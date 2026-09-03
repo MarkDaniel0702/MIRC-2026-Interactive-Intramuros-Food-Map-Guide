@@ -181,6 +181,47 @@ body {
 .rule span:first-child { background: linear-gradient(90deg, transparent, var(--navy-400) 12%, var(--navy-400) 88%, transparent); }
 .rule span:last-child { width: 38%; margin: 0 auto; background: var(--gold-dk); }
 
+/* ──────────────────────────── mode tabs (Eat / See) ────────────────────── */
+
+.tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  margin: 18px 24px 0;
+  padding: 1px;
+  background: var(--navy-500);
+  border: 1px solid var(--navy-500);
+  border-radius: var(--r);
+}
+
+.tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 9px 10px;
+  font: 600 11px/1 var(--mono);
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--slate);
+  background: var(--navy-800);
+  border: 0;
+  cursor: pointer;
+  transition: background .16s var(--ease), color .16s var(--ease);
+}
+.tab svg {
+  width: 14px; height: 14px;
+  fill: none; stroke: currentColor; stroke-width: 1.4;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+.tab:hover { color: var(--white); background: var(--navy-700); }
+
+.tab.is-on {
+  color: var(--navy-900);
+  background: var(--gold);
+}
+.tab.is-on:hover { background: var(--gold-br); }
+
 /* ─────────────────────────────── controls ──────────────────────────────── */
 
 .controls {
@@ -511,6 +552,25 @@ body {
 .legend dd { margin: 0; font-size: 11.5px; color: var(--slate-lt); }
 .legend dd span { color: var(--slate-dk); font-family: var(--mono); font-size: 10.5px; }
 
+/* combined-ticket note, sights tab only */
+.passport {
+  margin: 13px 0 0;
+  padding: 10px 12px;
+  background: rgba(227, 178, 60, .07);
+  border: 1px solid rgba(227, 178, 60, .24);
+  border-left: 2px solid var(--gold);
+  border-radius: var(--r);
+}
+.passport__head {
+  margin: 0 0 4px;
+  font: 500 9.5px/1 var(--mono);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--slate-lt);
+}
+.passport__head b { color: var(--gold); font-weight: 600; }
+.passport__text { margin: 0; font: 400 10.5px/1.55 var(--mono); color: var(--slate); }
+
 .credit {
   margin: 14px 0 0;
   padding-top: 12px;
@@ -726,6 +786,268 @@ body {
   box-shadow: 0 0 0 3px rgba(70, 199, 149, .28), 0 0 14px -2px var(--green-lt);
 }
 
+/* ═══════════════════════════════ directions ════════════════════════════════ */
+
+/* Directions take over the panel: the browse chrome steps aside rather than
+   being juggled element by element in JS. */
+.panel.is-directions .tabs,
+.panel.is-directions .controls,
+.panel.is-directions .list,
+.panel.is-directions .empty,
+.panel.is-directions .panel__foot { display: none !important; }
+
+.dirs { padding: 16px 24px 28px; }
+
+.dirs__back {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin: 0 0 18px;
+  padding: 7px 12px 7px 8px;
+  font: 500 11px/1 var(--mono);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--slate-lt);
+  background: var(--navy-700);
+  border: 1px solid var(--navy-500);
+  border-radius: var(--r);
+  cursor: pointer;
+  transition: color .15s var(--ease), border-color .15s var(--ease);
+}
+.dirs__back svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.dirs__back:hover { color: var(--white); border-color: var(--gold); }
+
+.dirs__to-label,
+.dirs__from-label,
+.dirs__preset-label {
+  margin: 0 0 7px;
+  font: 500 9.5px/1 var(--mono);
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--slate);
+}
+
+.dirs__to {
+  margin: 0 0 20px;
+  font-family: var(--ui);
+  font-size: 20px; font-weight: 700;
+  font-variation-settings: 'wdth' 112;
+  letter-spacing: .01em;
+  line-height: 1.2;
+  color: var(--white);
+}
+
+.dirs__from { padding-top: 16px; border-top: 1px solid var(--navy-500); }
+.dirs__from-label { margin-bottom: 9px; }
+.dirs__preset-label { margin: 14px 0 8px; }
+
+.dirs__opts { display: grid; gap: 6px; }
+
+.dirs__opt {
+  display: flex; align-items: center; gap: 9px;
+  padding: 10px 12px;
+  font: 500 12px/1 var(--ui);
+  color: var(--slate-lt);
+  background: var(--navy-700);
+  border: 1px solid var(--navy-500);
+  border-radius: var(--r);
+  cursor: pointer;
+  text-align: left;
+  transition: background .15s var(--ease), color .15s var(--ease), border-color .15s var(--ease);
+}
+.dirs__opt svg { width: 14px; height: 14px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.dirs__opt:hover { color: var(--white); border-color: var(--green); background: var(--navy-600); }
+.dirs__opt.is-on { color: var(--navy-900); background: var(--gold); border-color: var(--gold); font-weight: 600; }
+
+.chip--preset { position: relative; }
+.chip--preset.is-on {
+  color: var(--navy-900);
+  background: var(--gold);
+  border-color: var(--gold);
+  font-weight: 600;
+}
+.chip__out {
+  margin-left: 6px;
+  font: 500 9px/1 var(--mono);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--slate-dk);
+}
+.chip--preset.is-on .chip__out { color: rgba(6, 13, 24, .62); }
+
+.dirs__msg {
+  margin: 16px 0 0;
+  padding: 10px 12px;
+  font: 400 11.5px/1.55 var(--mono);
+  border-radius: var(--r);
+  border-left: 2px solid var(--green);
+  background: rgba(47, 163, 122, .09);
+  color: var(--slate-lt);
+}
+.dirs__msg--warn {
+  border-left-color: var(--gold);
+  background: rgba(227, 178, 60, .09);
+}
+
+.dirs__result { margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--navy-500); }
+
+.dirs__summary {
+  display: flex; align-items: baseline; gap: 12px;
+  padding: 11px 13px;
+  background: var(--navy-700);
+  border: 1px solid var(--navy-500);
+  border-left: 2px solid var(--gold);
+  border-radius: var(--r);
+}
+.dirs__dist {
+  font: 600 17px/1 var(--ui);
+  font-variation-settings: 'wdth' 110;
+  color: var(--white);
+}
+.dirs__time { font: 500 12px/1 var(--mono); letter-spacing: .04em; color: var(--gold); }
+
+.dirs__from-name {
+  margin: 9px 0 0;
+  font: 400 11px/1.5 var(--mono);
+  color: var(--slate);
+}
+
+.dirs__steps {
+  list-style: none;
+  margin: 18px 0 0;
+  padding: 0;
+  counter-reset: step;
+}
+
+.dirs__step {
+  position: relative;
+  display: grid;
+  grid-template-columns: 22px 20px 1fr;
+  gap: 10px;
+  align-items: start;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--navy-600);
+}
+.dirs__step:last-child { border-bottom: 0; }
+
+.dirs__n {
+  font: 600 10.5px/1.5 var(--mono);
+  color: var(--slate-dk);
+  text-align: right;
+}
+
+.dirs__arrow {
+  width: 16px; height: 16px;
+  margin-top: 1px;
+  fill: none; stroke: var(--green-lt); stroke-width: 1.6;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+.dirs__step--last .dirs__arrow { stroke: var(--gold); }
+
+.dirs__text { font-size: 12.5px; line-height: 1.55; color: var(--paper); }
+.dirs__step--last .dirs__text { color: var(--white); font-weight: 600; }
+
+.dirs__len {
+  display: block;
+  margin-top: 3px;
+  font: 400 10.5px/1 var(--mono);
+  letter-spacing: .04em;
+  color: var(--slate-dk);
+}
+
+.dirs__credit {
+  margin: 16px 0 0;
+  padding-top: 12px;
+  border-top: 1px solid var(--navy-600);
+  font: 400 10px/1.55 var(--mono);
+  color: var(--slate-dk);
+}
+.dirs__credit a { color: var(--gold); }
+
+/* "Get directions" inside a popup */
+.pop__go {
+  display: flex; align-items: center; justify-content: center; gap: 7px;
+  width: 100%;
+  margin: 12px 0 0;
+  padding: 9px 12px;
+  font: 600 11px/1 var(--mono);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--navy-900);
+  background: var(--gold);
+  border: 1px solid var(--gold);
+  border-radius: var(--r);
+  cursor: pointer;
+  transition: background .15s var(--ease);
+}
+.pop__go svg { width: 13px; height: 13px; fill: currentColor; }
+.pop__go:hover { background: var(--gold-br); }
+
+.pop__contact {
+  display: flex; flex-wrap: wrap; gap: 6px 14px;
+  margin: 9px 0 0;
+  font: 400 11px/1.5 var(--mono);
+}
+.pop__contact a { color: var(--green-lt); text-underline-offset: 2px; }
+.pop__contact a:hover { color: var(--gold); }
+
+/* start marker + picking cursor */
+.start-icon { background: none !important; border: 0 !important; }
+.start-pin {
+  width: 100%; height: 100%;
+  background: var(--white);
+  border: 3px solid var(--green);
+  border-radius: 50%;
+  box-shadow: 0 0 0 3px rgba(47, 163, 122, .3), 0 2px 6px rgba(0, 0, 0, .55);
+}
+
+body.is-picking .leaflet-container { cursor: crosshair !important; }
+
+/* The destination gets its own marker rather than a restyled pin, because the
+   ordinary one may be inside a cluster with no element to restyle. */
+.dest-icon { background: none !important; border: 0 !important; }
+
+.dest-pin {
+  --c: var(--gold);
+  position: relative;
+  width: 38px; height: 38px;
+}
+
+.dest-pin__disc {
+  position: absolute; inset: 0;
+  display: grid; place-items: center;
+  background: var(--c);
+  border: 3px solid var(--gold-br);
+  border-radius: 50%;
+  box-shadow: 0 3px 14px rgba(0, 0, 0, .75), 0 0 22px -2px var(--gold);
+}
+.dest-pin__disc svg {
+  width: 19px; height: 19px;
+  fill: none; stroke: var(--navy-900); stroke-width: 1.7;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+
+.dest-pin::after {
+  content: '';
+  position: absolute;
+  left: 50%; bottom: -4px;
+  width: 11px; height: 11px;
+  background: var(--c);
+  border-right: 3px solid var(--gold-br);
+  border-bottom: 3px solid var(--gold-br);
+  border-radius: 0 0 2px 0;
+  transform: translateX(-50%) rotate(45deg);
+  z-index: -1;
+}
+
+.dest-pin::before {
+  content: '';
+  position: absolute;
+  inset: -10px;
+  border: 2px solid var(--gold-br);
+  border-radius: 50%;
+  opacity: .6;
+  animation: halo 1.9s var(--ease) infinite;
+}
+
 /* ─────────────────────────────── toast ─────────────────────────────────── */
 
 .toast {
@@ -836,6 +1158,20 @@ body {
   text-transform: uppercase;
   white-space: nowrap;
   color: var(--slate);
+}
+
+/* A sight's fee can be a phrase ("Included in Fort Santiago entry"), not a symbol. */
+.pop--sight .pop__pesos { white-space: normal; font-size: 12.5px; line-height: 1.35; }
+
+.pop__hours {
+  display: flex; align-items: flex-start; gap: 7px;
+  margin: 8px 0 0;
+  font: 400 11px/1.5 var(--mono);
+  color: var(--slate);
+}
+.pop__hours svg {
+  width: 12px; height: 12px; margin-top: 2px; flex: none;
+  fill: none; stroke: var(--gold); stroke-width: 1.5; stroke-linecap: round;
 }
 
 .pop__blurb { margin: 12px 0 0; font-size: 12.5px; line-height: 1.58; color: var(--slate-lt); }
@@ -1023,6 +1359,11 @@ body {
   .rule { margin-top: 12px; }
   .controls { padding: 14px 18px 12px; gap: 12px; }
   .chip { font-size: 11px; padding: 5px 10px 5px 8px; }
+  .tabs { margin: 14px 18px 0; }
+  .tab { font-size: 10px; letter-spacing: .12em; padding: 9px 4px; gap: 5px; }
+  .tab svg { width: 12px; height: 12px; }
+  .dirs { padding: 14px 18px 30px; }
+  .dirs__to { font-size: 18px; }
   .list { padding: 4px 12px 8px; }
   .panel__foot { padding: 14px 18px 26px; }
 

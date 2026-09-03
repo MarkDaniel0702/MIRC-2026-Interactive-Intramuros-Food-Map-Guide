@@ -29,7 +29,6 @@ const PRICE_TIERS = {
 const CATEGORIES = {
   heritage: { label: 'Restaurants & Heritage Dining', color: '#D4A82F', icon: 'fork'   },
   cafe:     { label: 'Cafes & Coffee',                color: '#2FA37A', icon: 'cup'    },
-  bar:      { label: 'Bars & Nightlife',              color: '#6C8FD4', icon: 'glass'  },
   fastfood: { label: 'Fast Food & Chains',            color: '#C4643C', icon: 'burger' },
   budget:   { label: 'Budget Eats & Carinderias',     color: '#82C144', icon: 'bowl'   },
   dessert:  { label: 'Desserts & Snacks',             color: '#C9D6E6', icon: 'cone'   }
@@ -64,34 +63,16 @@ const FOOD_SPOTS = [
     blurb: 'Filipino kitchen on the quieter western side of the walled city.'
   },
   {
-    id: 'bamboo-intramuros', name: 'Bamboo Intramuros', category: 'bar', priceTier: 2,
-    cuisine: ['Bar', 'Filipino', 'Grill'], street: 'Magallanes Drive', area: null,
-    lat: 14.594598, lng: 120.977585, osm: 'node/6134921366',
-    blurb: 'Open-air bar and grill tucked along the northern edge of Intramuros.'
-  },
-  {
     id: 'barbaras-casa-manila', name: "Barbara's Casa Manila", category: 'heritage', priceTier: 4,
     cuisine: ['Filipino', 'Buffet'], street: 'General Luna Street', area: 'Plaza San Luis Complex',
     lat: 14.589439, lng: 120.975215, osm: 'node/5938571786',
     blurb: 'Heritage buffet inside a Spanish-era mansion, with a Filipino cultural show at dinner.'
   },
   {
-    id: 'bataka-bar', name: 'Bataka Bar', category: 'bar', priceTier: 2,
-    cuisine: ['Bar', 'Filipino'], street: 'General Luna Street', area: 'Plaza San Luis area',
-    lat: 14.589301, lng: 120.975319, osm: 'node/7138594047',
-    blurb: 'Casual drinking spot a few steps from Casa Manila.'
-  },
-  {
-    id: 'batala-ice-cream', name: 'Batala (Ice Cream)', category: 'dessert', priceTier: 1,
+    id: 'batala-ice-cream', name: 'Batala', category: 'dessert', priceTier: 1,
     cuisine: ['Ice Cream', 'Desserts'], street: 'San Jose Street', area: null,
     lat: 14.587318, lng: 120.977635, osm: 'node/12928095701',
-    blurb: 'Ice cream counter in the southern quarter — a separate venue from Batala Bar.'
-  },
-  {
-    id: 'batala-bar', name: 'Batala Bar', category: 'bar', priceTier: 2,
-    cuisine: ['Craft Beer', 'Bar'], street: 'General Luna Street', area: 'Plaza San Luis Complex',
-    lat: 14.589570, lng: 120.975060, osm: 'node/11710850483',
-    blurb: 'Craft beer bar in the Plaza San Luis complex, popular after dark.'
+    blurb: 'Ice cream counter in the southern quarter of the walled city.'
   },
   {
     id: 'beanleaf', name: 'Beanleaf', category: 'cafe', priceTier: 2,
@@ -188,12 +169,6 @@ const FOOD_SPOTS = [
     cuisine: ['Pizza', 'Pasta'], street: 'Andres Soriano Avenue', area: null,
     lat: 14.592955, lng: 120.973115, osm: 'node/735198892',
     blurb: 'Pizza and pasta fast food chain on Andres Soriano Avenue.'
-  },
-  {
-    id: 'grotto-hookah-lounge', name: 'Grotto Hookah Lounge', category: 'bar', priceTier: 2,
-    cuisine: ['Shisha', 'Bar'], street: 'Cabildo Street', area: null,
-    lat: 14.591699, lng: 120.974185, osm: 'node/12803663501',
-    blurb: 'Shisha lounge on Cabildo Street, open late.'
   },
   {
     id: 'ilustrado', name: 'Ilustrado', category: 'heritage', priceTier: 3,
@@ -314,12 +289,6 @@ const FOOD_SPOTS = [
     cuisine: ['Filipino', 'Grill'], street: 'Victoria Street', area: null,
     lat: 14.589707, lng: 120.978639, osm: 'node/4524696228',
     blurb: 'Casual grill and Filipino plates on Victoria Street.'
-  },
-  {
-    id: 'sky-deck-view-bar', name: 'Sky Deck View Bar', category: 'bar', priceTier: 3,
-    cuisine: ['Bar', 'Cocktails', 'Tapas'], street: 'Muralla Street', area: 'The Bayleaf Hotel roof deck',
-    lat: 14.589941, lng: 120.978735, osm: 'node/13208384185',
-    blurb: 'Rooftop bar on The Bayleaf with a 360-degree view over the walls and the Manila Bay sunset.'
   },
   {
     id: 'starbucks-general-luna-south', name: 'Starbucks — General Luna (South)', category: 'cafe', priceTier: 2,

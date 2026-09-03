@@ -1,7 +1,25 @@
 # Data & method
 
-How the 52 food spots on this map were chosen, where the numbers come from, and what
-you should and shouldn't trust.
+How the **47 food spots** and **21 heritage sights** on this map were chosen, where the
+numbers come from, and what you should and shouldn't trust.
+
+Accommodation is documented separately in [`HOTELS.md`](HOTELS.md); deployment in
+[`DEPLOY.md`](DEPLOY.md).
+
+The three **public** hotels from `HOTELS.md` are also shown on the map under the **Stay**
+tab (`mapped: true` in `data/hotels.js`). The members-only and long-stay properties stay
+documented but off the map — they are not places a visitor can book, and offering walking
+directions to them would be misleading.
+
+### Start points for directions
+
+`data/start-points.js` holds six arrival points offered when asking for directions. Three
+of them — Central Terminal (LRT-1), Park & Ride Lawton and Escolta Ferry Station — sit
+**outside** the boundary. That is the one sanctioned exception to the inside-only rule:
+they are navigation references for people arriving, never listed as destinations, and they
+are flagged `outside: true` so the interface labels them as such. Their coordinates come
+from Overpass (`railway=station`, `public_transport=station`), not from free-text
+geocoding, which during research returned a Rizal Park 19 km away in Las Piñas.
 
 ---
 
@@ -55,7 +73,8 @@ Run against `https://overpass-api.de/api/interpreter` (or the
 `https://overpass.kumi.systems/api/interpreter` mirror) on **2026-09-03**.
 
 - Returned **57** food and drink POIs.
-- **52** had a `name` tag and were kept.
+- **52** had a `name` tag and were kept. Five bar/nightlife venues were later removed
+  by request, leaving **47** — see §4.
 - **5** unnamed entries (3 `restaurant`, 2 `food_court`) were dropped — a map pin with no
   name is no use to anyone.
 
@@ -97,20 +116,20 @@ Tiers were assigned from three sources, in order of preference:
 ### Why not exact peso figures per venue?
 
 Because they aren't available. Published prices could be verified for only a handful of
-these 52 establishments; several major Philippine food publications block automated
+these 47 establishments; several major Philippine food publications block automated
 access, and most independent Intramuros venues publish no menu pricing at all. Printing a
 specific range like "₱320–₱480" for a carinderia nobody has priced would present a guess
 as a fact. A labelled band is honest about its own precision.
 
 Every card and popup carries the review date and a "confirm with the venue" note.
 
-**Distribution:** 17 × `₱` · 31 × `₱₱` · 3 × `₱₱₱` · 1 × `₱₱₱₱`
+**Distribution:** 17 × `₱` · 27 × `₱₱` · 2 × `₱₱₱` · 1 × `₱₱₱₱`
 
 ---
 
 ## 4. Categories
 
-Six categories, each with its own marker colour. Specific cuisine lives in the `cuisine`
+Five categories, each with its own marker colour. Specific cuisine lives in the `cuisine`
 tags (which search covers), not in the category name — so Parers Kimchi is filed under
 Restaurants with a `Korean` tag rather than needing a category of its own.
 
@@ -118,19 +137,31 @@ Restaurants with a `Korean` tag rather than needing a category of its own.
 |---|---|---|
 | `heritage` | Restaurants & Heritage Dining | 12 |
 | `cafe` | Cafés & Coffee | 17 |
-| `bar` | Bars & Nightlife | 5 |
 | `fastfood` | Fast Food & Chains | 7 |
 | `budget` | Budget Eats & Carinderias | 7 |
 | `dessert` | Desserts & Snacks | 4 |
+
+### Bars and nightlife were removed
+
+The `bar` category and its five venues — Bamboo Intramuros, Bataka Bar, Batala Bar,
+Grotto Hookah Lounge and Sky Deck View Bar — were **deliberately removed** in September
+2026. The site serves a university conference audience of visiting researchers, for whom
+nightlife listings are off-brief. The food list went from 52 spots to 47.
+
+Two knock-on edits went with it, so nothing dangles:
+
+- "Batala (Ice Cream)" is now just **"Batala"**. The qualifier existed only to tell it
+  apart from Batala Bar, which is gone.
+- The Bayleaf's entry in `HOTELS.md` no longer cites Sky Deck as a food-map venue.
+
+Restoring the category means re-running the Overpass query in §2 with `bar` and `pub` in
+the amenity list, and re-adding a `bar` entry to `CATEGORIES`.
 
 ### Editorial decisions worth knowing
 
 - **Three Starbucks branches** exist inside the boundary. They're disambiguated by
   location (General Luna South / General Luna North / Muralla) rather than listed as three
   identical rows.
-- **"Batala" and "Batala Bar" are two different venues** ~250 m apart — an ice cream
-  counter on San Jose Street and a craft beer bar in Plaza San Luis. Both are kept, and
-  the ice cream one is named "Batala (Ice Cream)" so the list isn't confusing.
 - **Coffee and tea chains** (Starbucks, Figaro, Moonleaf) are filed under *Cafés & Coffee*,
   not *Fast Food & Chains* — someone filtering for coffee wants to see them.
 - **Street names** come from the OSM `addr:street` tag where present, otherwise from the
@@ -138,7 +169,86 @@ Restaurants with a `Korean` tag rather than needing a category of its own.
 
 ---
 
-## 5. Known limitations
+## 5. Tourist spots (the "See" tab)
+
+Added September 2026 for the conference audience: visiting researchers with a few free
+hours between sessions. Machine data in `data/tourist-spots.js`.
+
+**Collection.** Same discipline — an Overpass query constrained to the boundary:
+
+```overpassql
+[out:json][timeout:120];
+area(3600103707)->.a;
+(
+  nwr["tourism"~"^(attraction|museum|gallery|artwork|viewpoint|theme_park)$"](area.a);
+  nwr["historic"~"^(castle|fort|monument|memorial|ruins|city_gate|building|church|archaeological_site)$"](area.a);
+  nwr["amenity"~"^(place_of_worship|theatre|arts_centre)$"](area.a);
+  nwr["leisure"="park"](area.a);
+);
+out center tags;
+```
+
+That returned **98 uniquely named features**, most of them small statues and plaques. The
+list was curated down to **21** that justify a visit, keeping the OSM coordinate for each.
+Every one passes the same point-in-polygon gate.
+
+| Key | Label | Count |
+|---|---|---|
+| `museum` | Museums | 5 |
+| `church` | Churches | 2 |
+| `fort` | Walls, Gates & Bastions | 7 |
+| `plaza` | Plazas & Gardens | 4 |
+| `monument` | Monuments & Ruins | 3 |
+
+### Entrance fees — better sourced than the food prices
+
+Unlike restaurant prices, these are **published and stable**. They come from the
+Intramuros Administration ([intramuros.gov.ph](https://intramuros.gov.ph/guide-museums/))
+and the individual operators, checked **2026-09-03**:
+
+| Site | Regular | Discounted |
+|---|---|---|
+| Fort Santiago | ₱75 | ₱50 |
+| Casa Manila | ₱75 | ₱50 |
+| Baluarte de San Diego | ₱75 | ₱50 |
+| Bahay Tsinoy | ₱100 | ₱60 (students) |
+| Museo de Intramuros | ₱200 | ₱160 |
+| San Agustin Museum | ₱200 | ₱160 |
+| Everything else listed | Free | — |
+
+Discounted rates apply to students, seniors and PWD — most conference delegates with a
+university ID qualify.
+
+**Intramuros Passport — ₱350** covers Fort Santiago, Casa Manila, Museo de Intramuros,
+Baluarte de San Diego and Centro de Turismo, plus a free guided tranvía tour. It pays for
+itself from the third paid site onward, which is why the sights tab surfaces it in the
+footer. *Centro de Turismo is the one passport site not pinned on the map — its
+coordinates could not be verified, and nothing unverified gets a pin.*
+
+### Visit durations and walking times
+
+- `duration` is an estimate for an unhurried visit, not a rushed one. It is editorial —
+  no source publishes these.
+- Walking time is the straight-line distance from `VENUE_ANCHOR` at
+  `WALK_METRES_PER_MIN` (80 m/min). Straight-line under-reads real walking by roughly
+  10–20% in a grid, so treat it as a floor.
+
+> **Set the anchor to your venue.** `VENUE_ANCHOR` in `data/tourist-spots.js` defaults to
+> Plaza de Roma. Change its `name`, `lat` and `lng` to the conference venue and every
+> walking time on the site re-bases itself. That is the single highest-value edit for
+> this audience.
+
+### Accuracy notes
+
+- Opening hours change, especially around holidays and for Mass at the churches. San
+  Agustin and Manila Cathedral close to sightseers during services and weddings.
+- Most museums **close on Monday**. Bahay Tsinoy opens only 1–5pm.
+- The `fort-santiago` pin marks the **main gate**, where tickets are sold, rather than the
+  centre of the complex — more useful for actually getting there.
+
+---
+
+## 6. Known limitations
 
 - **OSM POIs can be stale.** A few entries have low OSM node ids, meaning they were mapped
   many years ago; venues in Intramuros open and close. `Ilustrado` (node 735198925) is the
@@ -152,13 +262,13 @@ Restaurants with a `Korean` tag rather than needing a category of its own.
 
 ---
 
-## 6. Refreshing the data
+## 7. Refreshing the data
 
-1. Re-run the Overpass query in §2.
-2. Update `data/food-spots.js`, keeping each record's curated fields
-   (`category`, `priceTier`, `cuisine`, `blurb`).
-3. Bump `DATA_REVIEWED` in `data/food-spots.js`.
-4. Run the gate — it must pass before shipping:
+1. Re-run the Overpass query in §2 (food) or §5 (sights).
+2. Update `data/food-spots.js` / `data/tourist-spots.js`, keeping each record's curated
+   fields (`category`, `priceTier` / `feeTier`, `cuisine`, `duration`, `blurb`).
+3. Bump `DATA_REVIEWED` / `SIGHTS_REVIEWED` in the file you touched.
+4. Run the gate — it must pass before shipping. It checks food, sights and hotels:
 
 ```bash
 node tools/verify-in-intramuros.mjs

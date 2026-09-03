@@ -49,7 +49,7 @@ USD-sourced figures are converted at **₱62.50 / US$1** (rate as of 2026-09-02)
 | **Price range** | **≈ ₱2,800 – ₱13,300 per night.** From about ₱2,765 for a Superior; typical standard room ₱4,000 – ₱9,100; Bayleaf Suite reaches roughly ₱13,000 |
 | **Room types** | 57 rooms in 7 categories — Superior Twin (23 sqm) · Deluxe Twin / Queen / King (25 sqm) · Premier Trio (31 sqm) · Executive Suite (45 sqm) · Bayleaf Suite (135 sqm) |
 | **Booking / contact** | [thebayleaf.com.ph/intramuros](https://www.thebayleaf.com.ph/intramuros/) · +63 2 5318 5000 / 5328 3170 · tbi-inquiry@thebayleaf.com.ph |
-| **Notes** | Operated by Lyceum of the Philippines University. Houses the Sky Deck rooftop bar, 9 Spoons and Cioccolata — three venues that also appear on the food map. |
+| **Notes** | Operated by Lyceum of the Philippines University. Houses Cioccolata, which appears on the food map. |
 | **Price sourced from** | Hotel's own reservation page ("rates from ₱2,765"); aggregator listings US$46–US$213 |
 
 ### White Knight Hotel Intramuros
@@ -61,7 +61,7 @@ USD-sourced figures are converted at **₱62.50 / US$1** (rate as of 2026-09-02)
 | **Price range** | **≈ ₱1,750 – ₱5,100 per night.** Typically around ₱2,000; standard rooms roughly ₱1,900 – ₱2,500 |
 | **Room types** | 29 air-conditioned rooms — Standard, Queen, Double, plus family/group rooms. All with safe, coffee/tea maker, LCD cable TV, private hot/cold bath |
 | **Booking / contact** | No official site found; listed on major OTAs (Agoda, Booking, Traveloka, KAYAK) and [Facebook](https://www.facebook.com/whiteknighthotelintramuros/) |
-| **Notes** | A restored Spanish colonial mansion — whitewashed walls, tile floors, wooden staircases — inside the Plaza San Luis complex, so it sits directly among the heritage food spots (Barbara's, Batala Bar, Café Intramuros, Tesoros). In-house café; massage and airport/city transfers offered. |
+| **Notes** | A restored Spanish colonial mansion — whitewashed walls, tile floors, wooden staircases — inside the Plaza San Luis complex, so it sits directly among the heritage food spots (Barbara's, Café Intramuros, Cold Treats, Tesoros). In-house café; massage and airport/city transfers offered. |
 | **Price sourced from** | Aggregator listings US$28–US$82, average US$32 |
 
 ### Residencia 729

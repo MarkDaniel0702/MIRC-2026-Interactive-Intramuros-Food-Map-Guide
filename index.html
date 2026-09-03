@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Intramuros Food Map — A guide to eating inside the walled city</title>
-<meta name="description" content="An interactive map of every food spot inside the official boundary of Intramuros, Manila — with locations, categories and price ranges.">
+<title>Intramuros Guide — Where to eat and what to see inside the walled city</title>
+<meta name="description" content="An interactive map of Intramuros, Manila — food spots with price ranges and heritage sights with entrance fees and visit times, all verified inside the official boundary.">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#060D18">
 
@@ -20,16 +20,16 @@
 </head>
 <body>
 
-<a class="skip-link" href="#list">Skip to the list of food spots</a>
+<a class="skip-link" href="#list">Skip to the list</a>
 
 <div class="app">
 
   <!-- ───────────────────────── sidebar / bottom sheet ───────────────────────── -->
-  <aside class="panel" id="panel" aria-label="Food spot browser">
+  <aside class="panel" id="panel" aria-label="Places browser">
 
     <button class="sheet-grip" id="sheetGrip" aria-expanded="false" aria-controls="panelBody">
       <span class="sheet-grip__bar" aria-hidden="true"></span>
-      <span class="sheet-grip__text" id="gripText">52 food spots</span>
+      <span class="sheet-grip__text" id="gripText">Browse</span>
     </button>
 
     <div class="panel__body" id="panelBody">
@@ -37,9 +37,27 @@
       <header class="masthead">
         <p class="masthead__eyebrow">Manila &middot; The Walled City</p>
         <h1 class="masthead__title">Intramuros</h1>
-        <p class="masthead__sub">A food map within the walls</p>
+        <p class="masthead__sub" id="mastheadSub">Where to eat within the walls</p>
         <div class="rule" aria-hidden="true"><span></span><span></span></div>
       </header>
+
+      <div class="tabs" role="tablist" aria-label="What to browse">
+        <button type="button" class="tab is-on" id="tabFood" role="tab"
+                aria-selected="true" aria-controls="list" data-mode="food">
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5.4 2.4v3.6a1.5 1.5 0 0 0 3 0V2.4M6.9 7.4v6.2M11.4 2.4c1.1 1.5 1.1 3.7 0 4.9v6.3"/></svg>
+          Eat
+        </button>
+        <button type="button" class="tab" id="tabSights" role="tab"
+                aria-selected="false" aria-controls="list" data-mode="sights">
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 13.5h12M3.4 13.5V7M6.5 13.5V7M9.5 13.5V7M12.6 13.5V7M2 6.4 8 2.6l6 3.8z"/></svg>
+          See
+        </button>
+        <button type="button" class="tab" id="tabStay" role="tab"
+                aria-selected="false" aria-controls="list" data-mode="stay">
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2.2 12.8V4.4M2.2 8.2h11.6a2 2 0 0 1 2 2v2.6M2.2 11h13.6M5.4 6.9a1.3 1.3 0 1 0 0-.1z"/></svg>
+          Stay
+        </button>
+      </div>
 
       <div class="controls">
 
@@ -49,18 +67,18 @@
           </svg>
           <input type="search" id="search" class="search__input"
                  placeholder="Search a name, dish or street…"
-                 aria-label="Search food spots by name, cuisine or street"
+                 aria-label="Search by name, cuisine or street"
                  autocomplete="off" spellcheck="false">
           <button type="button" class="search__clear" id="searchClear" aria-label="Clear search" hidden>&times;</button>
         </div>
 
-        <fieldset class="filter">
+        <fieldset class="filter" id="categoryFilter">
           <legend class="filter__legend">Category</legend>
           <div class="chips" id="categoryChips"></div>
         </fieldset>
 
         <fieldset class="filter">
-          <legend class="filter__legend">Price range <span class="filter__note">per person</span></legend>
+          <legend class="filter__legend" id="tierLegend">Price range <span class="filter__note" id="tierNote">per person</span></legend>
           <div class="chips chips--price" id="priceChips"></div>
         </fieldset>
 
@@ -89,13 +107,57 @@
           <path d="M10 18h28M14 18a10 10 0 0 0 20 0M24 28v10M17 38h14"/>
         </svg>
         <p class="empty__title">Nothing on the table</p>
-        <p class="empty__text">No spot inside the walls matches these filters.</p>
+        <p class="empty__text" id="emptyText">No spot inside the walls matches these filters.</p>
         <button type="button" class="btn btn--solid" id="emptyReset">Clear all filters</button>
       </div>
 
+      <section class="dirs" id="dirs" hidden aria-label="Walking directions">
+        <button type="button" class="dirs__back" id="dirsBack">
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M9.6 3.2 4.8 8l4.8 4.8"/></svg>
+          Back to the list
+        </button>
+
+        <p class="dirs__to-label">Walking to</p>
+        <h2 class="dirs__to" id="dirsTo"></h2>
+
+        <div class="dirs__from">
+          <p class="dirs__from-label">Start from</p>
+          <div class="dirs__opts">
+            <button type="button" class="dirs__opt" id="dirsUseLocation">
+              <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="2.4"/><circle cx="8" cy="8" r="5.6"/><path d="M8 .8v1.8M8 13.4v1.8M.8 8h1.8M13.4 8h1.8"/></svg>
+              My location
+            </button>
+            <button type="button" class="dirs__opt" id="dirsPickOnMap">
+              <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 14.5S13 10 13 6.4a5 5 0 0 0-10 0C3 10 8 14.5 8 14.5z"/><circle cx="8" cy="6.3" r="1.7"/></svg>
+              Tap a point on the map
+            </button>
+          </div>
+          <p class="dirs__preset-label">Or arriving at&hellip;</p>
+          <div class="chips" id="dirsPresets"></div>
+        </div>
+
+        <p class="dirs__msg" id="dirsMsg" role="status" hidden></p>
+
+        <div class="dirs__result" id="dirsResult" hidden>
+          <div class="dirs__summary">
+            <span class="dirs__dist" id="dirsDist"></span>
+            <span class="dirs__time" id="dirsTime"></span>
+          </div>
+          <p class="dirs__from-name" id="dirsFromName"></p>
+          <ol class="dirs__steps" id="dirsSteps"></ol>
+          <p class="dirs__credit" id="dirsCredit"></p>
+        </div>
+      </section>
+
       <footer class="panel__foot">
-        <p class="legend__title">Price key <span>&mdash; indicative, per person</span></p>
+        <p class="legend__title" id="legendTitle">Price key <span id="legendNote">&mdash; indicative, per person</span></p>
         <dl class="legend" id="legend"></dl>
+
+        <div class="passport" id="passport" hidden>
+          <p class="passport__head">Intramuros Passport &mdash; <b id="passportPrice"></b></p>
+          <p class="passport__text" id="passportText"></p>
+        </div>
+
         <p class="credit">
           Boundary &amp; places from <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>,
           ODbL. Reviewed <span id="reviewedDate"></span>.
@@ -107,7 +169,7 @@
 
   <!-- ───────────────────────────────── map ──────────────────────────────────── -->
   <main class="mapwrap">
-    <div id="map" role="application" aria-label="Interactive map of food spots inside Intramuros"></div>
+    <div id="map" role="application" aria-label="Interactive map of food spots and heritage sights inside Intramuros"></div>
 
     <div class="map-cartouche" aria-hidden="true">
       <span class="map-cartouche__rose">
@@ -144,9 +206,18 @@
     or Quiapo appears here, because nothing outside the boundary can pass that check.
   </p>
 
+  <h3>What is on the map</h3>
+  <p>
+    Two sets, switched with the <strong>Eat</strong> / <strong>See</strong> tabs:
+    <b id="dlgFoodCount"></b> places to eat, and <b id="dlgSightCount"></b> heritage sights
+    with entrance fees and realistic visit times. Filters, search and the list all follow
+    whichever tab is active.
+  </p>
+
   <h3>How price ranges work</h3>
   <p>
-    Price is shown as a tier plus an explicit peso band, using one scale across every listing:
+    Food prices are shown as a tier plus an explicit peso band, using one scale across
+    every listing:
   </p>
   <dl class="legend legend--dialog" id="dialogLegend"></dl>
   <p class="dialog__caveat">
@@ -156,10 +227,24 @@
     the venue.
   </p>
 
+  <h3>Entrance fees and visit times</h3>
+  <p>
+    Sight entrance fees come from the <strong>Intramuros Administration</strong>
+    (<code>intramuros.gov.ph</code>) and the operators' own pages, checked
+    <span class="reviewed-date"></span>. Unlike restaurant prices these are published and
+    reasonably stable, but confirm before you travel. Discounted rates generally apply to
+    students, seniors and PWD — bring ID.
+  </p>
+  <p>
+    Visit durations are estimates for an unhurried look, not a rush. Walking times are
+    straight-line distances from <b id="dlgAnchor"></b> at 80 m per minute, so allow a
+    little more on the ground.
+  </p>
+
   <h3>Sources</h3>
   <p>
     Names and coordinates come from OpenStreetMap via the Overpass API, retrieved
-    <span class="reviewed-date"></span>, and were re-checked against Nominatim — all 52
+    <span class="reviewed-date"></span>, and were re-checked against Nominatim — every one
     came back in the Intramuros quarter. Map data and base tiles
     &copy; OpenStreetMap contributors (ODbL). Full method in <code>DATA.md</code>.
   </p>
@@ -170,6 +255,10 @@
 
 <script src="data/intramuros-boundary.js"></script>
 <script src="data/food-spots.js"></script>
+<script src="data/tourist-spots.js"></script>
+<script src="data/hotels.js"></script>
+<script src="data/start-points.js"></script>
+<script src="routing.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

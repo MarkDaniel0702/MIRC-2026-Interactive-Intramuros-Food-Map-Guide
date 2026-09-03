@@ -36,6 +36,12 @@ try {
   ({ HOTELS, ACCESS_TYPES } = require(join(root, 'data', 'hotels.js')));
 } catch { /* hotels.js not present; skip that pass */ }
 
+/* Tourist spots likewise. */
+let TOURIST_SPOTS = null, SIGHT_CATEGORIES = null, FEE_TIERS = null;
+try {
+  ({ TOURIST_SPOTS, SIGHT_CATEGORIES, FEE_TIERS } = require(join(root, 'data', 'tourist-spots.js')));
+} catch { /* tourist-spots.js not present; skip that pass */ }
+
 /* ── terminal colours (skipped when output is piped or NO_COLOR is set) ───────── */
 const tty = process.stdout.isTTY && !process.env.NO_COLOR;
 const c = (code, s) => (tty ? `[${code}m${s}[0m` : s);
@@ -136,10 +142,47 @@ if (problems.length === 0) {
   failures.push(`${problems.length} schema problem(s)`);
 }
 
-/* ── pass 3: accommodation (optional) ────────────────────────────────────────── */
+/* ── pass 3: tourist spots (optional) ────────────────────────────────────────── */
+
+if (TOURIST_SPOTS) {
+  console.log(bold('  3. Tourist spots — is every sight inside Intramuros?\n'));
+
+  const sightsOutside = [];
+  for (const s of TOURIST_SPOTS) {
+    const ok = insideBoundary(s.lng, s.lat, INTRAMUROS_BOUNDARY.geometry);
+    if (!ok) sightsOutside.push(s);
+    console.log(`     ${ok ? green('PASS') : red('FAIL')}  ${s.name.padEnd(30)} ${dim(`${s.fee}`.padEnd(30))} ${dim(s.duration)}`);
+
+    // schema
+    for (const f of ['id', 'name', 'category', 'fee', 'hours', 'duration', 'durationMins', 'lat', 'lng', 'osm', 'blurb']) {
+      if (s[f] === undefined || s[f] === null || s[f] === '') problems.push(`${s.id}: missing "${f}"`);
+    }
+    if (!SIGHT_CATEGORIES[s.category]) problems.push(`${s.id}: unknown sight category "${s.category}"`);
+    if (!FEE_TIERS[s.feeTier]) problems.push(`${s.id}: feeTier ${JSON.stringify(s.feeTier)} is not 0-2`);
+    if (seenIds.has(s.id)) problems.push(`id "${s.id}" collides with a food spot`);
+    else seenIds.set(s.id, s.name);
+  }
+
+  console.log(
+    sightsOutside.length === 0
+      ? green(`\n     All ${TOURIST_SPOTS.length} sights are inside the official Intramuros boundary.\n`)
+      : red(`\n     ${sightsOutside.length} sight(s) fall OUTSIDE Intramuros.\n`)
+  );
+  if (sightsOutside.length) failures.push(`${sightsOutside.length} sight(s) outside the boundary`);
+
+  // Schema problems found here are reported with the pass-2 batch below.
+  if (problems.length) {
+    for (const p of problems) console.log(`     ${red('FAIL')}  ${p}`);
+    console.log('');
+    failures.push(`${problems.length} schema problem(s)`);
+    problems.length = 0;
+  }
+}
+
+/* ── pass 4: accommodation (optional) ────────────────────────────────────────── */
 
 if (HOTELS) {
-  console.log(bold('  3. Accommodation — is every property inside Intramuros?\n'));
+  console.log(bold('  4. Accommodation — is every property inside Intramuros?\n'));
 
   const staysOutside = [];
   for (const h of HOTELS) {

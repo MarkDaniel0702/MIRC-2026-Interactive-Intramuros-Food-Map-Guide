@@ -26,10 +26,16 @@
 
 /** Indicative nightly bands, used only to group properties at a glance. */
 const STAY_TIERS = {
-  1: { symbol: '₱',       label: 'Budget',    range: 'under ₱1,500'      },
-  2: { symbol: '₱₱', label: 'Mid-range', range: '₱1,500 – ₱3,500'  },
-  3: { symbol: '₱₱₱', label: 'Upscale', range: '₱3,500 – ₱7,000' },
-  4: { symbol: '₱₱₱₱', label: 'Premium', range: '₱7,000 and up'   }
+  0: { symbol: '—',       label: 'Not published', range: 'No rate published', short: 'n/a' },
+  1: { symbol: '₱',       label: 'Budget',    range: 'under ₱1,500',     short: '<₱1.5k'  },
+  2: { symbol: '₱₱', label: 'Mid-range', range: '₱1,500 – ₱3,500', short: '₱1.5–3.5k' },
+  3: { symbol: '₱₱₱', label: 'Upscale', range: '₱3,500 – ₱7,000', short: '₱3.5–7k' },
+  4: { symbol: '₱₱₱₱', label: 'Premium', range: '₱7,000 and up',  short: '₱7k+'    }
+};
+
+/** The Stay tab shows a single kind of thing, so one category is honest. */
+const STAY_CATEGORIES = {
+  stay: { label: 'Places to stay', color: '#C9D6E6', icon: 'bed' }
 };
 
 const ACCESS_TYPES = {
@@ -48,6 +54,7 @@ const HOTELS = [
     id: 'the-bayleaf-intramuros',
     name: 'The Bayleaf Intramuros',
     access: 'public',
+    mapped: true, category: 'stay',
     lat: 14.590004, lng: 120.978725, osm: 'way/89568405',
     street: 'Muralla corner Victoria Street',
     area: 'Eastern wall, beside Lyceum of the Philippines University',
@@ -64,12 +71,13 @@ const HOTELS = [
     website: 'https://www.thebayleaf.com.ph/intramuros/',
     phone: '+63 2 5318 5000',
     email: 'tbi-inquiry@thebayleaf.com.ph',
-    blurb: 'The only full-service boutique hotel inside the walls. Operated by Lyceum of the Philippines University; home to the Sky Deck rooftop bar, 9 Spoons and Cioccolata.'
+    blurb: 'The only full-service boutique hotel inside the walls. Operated by Lyceum of the Philippines University; also home to Cioccolata, which appears on the food map.'
   },
   {
     id: 'white-knight-hotel-intramuros',
     name: 'White Knight Hotel Intramuros',
     access: 'public',
+    mapped: true, category: 'stay',
     lat: 14.589591, lng: 120.975686, osm: 'node/1038011236',
     street: 'Plaza San Luis Complex, General Luna Street',
     area: 'Opposite San Agustin Church (mapped at Urdaneta Street)',
@@ -88,12 +96,13 @@ const HOTELS = [
     id: 'residencia-729',
     name: 'Residencia 729',
     access: 'public',
+    mapped: true, category: 'stay',
     lat: 14.589739, lng: 120.976733, osm: 'way/639239855',
     street: 'Santa Potenciana Street',
     area: 'Southern quarter, near Cabildo Street',
     rooms: null,
     roomTypes: null,
-    priceTier: null,
+    priceTier: 0,
     priceRange: 'Not published',
     priceNote: 'No current nightly rate could be verified from any public source. An old directory listing (2009) records ₱3,000 per MONTH, suggesting it may operate as long-stay rather than nightly accommodation.',
     priceSource: 'None current — do not quote',
@@ -213,5 +222,5 @@ const HOTELS_UNVERIFIED = [
 ];
 
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { HOTELS, HOTELS_UNVERIFIED, STAY_TIERS, ACCESS_TYPES, FX_USD_PHP, STAY_REVIEWED };
+  module.exports = { HOTELS, HOTELS_UNVERIFIED, STAY_TIERS, STAY_CATEGORIES, ACCESS_TYPES, FX_USD_PHP, STAY_REVIEWED };
 }
