@@ -30,6 +30,12 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const { FOOD_SPOTS, PRICE_TIERS, CATEGORIES, DATA_REVIEWED } = require(join(root, 'data', 'food-spots.js'));
 const { INTRAMUROS_BOUNDARY } = require(join(root, 'data', 'intramuros-boundary.js'));
 
+/* Accommodation data is optional — the food map works without it. */
+let HOTELS = null, ACCESS_TYPES = null;
+try {
+  ({ HOTELS, ACCESS_TYPES } = require(join(root, 'data', 'hotels.js')));
+} catch { /* hotels.js not present; skip that pass */ }
+
 /* ── terminal colours (skipped when output is piped or NO_COLOR is set) ───────── */
 const tty = process.stdout.isTTY && !process.env.NO_COLOR;
 const c = (code, s) => (tty ? `[${code}m${s}[0m` : s);
@@ -128,6 +134,30 @@ if (problems.length === 0) {
   for (const p of problems) console.log(`     ${red('FAIL')}  ${p}`);
   console.log('');
   failures.push(`${problems.length} schema problem(s)`);
+}
+
+/* ── pass 3: accommodation (optional) ────────────────────────────────────────── */
+
+if (HOTELS) {
+  console.log(bold('  3. Accommodation — is every property inside Intramuros?\n'));
+
+  const staysOutside = [];
+  for (const h of HOTELS) {
+    const ok = insideBoundary(h.lng, h.lat, INTRAMUROS_BOUNDARY.geometry);
+    if (!ok) staysOutside.push(h);
+    const access = ACCESS_TYPES[h.access] ? ACCESS_TYPES[h.access].label : red(`bad access "${h.access}"`);
+    console.log(`     ${ok ? green('PASS') : red('FAIL')}  ${h.name.padEnd(34)} ${dim(access)}`);
+    if (!ACCESS_TYPES[h.access]) problems.push(`${h.id}: unknown access type "${h.access}"`);
+  }
+
+  const publicCount = HOTELS.filter(h => h.access === 'public').length;
+  console.log(
+    staysOutside.length === 0
+      ? green(`\n     All ${HOTELS.length} properties are inside the boundary `) +
+        dim(`(${publicCount} open to travellers).\n`)
+      : red(`\n     ${staysOutside.length} propert(ies) fall OUTSIDE Intramuros.\n`)
+  );
+  if (staysOutside.length) failures.push(`${staysOutside.length} propert(ies) outside the boundary`);
 }
 
 /* ── summary ─────────────────────────────────────────────────────────────────── */

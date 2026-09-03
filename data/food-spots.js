@@ -23,14 +23,16 @@ const PRICE_TIERS = {
   4: { symbol: '₱₱₱₱', label: 'Fine dining', range: '₱1,000 and up', short: '₱1k+' }
 };
 
-/** Category keys -> display label + marker colour. */
+/** Category keys -> display label + marker colour.
+ *  Colours sit inside the navy / green / gold system; bright gold is reserved for
+ *  selection and highlights, so categories use a brass, not the accent gold. */
 const CATEGORIES = {
-  heritage: { label: 'Restaurants & Heritage Dining', color: '#A6432C', icon: 'fork'   },
-  cafe:     { label: 'Cafés & Coffee',           color: '#8A6A2F', icon: 'cup'    },
-  bar:      { label: 'Bars & Nightlife',              color: '#5B4A7A', icon: 'glass'  },
-  fastfood: { label: 'Fast Food & Chains',            color: '#C77B22', icon: 'burger' },
-  budget:   { label: 'Budget Eats & Carinderias',     color: '#4E7A4A', icon: 'bowl'   },
-  dessert:  { label: 'Desserts & Snacks',             color: '#B4527A', icon: 'cone'   }
+  heritage: { label: 'Restaurants & Heritage Dining', color: '#D4A82F', icon: 'fork'   },
+  cafe:     { label: 'Cafes & Coffee',                color: '#2FA37A', icon: 'cup'    },
+  bar:      { label: 'Bars & Nightlife',              color: '#6C8FD4', icon: 'glass'  },
+  fastfood: { label: 'Fast Food & Chains',            color: '#C4643C', icon: 'burger' },
+  budget:   { label: 'Budget Eats & Carinderias',     color: '#82C144', icon: 'bowl'   },
+  dessert:  { label: 'Desserts & Snacks',             color: '#C9D6E6', icon: 'cone'   }
 };
 
 /** When the price tiers and the spot list were last reviewed. */

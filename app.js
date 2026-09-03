@@ -96,8 +96,8 @@
   });
 
   /* Standard OSM raster tiles: no API key, no sign-up, good detail down to z19.
-     They arrive quite colourful — styles.css warms and desaturates .leaflet-tile-pane
-     so the map sits on the same parchment as the rest of the page.
+     They arrive as a light, colourful plate — styles.css inverts and tints
+     .leaflet-tile-pane into the navy night map the rest of the page is built on.
      If this ever serves real traffic, swap in a keyed provider (see README). */
   L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
@@ -106,17 +106,32 @@
 
   L.control.zoom({ position: 'topleft' }).addTo(map);
 
-  /* Everything outside the official boundary is dimmed: a world-sized polygon
-     with the Intramuros ring punched out as a hole. */
+  /* Everything outside the official boundary is pushed down toward black: a
+     world-sized polygon with the Intramuros ring punched out as a hole. On a dark
+     basemap a light scrim does nothing, so this has to be both darker and stronger
+     than it would be over a light one. */
   L.polygon(
     [[[-89.9, -179.9], [-89.9, 179.9], [89.9, 179.9], [89.9, -179.9]], ring],
-    { stroke: false, fillColor: '#241C14', fillOpacity: 0.16, interactive: false }
+    { stroke: false, fillColor: '#02060C', fillOpacity: 0.62, interactive: false }
   ).addTo(map);
 
-  /* The boundary itself, drawn as a surveyor's dashed line. */
+  /* ...and the inside is lifted with a faint wash of the system green, so the
+     district reads as the live region rather than merely the less-dark one. */
   L.polygon(ring, {
-    color: '#A6432C', weight: 1.6, opacity: 0.7,
-    dashArray: '3 5', lineCap: 'round', fill: false, interactive: false
+    stroke: false, fillColor: '#2FA37A', fillOpacity: 0.06, interactive: false
+  }).addTo(map);
+
+  /* The boundary itself: a soft green glow carrying a fine gold survey dash.
+     Gold is the accent that marks the key edge — kept at partial opacity so it
+     reads as a drawn line, not a neon one. */
+  L.polygon(ring, {
+    color: '#2FA37A', weight: 6, opacity: 0.16,
+    lineJoin: 'round', fill: false, interactive: false
+  }).addTo(map);
+
+  L.polygon(ring, {
+    color: '#E3B23C', weight: 1.4, opacity: 0.68,
+    dashArray: '5 6', lineCap: 'butt', fill: false, interactive: false
   }).addTo(map);
 
   const HOME = { bounds, options: { padding: [34, 34] } };
@@ -155,7 +170,7 @@
       riseOnHover: true
     });
 
-    marker.bindPopup(popupHTML(spot), { maxWidth: 262, minWidth: 262, autoPanPadding: [24, 24] });
+    marker.bindPopup(popupHTML(spot), { maxWidth: 280, minWidth: 280, autoPanPadding: [26, 26] });
     marker.on('click', () => select(spot.id, { from: 'map' }));
     marker.on('popupclose', () => {
       if (state.activeId === spot.id) setActive(null);
