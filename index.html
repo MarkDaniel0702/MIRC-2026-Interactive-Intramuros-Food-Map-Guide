@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Intramuros Food Map — A guide to eating inside the walled city</title>
+<meta name="description" content="An interactive map of every food spot inside the official boundary of Intramuros, Manila — with locations, categories and price ranges.">
+<meta name="color-scheme" content="light">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,400..900,0..100,0..1;1,9..144,400..900,0..100,0..1&family=Archivo:ital,wdth,wght@0,62..125,400..700;1,62..125,400..700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" integrity="sha512-h9FcoyWjHcOcmEVkxOfTLnmZFWIH0iZhZT1H2TbOq55xssQGEJHEaIm+PgoUaZbRvQTNTluNOEfb1ZRy6D3BOw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.min.css" integrity="sha512-ENrTWqddXrLJsQS2A86QmvA17PkJ0GVm1bqj5aTgpeMAfDKN2+SIOLpKG8R/6KkimnhTb+VW5qqUHB/r1zaRgg==" crossorigin="anonymous" referrerpolicy="no-referrer">
+
+<link rel="stylesheet" href="styles.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%232b2119'/><path d='M11 8v6a2 2 0 0 0 4 0V8M13 16v9M22 8c1.5 2.2 1.5 5.4 0 7v10' stroke='%23e8dfcd' stroke-width='2.1' stroke-linecap='round' fill='none'/></svg>">
+</head>
+<body>
+
+<a class="skip-link" href="#list">Skip to the list of food spots</a>
+
+<div class="app">
+
+  <!-- ───────────────────────── sidebar / bottom sheet ───────────────────────── -->
+  <aside class="panel" id="panel" aria-label="Food spot browser">
+
+    <button class="sheet-grip" id="sheetGrip" aria-expanded="false" aria-controls="panelBody">
+      <span class="sheet-grip__bar" aria-hidden="true"></span>
+      <span class="sheet-grip__text" id="gripText">52 food spots</span>
+    </button>
+
+    <div class="panel__body" id="panelBody">
+
+      <header class="masthead">
+        <p class="masthead__eyebrow">Manila &middot; The Walled City</p>
+        <h1 class="masthead__title">Intramuros</h1>
+        <p class="masthead__sub">A food map within the walls</p>
+        <div class="rule" aria-hidden="true"><span></span><span></span></div>
+      </header>
+
+      <div class="controls">
+
+        <div class="search">
+          <svg class="search__icon" viewBox="0 0 16 16" aria-hidden="true">
+            <circle cx="7" cy="7" r="4.6"/><path d="M10.4 10.4 14 14"/>
+          </svg>
+          <input type="search" id="search" class="search__input"
+                 placeholder="Search a name, dish or street…"
+                 aria-label="Search food spots by name, cuisine or street"
+                 autocomplete="off" spellcheck="false">
+          <button type="button" class="search__clear" id="searchClear" aria-label="Clear search" hidden>&times;</button>
+        </div>
+
+        <fieldset class="filter">
+          <legend class="filter__legend">Category</legend>
+          <div class="chips" id="categoryChips"></div>
+        </fieldset>
+
+        <fieldset class="filter">
+          <legend class="filter__legend">Price range <span class="filter__note">per person</span></legend>
+          <div class="chips chips--price" id="priceChips"></div>
+        </fieldset>
+
+        <div class="toolbar">
+          <button type="button" class="btn" id="nearMe">
+            <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="2.4"/><circle cx="8" cy="8" r="5.6"/><path d="M8 .8v1.8M8 13.4v1.8M.8 8h1.8M13.4 8h1.8"/></svg>
+            Near me
+          </button>
+          <button type="button" class="btn" id="reset">
+            <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13.6 8a5.6 5.6 0 1 1-1.7-4"/><path d="M12.4 1.4v3h-3"/></svg>
+            Reset
+          </button>
+          <button type="button" class="btn btn--ghost" id="aboutBtn">
+            <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.4"/><path d="M8 7.2v4M8 4.8v.5"/></svg>
+            About
+          </button>
+        </div>
+
+        <p class="count" id="count" role="status" aria-live="polite"></p>
+      </div>
+
+      <ol class="list" id="list" tabindex="-1"></ol>
+
+      <div class="empty" id="empty" hidden>
+        <svg viewBox="0 0 48 48" aria-hidden="true">
+          <path d="M10 18h28M14 18a10 10 0 0 0 20 0M24 28v10M17 38h14"/>
+        </svg>
+        <p class="empty__title">Nothing on the table</p>
+        <p class="empty__text">No spot inside the walls matches these filters.</p>
+        <button type="button" class="btn btn--solid" id="emptyReset">Clear all filters</button>
+      </div>
+
+      <footer class="panel__foot">
+        <p class="legend__title">Price key <span>&mdash; indicative, per person</span></p>
+        <dl class="legend" id="legend"></dl>
+        <p class="credit">
+          Boundary &amp; places from <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>,
+          ODbL. Reviewed <span id="reviewedDate"></span>.
+        </p>
+      </footer>
+
+    </div>
+  </aside>
+
+  <!-- ───────────────────────────────── map ──────────────────────────────────── -->
+  <main class="mapwrap">
+    <div id="map" role="application" aria-label="Interactive map of food spots inside Intramuros"></div>
+
+    <div class="map-cartouche" aria-hidden="true">
+      <span class="map-cartouche__rose">
+        <svg viewBox="0 0 24 24"><path d="M12 1.5 14 10l8.5 2-8.5 2-2 8.5-2-8.5L1.5 12 10 10z"/><path d="M12 1.5V22.5M1.5 12h21" opacity=".35"/></svg>
+      </span>
+      <span class="map-cartouche__text">N</span>
+    </div>
+
+    <div class="map-note" id="mapNote">
+      <strong>Only inside the walls.</strong>
+      The shaded ground is the official Intramuros boundary — every pin sits within it.
+    </div>
+  </main>
+</div>
+
+<!-- ──────────────────────────────── about dialog ────────────────────────────── -->
+<dialog class="dialog" id="aboutDialog" aria-labelledby="aboutTitle">
+  <form method="dialog" class="dialog__close-form">
+    <button class="dialog__close" aria-label="Close">&times;</button>
+  </form>
+
+  <h2 class="dialog__title" id="aboutTitle">About this map</h2>
+
+  <h3>What counts as Intramuros</h3>
+  <p>
+    Every spot on this map sits inside the <strong>official administrative boundary of
+    Intramuros</strong> — OpenStreetMap relation <code>103707</code>, the same polygon
+    drawn on the map as the lit ground.
+  </p>
+  <p>
+    This is checked, not claimed. The list was built by querying only within that polygon,
+    and a script re-tests all <span id="dlgCount"></span> coordinates against it:
+    <code>node tools/verify-in-intramuros.mjs</code>. Nothing from Binondo, Ermita, Malate
+    or Quiapo appears here, because nothing outside the boundary can pass that check.
+  </p>
+
+  <h3>How price ranges work</h3>
+  <p>
+    Price is shown as a tier plus an explicit peso band, using one scale across every listing:
+  </p>
+  <dl class="legend legend--dialog" id="dialogLegend"></dl>
+  <p class="dialog__caveat">
+    These are <strong>indicative estimates for a typical meal per person</strong>, not quoted
+    prices. They come from published prices where those exist, standard chain pricing, and
+    establishment type otherwise. Menus change — treat the band as a guide and confirm with
+    the venue.
+  </p>
+
+  <h3>Sources</h3>
+  <p>
+    Names and coordinates come from OpenStreetMap via the Overpass API, retrieved
+    <span class="reviewed-date"></span>, and were re-checked against Nominatim — all 52
+    came back in the Intramuros quarter. Map data and base tiles
+    &copy; OpenStreetMap contributors (ODbL). Full method in <code>DATA.md</code>.
+  </p>
+</dialog>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" integrity="sha512-puJW3E/qXDqYp9IfhAI54BJEaWIfloJ7JWs7OeD5i6ruC9JZL1gERT1wjtwXFlh7CjE7ZJ+/vcRZRkIYIb6p4g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/leaflet.markercluster.min.js" integrity="sha512-TiMWaqipFi2Vqt4ugRzsF8oRoGFlFFuqIi30FFxEPNw58Ov9mOy6LgC05ysfkxwLE0xVeZtmr92wVg9siAFRWA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script src="data/intramuros-boundary.js"></script>
+<script src="data/food-spots.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
