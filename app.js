@@ -128,14 +128,17 @@
     },
     stay: {
       label: 'Stay',
-      /* Only the three properties actually bookable by a traveller. The members-only
-         AMOSUP facilities and the student dormitories stay in HOTELS.md but off the
-         map — routing a delegate to a seafarers' dorm is a dead end. */
+      /* Only properties a traveller can both book AND compare on price. The
+         members-only AMOSUP facilities and the student dormitories stay in
+         HOTELS.md but off the map — routing a delegate to a seafarers' dorm is a
+         dead end. Residencia 729 is publicly bookable but has no verifiable rate
+         (see its record in data/hotels.js), so it's held back too: a hotel with
+         no price next to two priced ones leaves the user unable to decide. */
       items: HOTELS.filter(h => h.mapped),
       categories: STAY_CATEGORIES,
       tiers: STAY_TIERS,
       tierOf: h => h.priceTier,
-      hideCategoryFilter: true,      // one category, three items — a filter would be noise
+      hideCategoryFilter: true,      // one category, two items — a filter would be noise
       subtitle: 'Where to stay within the walls',
       placeholder: 'Search a name or street…',
       filterLegend: 'Nightly rate',

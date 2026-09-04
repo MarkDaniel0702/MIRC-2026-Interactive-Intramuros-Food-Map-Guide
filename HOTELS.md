@@ -8,7 +8,8 @@ administrative boundary (OSM relation `103707`) — the same polygon the food ma
 
 ## The headline finding
 
-**Only three properties inside the walls are open to travellers.**
+**Only three properties inside the walls are open to travellers — and the map shows two
+of them.**
 
 Booking aggregators advertise "201 hotels in Intramuros" and similar. They are counting a
 radius, not the district — those lists are dominated by Ermita, Malate, Binondo and Rizal
@@ -18,11 +19,19 @@ query constrained to relation `103707` returns **8 accommodation POIs**, of whic
 | | Count | |
 |---|---|---|
 | Open to travellers | **3** | The Bayleaf, White Knight, Residencia 729 |
+| — shown on the interactive map | **2** | The Bayleaf, White Knight |
 | Members only | 3 | AMOSUP seafarers' union facilities |
 | Student / long-stay | 2 | Dormitory and boarding house |
 
 The commonly cited "only hotel in Intramuros" claim for The Bayleaf is close but not
 exact — it is the only *full-service* hotel; White Knight is a genuine second option.
+
+**Residencia 729 is open to travellers but not on the map.** It's real, it's public, and
+it's inside the boundary — but no current nightly rate exists anywhere online (see its
+entry below). A hotel card with no price next to two with real prices doesn't help anyone
+decide; it just sits there unusable. It stays fully documented here, and `data/hotels.js`
+keeps its record — just without the `mapped: true` flag that puts a pin on the Stay tab.
+If a rate ever surfaces, flipping that one flag is all it takes to add it back.
 
 ---
 
@@ -49,7 +58,7 @@ USD-sourced figures are converted at **₱62.50 / US$1** (rate as of 2026-09-02)
 | **Price range** | **≈ ₱2,800 – ₱13,300 per night.** From about ₱2,765 for a Superior; typical standard room ₱4,000 – ₱9,100; Bayleaf Suite reaches roughly ₱13,000 |
 | **Room types** | 57 rooms in 7 categories — Superior Twin (23 sqm) · Deluxe Twin / Queen / King (25 sqm) · Premier Trio (31 sqm) · Executive Suite (45 sqm) · Bayleaf Suite (135 sqm) |
 | **Booking / contact** | [thebayleaf.com.ph/intramuros](https://www.thebayleaf.com.ph/intramuros/) · +63 2 5318 5000 / 5328 3170 · tbi-inquiry@thebayleaf.com.ph |
-| **Notes** | Operated by Lyceum of the Philippines University. Houses Cioccolata, which appears on the food map. |
+| **Notes** | Operated by Lyceum of the Philippines University. Houses four in-house dining spots that appear on the food map — Cioccolata, 9 Spoons, Raffaele Woodfired Pizza and Sky Deck View Bar. |
 | **Price sourced from** | Hotel's own reservation page ("rates from ₱2,765"); aggregator listings US$46–US$213 |
 
 ### White Knight Hotel Intramuros

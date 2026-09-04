@@ -96,7 +96,12 @@ const HOTELS = [
     id: 'residencia-729',
     name: 'Residencia 729',
     access: 'public',
-    mapped: true, category: 'stay',
+    /* Deliberately NOT mapped (no `mapped: true`, no `category`) — it is a real,
+       publicly-bookable property, but with no verifiable nightly rate a visitor has
+       nothing to decide on. Showing it on the Stay tab next to two priced hotels
+       would leave the user without the information they need. Documented here and
+       in HOTELS.md so it isn't lost, just not put in front of a traveller comparing
+       options. Revisit if a current rate is ever sourced. */
     lat: 14.589739, lng: 120.976733, osm: 'way/639239855',
     street: 'Santa Potenciana Street',
     area: 'Southern quarter, near Cabildo Street',

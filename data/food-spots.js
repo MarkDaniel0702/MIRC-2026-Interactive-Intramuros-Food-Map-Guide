@@ -7,7 +7,10 @@
  * boundary polygon in data/intramuros-boundary.js.
  *
  * Coordinates and names come from an Overpass API query constrained to that
- * boundary (see DATA.md for the exact query). Nothing here was hand-placed.
+ * boundary (see DATA.md for the exact query), with a small number of manually
+ * researched additions — in-house restaurants at The Bayleaf hotel that have no
+ * separate OSM node and so share the hotel building's coordinates. Each such
+ * record says so in its blurb and is still gated by the same boundary check.
  *
  * Price tiers are INDICATIVE estimates, not quoted prices. See PRICE_TIERS below
  * and the methodology section of DATA.md.
@@ -39,6 +42,12 @@ const DATA_REVIEWED = '2026-09-03';
 
 const FOOD_SPOTS = [
   {
+    id: 'nine-spoons', name: '9 Spoons', category: 'heritage', priceTier: 3,
+    cuisine: ['Filipino', 'Breakfast', 'Buffet'], street: 'Muralla corner Victoria Street', area: 'The Bayleaf Intramuros, 9th floor',
+    lat: 14.590004, lng: 120.978725, osm: 'way/89568405 (9F)',
+    blurb: 'All-day dining restaurant on the top floor of The Bayleaf, serving Filipino heritage dishes — kare-kare, bagnet, sizzling bulalo — plus a weekday lunch buffet. Shares its coordinates with the hotel building; no separate OSM node exists for the restaurant itself.'
+  },
+  {
     id: 'adams-canteen', name: 'Adams Canteen', category: 'budget', priceTier: 1,
     cuisine: ['Filipino', 'Rice Meals'], street: 'Escuela Street', area: null,
     lat: 14.588943, lng: 120.977993, osm: 'node/1038225312',
@@ -63,16 +72,34 @@ const FOOD_SPOTS = [
     blurb: 'Filipino kitchen on the quieter western side of the walled city.'
   },
   {
+    id: 'bamboo-intramuros', name: 'Bamboo Intramuros', category: 'heritage', priceTier: 2,
+    cuisine: ['Filipino', 'Grill', 'Bar'], street: 'Magallanes Drive', area: null,
+    lat: 14.594598, lng: 120.977585, osm: 'node/6134921366',
+    blurb: 'Art-filled restaurant and bar on the northern edge of Intramuros — listed locally as Bambu Intramuros Art Bar and Restaurant — known for lechon kawali and cocktails amid bamboo-themed décor.'
+  },
+  {
     id: 'barbaras-casa-manila', name: "Barbara's Casa Manila", category: 'heritage', priceTier: 4,
     cuisine: ['Filipino', 'Buffet'], street: 'General Luna Street', area: 'Plaza San Luis Complex',
     lat: 14.589439, lng: 120.975215, osm: 'node/5938571786',
     blurb: 'Heritage buffet inside a Spanish-era mansion, with a Filipino cultural show at dinner.'
   },
   {
+    id: 'bataka-bar', name: 'Bataka Bar', category: 'heritage', priceTier: 2,
+    cuisine: ['Filipino', 'Bar'], street: 'General Luna Street', area: 'Plaza San Luis Complex',
+    lat: 14.589301, lng: 120.975319, osm: 'node/7138594047',
+    blurb: 'One of the dining spots inside the Plaza San Luis heritage complex, a few steps from Casa Manila, serving Filipino plates alongside its drinks list.'
+  },
+  {
     id: 'batala-ice-cream', name: 'Batala', category: 'dessert', priceTier: 1,
     cuisine: ['Ice Cream', 'Desserts'], street: 'San Jose Street', area: null,
     lat: 14.587318, lng: 120.977635, osm: 'node/12928095701',
-    blurb: 'Ice cream counter in the southern quarter of the walled city.'
+    blurb: 'Ice cream counter in the southern quarter of the walled city — a separate venue from Batala Bar below, despite the near-identical name.'
+  },
+  {
+    id: 'batala-bar', name: 'Batala Bar', category: 'heritage', priceTier: 2,
+    cuisine: ['Filipino', 'Craft Beer', 'Ice Cream'], street: 'General Luna Street', area: 'Plaza San Luis Complex',
+    lat: 14.589570, lng: 120.975060, osm: 'node/11710850483',
+    blurb: 'Craft beer bar and kitchen in the Plaza San Luis complex serving Filipino bar chow — crispy sisig, kare-kare, bagnet — alongside house-made ice cream and coffee, with vegan versions of several dishes.'
   },
   {
     id: 'beanleaf', name: 'Beanleaf', category: 'cafe', priceTier: 2,
@@ -130,9 +157,9 @@ const FOOD_SPOTS = [
   },
   {
     id: 'cioccolata', name: 'Cioccolata', category: 'dessert', priceTier: 2,
-    cuisine: ['Churros', 'Hot Chocolate', 'Desserts'], street: 'Muralla Street', area: 'The Bayleaf Hotel',
+    cuisine: ['Coffee', 'Churros', 'Hot Chocolate', 'Pastries'], street: 'Muralla Street', area: 'The Bayleaf Hotel',
     lat: 14.589866, lng: 120.978827, osm: 'node/6630882658',
-    blurb: 'Churros and thick hot chocolate at the foot of The Bayleaf hotel.'
+    blurb: 'Coffee, churros and pastries at the foot of The Bayleaf hotel — one of four in-house dining spots at the hotel, alongside 9 Spoons, Raffaele and Sky Deck View Bar.'
   },
   {
     id: 'club-intramuros', name: 'Club Intramuros', category: 'heritage', priceTier: 3,
@@ -279,6 +306,12 @@ const FOOD_SPOTS = [
     blurb: 'Grill house on Solana Street doing barbecue, chicken and rice plates.'
   },
   {
+    id: 'raffaele-woodfired-pizza', name: 'Raffaele Woodfired Pizza', category: 'heritage', priceTier: 2,
+    cuisine: ['Pizza', 'Italian'], street: 'Muralla corner Victoria Street', area: 'The Bayleaf Intramuros, 3rd floor',
+    lat: 14.590004, lng: 120.978725, osm: 'way/89568405 (3F)',
+    blurb: "Wood-fired pizza restaurant on The Bayleaf's third floor. Shares its coordinates with the hotel building; no separate OSM node exists for the restaurant itself."
+  },
+  {
     id: 'ristorante-delle-mitre', name: 'Ristorante delle Mitre', category: 'heritage', priceTier: 2,
     cuisine: ['Italian', 'Spanish', 'Filipino'], street: 'General Luna Street', area: 'Opposite San Agustin Church',
     lat: 14.589488, lng: 120.974704, osm: 'node/5421592625',
@@ -289,6 +322,12 @@ const FOOD_SPOTS = [
     cuisine: ['Filipino', 'Grill'], street: 'Victoria Street', area: null,
     lat: 14.589707, lng: 120.978639, osm: 'node/4524696228',
     blurb: 'Casual grill and Filipino plates on Victoria Street.'
+  },
+  {
+    id: 'sky-deck-view-bar', name: 'Sky Deck View Bar', category: 'heritage', priceTier: 3,
+    cuisine: ['Cocktails', 'Bar Snacks'], street: 'Muralla Street', area: 'The Bayleaf Hotel roof deck',
+    lat: 14.589941, lng: 120.978735, osm: 'node/13208384185',
+    blurb: 'Rooftop lounge atop The Bayleaf serving cocktails and bar snacks, with a view over the walls, the Intramuros golf course and the Manila Bay sunset.'
   },
   {
     id: 'starbucks-general-luna-south', name: 'Starbucks — General Luna (South)', category: 'cafe', priceTier: 2,

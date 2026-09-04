@@ -45,7 +45,7 @@ loading it at `/MIRC-2026-Interactive-Intramuros-Food-Map-Guide/`:
 
 - **Every asset path is relative** — `styles.css`, `app.js`, `data/food-spots.js`, and so
   on. Nothing starts with `/`, so the site works at a project subpath, not just at a
-  domain root. All 47 food spots, 21 sights, 3 hotels, map tiles and directions loaded
+  domain root. All 53 food spots, 21 sights, 2 mapped hotels, map tiles and directions loaded
   with no console errors and no failed requests.
 - **`.nojekyll`** is committed at the repo root. Nothing here would actually trip Jekyll
   today, but the file skips the Jekyll build entirely — slightly faster deploys and no
@@ -94,7 +94,7 @@ directions. This is tested — see `dirs.py` in the test notes, or block
 Open the live URL and confirm:
 
 - [ ] The map loads with tiles and pins (not a blank navy rectangle).
-- [ ] All three tabs work: **Eat** 47, **See** 21, **Stay** 3.
+- [ ] All three tabs work: **Eat** 53, **See** 21, **Stay** 2.
 - [ ] Clicking a marker opens a popup with a **Get directions** button.
 - [ ] Directions from a preset return a real route with steps and a distance.
 - [ ] **My location** now prompts for permission and works (this is the HTTPS-only one).

@@ -17,9 +17,9 @@ directions to any of it.
 
 | Tab | Contents |
 |---|---|
-| **Eat** | **47** restaurants, cafés, carinderias and fast-food branches, with price ranges |
+| **Eat** | **53** restaurants, cafés, carinderias, fast-food branches and hotel dining rooms, with price ranges |
 | **See** | **21** heritage sights, with entrance fees, opening hours and realistic visit times |
-| **Stay** | **3** hotels — every property inside the walls that a traveller can actually book |
+| **Stay** | **2** hotels — the properties inside the walls with both a public booking path and a real price. (A third, Residencia 729, is bookable but has no published rate — see `HOTELS.md`.) |
 
 Plus **walking directions** to any of them, from your location, a tapped point, or one of
 six arrival presets.
@@ -49,7 +49,7 @@ node tools/verify-in-intramuros.mjs
 ```
 
 ```
-  1. Location — is every spot inside Intramuros?      47/47 PASS
+  1. Location — is every spot inside Intramuros?      53/53 PASS
   2. Schema — is every record well formed?            PASS
   3. Tourist spots — is every sight inside?           21/21 PASS
   4. Accommodation — is every property inside?         8/8  PASS
@@ -120,7 +120,7 @@ styles.css                      design system, responsive layout, map + popup st
 app.js                          modes, markers, search, filters, list↔map sync, directions
 routing.js                      OSRM client + walking-instruction renderer
 
-data/food-spots.js              47 food spots  · PRICE_TIERS, CATEGORIES
+data/food-spots.js              53 food spots  · PRICE_TIERS, CATEGORIES
 data/tourist-spots.js           21 sights      · FEE_TIERS, VENUE_ANCHOR, passport info
 data/hotels.js                  8 properties   · 3 flagged `mapped` for the Stay tab
 data/start-points.js            6 arrival points for directions
@@ -160,7 +160,7 @@ Names and coordinates come from **OpenStreetMap** via the Overpass API, retrieve
 - **Entrance fees** are from the Intramuros Administration and site operators — published
   and reasonably stable. There's also a ₱350 **Intramuros Passport** covering five sites,
   which the See tab surfaces once it's worth buying.
-- **Restaurant prices are indicative estimates, not quotes.** Only a handful of the 47
+- **Restaurant prices are indicative estimates, not quotes.** Only a handful of the 53
   publish menu pricing, so each gets a tier plus an explicit peso band and a review date.
   Presenting a guess as an exact figure would be worse than an honest range.
 - **Hotel rates are a dated snapshot, not live pricing.** Nightly rates move daily.

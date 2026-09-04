@@ -194,10 +194,11 @@ if (HOTELS) {
   }
 
   const publicCount = HOTELS.filter(h => h.access === 'public').length;
+  const mappedCount = HOTELS.filter(h => h.mapped).length;
   console.log(
     staysOutside.length === 0
       ? green(`\n     All ${HOTELS.length} properties are inside the boundary `) +
-        dim(`(${publicCount} open to travellers).\n`)
+        dim(`(${publicCount} open to travellers, ${mappedCount} shown on the map).\n`)
       : red(`\n     ${staysOutside.length} propert(ies) fall OUTSIDE Intramuros.\n`)
   );
   if (staysOutside.length) failures.push(`${staysOutside.length} propert(ies) outside the boundary`);
