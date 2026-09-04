@@ -1,7 +1,11 @@
 # Data & method
 
-How the **53 food spots** and **21 heritage sights** on this map were chosen, where the
+How the **61 food spots** and **21 heritage sights** on this map were chosen, where the
 numbers come from, and what you should and shouldn't trust.
+
+Of the 61 food spots, **53 are OSM-derived and verified** and **8 are address-estimated**
+(community-listed eateries with no OpenStreetMap node — see §2, "Address-estimated
+entries"). The map also carries a small **landmark layer** (§8).
 
 Accommodation is documented separately in [`HOTELS.md`](HOTELS.md); deployment in
 [`DEPLOY.md`](DEPLOY.md).
@@ -96,6 +100,43 @@ separate lookup path, agreeing with the polygon test. That set includes all five
 bar-category venues discussed in §4; the two Bayleaf in-house additions postdate that pass
 and rely on the hotel-building check described above instead.
 
+### Address-estimated entries
+
+On **2026-09-04** a community-supplied list of Intramuros eateries was reconciled against
+the data. Nine of its rows already existed and were confirmed against their OSM nodes;
+three (`Uncle John's`, two `7-Eleven` branches) are convenience stores and fall outside
+the food-set definition in §2, so they are not listed. The remaining **eight have no
+OpenStreetMap node at all**:
+
+> Pastil Sa Tabi (PST) · Pastil-an Sayo · Vtan's Eatery · Lacanilao's Tapsilogan ·
+> Bacolodnon Eatery · Zaqueo Sisigan · Cheftain Eatery · Diego's Eatery
+
+They are kept, as the second sanctioned exception to the "every coordinate is copied
+verbatim from a single verifiable source" rule (the first being the out-of-boundary
+start points). Each carries:
+
+| Field | Value | Meaning |
+|---|---|---|
+| `osm` | `null` | no OpenStreetMap node exists for this venue |
+| `locationSource` | `'address'` | the coordinate is derived from the street address, not a mapped point |
+| `verified` | `false` | location is **not** independently confirmed |
+
+**How the coordinate is derived.** The street address is geocoded through Nominatim
+(`<house-number> <street>, Intramuros, Manila`). Where several venues share one street with
+no usable house number, the point is spread along that street's OSM geometry so pins don't
+stack. Every result is then run through the same ray-casting point-in-polygon gate as
+everything else — **an address-estimated pin that lands outside the boundary is rejected,
+not shipped.** All eight currently pass.
+
+**How it surfaces.** These pins render with a dashed disc and a gold marker dot; their
+popup carries an "Approximate location — placed from the street address" banner and a
+footnote that the venue has no OpenStreetMap record. Price tiers are `₱` (Budget), taken
+from the supplied list and reviewed 2026-09-04.
+
+`tools/verify-in-intramuros.mjs` allows `osm: null` **only** when `locationSource` is
+`'address'` or `'street'`, still boundary-checks the coordinate, and prints how many
+address-estimated entries are in the set.
+
 ---
 
 ## 3. Price ranges — read this before trusting a number
@@ -132,7 +173,8 @@ as a fact. A labelled band is honest about its own precision.
 
 Every card and popup carries the review date and a "confirm with the venue" note.
 
-**Distribution:** 17 × `₱` · 31 × `₱₱` · 4 × `₱₱₱` · 1 × `₱₱₱₱`
+**Distribution:** 25 × `₱` · 31 × `₱₱` · 4 × `₱₱₱` · 1 × `₱₱₱₱`
+(the eight address-estimated entries from §2 are all `₱`).
 
 ---
 
@@ -148,8 +190,10 @@ filed under Restaurants with a `Korean` tag rather than needing a category of it
 | `heritage` | Restaurants & Heritage Dining | 18 |
 | `cafe` | Cafés & Coffee | 17 |
 | `fastfood` | Fast Food & Chains | 7 |
-| `budget` | Budget Eats & Carinderias | 7 |
+| `budget` | Budget Eats & Carinderias | 15 |
 | `dessert` | Desserts & Snacks | 4 |
+
+(`budget` includes the eight address-estimated eateries from §2.)
 
 ### The bar/nightlife pass — removed, then corrected
 
@@ -320,7 +364,8 @@ coordinates could not be verified, and nothing unverified gets a pin.*
 2. Update `data/food-spots.js` / `data/tourist-spots.js`, keeping each record's curated
    fields (`category`, `priceTier` / `feeTier`, `cuisine`, `duration`, `blurb`).
 3. Bump `DATA_REVIEWED` / `SIGHTS_REVIEWED` in the file you touched.
-4. Run the gate — it must pass before shipping. It checks food, sights and hotels:
+4. Run the gate — it must pass before shipping. It checks food, sights, hotels and
+   landmarks:
 
 ```bash
 node tools/verify-in-intramuros.mjs
@@ -332,6 +377,30 @@ If the boundary itself needs refreshing:
 curl "https://nominatim.openstreetmap.org/search?q=Intramuros,+Manila&format=geojson&polygon_geojson=1&limit=1" \
   -H "User-Agent: your-app/1.0"
 ```
+
+---
+
+## 8. Landmarks
+
+`data/landmarks.js` holds a short list of **standalone highlighted markers**, separate
+from the Eat / See / Stay datasets. A landmark is always visible, sits above the
+clustered pins, is never touched by the tab switch or the filters, and **zooms the map
+in to its location when clicked** (`map.flyTo(..., 18)`).
+
+Currently one entry:
+
+| Landmark | OSM | Coordinate |
+|---|---|---|
+| Pamantasan ng Lungsod ng Maynila (PLM) — the University of the City of Manila, General Luna Street | `way/27275574` | 14.5868604, 120.9764378 |
+
+The coordinate is the OSM way centre, retrieved from Overpass on 2026-09-04 and gated by
+the same point-in-polygon check (`tools/verify-in-intramuros.mjs`, pass 5). Landmarks are
+navigation aids, not listings — they carry no price, category or filter state. Add more
+by appending to the `LANDMARKS` array (`id`, `name`, `short`, `lat`, `lng`, `blurb`
+required; `kind`, `osm`, `url` optional).
+
+> Note: PLM is *Pamantasan ng Lungsod ng Maynila*, not the Polytechnic University of the
+> Philippines (PUP), which is a different institution in Sta. Mesa.
 
 ---
 

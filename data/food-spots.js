@@ -12,10 +12,17 @@
  * separate OSM node and so share the hotel building's coordinates. Each such
  * record says so in its blurb and is still gated by the same boundary check.
  *
+ * A third class: eight community-listed eateries that have NO OpenStreetMap node
+ * at all. They carry `locationSource: 'address'` and `verified: false`; their
+ * coordinates are estimated from the street address, still gated to sit inside the
+ * boundary, and are shown on the map with an "approximate location" note. See
+ * DATA.md §2 ("Address-estimated entries").
+ *
  * Price tiers are INDICATIVE estimates, not quoted prices. See PRICE_TIERS below
  * and the methodology section of DATA.md.
  *
- * Data (c) OpenStreetMap contributors, ODbL. Retrieved 2026-09-03.
+ * Data (c) OpenStreetMap contributors, ODbL. Retrieved 2026-09-03;
+ * address-estimated additions 2026-09-04.
  */
 
 /** The one price scale used everywhere: legend, filters, list cards, popups. */
@@ -38,7 +45,7 @@ const CATEGORIES = {
 };
 
 /** When the price tiers and the spot list were last reviewed. */
-const DATA_REVIEWED = '2026-09-03';
+const DATA_REVIEWED = '2026-09-04';
 
 const FOOD_SPOTS = [
   {
@@ -358,6 +365,62 @@ const FOOD_SPOTS = [
     cuisine: ['Filipino', 'Café'], street: 'General Luna Street', area: 'Plaza San Luis Complex',
     lat: 14.589585, lng: 120.975042, osm: 'node/11710850484',
     blurb: "Café and dining room attached to the Tesoro's handicrafts store in Plaza San Luis."
+  },
+
+  /* ── Address-estimated entries ──────────────────────────────────────────────
+     Eight small eateries from a community-supplied list (see DATA.md §2). None
+     have an OpenStreetMap node, so there is no verified coordinate: each `lat`/
+     `lng` below is estimated from the street address, `osm` is null, and
+     `verified: false` drives an "approximate location" note in the UI. They still
+     pass the inside-Intramuros boundary gate in tools/verify-in-intramuros.mjs.
+     Prices are from the same list, reviewed 2026-09-04.                        */
+  {
+    id: 'pastil-sa-tabi', name: 'Pastil Sa Tabi (PST)', category: 'budget', priceTier: 1,
+    cuisine: ['Filipino', 'Pastil', 'Rice Meals'], street: 'Victoria Street', area: null,
+    lat: 14.589696, lng: 120.978594, osm: null, locationSource: 'address', verified: false,
+    blurb: 'Small pastil counter on Victoria Street serving cheap banana-leaf parcels of rice with shredded chicken or beef, to go. No OpenStreetMap record exists — the pin is estimated from the address (641 Victoria St) and is approximate.'
+  },
+  {
+    id: 'pastil-an-sayo', name: 'Pastil-an Sayo', category: 'budget', priceTier: 1,
+    cuisine: ['Filipino', 'Pastil', 'Rice Meals'], street: 'Victoria Street', area: null,
+    lat: 14.589714, lng: 120.979173, osm: null, locationSource: 'address', verified: false,
+    blurb: 'Pastil stall on the eastern stretch of Victoria Street — banana-leaf rice parcels from about ₱25. Not mapped in OpenStreetMap; the pin is placed from its street address (729A Victoria St) and is approximate.'
+  },
+  {
+    id: 'vtans-eatery', name: "Vtan's Eatery", category: 'budget', priceTier: 1,
+    cuisine: ['Filipino', 'Carinderia'], street: 'Victoria Street', area: null,
+    lat: 14.589744, lng: 120.978962, osm: null, locationSource: 'address', verified: false,
+    blurb: 'Carinderia on Victoria Street with a short daily menu of Filipino home dishes over rice. Not mapped in OpenStreetMap; location estimated from the address (641 Victoria St) and approximate.'
+  },
+  {
+    id: 'lacanilaos-tapsilogan', name: "Lacanilao's Tapsilogan", category: 'budget', priceTier: 1,
+    cuisine: ['Filipino', 'Silog', 'Breakfast'], street: 'Victoria Street', area: null,
+    lat: 14.589640, lng: 120.978230, osm: null, locationSource: 'address', verified: false,
+    blurb: 'Tapsilogan on Victoria Street doing the standard silog line-up — tapa, longganisa and tocino with garlic rice and egg — through the day. No OpenStreetMap node; location estimated from the street name and approximate.'
+  },
+  {
+    id: 'bacolodnon-eatery', name: 'Bacolodnon Eatery', category: 'budget', priceTier: 1,
+    cuisine: ['Filipino', 'Bacolod', 'Inasal'], street: 'Magallanes Street', area: null,
+    lat: 14.589272, lng: 120.977280, osm: null, locationSource: 'address', verified: false,
+    blurb: 'Bacolod-style carinderia on Magallanes Street — inasal and Negrense home cooking over rice. Not in OpenStreetMap; the pin is placed from the address (703 Magallanes St) and is approximate.'
+  },
+  {
+    id: 'zaqueo-sisigan', name: 'Zaqueo Sisigan', category: 'budget', priceTier: 1,
+    cuisine: ['Filipino', 'Sisig'], street: 'Magallanes Street', area: null,
+    lat: 14.590593, lng: 120.976083, osm: null, locationSource: 'address', verified: false,
+    blurb: 'Sisig eatery on Magallanes Street plating the sizzling chopped-pork classic over rice. Unmapped in OpenStreetMap — the pin is derived from the street address (356 Magallanes St) and is approximate.'
+  },
+  {
+    id: 'cheftain-eatery', name: 'Cheftain Eatery', category: 'budget', priceTier: 1,
+    cuisine: ['Filipino', 'Turo-Turo'], street: 'Santa Potenciana Street', area: null,
+    lat: 14.589247, lng: 120.976319, osm: null, locationSource: 'address', verified: false,
+    blurb: 'Turo-turo canteen on Santa Potenciana Street with a rotating tray of Filipino ulam over rice. Unmapped in OpenStreetMap — the pin is estimated from the street address (670 Sta. Potenciana St) and approximate.'
+  },
+  {
+    id: 'diegos-eatery', name: "Diego's Eatery", category: 'budget', priceTier: 1,
+    cuisine: ['Filipino', 'Turo-Turo'], street: 'Magallanes Street', area: null,
+    lat: 14.589370, lng: 120.976040, osm: null, locationSource: 'address', verified: false,
+    blurb: 'Neighbourhood eatery near the corner of Magallanes and Santa Potenciana Streets serving budget rice meals. No OpenStreetMap record; the pin is derived from that junction and is approximate.'
   }
 ];
 

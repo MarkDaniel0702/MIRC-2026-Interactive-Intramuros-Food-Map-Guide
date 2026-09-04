@@ -9,6 +9,7 @@
  *     INTRAMUROS_PASSPORT, SIGHTS_REVIEWED                (data/tourist-spots.js)
  *   HOTELS, STAY_TIERS, STAY_CATEGORIES, STAY_REVIEWED    (data/hotels.js)
  *   START_POINTS                                          (data/start-points.js)
+ *   LANDMARKS                                  (data/landmarks.js — optional layer)
  *   Routing                                               (routing.js)
  *   L                                     (Leaflet + Leaflet.markercluster from CDN)
  *
@@ -272,20 +273,62 @@
     }
   }).addTo(map);
 
+  /* ─────────────────────────── landmarks layer ───────────────────────────────
+     Standalone highlighted markers (data/landmarks.js). Added straight to the map
+     — never to the cluster — and built once, so they stay put through every tab
+     switch and filter change. Clicking one flies the map in to that spot. */
+
+  function landmarkPopupHTML(lm) {
+    return `
+      <div class="pop pop--landmark">
+        <span class="pop__cat"><i></i>${esc(lm.kind || 'Landmark')}</span>
+        <h2 class="pop__name">${esc(lm.name)}</h2>
+        <p class="pop__blurb">${esc(lm.blurb)}</p>
+        <p class="pop__where">${MARKER_SVG}<span>${esc(lm.street || 'Intramuros')}<br>Intramuros, Manila</span></p>
+        ${lm.url ? `<p class="pop__contact"><a href="${esc(lm.url)}" target="_blank" rel="noopener">Official site</a></p>` : ''}
+      </div>`;
+  }
+
+  if (typeof LANDMARKS !== 'undefined' && Array.isArray(LANDMARKS)) {
+    for (const lm of LANDMARKS) {
+      const marker = L.marker([lm.lat, lm.lng], {
+        icon: L.divIcon({
+          className: 'landmark-icon',
+          html: `<div class="landmark"><span>${esc(lm.short || '★')}</span></div>`,
+          iconSize: [40, 40],
+          iconAnchor: [20, 20],
+          popupAnchor: [0, -20]
+        }),
+        title: lm.name,
+        alt: lm.name,
+        zIndexOffset: 1000,
+        riseOnHover: true,
+        keyboard: true
+      }).addTo(map);
+
+      marker.bindPopup(landmarkPopupHTML(lm), { maxWidth: 260, minWidth: 220, autoPanPadding: [26, 26] });
+      marker.on('click', () => {
+        map.flyTo([lm.lat, lm.lng], 18, { duration: reduceMotion ? 0 : 0.8 });
+        marker.openPopup();
+      });
+    }
+  }
+
   /* ───────────────────────────── markers ─────────────────────────────────── */
 
   function buildMarker(spot, m) {
     const cat = m.categories[spot.category];
     const tier = m.tiers[m.tierOf(spot)];
+    const estimate = spot.verified === false;
     const marker = L.marker([spot.lat, spot.lng], {
       icon: L.divIcon({
         className: 'pin-icon',
-        html: `<div class="pin" style="--c:${cat.color}"><span class="pin__disc">${PIN_SVG(cat.icon)}</span></div>`,
+        html: `<div class="pin${estimate ? ' pin--estimate' : ''}" style="--c:${cat.color}"><span class="pin__disc">${PIN_SVG(cat.icon)}</span></div>`,
         iconSize: [30, 30],
         iconAnchor: [15, 33],
         popupAnchor: [0, -32]
       }),
-      title: `${spot.name} — ${tier.symbol}`,
+      title: `${spot.name} — ${tier.symbol}${estimate ? ' (approx. location)' : ''}`,
       alt: spot.name,
       riseOnHover: true
     });
@@ -347,11 +390,13 @@
     if (isSight) foot = `Fee and hours from the Intramuros Administration and the site operator, checked ${esc(SIGHTS_REVIEWED)}. Walking time is from ${esc(VENUE_ANCHOR.name)}.`;
     else if (isStay) foot = `Indicative nightly range, reviewed ${esc(STAY_REVIEWED)} — not a live rate. Confirm with the property. Method in HOTELS.md.`;
     else foot = `Price is an indicative range per person, reviewed ${esc(DATA_REVIEWED)}. Confirm with the venue.`;
+    if (spot.verified === false) foot += ' This venue has no OpenStreetMap record — its position is estimated from the street address and is not independently verified.';
 
     return `
       <div class="pop${isSight || isStay ? ' pop--sight' : ''}" style="--c:${cat.color}">
         <span class="pop__cat"><i></i>${esc(cat.label)}</span>
         <h2 class="pop__name">${esc(spot.name)}</h2>
+        ${spot.verified === false ? `<p class="pop__estimate">${MARKER_SVG}<span>Approximate location — placed from the street address${spot.street ? ` (${esc(spot.street)})` : ''}, not a mapped point.</span></p>` : ''}
 
         ${readout}
 

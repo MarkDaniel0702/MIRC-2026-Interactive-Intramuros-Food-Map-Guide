@@ -42,6 +42,12 @@ try {
   ({ TOURIST_SPOTS, SIGHT_CATEGORIES, FEE_TIERS } = require(join(root, 'data', 'tourist-spots.js')));
 } catch { /* tourist-spots.js not present; skip that pass */ }
 
+/* Standalone landmarks likewise. */
+let LANDMARKS = null;
+try {
+  ({ LANDMARKS } = require(join(root, 'data', 'landmarks.js')));
+} catch { /* landmarks.js not present; skip that pass */ }
+
 /* ── terminal colours (skipped when output is piped or NO_COLOR is set) ───────── */
 const tty = process.stdout.isTTY && !process.env.NO_COLOR;
 const c = (code, s) => (tty ? `[${code}m${s}[0m` : s);
@@ -88,7 +94,8 @@ for (const spot of FOOD_SPOTS) {
   const ok = insideBoundary(spot.lng, spot.lat, INTRAMUROS_BOUNDARY.geometry);
   if (!ok) outside.push(spot);
   const mark = ok ? green('PASS') : red('FAIL');
-  console.log(`     ${mark}  ${spot.name.padEnd(34)} ${dim(`${spot.lat}, ${spot.lng}`)}`);
+  const tag = spot.verified === false ? dim('  est.') : '';
+  console.log(`     ${mark}  ${spot.name.padEnd(34)} ${dim(`${spot.lat}, ${spot.lng}`)}${tag}`);
 }
 
 console.log(
@@ -102,18 +109,32 @@ if (outside.length) failures.push(`${outside.length} spot(s) outside the boundar
 
 console.log(bold('  2. Schema — is every record well formed?\n'));
 
-const required = ['id', 'name', 'category', 'priceTier', 'cuisine', 'lat', 'lng', 'osm', 'blurb'];
+/* `osm` is required for every real spot. The exception is an address-estimated
+   entry (locationSource 'address' | 'street'): it has no OSM node, carries
+   osm: null and verified: false, and is still gated by the pass-1 boundary test. */
+const ESTIMATE_SOURCES = ['address', 'street'];
+const baseRequired = ['id', 'name', 'category', 'priceTier', 'cuisine', 'lat', 'lng', 'blurb'];
 const problems = [];
 const seenIds = new Map();
 const seenOsm = new Map();
+let estimatedCount = 0;
 
 for (const spot of FOOD_SPOTS) {
   const where = spot.id || spot.name || '(unnamed record)';
+  const estimated = ESTIMATE_SOURCES.includes(spot.locationSource);
+  const required = estimated ? baseRequired : [...baseRequired, 'osm'];
 
   for (const field of required) {
     if (spot[field] === undefined || spot[field] === null || spot[field] === '') {
       problems.push(`${where}: missing required field "${field}"`);
     }
+  }
+  if (estimated) {
+    estimatedCount++;
+    if (spot.osm != null) problems.push(`${where}: address-estimated entry must have osm: null`);
+    if (spot.verified !== false) problems.push(`${where}: address-estimated entry must have verified: false`);
+  } else if (spot.locationSource !== undefined) {
+    problems.push(`${where}: locationSource ${JSON.stringify(spot.locationSource)} is not one of ${ESTIMATE_SOURCES.join(', ')}`);
   }
   if (!Number.isInteger(spot.priceTier) || !PRICE_TIERS[spot.priceTier]) {
     problems.push(`${where}: priceTier ${JSON.stringify(spot.priceTier)} is not one of 1-4`);
@@ -130,12 +151,18 @@ for (const spot of FOOD_SPOTS) {
   if (seenIds.has(spot.id)) problems.push(`duplicate id "${spot.id}" (also used by ${seenIds.get(spot.id)})`);
   else seenIds.set(spot.id, spot.name);
 
-  if (seenOsm.has(spot.osm)) problems.push(`duplicate OSM ref "${spot.osm}" (${spot.name} / ${seenOsm.get(spot.osm)})`);
-  else seenOsm.set(spot.osm, spot.name);
+  if (spot.osm != null) {
+    if (seenOsm.has(spot.osm)) problems.push(`duplicate OSM ref "${spot.osm}" (${spot.name} / ${seenOsm.get(spot.osm)})`);
+    else seenOsm.set(spot.osm, spot.name);
+  }
 }
 
 if (problems.length === 0) {
-  console.log(green(`     All ${FOOD_SPOTS.length} records are well formed.\n`));
+  console.log(green(`     All ${FOOD_SPOTS.length} records are well formed.`));
+  if (estimatedCount) {
+    console.log(dim(`     ${estimatedCount} of them are address-estimated (no OSM node; location not independently verified).`));
+  }
+  console.log('');
 } else {
   for (const p of problems) console.log(`     ${red('FAIL')}  ${p}`);
   console.log('');
@@ -202,6 +229,42 @@ if (HOTELS) {
       : red(`\n     ${staysOutside.length} propert(ies) fall OUTSIDE Intramuros.\n`)
   );
   if (staysOutside.length) failures.push(`${staysOutside.length} propert(ies) outside the boundary`);
+}
+
+/* ── pass 5: standalone landmarks (optional) ─────────────────────────────────── */
+
+if (LANDMARKS) {
+  console.log(bold('  5. Landmarks — is every highlighted landmark inside Intramuros?\n'));
+
+  const lmOutside = [];
+  const lmProblems = [];
+  for (const lm of LANDMARKS) {
+    const ok = insideBoundary(lm.lng, lm.lat, INTRAMUROS_BOUNDARY.geometry);
+    if (!ok) lmOutside.push(lm);
+    console.log(`     ${ok ? green('PASS') : red('FAIL')}  ${String(lm.name).padEnd(38)} ${dim(`${lm.lat}, ${lm.lng}`)}`);
+
+    for (const f of ['id', 'name', 'short', 'lat', 'lng', 'blurb']) {
+      if (lm[f] === undefined || lm[f] === null || lm[f] === '') lmProblems.push(`${lm.id || lm.name}: missing "${f}"`);
+    }
+    if (!(lm.lat > 14.58 && lm.lat < 14.60 && lm.lng > 120.96 && lm.lng < 120.99)) {
+      lmProblems.push(`${lm.id || lm.name}: coordinates are outside the Intramuros bounding box`);
+    }
+    if (seenIds.has(lm.id)) lmProblems.push(`landmark id "${lm.id}" collides with another record`);
+    else seenIds.set(lm.id, lm.name);
+  }
+
+  console.log(
+    lmOutside.length === 0
+      ? green(`\n     All ${LANDMARKS.length} landmark(s) are inside the official Intramuros boundary.\n`)
+      : red(`\n     ${lmOutside.length} landmark(s) fall OUTSIDE Intramuros.\n`)
+  );
+  if (lmOutside.length) failures.push(`${lmOutside.length} landmark(s) outside the boundary`);
+
+  if (lmProblems.length) {
+    for (const p of lmProblems) console.log(`     ${red('FAIL')}  ${p}`);
+    console.log('');
+    failures.push(`${lmProblems.length} landmark schema problem(s)`);
+  }
 }
 
 /* ── summary ─────────────────────────────────────────────────────────────────── */
