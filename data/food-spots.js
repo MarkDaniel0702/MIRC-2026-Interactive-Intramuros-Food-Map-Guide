@@ -366,18 +366,20 @@ const FOOD_SPOTS = [
     blurb: "Café and dining room attached to the Tesoro's handicrafts store in Plaza San Luis."
   },
 
-  /* ── Address-estimated entries ──────────────────────────────────────────────
-     Eight small eateries from a community-supplied list (see DATA.md §2). None
-     have an OpenStreetMap node, so there is no verified coordinate: each `lat`/
-     `lng` below is estimated from the street address, `osm` is null, and
-     `verified: false` drives an "approximate location" note in the UI. They still
-     pass the inside-Intramuros boundary gate in tools/verify-in-intramuros.mjs.
-     Prices are from the same list, reviewed 2026-09-04.                        */
+  /* ── Entries with no OpenStreetMap node ─────────────────────────────────────
+     Small eateries that OpenStreetMap has not mapped, so `osm` is null. Two sub-
+     classes, both still gated by the inside-Intramuros boundary check:
+       · locationSource 'address' + verified:false — coordinate estimated from the
+         street address; the UI shows a dashed pin and an "approximate" note.
+       · locationSource 'user'    + verified:true  — an exact point supplied
+         directly by a visitor; shown as a normal pin.
+     Prices reviewed 2026-09-04; Cioden Diner and the two user-pinned coordinates
+     added 2026-09-09.                                                          */
   {
     id: 'pastil-sa-tabi', name: 'Pastil Sa Tabi (PST)', category: 'budget', priceTier: 1,
     cuisine: ['Filipino', 'Pastil', 'Rice Meals'], street: 'Victoria Street', area: null,
-    lat: 14.589696, lng: 120.978594, osm: null, locationSource: 'address', verified: false,
-    blurb: 'Small pastil counter on Victoria Street serving cheap banana-leaf parcels of rice with shredded chicken or beef, to go. No OpenStreetMap record exists — the pin is estimated from the address (641 Victoria St) and is approximate.'
+    lat: 14.588607, lng: 120.977304, osm: null, locationSource: 'user', verified: true,
+    blurb: 'Small pastil counter on Victoria Street serving cheap banana-leaf parcels of rice with shredded chicken or beef, to go. Not in OpenStreetMap — the coordinate was supplied directly by a visitor.'
   },
   {
     id: 'pastil-an-sayo', name: 'Pastil-an Sayo', category: 'budget', priceTier: 1,
@@ -388,8 +390,8 @@ const FOOD_SPOTS = [
   {
     id: 'vtans-eatery', name: "Vtan's Eatery", category: 'budget', priceTier: 1,
     cuisine: ['Filipino', 'Carinderia'], street: 'Victoria Street', area: null,
-    lat: 14.589744, lng: 120.978962, osm: null, locationSource: 'address', verified: false,
-    blurb: 'Carinderia on Victoria Street with a short daily menu of Filipino home dishes over rice. Not mapped in OpenStreetMap; location estimated from the address (641 Victoria St) and approximate.'
+    lat: 14.588643, lng: 120.977392, osm: null, locationSource: 'user', verified: true,
+    blurb: 'Carinderia on Victoria Street with a short daily menu of Filipino home dishes over rice. Not in OpenStreetMap — the coordinate was supplied directly by a visitor.'
   },
   {
     id: 'lacanilaos-tapsilogan', name: "Lacanilao's Tapsilogan", category: 'budget', priceTier: 1,
@@ -420,6 +422,12 @@ const FOOD_SPOTS = [
     cuisine: ['Filipino', 'Turo-Turo'], street: 'Magallanes Street', area: null,
     lat: 14.589370, lng: 120.976040, osm: null, locationSource: 'address', verified: false,
     blurb: 'Neighbourhood eatery near the corner of Magallanes and Santa Potenciana Streets serving budget rice meals. No OpenStreetMap record; the pin is derived from that junction and is approximate.'
+  },
+  {
+    id: 'cioden-diner', name: 'Cioden Diner', category: 'budget', priceTier: 1,
+    cuisine: ['Filipino', 'Carinderia', 'Rice Meals'], street: null, area: null,
+    lat: 14.589452, lng: 120.978018, osm: null, locationSource: 'user', verified: true,
+    blurb: 'Carinderia in the eastern quarter of the walled city serving budget Filipino rice meals from about ₱35. Not in OpenStreetMap — the coordinate was supplied directly by a visitor.'
   }
 ];
 

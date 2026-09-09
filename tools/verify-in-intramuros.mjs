@@ -94,7 +94,8 @@ for (const spot of FOOD_SPOTS) {
   const ok = insideBoundary(spot.lng, spot.lat, INTRAMUROS_BOUNDARY.geometry);
   if (!ok) outside.push(spot);
   const mark = ok ? green('PASS') : red('FAIL');
-  const tag = spot.verified === false ? dim('  est.') : '';
+  const tag = spot.verified === false ? dim('  est.')
+            : spot.locationSource === 'user' ? dim('  user') : '';
   console.log(`     ${mark}  ${spot.name.padEnd(34)} ${dim(`${spot.lat}, ${spot.lng}`)}${tag}`);
 }
 
@@ -109,32 +110,42 @@ if (outside.length) failures.push(`${outside.length} spot(s) outside the boundar
 
 console.log(bold('  2. Schema — is every record well formed?\n'));
 
-/* `osm` is required for every real spot. The exception is an address-estimated
-   entry (locationSource 'address' | 'street'): it has no OSM node, carries
-   osm: null and verified: false, and is still gated by the pass-1 boundary test. */
+/* `osm` is required for every real spot. The exceptions are records with no OSM
+   node, flagged by locationSource:
+     · 'address' | 'street' — coordinate ESTIMATED from the address; verified:false.
+     · 'user'               — EXACT point supplied by a person;    verified:true.
+   All of them still carry osm:null and are gated by the pass-1 boundary test. */
 const ESTIMATE_SOURCES = ['address', 'street'];
+const NO_OSM_SOURCES = [...ESTIMATE_SOURCES, 'user'];
 const baseRequired = ['id', 'name', 'category', 'priceTier', 'cuisine', 'lat', 'lng', 'blurb'];
 const problems = [];
 const seenIds = new Map();
 const seenOsm = new Map();
 let estimatedCount = 0;
+let userPinnedCount = 0;
 
 for (const spot of FOOD_SPOTS) {
   const where = spot.id || spot.name || '(unnamed record)';
   const estimated = ESTIMATE_SOURCES.includes(spot.locationSource);
-  const required = estimated ? baseRequired : [...baseRequired, 'osm'];
+  const noOsm = NO_OSM_SOURCES.includes(spot.locationSource);
+  const required = noOsm ? baseRequired : [...baseRequired, 'osm'];
 
   for (const field of required) {
     if (spot[field] === undefined || spot[field] === null || spot[field] === '') {
       problems.push(`${where}: missing required field "${field}"`);
     }
   }
+  if (spot.locationSource !== undefined && !noOsm) {
+    problems.push(`${where}: locationSource ${JSON.stringify(spot.locationSource)} is not one of ${NO_OSM_SOURCES.join(', ')}`);
+  } else if (noOsm && spot.osm != null) {
+    problems.push(`${where}: ${spot.locationSource}-sourced entry must have osm: null`);
+  }
   if (estimated) {
     estimatedCount++;
-    if (spot.osm != null) problems.push(`${where}: address-estimated entry must have osm: null`);
     if (spot.verified !== false) problems.push(`${where}: address-estimated entry must have verified: false`);
-  } else if (spot.locationSource !== undefined) {
-    problems.push(`${where}: locationSource ${JSON.stringify(spot.locationSource)} is not one of ${ESTIMATE_SOURCES.join(', ')}`);
+  } else if (spot.locationSource === 'user') {
+    userPinnedCount++;
+    if (spot.verified !== true) problems.push(`${where}: user-pinned entry must have verified: true`);
   }
   if (!Number.isInteger(spot.priceTier) || !PRICE_TIERS[spot.priceTier]) {
     problems.push(`${where}: priceTier ${JSON.stringify(spot.priceTier)} is not one of 1-4`);
@@ -161,6 +172,9 @@ if (problems.length === 0) {
   console.log(green(`     All ${FOOD_SPOTS.length} records are well formed.`));
   if (estimatedCount) {
     console.log(dim(`     ${estimatedCount} of them are address-estimated (no OSM node; location not independently verified).`));
+  }
+  if (userPinnedCount) {
+    console.log(dim(`     ${userPinnedCount} of them are user-pinned (no OSM node; exact coordinate supplied by a person).`));
   }
   console.log('');
 } else {

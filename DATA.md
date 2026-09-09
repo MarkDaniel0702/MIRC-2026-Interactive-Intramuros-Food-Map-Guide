@@ -1,17 +1,24 @@
 # Data & method
 
-How the **60 food spots** and **21 heritage sights** on this map were chosen, where the
+How the **61 food spots** and **21 heritage sights** on this map were chosen, where the
 numbers come from, and what you should and shouldn't trust.
 
-Of the 60 food spots, **52 are OSM-derived and verified** and **8 are address-estimated**
-(community-listed eateries with no OpenStreetMap node — see §2, "Address-estimated
-entries"). The map also carries a small **landmark layer** (§8).
+Of the 61 food spots, **52 are OSM-derived and verified**, **6 are address-estimated**,
+and **3 are user-pinned** — an exact coordinate supplied directly by a visitor, with no
+OpenStreetMap node (see §2, "Entries with no OpenStreetMap node"). The map also carries a
+small **landmark layer** (§8).
 
-> **2026-09-09.** `Cafe Sofia` (General Luna Street, OSM `node/11521200457`) was removed
-> after a first-hand report that it has closed. It was still present in OpenStreetMap and
-> in 2025 listings at the time, so the closure is not independently corroborated —
-> restore the record if it turns out to be trading. Food spots went 61 → 60,
-> Restaurants & Heritage Dining 18 → 17, `₱₱` tier 31 → 30.
+> **2026-09-09.** Two changes.
+> · `Cafe Sofia` (General Luna Street, OSM `node/11521200457`) was removed after a
+>   first-hand report that it has closed. It was still present in OpenStreetMap and in
+>   2025 listings at the time, so the closure is not independently corroborated — restore
+>   the record if it turns out to be trading. (Food spots 61 → 60, Restaurants & Heritage
+>   Dining 18 → 17, `₱₱` tier 31 → 30.)
+> · `Vtan's Eatery` and `Pastil Sa Tabi (PST)` were re-pinned to exact coordinates
+>   supplied by a visitor and moved from address-estimated to `locationSource: 'user'`
+>   (`verified: true`); a new user-pinned carinderia, `Cioden Diner` (Budget, `₱` — "₱35
+>   and above"), was added. (Food spots 60 → 61, Budget Eats & Carinderias 15 → 16, `₱`
+>   tier 25 → 26; address-estimated 8 → 6, user-pinned 0 → 3.)
 
 Accommodation is documented separately in [`HOTELS.md`](HOTELS.md); deployment in
 [`DEPLOY.md`](DEPLOY.md).
@@ -106,42 +113,43 @@ separate lookup path, agreeing with the polygon test. That set includes all five
 bar-category venues discussed in §4; the two Bayleaf in-house additions postdate that pass
 and rely on the hotel-building check described above instead.
 
-### Address-estimated entries
+### Entries with no OpenStreetMap node
 
 On **2026-09-04** a community-supplied list of Intramuros eateries was reconciled against
 the data. Nine of its rows already existed and were confirmed against their OSM nodes;
 three (`Uncle John's`, two `7-Eleven` branches) are convenience stores and fall outside
-the food-set definition in §2, so they are not listed. The remaining **eight have no
-OpenStreetMap node at all**:
+the food-set definition in §2, so they are not listed. Eight others had **no OpenStreetMap
+node at all** and were added with `osm: null`; a ninth (`Cioden Diner`) was added the same
+way on 2026-09-09.
 
-> Pastil Sa Tabi (PST) · Pastil-an Sayo · Vtan's Eatery · Lacanilao's Tapsilogan ·
-> Bacolodnon Eatery · Zaqueo Sisigan · Cheftain Eatery · Diego's Eatery
+These nine are kept, as the second sanctioned exception to the "every coordinate is copied
+verbatim from a single verifiable source" rule (the first being the out-of-boundary start
+points). Two sub-classes, set by `locationSource`:
 
-They are kept, as the second sanctioned exception to the "every coordinate is copied
-verbatim from a single verifiable source" rule (the first being the out-of-boundary
-start points). Each carries:
+| `locationSource` | `verified` | Coordinate origin | Count |
+|---|---|---|---|
+| `'address'` | `false` | Estimated from the street address (see "How the coordinate is derived" below). Renders with a **dashed disc + gold dot** and an "Approximate location" popup banner. | 6 |
+| `'user'` | `true` | An **exact point supplied directly by a visitor**. Renders as a normal pin, no banner. | 3 |
 
-| Field | Value | Meaning |
-|---|---|---|
-| `osm` | `null` | no OpenStreetMap node exists for this venue |
-| `locationSource` | `'address'` | the coordinate is derived from the street address, not a mapped point |
-| `verified` | `false` | location is **not** independently confirmed |
+**Address-estimated (6):** Pastil-an Sayo · Lacanilao's Tapsilogan · Bacolodnon Eatery ·
+Zaqueo Sisigan · Cheftain Eatery · Diego's Eatery.
 
-**How the coordinate is derived.** The street address is geocoded through Nominatim
-(`<house-number> <street>, Intramuros, Manila`). Where several venues share one street with
-no usable house number, the point is spread along that street's OSM geometry so pins don't
-stack. Every result is then run through the same ray-casting point-in-polygon gate as
-everything else — **an address-estimated pin that lands outside the boundary is rejected,
-not shipped.** All eight currently pass.
+**User-pinned (3):** Vtan's Eatery · Pastil Sa Tabi (PST) · Cioden Diner. Vtan's and PST
+were address-estimated until **2026-09-09**, when a visitor provided exact coordinates;
+Cioden Diner was added the same day (Budget, `₱` — reported "₱35 and above"). These carry
+no street on the record beyond what was already known.
 
-**How it surfaces.** These pins render with a dashed disc and a gold marker dot; their
-popup carries an "Approximate location — placed from the street address" banner and a
-footnote that the venue has no OpenStreetMap record. Price tiers are `₱` (Budget), taken
-from the supplied list and reviewed 2026-09-04.
+**How the address-estimated coordinate is derived.** The street address is geocoded
+through Nominatim (`<house-number> <street>, Intramuros, Manila`). Where several venues
+share one street with no usable house number, the point is spread along that street's OSM
+geometry so pins don't stack.
 
-`tools/verify-in-intramuros.mjs` allows `osm: null` **only** when `locationSource` is
-`'address'` or `'street'`, still boundary-checks the coordinate, and prints how many
-address-estimated entries are in the set.
+**Both sub-classes are still gated.** Every one is run through the same ray-casting
+point-in-polygon test as everything else — a pin outside the boundary is rejected, not
+shipped. `tools/verify-in-intramuros.mjs` allows `osm: null` **only** when
+`locationSource` is `'address'`, `'street'` or `'user'`, enforces `verified: false` for
+the estimated ones and `verified: true` for the user-pinned ones, and prints how many of
+each are in the set.
 
 ---
 
@@ -172,15 +180,15 @@ Tiers were assigned from three sources, in order of preference:
 ### Why not exact peso figures per venue?
 
 Because they aren't available. Published prices could be verified for only a handful of
-these 60 establishments; several major Philippine food publications block automated
+these 61 establishments; several major Philippine food publications block automated
 access, and most independent Intramuros venues publish no menu pricing at all. Printing a
 specific range like "₱320–₱480" for a carinderia nobody has priced would present a guess
 as a fact. A labelled band is honest about its own precision.
 
 Every card and popup carries the review date and a "confirm with the venue" note.
 
-**Distribution:** 25 × `₱` · 30 × `₱₱` · 4 × `₱₱₱` · 1 × `₱₱₱₱`
-(the eight address-estimated entries from §2 are all `₱`).
+**Distribution:** 26 × `₱` · 30 × `₱₱` · 4 × `₱₱₱` · 1 × `₱₱₱₱`
+(the six address-estimated and three user-pinned entries from §2 are all `₱`).
 
 ---
 
@@ -196,10 +204,10 @@ filed under Restaurants with a `Korean` tag rather than needing a category of it
 | `heritage` | Restaurants & Heritage Dining | 17 |
 | `cafe` | Cafés & Coffee | 17 |
 | `fastfood` | Fast Food & Chains | 7 |
-| `budget` | Budget Eats & Carinderias | 15 |
+| `budget` | Budget Eats & Carinderias | 16 |
 | `dessert` | Desserts & Snacks | 4 |
 
-(`budget` includes the eight address-estimated eateries from §2.)
+(`budget` includes the six address-estimated and three user-pinned entries from §2.)
 
 ### The bar/nightlife pass — removed, then corrected
 
