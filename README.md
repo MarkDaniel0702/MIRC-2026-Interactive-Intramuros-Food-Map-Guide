@@ -23,7 +23,7 @@ directions to any of it.
 
 Plus a highlighted **PLM** (Pamantasan ng Lungsod ng Maynila) campus landmark — the
 MIRC 2026 venue — that zooms the map in when tapped and reveals its buildings and halls
-(JAA, GEE, Katipunan…) once you're zoomed close; and **walking directions** to any
+(JAA, GEE, GK, GA) once you're zoomed close; and **walking directions** to any
 listing — from your location, a tapped point, or one of six arrival presets.
 
 - **Search** by name, dish, cuisine, street or period — press <kbd>/</kbd> to jump to it
@@ -55,7 +55,7 @@ node tools/verify-in-intramuros.mjs
   2. Schema — is every record well formed?            PASS  (9 user-pinned)
   3. Tourist spots — is every sight inside?           21/21 PASS
   4. Accommodation — is every property inside?         8/8  PASS
-  5. Landmarks — is every landmark inside?             4/4  PASS
+  5. Landmarks — is every landmark inside?             5/5  PASS
 
   VERIFIED — every spot is inside Intramuros and every record is valid.
 ```

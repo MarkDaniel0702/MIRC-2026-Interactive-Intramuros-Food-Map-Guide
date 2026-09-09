@@ -422,23 +422,28 @@ switch or the filters, and **zooms the map in to its location when clicked**
   cluster within tens of metres, so `app.js` only shows them once the map is zoomed past
   `CAMPUS_MIN_ZOOM` (17); clicking the parent brings them in. Rendered smaller, no pulse.
 
-| Landmark | Kind | Coordinate | Source |
-|---|---|---|---|
-| Pamantasan ng Lungsod ng Maynila (PLM) — University of the City of Manila; the MIRC 2026 venue | top-level | 14.5868604, 120.9764378 | OSM `way/27275574` centre (Overpass 2026-09-04) |
-| Justo Albert Auditorium (JAA) | campus | 14.586453, 120.975866 | visitor Google Maps pin |
-| Katipunan Building (Gusaling Katipunan) | campus | 14.587515, 120.976390 | visitor Google Maps pin ("Gusaling Katipunan" on Google) |
-| Gusaling Emilio Ejercito Sr. (GEE) | campus | 14.586407, 120.976898 | visitor Google Maps pin |
+| Landmark | Icon | Kind | Coordinate | Source |
+|---|---|---|---|---|
+| Pamantasan ng Lungsod ng Maynila (PLM) — University of the City of Manila; the MIRC 2026 venue | `PLM` | top-level | 14.5868604, 120.9764378 | OSM `way/27275574` centre (Overpass 2026-09-04) |
+| Justo Albert Auditorium | `JAA` | campus · single venue | 14.586453, 120.975866 | visitor Google Maps pin |
+| Gusaling Katipunan (Katipunan Building) | `GK` | campus · building | 14.587515, 120.976390 | visitor Google Maps pin ("Gusaling Katipunan" on Google) |
+| Gusaling Emilio Ejercito Sr. | `GEE` | campus · building | 14.586407, 120.976898 | visitor Google Maps pin |
+| Gusaling Don Pepe Atienza | `GA` | campus · building | 14.586262, 120.976300 | visitor Google Maps pin ("Gusaling Don Pepe Atienza" on Google) |
 
-All four are gated by the same point-in-polygon check (`tools/verify-in-intramuros.mjs`,
+All five are gated by the same point-in-polygon check (`tools/verify-in-intramuros.mjs`,
 pass 5). Landmarks are navigation aids — no price, category or filter state. Add more by
 appending to `LANDMARKS` (`id`, `name`, `short`, `lat`, `lng`, `blurb` required; `kind`,
 `osm`, `url`, `campus`, `provisional` optional).
 
-> **Provisional (2026-09-09).** GEE is `provisional: true`: the visitor confirmed the AVR
-> and KL rooms are at this one pin, so they were merged into a single "GEE" marker; "AVR"
-> is still only assumed to mean Audio-Visual Room and "KL" is not yet expanded. A further
-> campus point, **Gusaling Atienza (TOP)**, is pending (its link could not be resolved).
-> `PLM Canteen` is on the **Eat** tab, not here — see §2.
+**Structure.** `JAA` is a single venue. `GK`, `GEE` and `GA` are whole **buildings**; the
+MIRC 2026 session rooms inside them (GEE AVR, GEE KL, GK BTB, GA TOP …) are named in each
+marker's blurb rather than given their own pins.
+
+> **Provisional.** The three `Gusaling` markers are `provisional: true` — room
+> abbreviations `AVR` (assumed "Audio-Visual Room"), `KL`, `BTB` and `TOP` are not yet
+> expanded, and it is unconfirmed whether any of those rooms sit far enough from the
+> building pin to need their own marker. `PLM Canteen` is on the **Eat** tab, not here —
+> its pin resolves to the PLM Multi-Purpose Building; see §2.
 
 > Note: PLM is *Pamantasan ng Lungsod ng Maynila*, not the Polytechnic University of the
 > Philippines (PUP), which is a different institution in Sta. Mesa.
