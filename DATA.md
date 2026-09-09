@@ -1,27 +1,28 @@
 # Data & method
 
-How the **61 food spots** and **21 heritage sights** on this map were chosen, where the
+How the **60 food spots** and **21 heritage sights** on this map were chosen, where the
 numbers come from, and what you should and shouldn't trust.
 
-Of the 61 food spots, **52 are OSM-derived and verified**, **5 are address-estimated**,
-and **4 are user-pinned** — an exact coordinate supplied directly by a visitor, with no
-OpenStreetMap node (see §2, "Entries with no OpenStreetMap node"). The map also carries a
-small **landmark layer** (§8).
+Of the 60 food spots, **52 are OSM-derived and verified** and **8 are user-pinned** — an
+exact coordinate supplied directly by a visitor (a Google Maps pin), with no OpenStreetMap
+node (see §2, "Entries with no OpenStreetMap node"). No entries are currently
+address-estimated. The map also carries a small **landmark layer** (§8).
 
-> **2026-09-09.** Two changes.
-> · `Cafe Sofia` (General Luna Street, OSM `node/11521200457`) was removed after a
->   first-hand report that it has closed. It was still present in OpenStreetMap and in
->   2025 listings at the time, so the closure is not independently corroborated — restore
->   the record if it turns out to be trading. (Food spots 61 → 60, Restaurants & Heritage
->   Dining 18 → 17, `₱₱` tier 31 → 30.)
-> · `Vtan's Eatery`, `Pastil Sa Tabi (PST)` and `Lacanilao's Tapsilogan` were re-pinned
->   to exact coordinates from Google Maps pins supplied by a visitor and moved from
->   address-estimated to `locationSource: 'user'` (`verified: true`); a new user-pinned
->   carinderia, `Cioden Diner` (Budget, `₱` — "₱35 and above"), was added. A fourth pin
->   offered for `Pastil-an Sayo` fell ~2 km outside the boundary (a wide-area Google
->   guess, name unresolved) and was rejected; it stays address-estimated. (Food spots
->   60 → 61, Budget Eats & Carinderias 15 → 16, `₱` tier 25 → 26; address-estimated
->   8 → 5, user-pinned 0 → 4.)
+> **2026-09-09.** Several changes:
+> · `Cafe Sofia` (General Luna Street, OSM `node/11521200457`) removed after a first-hand
+>   report that it has closed — not independently corroborated (still in OSM and 2025
+>   listings), so restore it if it turns out to be trading.
+> · `Diego's Eatery` removed at the user's request (no reason given).
+> · Eight eateries with no OSM node were re-pinned to exact coordinates from Google Maps
+>   pins supplied by a visitor and are now all `locationSource: 'user'` (`verified: true`):
+>   Pastil Sa Tabi (PST), Vtan's Eatery, Lacanilao's Tapsilogan, Pastil-an Sayo,
+>   Bacolodnon Eatery, Zaqueo Sisigan, Cheftain Eatery, and Cioden's Diner (added this
+>   day; renamed from "Cioden Diner" to match Google's listing). One earlier pin for
+>   Pastil-an Sayo landed ~2 km outside the boundary and was rejected before the correct
+>   one arrived.
+> · Net: food spots 61 → 60; Restaurants & Heritage Dining 18 → 17; Budget Eats &
+>   Carinderias unchanged at 15 (−Diego's, +Cioden's); `₱` tier 25, `₱₱` tier 30;
+>   address-estimated entries 8 → 0, user-pinned 0 → 8.
 
 Accommodation is documented separately in [`HOTELS.md`](HOTELS.md); deployment in
 [`DEPLOY.md`](DEPLOY.md).
@@ -118,39 +119,36 @@ and rely on the hotel-building check described above instead.
 
 ### Entries with no OpenStreetMap node
 
-On **2026-09-04** a community-supplied list of Intramuros eateries was reconciled against
-the data. Nine of its rows already existed and were confirmed against their OSM nodes;
-three (`Uncle John's`, two `7-Eleven` branches) are convenience stores and fall outside
-the food-set definition in §2, so they are not listed. Eight others had **no OpenStreetMap
-node at all** and were added with `osm: null`; a ninth (`Cioden Diner`) was added the same
-way on 2026-09-09.
+**Eight food spots have `osm: null`** — OpenStreetMap has not mapped them. They originate
+from a community-supplied list reconciled against the data on **2026-09-04** (three of the
+list's rows — `Uncle John's` and two `7-Eleven` branches — are convenience stores and fall
+outside the food-set definition in §2, so they are not listed); `Cioden's Diner` was added
+the same way on 2026-09-09.
 
-These nine are kept, as the second sanctioned exception to the "every coordinate is copied
+They are kept as the second sanctioned exception to the "every coordinate is copied
 verbatim from a single verifiable source" rule (the first being the out-of-boundary start
-points). Two sub-classes, set by `locationSource`:
+points). `locationSource` records where the coordinate came from:
 
 | `locationSource` | `verified` | Coordinate origin | Count |
 |---|---|---|---|
-| `'address'` | `false` | Estimated from the street address (see "How the coordinate is derived" below). Renders with a **dashed disc + gold dot** and an "Approximate location" popup banner. | 5 |
-| `'user'` | `true` | An **exact point supplied directly by a visitor**. Renders as a normal pin, no banner. | 4 |
+| `'user'` | `true` | An **exact point supplied directly by a visitor** — here, a Google Maps pin. Renders as a normal pin, no banner. | 8 |
+| `'address'` | `false` | Estimated from the street address, spread along the OSM street geometry where there's no house number. Renders with a **dashed disc + gold dot** and an "Approximate location" popup banner. | 0 |
 
-**Address-estimated (5):** Pastil-an Sayo · Bacolodnon Eatery · Zaqueo Sisigan ·
-Cheftain Eatery · Diego's Eatery.
+**User-pinned (8):** Pastil Sa Tabi (PST) · Vtan's Eatery · Lacanilao's Tapsilogan ·
+Pastil-an Sayo · Bacolodnon Eatery · Zaqueo Sisigan · Cheftain Eatery · Cioden's Diner.
+All eight were re-pinned to Google Maps coordinates supplied by a visitor across
+**2026-09-09** (they were address-estimated before that). Two caveats:
 
-**User-pinned (4):** Pastil Sa Tabi (PST) · Vtan's Eatery · Lacanilao's Tapsilogan ·
-Cioden Diner. The first three were address-estimated until **2026-09-09**, when a visitor
-supplied exact Google Maps pins; Cioden Diner was added the same day (Budget, `₱` —
-reported "₱35 and above"). They carry no street on the record beyond what was already
-known — and the three re-pinned coordinates sit in the south-eastern quarter near Muralla
-Street, ~100 m from the `street: 'Victoria Street'` label still on the records, which may
-need correcting.
+- The `street` field on several still reads `Victoria Street` / `Magallanes Street` /
+  `Santa Potenciana Street`, but the confirmed pins cluster in the south-central quarter
+  near General Luna / Real / Sta. Potenciana — the street labels may need correcting.
+  `Cioden's Diner` has no street on record (coordinate only).
+- One earlier pin offered for `Pastil-an Sayo` landed ~2 km outside the boundary (a
+  wide-area Google guess) and was rejected before the correct one arrived.
 
-**How the address-estimated coordinate is derived.** The street address is geocoded
-through Nominatim (`<house-number> <street>, Intramuros, Manila`). Where several venues
-share one street with no usable house number, the point is spread along that street's OSM
-geometry so pins don't stack.
+`'address'` is still a supported class — it is just empty right now.
 
-**Both sub-classes are still gated.** Every one is run through the same ray-casting
+**Both sub-classes are gated.** Every entry is run through the same ray-casting
 point-in-polygon test as everything else — a pin outside the boundary is rejected, not
 shipped. `tools/verify-in-intramuros.mjs` allows `osm: null` **only** when
 `locationSource` is `'address'`, `'street'` or `'user'`, enforces `verified: false` for
@@ -186,15 +184,15 @@ Tiers were assigned from three sources, in order of preference:
 ### Why not exact peso figures per venue?
 
 Because they aren't available. Published prices could be verified for only a handful of
-these 61 establishments; several major Philippine food publications block automated
+these 60 establishments; several major Philippine food publications block automated
 access, and most independent Intramuros venues publish no menu pricing at all. Printing a
 specific range like "₱320–₱480" for a carinderia nobody has priced would present a guess
 as a fact. A labelled band is honest about its own precision.
 
 Every card and popup carries the review date and a "confirm with the venue" note.
 
-**Distribution:** 26 × `₱` · 30 × `₱₱` · 4 × `₱₱₱` · 1 × `₱₱₱₱`
-(the five address-estimated and four user-pinned entries from §2 are all `₱`).
+**Distribution:** 25 × `₱` · 30 × `₱₱` · 4 × `₱₱₱` · 1 × `₱₱₱₱`
+(the eight user-pinned entries from §2 are all `₱`).
 
 ---
 
@@ -210,10 +208,10 @@ filed under Restaurants with a `Korean` tag rather than needing a category of it
 | `heritage` | Restaurants & Heritage Dining | 17 |
 | `cafe` | Cafés & Coffee | 17 |
 | `fastfood` | Fast Food & Chains | 7 |
-| `budget` | Budget Eats & Carinderias | 16 |
+| `budget` | Budget Eats & Carinderias | 15 |
 | `dessert` | Desserts & Snacks | 4 |
 
-(`budget` includes the five address-estimated and four user-pinned entries from §2.)
+(`budget` includes the eight user-pinned entries from §2.)
 
 ### The bar/nightlife pass — removed, then corrected
 

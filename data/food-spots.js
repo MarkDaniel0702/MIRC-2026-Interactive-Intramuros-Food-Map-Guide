@@ -368,13 +368,14 @@ const FOOD_SPOTS = [
 
   /* ── Entries with no OpenStreetMap node ─────────────────────────────────────
      Small eateries that OpenStreetMap has not mapped, so `osm` is null. Two sub-
-     classes, both still gated by the inside-Intramuros boundary check:
+     classes are supported, both gated by the inside-Intramuros boundary check:
        · locationSource 'address' + verified:false — coordinate estimated from the
          street address; the UI shows a dashed pin and an "approximate" note.
+         (Currently none — all were later re-pinned or removed.)
        · locationSource 'user'    + verified:true  — an exact point supplied
          directly by a visitor; shown as a normal pin.
-     Prices reviewed 2026-09-04; Cioden Diner and the two user-pinned coordinates
-     added 2026-09-09.                                                          */
+     Prices reviewed 2026-09-04. The user-pinned coordinates are Google Maps pins
+     supplied by a visitor across 2026-09-09.                                    */
   {
     id: 'pastil-sa-tabi', name: 'Pastil Sa Tabi (PST)', category: 'budget', priceTier: 1,
     cuisine: ['Filipino', 'Pastil', 'Rice Meals'], street: 'Victoria Street', area: null,
@@ -384,8 +385,8 @@ const FOOD_SPOTS = [
   {
     id: 'pastil-an-sayo', name: 'Pastil-an Sayo', category: 'budget', priceTier: 1,
     cuisine: ['Filipino', 'Pastil', 'Rice Meals'], street: 'Victoria Street', area: null,
-    lat: 14.589714, lng: 120.979173, osm: null, locationSource: 'address', verified: false,
-    blurb: 'Pastil stall on the eastern stretch of Victoria Street — banana-leaf rice parcels from about ₱25. Not mapped in OpenStreetMap; the pin is placed from its street address (729A Victoria St) and is approximate.'
+    lat: 14.588921, lng: 120.977342, osm: null, locationSource: 'user', verified: true,
+    blurb: 'Pastil stall selling banana-leaf parcels of rice with shredded chicken or beef, from about ₱25. Not in OpenStreetMap — the coordinate is from a Google Maps pin supplied by a visitor.'
   },
   {
     id: 'vtans-eatery', name: "Vtan's Eatery", category: 'budget', priceTier: 1,
@@ -402,32 +403,27 @@ const FOOD_SPOTS = [
   {
     id: 'bacolodnon-eatery', name: 'Bacolodnon Eatery', category: 'budget', priceTier: 1,
     cuisine: ['Filipino', 'Bacolod', 'Inasal'], street: 'Magallanes Street', area: null,
-    lat: 14.589272, lng: 120.977280, osm: null, locationSource: 'address', verified: false,
-    blurb: 'Bacolod-style carinderia on Magallanes Street — inasal and Negrense home cooking over rice. Not in OpenStreetMap; the pin is placed from the address (703 Magallanes St) and is approximate.'
+    lat: 14.588659, lng: 120.976512, osm: null, locationSource: 'user', verified: true,
+    blurb: 'Bacolod-style carinderia — chicken inasal and Negrense home cooking over rice. Not in OpenStreetMap — the coordinate is from a Google Maps pin supplied by a visitor.'
   },
   {
     id: 'zaqueo-sisigan', name: 'Zaqueo Sisigan', category: 'budget', priceTier: 1,
     cuisine: ['Filipino', 'Sisig'], street: 'Magallanes Street', area: null,
-    lat: 14.590593, lng: 120.976083, osm: null, locationSource: 'address', verified: false,
-    blurb: 'Sisig eatery on Magallanes Street plating the sizzling chopped-pork classic over rice. Unmapped in OpenStreetMap — the pin is derived from the street address (356 Magallanes St) and is approximate.'
+    lat: 14.589068, lng: 120.976010, osm: null, locationSource: 'user', verified: true,
+    blurb: 'Sisig eatery plating the sizzling chopped-pork classic over rice. Not in OpenStreetMap — the coordinate is from a Google Maps pin supplied by a visitor.'
   },
   {
     id: 'cheftain-eatery', name: 'Cheftain Eatery', category: 'budget', priceTier: 1,
     cuisine: ['Filipino', 'Turo-Turo'], street: 'Santa Potenciana Street', area: null,
-    lat: 14.589247, lng: 120.976319, osm: null, locationSource: 'address', verified: false,
-    blurb: 'Turo-turo canteen on Santa Potenciana Street with a rotating tray of Filipino ulam over rice. Unmapped in OpenStreetMap — the pin is estimated from the street address (670 Sta. Potenciana St) and approximate.'
+    lat: 14.589110, lng: 120.976163, osm: null, locationSource: 'user', verified: true,
+    blurb: "Turo-turo canteen with a rotating tray of Filipino ulam over rice; Google lists it as \"Cheftain Eatery and Catering\". Not in OpenStreetMap — the coordinate is from a Google Maps pin supplied by a visitor."
   },
+  /* Diego's Eatery (id: diegos-eatery) removed 2026-09-09 at the user's request. */
   {
-    id: 'diegos-eatery', name: "Diego's Eatery", category: 'budget', priceTier: 1,
-    cuisine: ['Filipino', 'Turo-Turo'], street: 'Magallanes Street', area: null,
-    lat: 14.589370, lng: 120.976040, osm: null, locationSource: 'address', verified: false,
-    blurb: 'Neighbourhood eatery near the corner of Magallanes and Santa Potenciana Streets serving budget rice meals. No OpenStreetMap record; the pin is derived from that junction and is approximate.'
-  },
-  {
-    id: 'cioden-diner', name: 'Cioden Diner', category: 'budget', priceTier: 1,
+    id: 'cioden-diner', name: "Cioden's Diner", category: 'budget', priceTier: 1,
     cuisine: ['Filipino', 'Carinderia', 'Rice Meals'], street: null, area: null,
-    lat: 14.589452, lng: 120.978018, osm: null, locationSource: 'user', verified: true,
-    blurb: 'Carinderia in the eastern quarter of the walled city serving budget Filipino rice meals from about ₱35. Not in OpenStreetMap — the coordinate was supplied directly by a visitor.'
+    lat: 14.589113, lng: 120.975281, osm: null, locationSource: 'user', verified: true,
+    blurb: 'Carinderia serving budget Filipino rice meals from about ₱35. Not in OpenStreetMap — the coordinate is from a Google Maps pin supplied by a visitor.'
   }
 ];
 
