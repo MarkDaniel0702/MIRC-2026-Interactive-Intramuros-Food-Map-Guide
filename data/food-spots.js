@@ -424,6 +424,12 @@ const FOOD_SPOTS = [
     cuisine: ['Filipino', 'Carinderia', 'Rice Meals'], street: null, area: null,
     lat: 14.589113, lng: 120.975281, osm: null, locationSource: 'user', verified: true,
     blurb: 'Carinderia serving budget Filipino rice meals from about ₱35. Not in OpenStreetMap — the coordinate is from a Google Maps pin supplied by a visitor.'
+  },
+  {
+    id: 'plm-canteen', name: 'PLM Canteen', category: 'budget', priceTier: 1,
+    cuisine: ['Filipino', 'Canteen', 'Rice Meals'], street: 'General Luna Street', area: 'PLM campus',
+    lat: 14.587149, lng: 120.976675, osm: null, locationSource: 'user', verified: true,
+    blurb: 'Campus canteen at Pamantasan ng Lungsod ng Maynila, on General Luna Street. The visitor-supplied pin resolves to the PLM Multi-Purpose Building — confirm the exact spot and whether it is open to conference visitors.'
   }
 ];
 

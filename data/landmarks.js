@@ -49,24 +49,14 @@ const LANDMARKS = [
     blurb: 'Academic building on the PLM campus (Filipino: Gusaling Katipunan). Coordinate from a visitor-supplied Google Maps pin ("Gusaling Katipunan" on Google).'
   },
   {
-    id: 'plm-gee-avr',
-    name: 'Gusaling Emilio Ejercito Sr. — AVR',
-    short: 'AVR',
-    kind: 'PLM campus · Audio-Visual Room',
-    lat: 14.587371, lng: 120.976091,
-    campus: true,
-    provisional: true,
-    blurb: 'Audio-Visual Room in the Gusaling Emilio Ejercito Sr. (GEE) building, PLM campus. PROVISIONAL: "AVR" is assumed to mean Audio-Visual Room, and the AVR / KL split across the two GEE pins is not yet confirmed — the labels may need swapping.'
-  },
-  {
-    id: 'plm-gee-kl',
-    name: 'Gusaling Emilio Ejercito Sr. — KL',
-    short: 'KL',
-    kind: 'PLM campus · room',
+    id: 'plm-gee',
+    name: 'Gusaling Emilio Ejercito Sr. (GEE)',
+    short: 'GEE',
+    kind: 'PLM campus · building',
     lat: 14.586407, lng: 120.976898,
     campus: true,
     provisional: true,
-    blurb: 'A room in the Gusaling Emilio Ejercito Sr. (GEE) building, PLM campus. PROVISIONAL: "KL" has not been expanded, and the AVR / KL split across the two GEE pins is not yet confirmed — the labels may need swapping.'
+    blurb: 'The Emilio Ejercito Sr. Building on the PLM campus — houses the AVR and KL rooms used for MIRC 2026 sessions; a visitor confirmed both are at this one location. "AVR" is taken to mean Audio-Visual Room; "KL" is not yet expanded.'
   }
 ];
 

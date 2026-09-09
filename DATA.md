@@ -1,9 +1,9 @@
 # Data & method
 
-How the **60 food spots** and **21 heritage sights** on this map were chosen, where the
+How the **61 food spots** and **21 heritage sights** on this map were chosen, where the
 numbers come from, and what you should and shouldn't trust.
 
-Of the 60 food spots, **52 are OSM-derived and verified** and **8 are user-pinned** — an
+Of the 61 food spots, **52 are OSM-derived and verified** and **9 are user-pinned** — an
 exact coordinate supplied directly by a visitor (a Google Maps pin), with no OpenStreetMap
 node (see §2, "Entries with no OpenStreetMap node"). No entries are currently
 address-estimated. The map also carries a small **landmark layer** (§8).
@@ -20,9 +20,12 @@ address-estimated. The map also carries a small **landmark layer** (§8).
 >   day; renamed from "Cioden Diner" to match Google's listing). One earlier pin for
 >   Pastil-an Sayo landed ~2 km outside the boundary and was rejected before the correct
 >   one arrived.
-> · Net: food spots 61 → 60; Restaurants & Heritage Dining 18 → 17; Budget Eats &
->   Carinderias unchanged at 15 (−Diego's, +Cioden's); `₱` tier 25, `₱₱` tier 30;
->   address-estimated entries 8 → 0, user-pinned 0 → 8.
+> · `PLM Canteen` added to the Eat tab (Budget, `₱`, user-pinned). Its pin resolves to
+>   the PLM Multi-Purpose Building on General Luna Street — the "Canteen" label and exact
+>   spot are unconfirmed.
+> · Net: food spots 61 → 61 (−Cafe Sofia, −Diego's, +Cioden's, +PLM Canteen); Restaurants
+>   & Heritage Dining 18 → 17; Budget Eats & Carinderias 15 → 16; `₱` tier 25 → 26,
+>   `₱₱` tier 31 → 30; address-estimated entries 8 → 0, user-pinned 0 → 9.
 
 Accommodation is documented separately in [`HOTELS.md`](HOTELS.md); deployment in
 [`DEPLOY.md`](DEPLOY.md).
@@ -119,11 +122,11 @@ and rely on the hotel-building check described above instead.
 
 ### Entries with no OpenStreetMap node
 
-**Eight food spots have `osm: null`** — OpenStreetMap has not mapped them. They originate
+**Nine food spots have `osm: null`** — OpenStreetMap has not mapped them. Eight originate
 from a community-supplied list reconciled against the data on **2026-09-04** (three of the
 list's rows — `Uncle John's` and two `7-Eleven` branches — are convenience stores and fall
-outside the food-set definition in §2, so they are not listed); `Cioden's Diner` was added
-the same way on 2026-09-09.
+outside the food-set definition in §2, so they are not listed); `Cioden's Diner` and
+`PLM Canteen` were added the same way on 2026-09-09.
 
 They are kept as the second sanctioned exception to the "every coordinate is copied
 verbatim from a single verifiable source" rule (the first being the out-of-boundary start
@@ -131,13 +134,13 @@ points). `locationSource` records where the coordinate came from:
 
 | `locationSource` | `verified` | Coordinate origin | Count |
 |---|---|---|---|
-| `'user'` | `true` | An **exact point supplied directly by a visitor** — here, a Google Maps pin. Renders as a normal pin, no banner. | 8 |
+| `'user'` | `true` | An **exact point supplied directly by a visitor** — here, a Google Maps pin. Renders as a normal pin, no banner. | 9 |
 | `'address'` | `false` | Estimated from the street address, spread along the OSM street geometry where there's no house number. Renders with a **dashed disc + gold dot** and an "Approximate location" popup banner. | 0 |
 
-**User-pinned (8):** Pastil Sa Tabi (PST) · Vtan's Eatery · Lacanilao's Tapsilogan ·
-Pastil-an Sayo · Bacolodnon Eatery · Zaqueo Sisigan · Cheftain Eatery · Cioden's Diner.
-All eight were re-pinned to Google Maps coordinates supplied by a visitor across
-**2026-09-09** (they were address-estimated before that). Two caveats:
+**User-pinned (9):** Pastil Sa Tabi (PST) · Vtan's Eatery · Lacanilao's Tapsilogan ·
+Pastil-an Sayo · Bacolodnon Eatery · Zaqueo Sisigan · Cheftain Eatery · Cioden's Diner ·
+PLM Canteen. All were pinned from Google Maps coordinates supplied by a visitor across
+**2026-09-09** (the first eight were address-estimated before that). Caveats:
 
 - `Pastil-an Sayo` is confirmed at **729A Victoria Street** (address, Plus Code and pin
   all agree). The other six carrying a `street` — `Pastil Sa Tabi (PST)`, `Vtan's Eatery`,
@@ -145,6 +148,8 @@ All eight were re-pinned to Google Maps coordinates supplied by a visitor across
   have pins that cluster in the south-central quarter near General Luna / Real / Sta.
   Potenciana, ~100 m from the street label still on the record; those labels may need
   correcting. `Cioden's Diner` has no street on record (coordinate only).
+- `PLM Canteen`'s pin resolves to the PLM **Multi-Purpose Building** (General Luna Street),
+  not a place named "Canteen" — the label and the exact spot are unconfirmed.
 - Two earlier pins offered for `Pastil-an Sayo` were superseded — one landed ~2 km outside
   the boundary (a wide-area Google guess) and was rejected outright.
 
@@ -186,15 +191,15 @@ Tiers were assigned from three sources, in order of preference:
 ### Why not exact peso figures per venue?
 
 Because they aren't available. Published prices could be verified for only a handful of
-these 60 establishments; several major Philippine food publications block automated
+these 61 establishments; several major Philippine food publications block automated
 access, and most independent Intramuros venues publish no menu pricing at all. Printing a
 specific range like "₱320–₱480" for a carinderia nobody has priced would present a guess
 as a fact. A labelled band is honest about its own precision.
 
 Every card and popup carries the review date and a "confirm with the venue" note.
 
-**Distribution:** 25 × `₱` · 30 × `₱₱` · 4 × `₱₱₱` · 1 × `₱₱₱₱`
-(the eight user-pinned entries from §2 are all `₱`).
+**Distribution:** 26 × `₱` · 30 × `₱₱` · 4 × `₱₱₱` · 1 × `₱₱₱₱`
+(the nine user-pinned entries from §2 are all `₱`).
 
 ---
 
@@ -210,10 +215,10 @@ filed under Restaurants with a `Korean` tag rather than needing a category of it
 | `heritage` | Restaurants & Heritage Dining | 17 |
 | `cafe` | Cafés & Coffee | 17 |
 | `fastfood` | Fast Food & Chains | 7 |
-| `budget` | Budget Eats & Carinderias | 15 |
+| `budget` | Budget Eats & Carinderias | 16 |
 | `dessert` | Desserts & Snacks | 4 |
 
-(`budget` includes the eight user-pinned entries from §2.)
+(`budget` includes the nine user-pinned entries from §2.)
 
 ### The bar/nightlife pass — removed, then corrected
 
@@ -422,18 +427,18 @@ switch or the filters, and **zooms the map in to its location when clicked**
 | Pamantasan ng Lungsod ng Maynila (PLM) — University of the City of Manila; the MIRC 2026 venue | top-level | 14.5868604, 120.9764378 | OSM `way/27275574` centre (Overpass 2026-09-04) |
 | Justo Albert Auditorium (JAA) | campus | 14.586453, 120.975866 | visitor Google Maps pin |
 | Katipunan Building (Gusaling Katipunan) | campus | 14.587515, 120.976390 | visitor Google Maps pin ("Gusaling Katipunan" on Google) |
-| Gusaling Emilio Ejercito Sr. — AVR | campus | 14.587371, 120.976091 | visitor Google Maps pin |
-| Gusaling Emilio Ejercito Sr. — KL | campus | 14.586407, 120.976898 | visitor Google Maps pin |
+| Gusaling Emilio Ejercito Sr. (GEE) | campus | 14.586407, 120.976898 | visitor Google Maps pin |
 
-All five are gated by the same point-in-polygon check (`tools/verify-in-intramuros.mjs`,
+All four are gated by the same point-in-polygon check (`tools/verify-in-intramuros.mjs`,
 pass 5). Landmarks are navigation aids — no price, category or filter state. Add more by
 appending to `LANDMARKS` (`id`, `name`, `short`, `lat`, `lng`, `blurb` required; `kind`,
 `osm`, `url`, `campus`, `provisional` optional).
 
-> **Provisional (2026-09-09).** The two GEE rooms are `provisional: true`: "AVR" is
-> assumed to mean Audio-Visual Room, "KL" is not yet expanded, and the AVR ↔ KL
-> assignment across the two pins is unconfirmed (the labels may need swapping). A
-> **PLM Canteen** was requested for the Eat tab but no coordinate has been supplied yet.
+> **Provisional (2026-09-09).** GEE is `provisional: true`: the visitor confirmed the AVR
+> and KL rooms are at this one pin, so they were merged into a single "GEE" marker; "AVR"
+> is still only assumed to mean Audio-Visual Room and "KL" is not yet expanded. A further
+> campus point, **Gusaling Atienza (TOP)**, is pending (its link could not be resolved).
+> `PLM Canteen` is on the **Eat** tab, not here — see §2.
 
 > Note: PLM is *Pamantasan ng Lungsod ng Maynila*, not the Polytechnic University of the
 > Philippines (PUP), which is a different institution in Sta. Mesa.

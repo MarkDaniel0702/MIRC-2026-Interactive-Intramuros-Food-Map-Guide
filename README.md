@@ -17,7 +17,7 @@ directions to any of it.
 
 | Tab | Contents |
 |---|---|
-| **Eat** | **60** restaurants, cafés, carinderias, fast-food branches and hotel dining rooms, with price ranges (52 OSM-verified + 8 user-pinned — see `DATA.md`) |
+| **Eat** | **61** restaurants, cafés, carinderias, fast-food branches and hotel dining rooms, with price ranges (52 OSM-verified + 9 user-pinned — see `DATA.md`) |
 | **See** | **21** heritage sights, with entrance fees, opening hours and realistic visit times |
 | **Stay** | **2** hotels — the properties inside the walls with both a public booking path and a real price. (A third, Residencia 729, is bookable but has no published rate — see `HOTELS.md`.) |
 
@@ -51,16 +51,16 @@ node tools/verify-in-intramuros.mjs
 ```
 
 ```
-  1. Location — is every spot inside Intramuros?      60/60 PASS
-  2. Schema — is every record well formed?            PASS  (8 user-pinned)
+  1. Location — is every spot inside Intramuros?      61/61 PASS
+  2. Schema — is every record well formed?            PASS  (9 user-pinned)
   3. Tourist spots — is every sight inside?           21/21 PASS
   4. Accommodation — is every property inside?         8/8  PASS
-  5. Landmarks — is every landmark inside?             5/5  PASS
+  5. Landmarks — is every landmark inside?             4/4  PASS
 
   VERIFIED — every spot is inside Intramuros and every record is valid.
 ```
 
-Eight eateries have no OpenStreetMap node. All are **user-pinned** — an exact coordinate
+Nine eateries have no OpenStreetMap node. All are **user-pinned** — an exact coordinate
 supplied directly by a visitor (a Google Maps pin), shown as a normal pin. A second class,
 **address-estimated** (pin from the street address, flagged approximate, dashed marker),
 is supported but currently empty. Every one is boundary-checked by the same gate — one
@@ -129,7 +129,7 @@ styles.css                      design system, responsive layout, map + popup st
 app.js                          modes, markers, search, filters, list↔map sync, directions
 routing.js                      OSRM client + walking-instruction renderer
 
-data/food-spots.js              60 food spots  · 52 OSM-verified + 8 user-pinned
+data/food-spots.js              61 food spots  · 52 OSM-verified + 9 user-pinned
 data/tourist-spots.js           21 sights      · FEE_TIERS, VENUE_ANCHOR, passport info
 data/hotels.js                  8 properties   · 3 flagged `mapped` for the Stay tab
 data/start-points.js            6 arrival points for directions
@@ -173,10 +173,10 @@ see `DATA.md`).
 - **Entrance fees** are from the Intramuros Administration and site operators — published
   and reasonably stable. There's also a ₱350 **Intramuros Passport** covering five sites,
   which the See tab surfaces once it's worth buying.
-- **Restaurant prices are indicative estimates, not quotes.** Only a handful of the 60
+- **Restaurant prices are indicative estimates, not quotes.** Only a handful of the 61
   publish menu pricing, so each gets a tier plus an explicit peso band and a review date.
   Presenting a guess as an exact figure would be worse than an honest range.
-- **Eight eateries have no OpenStreetMap node** — all user-pinned (an exact coordinate
+- **Nine eateries have no OpenStreetMap node** — all user-pinned (an exact coordinate
   supplied by a visitor), boundary-checked like everything else.
 - **Hotel rates are a dated snapshot, not live pricing.** Nightly rates move daily.
 
