@@ -384,9 +384,9 @@ const FOOD_SPOTS = [
   },
   {
     id: 'pastil-an-sayo', name: 'Pastil-an Sayo', category: 'budget', priceTier: 1,
-    cuisine: ['Filipino', 'Pastil', 'Rice Meals'], street: 'Victoria Street', area: null,
-    lat: 14.588921, lng: 120.977342, osm: null, locationSource: 'user', verified: true,
-    blurb: 'Pastil stall selling banana-leaf parcels of rice with shredded chicken or beef, from about ₱25. Not in OpenStreetMap — the coordinate is from a Google Maps pin supplied by a visitor.'
+    cuisine: ['Filipino', 'Pastil', 'Rice Meals'], street: 'Victoria Street', area: '729A Victoria Street',
+    lat: 14.589078, lng: 120.977857, osm: null, locationSource: 'user', verified: true,
+    blurb: 'Pastil stall at 729A Victoria Street selling banana-leaf parcels of rice with shredded chicken or beef, from about ₱25. Not in OpenStreetMap — the coordinate is from a Google Maps pin supplied by a visitor.'
   },
   {
     id: 'vtans-eatery', name: "Vtan's Eatery", category: 'budget', priceTier: 1,

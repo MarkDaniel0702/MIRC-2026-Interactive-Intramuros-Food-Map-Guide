@@ -139,12 +139,14 @@ Pastil-an Sayo · Bacolodnon Eatery · Zaqueo Sisigan · Cheftain Eatery · Ciod
 All eight were re-pinned to Google Maps coordinates supplied by a visitor across
 **2026-09-09** (they were address-estimated before that). Two caveats:
 
-- The `street` field on several still reads `Victoria Street` / `Magallanes Street` /
-  `Santa Potenciana Street`, but the confirmed pins cluster in the south-central quarter
-  near General Luna / Real / Sta. Potenciana — the street labels may need correcting.
-  `Cioden's Diner` has no street on record (coordinate only).
-- One earlier pin offered for `Pastil-an Sayo` landed ~2 km outside the boundary (a
-  wide-area Google guess) and was rejected before the correct one arrived.
+- `Pastil-an Sayo` is confirmed at **729A Victoria Street** (address, Plus Code and pin
+  all agree). The other six carrying a `street` — `Pastil Sa Tabi (PST)`, `Vtan's Eatery`,
+  `Lacanilao's Tapsilogan`, `Bacolodnon Eatery`, `Zaqueo Sisigan`, `Cheftain Eatery` —
+  have pins that cluster in the south-central quarter near General Luna / Real / Sta.
+  Potenciana, ~100 m from the street label still on the record; those labels may need
+  correcting. `Cioden's Diner` has no street on record (coordinate only).
+- Two earlier pins offered for `Pastil-an Sayo` were superseded — one landed ~2 km outside
+  the boundary (a wide-area Google guess) and was rejected outright.
 
 `'address'` is still a supported class — it is just empty right now.
 
