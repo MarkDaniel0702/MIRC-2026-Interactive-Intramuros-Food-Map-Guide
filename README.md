@@ -17,7 +17,7 @@ directions to any of it.
 
 | Tab | Contents |
 |---|---|
-| **Eat** | **61** restaurants, cafés, carinderias, fast-food branches and hotel dining rooms, with price ranges (52 OSM-verified + 6 address-estimated + 3 user-pinned — see `DATA.md`) |
+| **Eat** | **61** restaurants, cafés, carinderias, fast-food branches and hotel dining rooms, with price ranges (52 OSM-verified + 5 address-estimated + 4 user-pinned — see `DATA.md`) |
 | **See** | **21** heritage sights, with entrance fees, opening hours and realistic visit times |
 | **Stay** | **2** hotels — the properties inside the walls with both a public booking path and a real price. (A third, Residencia 729, is bookable but has no published rate — see `HOTELS.md`.) |
 
@@ -51,7 +51,7 @@ node tools/verify-in-intramuros.mjs
 
 ```
   1. Location — is every spot inside Intramuros?      61/61 PASS
-  2. Schema — is every record well formed?            PASS  (6 address-estimated, 3 user-pinned)
+  2. Schema — is every record well formed?            PASS  (5 address-estimated, 4 user-pinned)
   3. Tourist spots — is every sight inside?           21/21 PASS
   4. Accommodation — is every property inside?         8/8  PASS
   5. Landmarks — is every landmark inside?             1/1  PASS
@@ -59,10 +59,11 @@ node tools/verify-in-intramuros.mjs
   VERIFIED — every spot is inside Intramuros and every record is valid.
 ```
 
-Nine eateries have no OpenStreetMap node. Six are **address-estimated** — the pin is
-placed from the street address and flagged as approximate; three are **user-pinned** —
+Nine eateries have no OpenStreetMap node. Five are **address-estimated** — the pin is
+placed from the street address and flagged as approximate; four are **user-pinned** —
 an exact coordinate supplied directly by a visitor, shown as a normal pin. Both kinds are
-still boundary-checked by the same gate, and one that landed outside would fail the build.
+still boundary-checked by the same gate, and one that landed outside would fail the build
+(one visitor-supplied pin did, ~2 km out, and was rejected).
 
 It exits non-zero on any failure, so it works as a pre-commit or CI gate. Run it after
 touching any data file.
@@ -127,7 +128,7 @@ styles.css                      design system, responsive layout, map + popup st
 app.js                          modes, markers, search, filters, list↔map sync, directions
 routing.js                      OSRM client + walking-instruction renderer
 
-data/food-spots.js              61 food spots  · 52 OSM-verified + 6 address-estimated + 3 user-pinned
+data/food-spots.js              61 food spots  · 52 OSM-verified + 5 address-estimated + 4 user-pinned
 data/tourist-spots.js           21 sights      · FEE_TIERS, VENUE_ANCHOR, passport info
 data/hotels.js                  8 properties   · 3 flagged `mapped` for the Stay tab
 data/start-points.js            6 arrival points for directions
@@ -174,8 +175,8 @@ see `DATA.md`).
 - **Restaurant prices are indicative estimates, not quotes.** Only a handful of the 61
   publish menu pricing, so each gets a tier plus an explicit peso band and a review date.
   Presenting a guess as an exact figure would be worse than an honest range.
-- **Nine eateries have no OpenStreetMap node.** Six are address-estimated (pin derived
-  from the street address, shown as approximate); three are user-pinned (exact coordinate
+- **Nine eateries have no OpenStreetMap node.** Five are address-estimated (pin derived
+  from the street address, shown as approximate); four are user-pinned (exact coordinate
   supplied by a visitor). Both are boundary-checked.
 - **Hotel rates are a dated snapshot, not live pricing.** Nightly rates move daily.
 

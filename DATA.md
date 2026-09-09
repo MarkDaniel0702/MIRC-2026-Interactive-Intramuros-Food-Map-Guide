@@ -3,8 +3,8 @@
 How the **61 food spots** and **21 heritage sights** on this map were chosen, where the
 numbers come from, and what you should and shouldn't trust.
 
-Of the 61 food spots, **52 are OSM-derived and verified**, **6 are address-estimated**,
-and **3 are user-pinned** — an exact coordinate supplied directly by a visitor, with no
+Of the 61 food spots, **52 are OSM-derived and verified**, **5 are address-estimated**,
+and **4 are user-pinned** — an exact coordinate supplied directly by a visitor, with no
 OpenStreetMap node (see §2, "Entries with no OpenStreetMap node"). The map also carries a
 small **landmark layer** (§8).
 
@@ -14,11 +14,14 @@ small **landmark layer** (§8).
 >   2025 listings at the time, so the closure is not independently corroborated — restore
 >   the record if it turns out to be trading. (Food spots 61 → 60, Restaurants & Heritage
 >   Dining 18 → 17, `₱₱` tier 31 → 30.)
-> · `Vtan's Eatery` and `Pastil Sa Tabi (PST)` were re-pinned to exact coordinates
->   supplied by a visitor and moved from address-estimated to `locationSource: 'user'`
->   (`verified: true`); a new user-pinned carinderia, `Cioden Diner` (Budget, `₱` — "₱35
->   and above"), was added. (Food spots 60 → 61, Budget Eats & Carinderias 15 → 16, `₱`
->   tier 25 → 26; address-estimated 8 → 6, user-pinned 0 → 3.)
+> · `Vtan's Eatery`, `Pastil Sa Tabi (PST)` and `Lacanilao's Tapsilogan` were re-pinned
+>   to exact coordinates from Google Maps pins supplied by a visitor and moved from
+>   address-estimated to `locationSource: 'user'` (`verified: true`); a new user-pinned
+>   carinderia, `Cioden Diner` (Budget, `₱` — "₱35 and above"), was added. A fourth pin
+>   offered for `Pastil-an Sayo` fell ~2 km outside the boundary (a wide-area Google
+>   guess, name unresolved) and was rejected; it stays address-estimated. (Food spots
+>   60 → 61, Budget Eats & Carinderias 15 → 16, `₱` tier 25 → 26; address-estimated
+>   8 → 5, user-pinned 0 → 4.)
 
 Accommodation is documented separately in [`HOTELS.md`](HOTELS.md); deployment in
 [`DEPLOY.md`](DEPLOY.md).
@@ -128,16 +131,19 @@ points). Two sub-classes, set by `locationSource`:
 
 | `locationSource` | `verified` | Coordinate origin | Count |
 |---|---|---|---|
-| `'address'` | `false` | Estimated from the street address (see "How the coordinate is derived" below). Renders with a **dashed disc + gold dot** and an "Approximate location" popup banner. | 6 |
-| `'user'` | `true` | An **exact point supplied directly by a visitor**. Renders as a normal pin, no banner. | 3 |
+| `'address'` | `false` | Estimated from the street address (see "How the coordinate is derived" below). Renders with a **dashed disc + gold dot** and an "Approximate location" popup banner. | 5 |
+| `'user'` | `true` | An **exact point supplied directly by a visitor**. Renders as a normal pin, no banner. | 4 |
 
-**Address-estimated (6):** Pastil-an Sayo · Lacanilao's Tapsilogan · Bacolodnon Eatery ·
-Zaqueo Sisigan · Cheftain Eatery · Diego's Eatery.
+**Address-estimated (5):** Pastil-an Sayo · Bacolodnon Eatery · Zaqueo Sisigan ·
+Cheftain Eatery · Diego's Eatery.
 
-**User-pinned (3):** Vtan's Eatery · Pastil Sa Tabi (PST) · Cioden Diner. Vtan's and PST
-were address-estimated until **2026-09-09**, when a visitor provided exact coordinates;
-Cioden Diner was added the same day (Budget, `₱` — reported "₱35 and above"). These carry
-no street on the record beyond what was already known.
+**User-pinned (4):** Pastil Sa Tabi (PST) · Vtan's Eatery · Lacanilao's Tapsilogan ·
+Cioden Diner. The first three were address-estimated until **2026-09-09**, when a visitor
+supplied exact Google Maps pins; Cioden Diner was added the same day (Budget, `₱` —
+reported "₱35 and above"). They carry no street on the record beyond what was already
+known — and the three re-pinned coordinates sit in the south-eastern quarter near Muralla
+Street, ~100 m from the `street: 'Victoria Street'` label still on the records, which may
+need correcting.
 
 **How the address-estimated coordinate is derived.** The street address is geocoded
 through Nominatim (`<house-number> <street>, Intramuros, Manila`). Where several venues
@@ -188,7 +194,7 @@ as a fact. A labelled band is honest about its own precision.
 Every card and popup carries the review date and a "confirm with the venue" note.
 
 **Distribution:** 26 × `₱` · 30 × `₱₱` · 4 × `₱₱₱` · 1 × `₱₱₱₱`
-(the six address-estimated and three user-pinned entries from §2 are all `₱`).
+(the five address-estimated and four user-pinned entries from §2 are all `₱`).
 
 ---
 
@@ -207,7 +213,7 @@ filed under Restaurants with a `Korean` tag rather than needing a category of it
 | `budget` | Budget Eats & Carinderias | 16 |
 | `dessert` | Desserts & Snacks | 4 |
 
-(`budget` includes the six address-estimated and three user-pinned entries from §2.)
+(`budget` includes the five address-estimated and four user-pinned entries from §2.)
 
 ### The bar/nightlife pass — removed, then corrected
 

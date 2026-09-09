@@ -378,7 +378,7 @@ const FOOD_SPOTS = [
   {
     id: 'pastil-sa-tabi', name: 'Pastil Sa Tabi (PST)', category: 'budget', priceTier: 1,
     cuisine: ['Filipino', 'Pastil', 'Rice Meals'], street: 'Victoria Street', area: null,
-    lat: 14.588607, lng: 120.977304, osm: null, locationSource: 'user', verified: true,
+    lat: 14.588567, lng: 120.976931, osm: null, locationSource: 'user', verified: true,
     blurb: 'Small pastil counter on Victoria Street serving cheap banana-leaf parcels of rice with shredded chicken or beef, to go. Not in OpenStreetMap — the coordinate was supplied directly by a visitor.'
   },
   {
@@ -390,14 +390,14 @@ const FOOD_SPOTS = [
   {
     id: 'vtans-eatery', name: "Vtan's Eatery", category: 'budget', priceTier: 1,
     cuisine: ['Filipino', 'Carinderia'], street: 'Victoria Street', area: null,
-    lat: 14.588643, lng: 120.977392, osm: null, locationSource: 'user', verified: true,
+    lat: 14.588612, lng: 120.977135, osm: null, locationSource: 'user', verified: true,
     blurb: 'Carinderia on Victoria Street with a short daily menu of Filipino home dishes over rice. Not in OpenStreetMap — the coordinate was supplied directly by a visitor.'
   },
   {
     id: 'lacanilaos-tapsilogan', name: "Lacanilao's Tapsilogan", category: 'budget', priceTier: 1,
     cuisine: ['Filipino', 'Silog', 'Breakfast'], street: 'Victoria Street', area: null,
-    lat: 14.589640, lng: 120.978230, osm: null, locationSource: 'address', verified: false,
-    blurb: 'Tapsilogan on Victoria Street doing the standard silog line-up — tapa, longganisa and tocino with garlic rice and egg — through the day. No OpenStreetMap node; location estimated from the street name and approximate.'
+    lat: 14.588328, lng: 120.976926, osm: null, locationSource: 'user', verified: true,
+    blurb: 'Tapsilogan on Victoria Street doing the standard silog line-up — tapa, longganisa and tocino with garlic rice and egg — through the day. Not in OpenStreetMap — the coordinate was supplied directly by a visitor.'
   },
   {
     id: 'bacolodnon-eatery', name: 'Bacolodnon Eatery', category: 'budget', priceTier: 1,
