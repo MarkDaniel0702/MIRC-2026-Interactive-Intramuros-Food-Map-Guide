@@ -616,22 +616,26 @@
     if (from === 'list') {
       if (isMobile()) setSheet(false);           // don't cover the map we're flying to
 
-      /* Fly the map to the spot and open its popup.
+      /* Fly the map to the spot, then show its popup once the camera has settled.
 
-         The old code used cluster.zoomToShowLayer(marker, cb) — but its callback
-         is unreliable (observed never firing), and a marker currently inside a
-         cluster has no `_map`, so `marker.openPopup()` silently no-ops. So instead
-         open the marker's own popup *on the map* at the marker's coordinates,
-         which works whether or not the marker is clustered right now. It's the
-         same bound popup instance, so the marker's `popupclose` handler still
-         deselects on close. */
+         (The old code used cluster.zoomToShowLayer(marker, cb) to do this; its
+         callback proved unreliable — observed never firing — so the fly and the
+         reveal are sequenced on `moveend` instead.) */
+      map.closePopup();                          // don't let the old one ride along
       map.flyTo([spot.lat, spot.lng], 18, { duration: reduceMotion ? 0 : 0.7 });
 
-      const popup = marker.getPopup();
-      if (popup) map.openPopup(popup, [spot.lat, spot.lng], { autoPanPadding: [26, 26] });
+      /* Once the fly settles: re-apply the active style to the pin (setActive above
+         ran before the pin was rendered) and open the popup.
 
-      /* Once the fly settles the real pin element exists — re-apply the active
-         style to it (setActive above ran before the pin was rendered). */
+         The popup must NOT be opened before `moveend`. Leaflet's autoPan measures
+         the popup against the viewport at the moment it opens and nudges the map so
+         the whole thing fits — but a pan issued while flyTo is still animating is
+         thrown away when the fly sets its own final centre. The map then settles
+         centred exactly on the pin, and a tall popup (name, price band, blurb,
+         address, directions) runs off the top edge of the map.
+         Opening after the fly gives autoPan the last word. This is why clicking the
+         pin never showed the bug: there the map is stationary, so Leaflet's own
+         autoPan is never overridden. */
       pendingSelect = id;
       let revealT;
       const reveal = () => {
@@ -640,6 +644,13 @@
         if (pendingSelect !== id) return;        // superseded by a newer selection
         pendingSelect = null;
         setActive(id);
+
+        /* The marker's own popup instance, opened on the map rather than on the
+           marker: a marker sitting inside a cluster has no `_map`, so
+           `marker.openPopup()` would silently no-op. Same instance either way, so
+           the marker's `popupclose` handler still deselects on close. */
+        const popup = marker.getPopup();
+        if (popup) map.openPopup(popup, [spot.lat, spot.lng], { autoPanPadding: [26, 26] });
       };
       map.on('moveend', reveal);
       revealT = setTimeout(reveal, reduceMotion ? 60 : 1200);
