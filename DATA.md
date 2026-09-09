@@ -428,7 +428,7 @@ switch or the filters, and **zooms the map in to its location when clicked**
 | Justo Albert Auditorium | `JAA` | campus · single venue | 14.586453, 120.975866 | visitor Google Maps pin |
 | Gusaling Katipunan (Katipunan Building) | `GK` | campus · building | 14.587515, 120.976390 | visitor Google Maps pin ("Gusaling Katipunan" on Google) |
 | Gusaling Emilio Ejercito Sr. | `GEE` | campus · building | 14.586407, 120.976898 | visitor Google Maps pin |
-| Gusaling Don Pepe Atienza | `GA` | campus · building | 14.586262, 120.976300 | visitor Google Maps pin ("Gusaling Don Pepe Atienza" on Google) |
+| Gusaling Don Pepe Atienza | `GA` | campus · building | 14.586260, 120.976835 | visitor Google Maps pin on the Mass Communication Office (refined 2026-09-09 from an earlier "Gusaling Don Pepe Atienza" pin ~58 m west) |
 
 All five are gated by the same point-in-polygon check (`tools/verify-in-intramuros.mjs`,
 pass 5). Landmarks are navigation aids — no price, category or filter state. Add more by

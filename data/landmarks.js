@@ -66,10 +66,10 @@ const LANDMARKS = [
     name: 'Gusaling Don Pepe Atienza (GA)',
     short: 'GA',
     kind: 'PLM campus · building',
-    lat: 14.586262, lng: 120.976300,
+    lat: 14.586260, lng: 120.976835,
     campus: true,
     provisional: true,
-    blurb: 'Don Pepe Atienza Building on the PLM campus, Muralla Street side. MIRC 2026 session rooms inside it — e.g. "TOP" — are not separately pinned. Coordinate from a visitor-supplied Google Maps pin ("Gusaling Don Pepe Atienza" on Google).'
+    blurb: 'Don Pepe Atienza Building on the PLM campus, Muralla Street side — home of the College / Mass Communication Office, where MIRC 2026 sessions are held. Rooms inside it (e.g. "TOP") are not separately pinned. Coordinate refined 2026-09-09 to a visitor Google Maps pin on the Mass Communication Office.'
   }
 ];
 
