@@ -74,36 +74,24 @@
   /* ───────────────────────────── the phoenix ─────────────────────────────── */
 
   /**
-   * Dan's mark: a phoenix — spread wings, a flame for a crest, a swallowtail. Filled
-   * rather than stroked, like the compass rose it sits below: a line-drawn version was
-   * tried first and read as a stick figure with its arms up, because thin strokes give
-   * a wing no mass. Silhouette is what makes it a bird at 15 pixels.
+   * Dan's mark: the supplied phoenix artwork, cropped to the bird and scaled to
+   * 256px wide (assets/dan-phoenix.png) so it stays crisp on a high-DPI screen at
+   * the two sizes it is actually drawn at.
    *
-   * Gold — the colour this system reserves for the things that matter — with the
-   * body a shade brighter than the wings. It stays gold on the resting launcher,
-   * the one warm mark on a steel control, and inverts to navy when the launcher
-   * lights up.
+   * It is 4:3, wider than it is tall, so it letterboxes inside the square slots the
+   * CSS gives it — `object-fit: contain` keeps the proportions rather than squashing
+   * the wings.
    *
-   * It is alive: the wings beat slowly on their own, faster on hover, and faster
-   * still while Dan is composing an answer, so the icon carries the state instead
-   * of a separate spinner. `prefers-reduced-motion` stops all of it.
+   * Decorative: the launcher and the panel header both carry the name in text beside
+   * it, and the launcher has its own aria-label, so the image is hidden from screen
+   * readers instead of being announced twice.
    *
-   * `size` is 'phx--sm' (launcher) or 'phx--lg' (panel header, which also gets the
-   * rising embers — they are sub-pixel noise at launcher size).
+   * `size` is 'phx--sm' (launcher) or 'phx--lg' (panel header).
    */
-  const phoenix = size => `
-    <svg class="phx ${size}" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-      <g class="phx__embers">
-        <circle cx="8.6" cy="2.8" r=".62"/><circle cx="15.4" cy="2.8" r=".62"/>
-      </g>
-      <g class="phx__bird">
-        <path class="phx__wing phx__wing--l" d="M11.3 9.8c-2.8-3.8-6.3-6.2-10.2-7.2c1.7 3.3 2.6 6.6 2.7 10c1.9-1.9 4.2-2.8 7.5-2.8z"/>
-        <path class="phx__wing phx__wing--r" d="M12.7 9.8c2.8-3.8 6.3-6.2 10.2-7.2c-1.7 3.3-2.6 6.6-2.7 10c-1.9-1.9-4.2-2.8-7.5-2.8z"/>
-        <path class="phx__tail" d="M12 16.4c-1 2.9-2.6 5.3-4.8 7.2c2-.8 3.6-1.9 4.8-3.4c1.2 1.5 2.8 2.6 4.8 3.4c-2.2-1.9-3.8-4.3-4.8-7.2z"/>
-        <path class="phx__body" d="M12 5.2c1.1 0 2 .9 2 2c0 .7-.4 1.4-1 1.7c.8 2 1.2 4.1 1.2 6.4c0 1.1-1 1.7-2.2 1.7s-2.2-.6-2.2-1.7c0-2.3.4-4.4 1.2-6.4c-.6-.3-1-1-1-1.7c0-1.1.9-2 2-2z"/>
-        <path class="phx__crest" d="M12 .9c1.2 1.5 1.8 2.9 1.8 4.2c0 1-.8 1.5-1.8 1.5s-1.8-.5-1.8-1.5c0-1.3.6-2.7 1.8-4.2z"/>
-      </g>
-    </svg>`;
+  const MARK = 'assets/dan-phoenix.png';
+
+  const phoenix = size =>
+    `<img class="phx ${size}" src="${MARK}" alt="" aria-hidden="true" draggable="false">`;
 
   /* ───────────────────────────── the launcher ────────────────────────────── */
 

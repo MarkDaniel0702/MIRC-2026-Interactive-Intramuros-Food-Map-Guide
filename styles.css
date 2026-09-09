@@ -1519,10 +1519,14 @@ body.is-picking .leaflet-container { cursor: crosshair !important; }
 }
 .chat-launch:hover { color: var(--white); border-color: var(--green); }
 .chat-launch:active { transform: translateY(1px); }
+/* Open state keeps its dark ground: the phoenix is orange, and orange on the gold
+   fill the other controls use for "on" turns muddy. Gold moves to the text and the
+   edge instead, which still reads as lit. */
 .chat-launch.is-on {
-  color: var(--navy-900);
-  background: var(--gold);
-  border-color: var(--gold-br);
+  color: var(--gold-br);
+  background: rgba(10, 21, 38, .96);
+  border-color: var(--gold);
+  box-shadow: var(--shadow-m), inset 0 0 0 1px rgba(227, 178, 60, .30);
   font-weight: 600;
 }
 
@@ -1714,8 +1718,10 @@ body.is-picking .leaflet-container { cursor: crosshair !important; }
 
 /* On a phone the panel takes the map, sitting above the bottom sheet (z 1200). */
 @media (max-width: 760px) {
-  .chat-launch { top: 68px; right: 12px; padding: 8px 11px; }
+  .chat-launch { top: 68px; right: 12px; padding: 8px 10px; }
   .chat-launch__text { display: none; }
+  /* Text is gone here, so the bird carries the button on its own — give it more. */
+  .phx--sm { width: 32px; height: 24px; }
 
   .chat {
     left: 10px; right: 10px;
@@ -1730,71 +1736,41 @@ body.is-picking .leaflet-container { cursor: crosshair !important; }
   .chat__thinking span { animation: none; opacity: .6; }
 }
 
-/* ───────────────────────────── Dan's phoenix ───────────────────────────────
-   Line-drawn in the same stroke vocabulary as the tab, toolbar and pin glyphs,
-   so it reads as part of the instrument panel rather than a mascot dropped on
-   top of it. Gold — the accent reserved for selection and key edges — with the
-   body a shade brighter than the wings, and navy when it sits on a gold ground.
+/* ───────────────────────────── Dan's mark ──────────────────────────────────
+   The supplied phoenix artwork (assets/dan-phoenix.png), cropped to the bird.
+   Its oranges run hotter than the interface's gold, which is the point — it is
+   the one piece of warm colour on a navy instrument panel, and it reads as a
+   badge rather than as another control glyph.
 
-   The wings beat on a slow idle cycle, quicken on hover, and run fast while an
-   answer is being composed, so the mark itself reports Dan's state. */
+   The artwork is 4:3, so `contain` letterboxes it in the square slot instead of
+   stretching the wings. It drifts on a slow cycle, quickens on hover, and beats
+   fast while an answer is being composed, so the mark still carries Dan's state
+   without needing a separate spinner. */
 
-.phx { overflow: visible; flex: none; }
-
-.phx__wing,
-.phx__tail          { fill: var(--gold); }
-.phx__body,
-.phx__crest         { fill: var(--gold-br); }
-.phx__embers circle { fill: var(--gold-br); }
-
-/* Wings pivot at the shoulder; the whole bird lifts on the same cycle. */
-.phx__wing,
-.phx__bird,
-.phx__tail,
-.phx__embers circle { transform-box: view-box; }
-
-.phx__wing--l { transform-origin: 12px 9.8px;  animation: phxBeatL 2.9s var(--ease) infinite; }
-.phx__wing--r { transform-origin: 12px 9.8px;  animation: phxBeatR 2.9s var(--ease) infinite; }
-.phx__bird    { transform-origin: 12px 12px;   animation: phxRise  2.9s var(--ease) infinite; }
-.phx__tail    { transform-origin: 12px 16.4px; animation: phxSway  2.9s var(--ease) infinite; }
-.phx__embers circle { transform-origin: 12px 3px; animation: phxEmber 2.3s var(--ease) infinite; }
-
-@keyframes phxBeatL { 0%, 100% { transform: rotate(0deg); }   50% { transform: rotate(-8deg); } }
-@keyframes phxBeatR { 0%, 100% { transform: rotate(0deg); }   50% { transform: rotate(8deg); } }
-@keyframes phxRise  { 0%, 100% { transform: translateY(.5px); } 50% { transform: translateY(-.5px); } }
-@keyframes phxSway  { 0%, 100% { transform: rotate(-2.5deg); } 50% { transform: rotate(2.5deg); } }
-@keyframes phxEmber {
-  0%, 100% { opacity: 0;   transform: translateY(1.6px); }
-  45%      { opacity: .85; transform: translateY(-.8px); }
+.phx {
+  flex: none;
+  display: block;
+  object-fit: contain;
+  animation: phxFloat 3.6s var(--ease) infinite;
 }
 
-/* Launcher size: the embers are sub-pixel noise down here, so they stay off. */
-.chat-launch .phx { width: 15px; height: 15px; }
-.phx--sm .phx__embers { display: none; }
+@keyframes phxFloat {
+  0%, 100% { transform: translateY(.7px) rotate(-1.2deg); }
+  50%      { transform: translateY(-.7px) rotate(1.2deg); }
+}
 
-/* On the lit launcher the bird inverts, or it would vanish into the gold. */
-.chat-launch.is-on .phx path,
-.chat-launch.is-on .phx circle { fill: var(--navy-900); }
+/* Sized to the artwork's 4:3, not to a square. This bird carries far more detail
+   than a line glyph does, and below about 26px the flames merge into a smudge —
+   so it is given noticeably more room than a normal control icon. */
+.phx--sm { width: 28px; height: 21px; }   /* launcher */
+.phx--lg { width: 44px; height: 33px; }   /* panel header */
 
-.chat-launch:hover .phx__wing--l,
-.chat-launch:hover .phx__wing--r,
-.chat-launch:hover .phx__bird { animation-duration: 1.15s; }
+.chat-launch:hover .phx { animation-duration: 1.7s; }
+.chat.is-busy .phx      { animation-duration: .85s; }
 
 /* Panel header */
 .chat__ident { display: flex; align-items: center; gap: 10px; }
-.chat__ident .phx { width: 27px; height: 27px; }
-
-.chat.is-busy .phx__wing--l,
-.chat.is-busy .phx__wing--r,
-.chat.is-busy .phx__bird     { animation-duration: .62s; }
-.chat.is-busy .phx__tail     { animation-duration: .62s; }
-.chat.is-busy .phx__embers circle { animation-duration: .55s; }
 
 @media (prefers-reduced-motion: reduce) {
-  .phx__wing--l,
-  .phx__wing--r,
-  .phx__bird,
-  .phx__tail,
-  .phx__embers circle { animation: none; }
-  .phx__embers circle { opacity: .5; }
+  .phx { animation: none; }
 }

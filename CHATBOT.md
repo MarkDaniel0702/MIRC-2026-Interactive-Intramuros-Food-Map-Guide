@@ -3,13 +3,20 @@
 A chat panel on the map that answers questions about the congress and about getting
 around Intramuros — and declines everything else.
 
-**Dan** is the assistant's name; his mark is a line-drawn phoenix in the system's gold
-(`--gold` `#E3B23C`, with `--gold-br` `#F7D06B` on the body), whose wings beat slowly on
-idle, faster on hover, and fast while he is composing an answer — so the icon carries
-the state and the panel needs no separate spinner. It freezes under
-`prefers-reduced-motion`. Both the launcher glyph and the header mark come from one
-`phoenix()` helper in `chat.js`; the animation lives in the *Dan's phoenix* block at the
-end of `styles.css`.
+**Dan** is the assistant's name; his mark is the phoenix artwork in
+`assets/dan-phoenix.png` — supplied art, cropped to the bird and scaled to 256px wide so
+it stays sharp on a high-DPI screen. It drifts on a slow cycle, quickens on hover, and
+beats fast while he is composing an answer, so the mark carries the state and the panel
+needs no separate spinner; `prefers-reduced-motion` stops it. Both placements come from
+one `phoenix()` helper in `chat.js`, sized by `.phx--sm` / `.phx--lg` in the *Dan's mark*
+block at the end of `styles.css`.
+
+Two things about it worth knowing. Its oranges run hotter than the interface's gold
+(`#E3B23C`) — deliberate, it reads as a badge rather than another control glyph — which
+is why the launcher no longer fills gold when open: an orange bird on a gold ground goes
+muddy, so the open state keeps its dark ground and moves the gold to the text and edge.
+And the artwork is far more detailed than a line glyph, so it needs about 26px before the
+flames stop merging; it is drawn larger than a normal control icon for that reason.
 
 The interface is built and wired in. What it still needs is **content and a key**;
 both are listed under [What I need from you](#what-i-need-from-you) below.
@@ -201,8 +208,9 @@ small paid Anthropic key removes the ceiling for roughly the price of lunch.
 ## Files
 
 ```
-chat.js                     phoenix, launcher, panel, composer, client-side guards
-styles.css                  the .chat-launch / .chat and Dan's phoenix blocks at the end
+chat.js                     mark, launcher, panel, composer, client-side guards
+assets/dan-phoenix.png      Dan's phoenix, cropped and scaled from the supplied art
+styles.css                  the .chat-launch / .chat and Dan's mark blocks at the end
 data/mirc-2026.json         the knowledge base — the file you edit
 data/chat-corpus.json       generated; do not edit by hand
 tools/build-corpus.mjs      the merge step
