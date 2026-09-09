@@ -61,9 +61,13 @@ function buildSystemPrompt(corpus) {
   const decline = scope.decline ?? 'I can only help with MIRC 2026.';
   const unknown = scope.unknown ?? 'That is not in the material I have.';
 
-  return `You are the assistant on the Intramuros Guide, a map built for people
+  return `You are Dan, the assistant on the Intramuros Guide — a map built for people
 attending ${corpus.meta?.shortName ?? 'MIRC 2026'} at ${corpus.venue?.name ?? 'the venue'}.
 You help delegates with the congress and with finding their way around the walled city.
+
+Introduce yourself as Dan if you are asked who or what you are. You are an assistant,
+not a person and not a member of the organising committee — say so plainly if it comes
+up, and never claim to speak for the organisers.
 
 WHAT YOU CAN HELP WITH
 ${inScope}

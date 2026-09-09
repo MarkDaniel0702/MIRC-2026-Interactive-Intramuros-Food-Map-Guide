@@ -1,7 +1,15 @@
-# The MIRC 2026 assistant
+# Dan — the MIRC 2026 assistant
 
 A chat panel on the map that answers questions about the congress and about getting
 around Intramuros — and declines everything else.
+
+**Dan** is the assistant's name; his mark is a line-drawn phoenix in the system's gold
+(`--gold` `#E3B23C`, with `--gold-br` `#F7D06B` on the body), whose wings beat slowly on
+idle, faster on hover, and fast while he is composing an answer — so the icon carries
+the state and the panel needs no separate spinner. It freezes under
+`prefers-reduced-motion`. Both the launcher glyph and the header mark come from one
+`phoenix()` helper in `chat.js`; the animation lives in the *Dan's phoenix* block at the
+end of `styles.css`.
 
 The interface is built and wired in. What it still needs is **content and a key**;
 both are listed under [What I need from you](#what-i-need-from-you) below.
@@ -16,7 +24,7 @@ data/mirc-2026.json        the congress knowledge base — you fill this in
         │  node tools/build-corpus.mjs
         │  (merges in the map's own food / sights / hotels / arrival points)
         ▼
-data/chat-corpus.json      the single file the assistant answers from
+data/chat-corpus.json      the single file Dan answers from
         │
         │  fetched and cached by the Worker
         ▼
@@ -24,14 +32,14 @@ worker/src/index.js        holds the API key · grounds the model · enforces sc
         ▲
         │  POST /chat
         │
-chat.js                    the launcher, the panel, the composer
+chat.js                    the phoenix, the launcher, the panel, the composer
 ```
 
 The site is static and served from GitHub Pages, so it cannot hold an API key. The
 Worker is the only server-side piece, and it exists mostly for that reason.
 
 **Nothing is invented.** A field left `null` in the knowledge base means *not
-published yet*: the prompt requires the assistant to say so and point at the
+published yet*: the prompt requires Dan to say so and point at the
 organisers rather than produce a plausible-looking time or room. That is deliberate —
 a confident wrong room sends someone to the wrong side of a campus.
 
@@ -42,7 +50,7 @@ a confident wrong room sends someone to the wrong side of a campus.
 ### 1. Congress content — the long pole
 
 Everything goes into `data/mirc-2026.json`. The file has a slot for each of these and
-a `gaps` list naming what is still missing; the assistant reads that list, so anything
+a `gaps` list naming what is still missing; Dan reads that list, so anything
 you leave out it will honestly report as unpublished.
 
 | # | What | Where it goes | Needed for |
@@ -71,7 +79,7 @@ please confirm or correct them:
 - The building coordinates for GK, GEE and GA come from visitor-supplied Google Maps
   pins, not survey data.
 
-Until these are confirmed the assistant gives the detail *and* says it is unconfirmed,
+Until these are confirmed Dan gives the detail *and* says it is unconfirmed,
 so nobody is misled. Also still missing: `venue.gettingThere`, `accessibility`,
 `parking` and `wifi`.
 
@@ -107,7 +115,7 @@ Vercel or Netlify Functions with a small change to the handler signature.
 # 1. Fill in the knowledge base
 #    edit data/mirc-2026.json
 
-# 2. Build the corpus the assistant reads
+# 2. Build the corpus Dan reads
 node tools/build-corpus.mjs
 
 # 3. Deploy the Worker
@@ -193,8 +201,8 @@ small paid Anthropic key removes the ceiling for roughly the price of lunch.
 ## Files
 
 ```
-chat.js                     launcher, panel, composer, client-side guards
-styles.css                  the .chat-launch / .chat block at the end
+chat.js                     phoenix, launcher, panel, composer, client-side guards
+styles.css                  the .chat-launch / .chat and Dan's phoenix blocks at the end
 data/mirc-2026.json         the knowledge base — the file you edit
 data/chat-corpus.json       generated; do not edit by hand
 tools/build-corpus.mjs      the merge step

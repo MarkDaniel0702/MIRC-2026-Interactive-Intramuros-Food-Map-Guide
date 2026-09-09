@@ -71,6 +71,40 @@
     lastFocus: null
   };
 
+  /* ───────────────────────────── the phoenix ─────────────────────────────── */
+
+  /**
+   * Dan's mark: a phoenix — spread wings, a flame for a crest, a swallowtail. Filled
+   * rather than stroked, like the compass rose it sits below: a line-drawn version was
+   * tried first and read as a stick figure with its arms up, because thin strokes give
+   * a wing no mass. Silhouette is what makes it a bird at 15 pixels.
+   *
+   * Gold — the colour this system reserves for the things that matter — with the
+   * body a shade brighter than the wings. It stays gold on the resting launcher,
+   * the one warm mark on a steel control, and inverts to navy when the launcher
+   * lights up.
+   *
+   * It is alive: the wings beat slowly on their own, faster on hover, and faster
+   * still while Dan is composing an answer, so the icon carries the state instead
+   * of a separate spinner. `prefers-reduced-motion` stops all of it.
+   *
+   * `size` is 'phx--sm' (launcher) or 'phx--lg' (panel header, which also gets the
+   * rising embers — they are sub-pixel noise at launcher size).
+   */
+  const phoenix = size => `
+    <svg class="phx ${size}" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <g class="phx__embers">
+        <circle cx="8.6" cy="2.8" r=".62"/><circle cx="15.4" cy="2.8" r=".62"/>
+      </g>
+      <g class="phx__bird">
+        <path class="phx__wing phx__wing--l" d="M11.3 9.8c-2.8-3.8-6.3-6.2-10.2-7.2c1.7 3.3 2.6 6.6 2.7 10c1.9-1.9 4.2-2.8 7.5-2.8z"/>
+        <path class="phx__wing phx__wing--r" d="M12.7 9.8c2.8-3.8 6.3-6.2 10.2-7.2c-1.7 3.3-2.6 6.6-2.7 10c-1.9-1.9-4.2-2.8-7.5-2.8z"/>
+        <path class="phx__tail" d="M12 16.4c-1 2.9-2.6 5.3-4.8 7.2c2-.8 3.6-1.9 4.8-3.4c1.2 1.5 2.8 2.6 4.8 3.4c-2.2-1.9-3.8-4.3-4.8-7.2z"/>
+        <path class="phx__body" d="M12 5.2c1.1 0 2 .9 2 2c0 .7-.4 1.4-1 1.7c.8 2 1.2 4.1 1.2 6.4c0 1.1-1 1.7-2.2 1.7s-2.2-.6-2.2-1.7c0-2.3.4-4.4 1.2-6.4c-.6-.3-1-1-1-1.7c0-1.1.9-2 2-2z"/>
+        <path class="phx__crest" d="M12 .9c1.2 1.5 1.8 2.9 1.8 4.2c0 1-.8 1.5-1.8 1.5s-1.8-.5-1.8-1.5c0-1.3.6-2.7 1.8-4.2z"/>
+      </g>
+    </svg>`;
+
   /* ───────────────────────────── the launcher ────────────────────────────── */
 
   const launcher = document.createElement('button');
@@ -79,14 +113,9 @@
   launcher.id = 'chatLaunch';
   launcher.setAttribute('aria-expanded', 'false');
   launcher.setAttribute('aria-controls', 'chatPanel');
-  launcher.innerHTML =
-    `<svg viewBox="0 0 16 16" aria-hidden="true">` +
-      `<path d="M2 3.2h12v8H8.6L5 14v-2.8H2z"/>` +
-      `<path d="M5.1 6.4h5.8M5.1 8.7h3.4"/>` +
-    `</svg>` +
-    `<span class="chat-launch__text">Ask MIRC</span>`;
-  launcher.title = 'Ask about MIRC 2026';
-  launcher.setAttribute('aria-label', 'Ask about MIRC 2026');
+  launcher.innerHTML = phoenix('phx--sm') + `<span class="chat-launch__text">Ask Dan</span>`;
+  launcher.title = 'Ask Dan about MIRC 2026';
+  launcher.setAttribute('aria-label', 'Ask Dan about MIRC 2026');
 
   /* ───────────────────────────── the panel ───────────────────────────────── */
 
@@ -94,14 +123,17 @@
   panel.className = 'chat';
   panel.id = 'chatPanel';
   panel.hidden = true;
-  panel.setAttribute('aria-label', 'MIRC 2026 assistant');
+  panel.setAttribute('aria-label', 'Dan, the MIRC 2026 assistant');
   panel.innerHTML = `
     <header class="chat__head">
-      <div>
-        <p class="chat__eyebrow">MIRC 2026</p>
-        <h2 class="chat__title">Ask the congress</h2>
+      <div class="chat__ident">
+        ${phoenix('phx--lg')}
+        <div>
+          <p class="chat__eyebrow">MIRC 2026</p>
+          <h2 class="chat__title">Dan</h2>
+        </div>
       </div>
-      <button type="button" class="chat__close" id="chatClose" aria-label="Close the assistant">&times;</button>
+      <button type="button" class="chat__close" id="chatClose" aria-label="Close Dan">&times;</button>
     </header>
 
     <div class="chat__log" id="chatLog" role="log" aria-live="polite" aria-atomic="false"></div>
@@ -194,6 +226,9 @@
     state.busy = on;
     $('#chatSend').disabled = on;
     $('#chatInput').disabled = on;
+    /* The phoenix beats faster while Dan is composing — the icon carries the state,
+       so the panel needs no separate spinner in its chrome. */
+    panel.classList.toggle('is-busy', on);
     renderSuggestions();
   }
 
@@ -219,9 +254,9 @@
 
     if (!ENDPOINT) {
       bubble('bot',
-        'I am not connected to the congress assistant yet. The organisers still need to ' +
-        'publish the MIRC 2026 programme and switch the service on — until then this ' +
-        'panel is here, but I cannot answer.', { muted: true });
+        "I'm not switched on yet. The organisers still need to publish the MIRC 2026 " +
+        'programme and connect me — until then this panel is here, but I cannot answer.',
+        { muted: true });
       return;
     }
 
@@ -278,7 +313,7 @@
     });
 
     bubble('bot',
-      'I can help with MIRC 2026 — the programme, sessions, the venue at PLM, ' +
+      "I'm Dan. I can help with MIRC 2026 — the programme, sessions, the venue at PLM, " +
       'registration — and with finding your way around Intramuros. What do you need?');
 
     renderSuggestions();
