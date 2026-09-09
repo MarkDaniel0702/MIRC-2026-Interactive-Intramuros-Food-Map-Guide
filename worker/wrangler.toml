@@ -1,0 +1,30 @@
+# MIRC 2026 chatbot Worker.
+#
+#   cd worker
+#   npx wrangler deploy
+#
+# Then set at least one model key as a secret (never put keys in this file):
+#   npx wrangler secret put GEMINI_API_KEY
+#   npx wrangler secret put GROQ_API_KEY
+#   npx wrangler secret put ANTHROPIC_API_KEY
+#
+# Providers are tried in the order gemini -> groq -> anthropic, so configuring two
+# free tiers gives the congress a fallback when one hits its rate ceiling.
+
+name = "mirc-2026-chat"
+main = "src/index.js"
+compatibility_date = "2026-01-01"
+
+[vars]
+# Where the built corpus lives. Regenerate it with `node tools/build-corpus.mjs`
+# and push, and the Worker picks it up within five minutes.
+CORPUS_URL = "https://markdaniel0702.github.io/MIRC-2026-Interactive-Intramuros-Food-Map-Guide/data/chat-corpus.json"
+
+# Origins allowed to call this Worker. Leave the localhost entry for development.
+ALLOWED_ORIGINS = "https://markdaniel0702.github.io,http://localhost:8000"
+
+# Model ids are pinned here rather than in code so a provider renaming a model is a
+# one-line change. Check the provider's current model list before the congress.
+GEMINI_MODEL = "gemini-2.0-flash"
+GROQ_MODEL = "llama-3.3-70b-versatile"
+ANTHROPIC_MODEL = "claude-sonnet-5"

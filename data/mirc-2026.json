@@ -1,0 +1,174 @@
+{
+  "_readme": [
+    "MIRC 2026 knowledge base — the ONLY thing the chatbot knows about the congress.",
+    "",
+    "HOW TO FILL THIS IN",
+    "  · null  = not yet supplied. The bot will say the detail is not published yet and",
+    "            point the asker at the organisers. It will NEVER invent a value.",
+    "  · []    = an empty list, treated the same way.",
+    "  · Anything you write here, the bot will state as fact. Only put in what is confirmed.",
+    "  · Add every remaining unknown to the \"gaps\" array so the bot can name what is missing.",
+    "",
+    "AFTER EDITING: run  node tools/build-corpus.mjs",
+    "  That merges this file with the map's own food / sights / hotels / landmark data",
+    "  into data/chat-corpus.json, which is what the chatbot actually reads.",
+    "",
+    "Set meta.contentFrozen to true once the committee has signed the content off."
+  ],
+
+  "meta": {
+    "id": "mirc-2026",
+    "shortName": "MIRC 2026",
+    "name": null,
+    "edition": null,
+    "theme": null,
+    "dates": null,
+    "hostInstitution": "Pamantasan ng Lungsod ng Maynila (PLM)",
+    "city": "Intramuros, Manila, Philippines",
+    "website": null,
+    "updated": "2026-09-09",
+    "contentFrozen": false
+  },
+
+  "gaps": [
+    "The full name MIRC stands for, and which edition this is",
+    "Congress dates and daily start/end times",
+    "The congress theme",
+    "The official website or registration page",
+    "The full programme: sessions, times, rooms, tracks, session chairs",
+    "Paper and poster titles, authors and abstracts",
+    "Keynote and plenary speakers, with bios",
+    "Organising and technical committee members",
+    "Registration fees, deadlines and how to register",
+    "On-site registration desk location and opening hours",
+    "Meals, breaks and refreshment arrangements",
+    "Wi-Fi access details for delegates",
+    "Certificate and proceedings arrangements",
+    "Emergency contacts and the code of conduct",
+    "Confirmation of the room codes AVR, KL, BTB and TOP (see venue.buildings)"
+  ],
+
+  "scope": {
+    "inScope": [
+      "The MIRC 2026 programme, sessions, papers, posters and speakers",
+      "Session times, rooms and buildings on the PLM campus",
+      "Registration, fees, deadlines and the on-site desk",
+      "Congress logistics: meals, breaks, Wi-Fi, certificates, contacts, code of conduct",
+      "The venue and how to reach it, including walking directions",
+      "Getting around Intramuros as a delegate: places to eat, heritage sights, places to stay"
+    ],
+    "outOfScope": [
+      "Writing, explaining or debugging code",
+      "Homework, assignments, maths problems and general study help",
+      "General knowledge, current affairs, news and trivia",
+      "Drafting essays, emails, posts or any other writing task",
+      "Translation, summarising or rewriting text the user supplies",
+      "Personal, medical, legal or financial advice",
+      "Anything about Manila beyond Intramuros, or travel unrelated to the congress"
+    ],
+    "decline": "I can only help with MIRC 2026 and getting around Intramuros. Ask me about the programme, a session, the venue, registration, or where to eat nearby.",
+    "unknown": "That is not in the congress material I have. The organisers at the registration desk will be able to tell you.",
+    "suggestions": [
+      "What is MIRC 2026?",
+      "Where is the venue?",
+      "How do I get to PLM from the LRT?",
+      "Where can I eat near the venue?",
+      "What is there to see in Intramuros?"
+    ]
+  },
+
+  "event": {
+    "about": null,
+    "audience": null,
+    "organisers": [],
+    "contacts": []
+  },
+
+  "schedule": {
+    "timezone": "Asia/Manila",
+    "days": []
+  },
+
+  "speakers": [],
+
+  "papers": [],
+
+  "venue": {
+    "name": "Pamantasan ng Lungsod ng Maynila (PLM)",
+    "alsoKnownAs": "University of the City of Manila",
+    "address": "General Luna Street, Intramuros, Manila",
+    "lat": 14.5868604,
+    "lng": 120.9764378,
+    "website": "https://www.plm.edu.ph/",
+    "osm": "way/27275574",
+    "description": "A full campus of colleges, gymnasiums and the PLM Chapel behind its own gate, in the southern quarter of the walled city. Sessions run in several buildings across the campus.",
+    "buildings": [
+      {
+        "code": "JAA",
+        "name": "Justo Albert Auditorium",
+        "lat": 14.586453,
+        "lng": 120.975866,
+        "confirmed": true,
+        "notes": "A single auditorium venue, not a multi-room building.",
+        "rooms": []
+      },
+      {
+        "code": "GK",
+        "name": "Gusaling Katipunan (Katipunan Building)",
+        "lat": 14.587515,
+        "lng": 120.976390,
+        "confirmed": false,
+        "notes": "Coordinate from a visitor-supplied Google Maps pin; not independently verified.",
+        "rooms": [
+          { "code": "BTB", "name": null, "confirmed": false }
+        ]
+      },
+      {
+        "code": "GEE",
+        "name": "Gusaling Emilio Ejercito Sr. (Emilio Ejercito Sr. Building)",
+        "lat": 14.586407,
+        "lng": 120.976898,
+        "confirmed": false,
+        "notes": "A visitor confirmed both the AVR and KL rooms are in this one building.",
+        "rooms": [
+          { "code": "AVR", "name": "Audio-Visual Room", "confirmed": false },
+          { "code": "KL", "name": null, "confirmed": false }
+        ]
+      },
+      {
+        "code": "GA",
+        "name": "Gusaling Don Pepe Atienza (Don Pepe Atienza Building)",
+        "lat": 14.586260,
+        "lng": 120.976835,
+        "confirmed": false,
+        "notes": "On the Muralla Street side; home of the College / Mass Communication Office.",
+        "rooms": [
+          { "code": "TOP", "name": null, "confirmed": false }
+        ]
+      }
+    ],
+    "gettingThere": null,
+    "accessibility": null,
+    "parking": null,
+    "wifi": null
+  },
+
+  "registration": {
+    "fees": [],
+    "deadlines": [],
+    "howTo": null,
+    "desk": null
+  },
+
+  "logistics": {
+    "meals": null,
+    "breaks": null,
+    "certificates": null,
+    "proceedings": null,
+    "emergency": null,
+    "codeOfConduct": null,
+    "photography": null
+  },
+
+  "faq": []
+}

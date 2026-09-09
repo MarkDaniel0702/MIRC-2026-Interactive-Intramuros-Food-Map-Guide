@@ -1,0 +1,1032 @@
+{
+  "_generated": "2026-09-09",
+  "_source": "node tools/build-corpus.mjs — do not edit by hand; edit data/mirc-2026.json",
+  "meta": {
+    "id": "mirc-2026",
+    "shortName": "MIRC 2026",
+    "name": null,
+    "edition": null,
+    "theme": null,
+    "dates": null,
+    "hostInstitution": "Pamantasan ng Lungsod ng Maynila (PLM)",
+    "city": "Intramuros, Manila, Philippines",
+    "website": null,
+    "updated": "2026-09-09",
+    "contentFrozen": false
+  },
+  "gaps": [
+    "The full name MIRC stands for, and which edition this is",
+    "Congress dates and daily start/end times",
+    "The congress theme",
+    "The official website or registration page",
+    "The full programme: sessions, times, rooms, tracks, session chairs",
+    "Paper and poster titles, authors and abstracts",
+    "Keynote and plenary speakers, with bios",
+    "Organising and technical committee members",
+    "Registration fees, deadlines and how to register",
+    "On-site registration desk location and opening hours",
+    "Meals, breaks and refreshment arrangements",
+    "Wi-Fi access details for delegates",
+    "Certificate and proceedings arrangements",
+    "Emergency contacts and the code of conduct",
+    "Confirmation of the room codes AVR, KL, BTB and TOP (see venue.buildings)"
+  ],
+  "scope": {
+    "inScope": [
+      "The MIRC 2026 programme, sessions, papers, posters and speakers",
+      "Session times, rooms and buildings on the PLM campus",
+      "Registration, fees, deadlines and the on-site desk",
+      "Congress logistics: meals, breaks, Wi-Fi, certificates, contacts, code of conduct",
+      "The venue and how to reach it, including walking directions",
+      "Getting around Intramuros as a delegate: places to eat, heritage sights, places to stay"
+    ],
+    "outOfScope": [
+      "Writing, explaining or debugging code",
+      "Homework, assignments, maths problems and general study help",
+      "General knowledge, current affairs, news and trivia",
+      "Drafting essays, emails, posts or any other writing task",
+      "Translation, summarising or rewriting text the user supplies",
+      "Personal, medical, legal or financial advice",
+      "Anything about Manila beyond Intramuros, or travel unrelated to the congress"
+    ],
+    "decline": "I can only help with MIRC 2026 and getting around Intramuros. Ask me about the programme, a session, the venue, registration, or where to eat nearby.",
+    "unknown": "That is not in the congress material I have. The organisers at the registration desk will be able to tell you.",
+    "suggestions": [
+      "What is MIRC 2026?",
+      "Where is the venue?",
+      "How do I get to PLM from the LRT?",
+      "Where can I eat near the venue?",
+      "What is there to see in Intramuros?"
+    ]
+  },
+  "event": {
+    "about": null,
+    "audience": null,
+    "organisers": [],
+    "contacts": []
+  },
+  "schedule": {
+    "timezone": "Asia/Manila",
+    "days": []
+  },
+  "speakers": [],
+  "papers": [],
+  "venue": {
+    "name": "Pamantasan ng Lungsod ng Maynila (PLM)",
+    "alsoKnownAs": "University of the City of Manila",
+    "address": "General Luna Street, Intramuros, Manila",
+    "lat": 14.5868604,
+    "lng": 120.9764378,
+    "website": "https://www.plm.edu.ph/",
+    "osm": "way/27275574",
+    "description": "A full campus of colleges, gymnasiums and the PLM Chapel behind its own gate, in the southern quarter of the walled city. Sessions run in several buildings across the campus.",
+    "buildings": [
+      {
+        "code": "JAA",
+        "name": "Justo Albert Auditorium",
+        "lat": 14.586453,
+        "lng": 120.975866,
+        "confirmed": true,
+        "notes": "A single auditorium venue, not a multi-room building.",
+        "rooms": []
+      },
+      {
+        "code": "GK",
+        "name": "Gusaling Katipunan (Katipunan Building)",
+        "lat": 14.587515,
+        "lng": 120.97639,
+        "confirmed": false,
+        "notes": "Coordinate from a visitor-supplied Google Maps pin; not independently verified.",
+        "rooms": [
+          {
+            "code": "BTB",
+            "name": null,
+            "confirmed": false
+          }
+        ]
+      },
+      {
+        "code": "GEE",
+        "name": "Gusaling Emilio Ejercito Sr. (Emilio Ejercito Sr. Building)",
+        "lat": 14.586407,
+        "lng": 120.976898,
+        "confirmed": false,
+        "notes": "A visitor confirmed both the AVR and KL rooms are in this one building.",
+        "rooms": [
+          {
+            "code": "AVR",
+            "name": "Audio-Visual Room",
+            "confirmed": false
+          },
+          {
+            "code": "KL",
+            "name": null,
+            "confirmed": false
+          }
+        ]
+      },
+      {
+        "code": "GA",
+        "name": "Gusaling Don Pepe Atienza (Don Pepe Atienza Building)",
+        "lat": 14.58626,
+        "lng": 120.976835,
+        "confirmed": false,
+        "notes": "On the Muralla Street side; home of the College / Mass Communication Office.",
+        "rooms": [
+          {
+            "code": "TOP",
+            "name": null,
+            "confirmed": false
+          }
+        ]
+      }
+    ],
+    "gettingThere": null,
+    "accessibility": null,
+    "parking": null,
+    "wifi": null
+  },
+  "registration": {
+    "fees": [],
+    "deadlines": [],
+    "howTo": null,
+    "desk": null
+  },
+  "logistics": {
+    "meals": null,
+    "breaks": null,
+    "certificates": null,
+    "proceedings": null,
+    "emergency": null,
+    "codeOfConduct": null,
+    "photography": null
+  },
+  "faq": [],
+  "localGuide": {
+    "note": "Places inside the Intramuros walls, from the Intramuros Guide map that hosts this chatbot. Every one is verified to sit inside the official boundary (OSM relation 103707). Walking times are straight-line from the venue at 80 m per minute, so allow a little more on the ground.",
+    "venueAnchor": "Pamantasan ng Lungsod ng Maynila",
+    "reviewed": "2026-09-04",
+    "priceCaveat": "Food prices are indicative estimates for a typical meal per person, not quoted prices. Menus change — treat the band as a guide.",
+    "feeCaveat": "Entrance fees are from the Intramuros Administration and site operators. Discounted rates generally apply to students, seniors and PWD — bring ID.",
+    "stayCaveat": "Hotel rates are a dated snapshot, not live pricing.",
+    "priceTiers": [
+      "₱ Budget — under ₱200",
+      "₱₱ Moderate — ₱200 – ₱500",
+      "₱₱₱ Upscale — ₱500 – ₱1,000",
+      "₱₱₱₱ Fine dining — ₱1,000 and up"
+    ],
+    "feeTiers": [
+      "Free entry No entrance fee",
+      "Low ₱75 – ₱100",
+      "Standard ₱150 – ₱200"
+    ],
+    "passport": {
+      "price": "₱350",
+      "covers": [
+        "Fort Santiago",
+        "Casa Manila",
+        "Museo de Intramuros",
+        "Baluarte de San Diego",
+        "Centro de Turismo"
+      ],
+      "extra": "Includes a free guided tranvía tour.",
+      "note": "Centro de Turismo is the fifth covered site; it is not pinned here because its coordinates could not be verified.",
+      "url": "https://intramuros.gov.ph/guide-museums/"
+    },
+    "eat": [
+      {
+        "name": "9 Spoons",
+        "category": "Restaurants & Heritage Dining",
+        "price": "Upscale — ₱500 – ₱1,000 per person",
+        "cuisine": "Filipino, Breakfast, Buffet",
+        "where": "Muralla corner Victoria Street · The Bayleaf Intramuros, 9th floor",
+        "fromVenue": "5 min walk (430 m)",
+        "about": "All-day dining restaurant on the top floor of The Bayleaf, serving Filipino heritage dishes — kare-kare, bagnet, sizzling bulalo — plus a weekday lunch buffet. Shares its coordinates with the hotel building; no separate OSM node exists for the restaurant itself."
+      },
+      {
+        "name": "Adams Canteen",
+        "category": "Budget Eats & Carinderias",
+        "price": "Budget — under ₱200 per person",
+        "cuisine": "Filipino, Rice Meals",
+        "where": "Escuela Street",
+        "fromVenue": "4 min walk (290 m)",
+        "about": "Neighbourhood canteen serving Filipino rice meals on the streets behind the southern wall."
+      },
+      {
+        "name": "Aujen's Coffee",
+        "category": "Cafes & Coffee",
+        "price": "Moderate — ₱200 – ₱500 per person",
+        "cuisine": "Coffee, Pastries",
+        "where": "Cabildo Street",
+        "fromVenue": "7 min walk (590 m)",
+        "about": "Small independent coffee bar a short walk from Manila Cathedral."
+      },
+      {
+        "name": "Bacolod Chk-N-Bbq",
+        "category": "Fast Food & Chains",
+        "price": "Moderate — ₱200 – ₱500 per person",
+        "cuisine": "Filipino, Chicken Inasal, Barbecue",
+        "where": "Andres Soriano Avenue",
+        "fromVenue": "10 min walk (780 m)",
+        "about": "Chain grill for Bacolod-style chicken inasal and barbecue skewers over rice."
+      },
+      {
+        "name": "Bacolodnon Eatery",
+        "category": "Budget Eats & Carinderias",
+        "price": "Budget — under ₱200 per person",
+        "cuisine": "Filipino, Bacolod, Inasal",
+        "where": "Magallanes Street",
+        "fromVenue": "3 min walk (200 m)",
+        "about": "Bacolod-style carinderia — chicken inasal and Negrense home cooking over rice. Not in OpenStreetMap — the coordinate is from a Google Maps pin supplied by a visitor."
+      },
+      {
+        "name": "Balai Maria",
+        "category": "Restaurants & Heritage Dining",
+        "price": "Moderate — ₱200 – ₱500 per person",
+        "cuisine": "Filipino",
+        "where": "Beaterio Street",
+        "fromVenue": "7 min walk (560 m)",
+        "about": "Filipino kitchen on the quieter western side of the walled city."
+      },
+      {
+        "name": "Bamboo Intramuros",
+        "category": "Restaurants & Heritage Dining",
+        "price": "Moderate — ₱200 – ₱500 per person",
+        "cuisine": "Filipino, Grill, Bar",
+        "where": "Magallanes Drive",
+        "fromVenue": "11 min walk (870 m)",
+        "about": "Art-filled restaurant and bar on the northern edge of Intramuros — listed locally as Bambu Intramuros Art Bar and Restaurant — known for lechon kawali and cocktails amid bamboo-themed décor."
+      },
+      {
+        "name": "Barbara's Casa Manila",
+        "category": "Restaurants & Heritage Dining",
+        "price": "Fine dining — ₱1,000 and up per person",
+        "cuisine": "Filipino, Buffet",
+        "where": "General Luna Street · Plaza San Luis Complex",
+        "fromVenue": "4 min walk (320 m)",
+        "about": "Heritage buffet inside a Spanish-era mansion, with a Filipino cultural show at dinner."
+      },
+      {
+        "name": "Bataka Bar",
+        "category": "Restaurants & Heritage Dining",
+        "price": "Moderate — ₱200 – ₱500 per person",
+        "cuisine": "Filipino, Bar",
+        "where": "General Luna Street · Plaza San Luis Complex",
+        "fromVenue": "4 min walk (300 m)",
+        "about": "One of the dining spots inside the Plaza San Luis heritage complex, a few steps from Casa Manila, serving Filipino plates alongside its drinks list."
+      },
+      {
+        "name": "Batala",
+        "category": "Desserts & Snacks",
+        "price": "Budget — under ₱200 per person",
+        "cuisine": "Ice Cream, Desserts",
+        "where": "San Jose Street",
+        "fromVenue": "2 min walk (140 m)",
+        "about": "Ice cream counter in the southern quarter of the walled city — a separate venue from Batala Bar below, despite the near-identical name."
+      },
+      {
+        "name": "Batala Bar",
+        "category": "Restaurants & Heritage Dining",
+        "price": "Moderate — ₱200 – ₱500 per person",
+        "cuisine": "Filipino, Craft Beer, Ice Cream",
+        "where": "General Luna Street · Plaza San Luis Complex",
+        "fromVenue": "4 min walk (340 m)",
+        "about": "Craft beer bar and kitchen in the Plaza San Luis complex serving Filipino bar chow — crispy sisig, kare-kare, bagnet — alongside house-made ice cream and coffee, with vegan versions of several dishes."
+      },
+      {
+        "name": "Beanleaf",
+        "category": "Cafes & Coffee",
+        "price": "Moderate — ₱200 – ₱500 per person",
+        "cuisine": "Coffee, Tea, Pastries",
+        "where": "General Luna Street",
+        "fromVenue": "10 min walk (800 m)",
+        "about": "Coffee and tea house on the western side, busy with students and office workers."
+      },
+      {
+        "name": "Belfry Café",
+        "category": "Cafes & Coffee",
+        "price": "Moderate — ₱200 – ₱500 per person",
+        "cuisine": "Coffee, Filipino",
+        "where": "Cabildo Street",
+        "fromVenue": "8 min walk (640 m)",
+        "about": "Café on Cabildo Street named for the bell towers it sits beneath."
+      },
+      {
+        "name": "Cafe Intramuros",
+        "category": "Cafes & Coffee",
+        "price": "Moderate — ₱200 – ₱500 per person",
+        "cuisine": "Coffee, Filipino",
+        "where": "Real Street · Plaza San Luis Complex",
+        "fromVenue": "4 min walk (340 m)",
+        "about": "Courtyard café in the Plaza San Luis complex, opposite San Agustin Church."
+      },
+      {
+        "name": "Cafe Janealo",
+        "category": "Cafes & Coffee",
+        "price": "Budget — under ₱200 per person",
+        "cuisine": "Filipino, Pasta, Rice Meals",
+        "where": "Beaterio Street",
+        "fromVenue": "7 min walk (580 m)",
+        "about": "Diner-style café serving rice meals and pasta, with live music some evenings."
+      },
+      {
+        "name": "Casa Marinero",
+        "category": "Restaurants & Heritage Dining",
+        "price": "Moderate — ₱200 – ₱500 per person",
+        "cuisine": "Filipino",
+        "where": "Santa Potenciana Street",
+        "fromVenue": "3 min walk (250 m)",
+        "about": "Filipino dining room on Santa Potenciana Street."
+      },
+      {
+        "name": "Casa Marinero II",
+        "category": "Restaurants & Heritage Dining",
+        "price": "Moderate — ₱200 – ₱500 per person",
+        "cuisine": "Filipino",
+        "where": "Cabildo Street",
+        "fromVenue": "3 min walk (250 m)",
+        "about": "Second branch of Casa Marinero, a few doors from the original."
+      },
+      {
+        "name": "Chamber Café",
+        "category": "Cafes & Coffee",
+        "price": "Moderate — ₱200 – ₱500 per person",
+        "cuisine": "Coffee",
+        "where": "Western Intramuros, near Muralla Street",
+        "fromVenue": "11 min walk (860 m)",
+        "about": "Compact coffee spot on the western side of the walled city."
+      },
+      {
+        "name": "Cheftain Eatery",
+        "category": "Budget Eats & Carinderias",
+        "price": "Budget — under ₱200 per person",
+        "cuisine": "Filipino, Turo-Turo",
+        "where": "Santa Potenciana Street",
+        "fromVenue": "3 min walk (250 m)",
+        "about": "Turo-turo canteen with a rotating tray of Filipino ulam over rice; Google lists it as \"Cheftain Eatery and Catering\". Not in OpenStreetMap — the coordinate is from a Google Maps pin supplied by a visitor."
+      },
+      {
+        "name": "Chowking",
+        "category": "Fast Food & Chains",
+        "price": "Budget — under ₱200 per person",
+        "cuisine": "Chinese, Filipino, Noodles",
+        "where": "Andres Soriano Avenue",
+        "fromVenue": "10 min walk (770 m)",
+        "about": "Chinese-Filipino fast food chain — rice toppings, noodles and siomai."
+      },
+      {
+        "name": "Cioccolata",
+        "category": "Desserts & Snacks",
+        "price": "Moderate — ₱200 – ₱500 per person",
+        "cuisine": "Coffee, Churros, Hot Chocolate, Pastries",
+        "where": "Muralla Street · The Bayleaf Hotel",
+        "fromVenue": "5 min walk (420 m)",
+        "about": "Coffee, churros and pastries at the foot of The Bayleaf hotel — one of four in-house dining spots at the hotel, alongside 9 Spoons, Raffaele and Sky Deck View Bar."
+      },
+      {
+        "name": "Cioden's Diner",
+        "category": "Budget Eats & Carinderias",
+        "price": "Budget — under ₱200 per person",
+        "cuisine": "Filipino, Carinderia, Rice Meals",
+        "fromVenue": "3 min walk (280 m)",
+        "about": "Carinderia serving budget Filipino rice meals from about ₱35. Not in OpenStreetMap — the coordinate is from a Google Maps pin supplied by a visitor."
+      },
+      {
+        "name": "Club Intramuros",
+        "category": "Restaurants & Heritage Dining",
+        "price": "Upscale — ₱500 – ₱1,000 per person",
+        "cuisine": "Filipino, International",
+        "where": "Bonifacio Drive · Club Intramuros Golf Club",
+        "fromVenue": "12 min walk (940 m)",
+        "about": "Clubhouse restaurant at the golf course laid out in the old moat, still within the Intramuros district."
+      },
+      {
+        "name": "Cold Treats",
+        "category": "Desserts & Snacks",
+        "price": "Budget — under ₱200 per person",
+        "cuisine": "Ice Cream, Snacks",
+        "where": "Real Street · Plaza San Luis Complex",
+        "fromVenue": "4 min walk (350 m)",
+        "about": "Ice cream and cold snacks stall in the Plaza San Luis complex."
+      },
+      {
+        "name": "Dexter Pizza - Sisay's",
+        "category": "Budget Eats & Carinderias",
+        "price": "Budget — under ₱200 per person",
+        "cuisine": "Pizza, Filipino",
+        "where": "Cabildo Street",
+        "fromVenue": "7 min walk (560 m)",
+        "about": "Neighbourhood pizza and short-order counter near Beaterio Street."
+      },
+      {
+        "name": "Figaro",
+        "category": "Cafes & Coffee",
+        "price": "Moderate — ₱200 – ₱500 per person",
+        "cuisine": "Coffee, Pastries",
+        "where": "Andres Soriano Avenue",
+        "fromVenue": "10 min walk (770 m)",
+        "about": "Branch of the Filipino coffee chain on Andres Soriano Avenue."
+      },
+      {
+        "name": "Flower Stories Cafe",
+        "category": "Cafes & Coffee",
+        "price": "Moderate — ₱200 – ₱500 per person",
+        "cuisine": "Coffee, Desserts",
+        "where": "Magallanes Street",
+        "fromVenue": "7 min walk (540 m)",
+        "about": "Small flower-shop café near Magallanes Street."
+      },
+      {
+        "name": "Greenwich",
+        "category": "Fast Food & Chains",
+        "price": "Budget — under ₱200 per person",
+        "cuisine": "Pizza, Pasta",
+        "where": "Andres Soriano Avenue",
+        "fromVenue": "10 min walk (770 m)",
+        "about": "Pizza and pasta fast food chain on Andres Soriano Avenue."
+      },
+      {
+        "name": "Ilustrado",
+        "category": "Restaurants & Heritage Dining",
+        "price": "Upscale — ₱500 – ₱1,000 per person",
+        "cuisine": "Filipino, Spanish",
+        "where": "Cabildo Street",
+        "fromVenue": "2 min walk (150 m)",
+        "about": "Long-established Spanish-Filipino restaurant in the walled city, known for paella and heritage set menus."
+      },
+      {
+        "name": "J's Cuisine",
+        "category": "Restaurants & Heritage Dining",
+        "price": "Moderate — ₱200 – ₱500 per person",
+        "cuisine": "Filipino",
+        "where": "Anda Street",
+        "fromVenue": "9 min walk (700 m)",
+        "about": "Casual Filipino restaurant in the northeastern quarter, near Anda Street."
+      },
+      {
+        "name": "Jollibee",
+        "category": "Fast Food & Chains",
+        "price": "Budget — under ₱200 per person",
+        "cuisine": "Filipino, Burgers, Fried Chicken",
+        "where": "Muelle del Rio · Near the Pasig River",
+        "fromVenue": "10 min walk (820 m)",
+        "about": "The country's biggest fast food chain — Chickenjoy, burger steak and sweet spaghetti."
+      },
+      {
+        "name": "Kabayan Food House",
+        "category": "Budget Eats & Carinderias",
+        "price": "Budget — under ₱200 per person",
+        "cuisine": "Filipino, Turo-Turo",
+        "where": "Santa Potenciana Street",
+        "fromVenue": "4 min walk (300 m)",
+        "about": "Turo-turo food house ladling out Filipino home cooking by the plate."
+      },
+      {
+        "name": "KFC",
+        "category": "Fast Food & Chains",
+        "price": "Budget — under ₱200 per person",
+        "cuisine": "Fried Chicken",
+        "where": "Andres Soriano Avenue",
+        "fromVenue": "10 min walk (760 m)",
+        "about": "Fried chicken chain branch off Andres Soriano Avenue."
+      },
+      {
+        "name": "La Cathedral Cafe",
+        "category": "Cafes & Coffee",
+        "price": "Moderate — ₱200 – ₱500 per person",
+        "cuisine": "Coffee, Filipino, Pasta",
+        "where": "Beaterio Street · Overlooking Manila Cathedral",
+        "fromVenue": "7 min walk (550 m)",
+        "about": "Multi-storey café with a roof deck looking straight across at the dome of Manila Cathedral."
+      },
+      {
+        "name": "La Events Cafe",
+        "category": "Cafes & Coffee",
+        "price": "Moderate — ₱200 – ₱500 per person",
+        "cuisine": "Breakfast, Filipino, Sandwiches, International",
+        "where": "Santa Clara Street",
+        "fromVenue": "10 min walk (830 m)",
+        "about": "All-day breakfast and sandwiches on the western side of the walled city."
+      },
+      {
+        "name": "Lacanilao's Tapsilogan",
+        "category": "Budget Eats & Carinderias",
+        "price": "Budget — under ₱200 per person",
+        "cuisine": "Filipino, Silog, Breakfast",
+        "where": "Victoria Street",
+        "fromVenue": "2 min walk (170 m)",
+        "about": "Tapsilogan on Victoria Street doing the standard silog line-up — tapa, longganisa and tocino with garlic rice and egg — through the day. Not in OpenStreetMap — the coordinate was supplied directly by a visitor."
+      },
+      {
+        "name": "Liezel's Place",
+        "category": "Budget Eats & Carinderias",
+        "price": "Budget — under ₱200 per person",
+        "cuisine": "Filipino, Rice Meals",
+        "where": "Cabildo Street",
+        "fromVenue": "2 min walk (180 m)",
+        "about": "Carinderia serving Filipino rice meals near the southern wall."
+      },
+      {
+        "name": "Los Frailes Cafe",
+        "category": "Cafes & Coffee",
+        "price": "Moderate — ₱200 – ₱500 per person",
+        "cuisine": "Coffee, Filipino",
+        "where": "Real Street · Near San Agustin Church",
+        "fromVenue": "4 min walk (330 m)",
+        "about": "Café named for the friars, steps from San Agustin Church."
+      },
+      {
+        "name": "Max's Restaurant",
+        "category": "Fast Food & Chains",
+        "price": "Moderate — ₱200 – ₱500 per person",
+        "cuisine": "Filipino, Fried Chicken",
+        "where": "Andres Soriano Avenue",
+        "fromVenue": "10 min walk (800 m)",
+        "about": "The classic Filipino chain built on fried chicken, with full rice meals and sharing platters."
+      },
+      {
+        "name": "McDonald's",
+        "category": "Fast Food & Chains",
+        "price": "Budget — under ₱200 per person",
+        "cuisine": "Burgers, Fried Chicken",
+        "where": "Muralla Street",
+        "fromVenue": "8 min walk (680 m)",
+        "about": "Burger chain branch on Muralla Street by the university campuses."
+      },
+      {
+        "name": "MK Cookies & Pastries",
+        "category": "Desserts & Snacks",
+        "price": "Budget — under ₱200 per person",
+        "cuisine": "Bakery, Cookies, Pastries",
+        "where": "Beaterio Street",
+        "fromVenue": "7 min walk (560 m)",
+        "about": "Cookie and pastry counter on Beaterio Street."
+      },
+      {
+        "name": "Moonleaf",
+        "category": "Cafes & Coffee",
+        "price": "Budget — under ₱200 per person",
+        "cuisine": "Milk Tea, Bubble Tea",
+        "where": "Victoria Street",
+        "fromVenue": "4 min walk (330 m)",
+        "about": "Milk tea shop on Victoria Street."
+      },
+      {
+        "name": "Papa Kape",
+        "category": "Cafes & Coffee",
+        "price": "Moderate — ₱200 – ₱500 per person",
+        "cuisine": "Coffee, Filipino",
+        "where": "Soledad Promenade · Inside Fort Santiago",
+        "fromVenue": "14 min walk (1.1 km)",
+        "about": "Coffee bar within the grounds of Fort Santiago, pouring Philippine-grown beans."
+      },
+      {
+        "name": "Paper + Cup",
+        "category": "Cafes & Coffee",
+        "price": "Moderate — ₱200 – ₱500 per person",
+        "cuisine": "Coffee, Brunch",
+        "where": "Muralla Street",
+        "fromVenue": "3 min walk (270 m)",
+        "about": "Quiet specialty coffee spot near the eastern wall."
+      },
+      {
+        "name": "Parers Kimchi",
+        "category": "Restaurants & Heritage Dining",
+        "price": "Moderate — ₱200 – ₱500 per person",
+        "cuisine": "Korean",
+        "where": "Beaterio Street",
+        "fromVenue": "8 min walk (600 m)",
+        "about": "Korean kitchen serving kimchi stews and grilled plates near Beaterio Street."
+      },
+      {
+        "name": "Pastil Sa Tabi (PST)",
+        "category": "Budget Eats & Carinderias",
+        "price": "Budget — under ₱200 per person",
+        "cuisine": "Filipino, Pastil, Rice Meals",
+        "where": "Victoria Street",
+        "fromVenue": "2 min walk (200 m)",
+        "about": "Small pastil counter on Victoria Street serving cheap banana-leaf parcels of rice with shredded chicken or beef, to go. Not in OpenStreetMap — the coordinate was supplied directly by a visitor."
+      },
+      {
+        "name": "Pastil-an Sayo",
+        "category": "Budget Eats & Carinderias",
+        "price": "Budget — under ₱200 per person",
+        "cuisine": "Filipino, Pastil, Rice Meals",
+        "where": "Victoria Street · 729A Victoria Street",
+        "fromVenue": "4 min walk (290 m)",
+        "about": "Pastil stall at 729A Victoria Street selling banana-leaf parcels of rice with shredded chicken or beef, from about ₱25. Not in OpenStreetMap — the coordinate is from a Google Maps pin supplied by a visitor."
+      },
+      {
+        "name": "Patio de Conchita",
+        "category": "Budget Eats & Carinderias",
+        "price": "Budget — under ₱200 per person",
+        "cuisine": "Filipino, Rice Meals",
+        "where": "Beaterio Street",
+        "fromVenue": "7 min walk (600 m)",
+        "about": "Rustic carinderia set in an old Spanish house, known for complete Filipino rice meals at around ₱140."
+      },
+      {
+        "name": "Pepito Foodhouse",
+        "category": "Budget Eats & Carinderias",
+        "price": "Budget — under ₱200 per person",
+        "cuisine": "Filipino, Barbecue, Grill",
+        "where": "Solana Street",
+        "fromVenue": "5 min walk (410 m)",
+        "about": "Grill house on Solana Street doing barbecue, chicken and rice plates."
+      },
+      {
+        "name": "PLM Canteen",
+        "category": "Budget Eats & Carinderias",
+        "price": "Budget — under ₱200 per person",
+        "cuisine": "Filipino, Canteen, Rice Meals",
+        "where": "General Luna Street · PLM campus",
+        "fromVenue": "1 min walk (40 m)",
+        "about": "Campus canteen at Pamantasan ng Lungsod ng Maynila, on General Luna Street. The visitor-supplied pin resolves to the PLM Multi-Purpose Building — confirm the exact spot and whether it is open to conference visitors."
+      },
+      {
+        "name": "Raffaele Woodfired Pizza",
+        "category": "Restaurants & Heritage Dining",
+        "price": "Moderate — ₱200 – ₱500 per person",
+        "cuisine": "Pizza, Italian",
+        "where": "Muralla corner Victoria Street · The Bayleaf Intramuros, 3rd floor",
+        "fromVenue": "5 min walk (430 m)",
+        "about": "Wood-fired pizza restaurant on The Bayleaf's third floor. Shares its coordinates with the hotel building; no separate OSM node exists for the restaurant itself."
+      },
+      {
+        "name": "Ristorante delle Mitre",
+        "category": "Restaurants & Heritage Dining",
+        "price": "Moderate — ₱200 – ₱500 per person",
+        "cuisine": "Italian, Spanish, Filipino",
+        "where": "General Luna Street · Opposite San Agustin Church",
+        "fromVenue": "4 min walk (350 m)",
+        "about": "Catholic-themed dining room opposite San Agustin Church, known for very large sharing portions."
+      },
+      {
+        "name": "Savor & Kribs",
+        "category": "Restaurants & Heritage Dining",
+        "price": "Moderate — ₱200 – ₱500 per person",
+        "cuisine": "Filipino, Grill",
+        "where": "Victoria Street",
+        "fromVenue": "5 min walk (400 m)",
+        "about": "Casual grill and Filipino plates on Victoria Street."
+      },
+      {
+        "name": "Sky Deck View Bar",
+        "category": "Restaurants & Heritage Dining",
+        "price": "Upscale — ₱500 – ₱1,000 per person",
+        "cuisine": "Cocktails, Bar Snacks",
+        "where": "Muralla Street · The Bayleaf Hotel roof deck",
+        "fromVenue": "5 min walk (420 m)",
+        "about": "Rooftop lounge atop The Bayleaf serving cocktails and bar snacks, with a view over the walls, the Intramuros golf course and the Manila Bay sunset."
+      },
+      {
+        "name": "Starbucks — General Luna (North)",
+        "category": "Cafes & Coffee",
+        "price": "Moderate — ₱200 – ₱500 per person",
+        "cuisine": "Coffee, Pastries",
+        "where": "General Luna Street",
+        "fromVenue": "10 min walk (800 m)",
+        "about": "Coffee chain branch on the northern stretch of General Luna Street."
+      },
+      {
+        "name": "Starbucks — General Luna (South)",
+        "category": "Cafes & Coffee",
+        "price": "Moderate — ₱200 – ₱500 per person",
+        "cuisine": "Coffee, Pastries",
+        "where": "General Luna Street",
+        "fromVenue": "2 min walk (190 m)",
+        "about": "Coffee chain branch on the southern stretch of General Luna Street."
+      },
+      {
+        "name": "Starbucks — Muralla",
+        "category": "Cafes & Coffee",
+        "price": "Moderate — ₱200 – ₱500 per person",
+        "cuisine": "Coffee, Pastries",
+        "where": "Muralla Street",
+        "fromVenue": "9 min walk (690 m)",
+        "about": "Coffee chain branch on Muralla Street beside the university campuses."
+      },
+      {
+        "name": "Sunlai Foodhouse",
+        "category": "Budget Eats & Carinderias",
+        "price": "Budget — under ₱200 per person",
+        "cuisine": "Filipino, Rice Meals",
+        "where": "Cabildo Street",
+        "fromVenue": "2 min walk (180 m)",
+        "about": "Food house near the southern wall serving Filipino plates over rice."
+      },
+      {
+        "name": "Tesoros",
+        "category": "Restaurants & Heritage Dining",
+        "price": "Moderate — ₱200 – ₱500 per person",
+        "cuisine": "Filipino, Café",
+        "where": "General Luna Street · Plaza San Luis Complex",
+        "fromVenue": "4 min walk (340 m)",
+        "about": "Café and dining room attached to the Tesoro's handicrafts store in Plaza San Luis."
+      },
+      {
+        "name": "Vtan's Eatery",
+        "category": "Budget Eats & Carinderias",
+        "price": "Budget — under ₱200 per person",
+        "cuisine": "Filipino, Carinderia",
+        "where": "Victoria Street",
+        "fromVenue": "3 min walk (210 m)",
+        "about": "Carinderia on Victoria Street with a short daily menu of Filipino home dishes over rice. Not in OpenStreetMap — the coordinate was supplied directly by a visitor."
+      },
+      {
+        "name": "Zaqueo Sisigan",
+        "category": "Budget Eats & Carinderias",
+        "price": "Budget — under ₱200 per person",
+        "cuisine": "Filipino, Sisig",
+        "where": "Magallanes Street",
+        "fromVenue": "3 min walk (250 m)",
+        "about": "Sisig eatery plating the sizzling chopped-pork classic over rice. Not in OpenStreetMap — the coordinate is from a Google Maps pin supplied by a visitor."
+      }
+    ],
+    "see": [
+      {
+        "name": "Ayuntamiento de Manila",
+        "category": "Monuments & Ruins",
+        "fee": "Free (exterior)",
+        "feeNote": "A working government building; interior access is limited",
+        "hours": "Exterior viewable at all hours",
+        "visitTime": "15 min",
+        "where": "Andres Soriano Avenue · Plaza de Roma",
+        "fromVenue": "9 min walk (710 m)",
+        "about": "The Casas Consistoriales — city hall of Spanish Manila, destroyed in 1945 and rebuilt in 2013 behind its original neoclassical facade. Now the Bureau of the Treasury."
+      },
+      {
+        "name": "Bahay Tsinoy",
+        "category": "Museums",
+        "fee": "₱100",
+        "feeNote": "₱60 for students",
+        "hours": "Tue–Sun 1pm–5pm · closed Monday",
+        "visitTime": "1–1.5 hrs",
+        "where": "Anda corner Cabildo Street · Kaisa Heritage Center",
+        "fromVenue": "6 min walk (470 m)",
+        "about": "Museum of Chinese life in the Philippines, run by Kaisa Para Sa Kaunlaran. Traces the Tsinoy community from pre-colonial trade through the Parián, the galleon era and the Second World War. Strong on primary material."
+      },
+      {
+        "name": "Baluarte de San Andrés",
+        "category": "Walls, Gates & Bastions",
+        "fee": "Free",
+        "hours": "Open at all hours",
+        "visitTime": "20 min",
+        "where": "Muralla Street · South-eastern wall",
+        "fromVenue": "3 min walk (240 m)",
+        "about": "A bastion on the south-eastern angle of the walls, one of the quieter points to get up onto the ramparts and see how thick the Spanish defences actually were."
+      },
+      {
+        "name": "Baluarte de San Diego",
+        "category": "Walls, Gates & Bastions",
+        "fee": "₱75",
+        "feeNote": "₱50 for students, seniors and PWD",
+        "inPassport": "yes",
+        "hours": "Daily 8am–5pm",
+        "visitTime": "45 min",
+        "where": "Muralla Street · Southern wall",
+        "fromVenue": "2 min walk (180 m)",
+        "about": "A circular bastion begun in 1586 to a design by the Jesuit Antonio Sedeño — among the oldest stone fortifications in the country. Excavated ruins now sit inside landscaped gardens, and you can walk the rampart."
+      },
+      {
+        "name": "Casa Manila",
+        "category": "Museums",
+        "fee": "₱75",
+        "feeNote": "₱50 for students, seniors and PWD",
+        "inPassport": "yes",
+        "hours": "Tue–Sun 9am–6pm · closed Monday",
+        "visitTime": "45 min",
+        "where": "General Luna Street · Plaza San Luis Complex",
+        "fromVenue": "4 min walk (340 m)",
+        "about": "A 1980s reconstruction of an 1850s colonial merchant house, furnished room by room to show how a wealthy Manila family lived — from the caída and sala down to the paired lavatories."
+      },
+      {
+        "name": "Fort Santiago",
+        "category": "Walls, Gates & Bastions",
+        "fee": "₱75",
+        "feeNote": "₱50 for students, seniors and PWD",
+        "inPassport": "yes",
+        "hours": "Mon–Fri 8am–10pm · Sat–Sun 6am–10pm",
+        "visitTime": "1.5–2 hrs",
+        "where": "Santa Clara Street · Northern tip, by the Pasig River",
+        "fromVenue": "13 min walk (1.1 km)",
+        "about": "The Spanish citadel guarding the mouth of the Pasig, begun 1571 on the site of Rajah Sulayman's settlement. José Rizal was held here before his execution in 1896; brass footsteps trace his last walk across the courtyard. The pin marks the main gate, where tickets are sold."
+      },
+      {
+        "name": "Manila Cathedral",
+        "category": "Churches",
+        "fee": "Free",
+        "feeNote": "Closed to sightseers during Mass and weddings",
+        "hours": "Daily, roughly 7am–6pm",
+        "visitTime": "30 min",
+        "where": "Cabildo corner Beaterio Street · Plaza de Roma",
+        "fromVenue": "7 min walk (600 m)",
+        "about": "The Minor Basilica of the Immaculate Conception. The present building, finished in 1958, is the eighth on this site — its predecessors were taken in turn by fire, typhoon, earthquake and the 1945 battle. Belgian stained glass and a Dutch pipe organ."
+      },
+      {
+        "name": "Memorare — Manila 1945",
+        "category": "Monuments & Ruins",
+        "fee": "Free",
+        "hours": "Open at all hours",
+        "visitTime": "10 min",
+        "where": "Anda Street · Plazuela de Santa Isabel",
+        "fromVenue": "6 min walk (460 m)",
+        "about": "Peter de Guzman's 1995 memorial to the roughly 100,000 civilians killed in the month-long Battle of Manila. A huddled group of figures beneath a grieving woman, with an inscription worth reading in full — the most affecting thing in Intramuros."
+      },
+      {
+        "name": "Museo de Intramuros",
+        "category": "Museums",
+        "fee": "₱200",
+        "feeNote": "₱160 for students, seniors and PWD",
+        "inPassport": "yes",
+        "hours": "Tue–Sun 9am–6pm · closed Monday",
+        "visitTime": "1 hr",
+        "where": "Arzobispo corner Anda Street · Reconstructed San Ignacio Church",
+        "fromVenue": "6 min walk (490 m)",
+        "about": "The Intramuros Administration's ecclesiastical art collection, opened 2019 inside the rebuilt shell of San Ignacio Church. Colonial santos, retablos and ivory carvings, shown in a deliberately modern interior."
+      },
+      {
+        "name": "Plaza de Roma",
+        "category": "Plazas & Gardens",
+        "fee": "Free",
+        "hours": "Open at all hours",
+        "visitTime": "15 min",
+        "where": "Cabildo Street · Between the Cathedral and the Ayuntamiento",
+        "fromVenue": "9 min walk (690 m)",
+        "about": "The main square of Spanish Manila and the natural place to start. It was a bullring until the 1790s, then Plaza McKinley under the Americans, renamed Plaza de Roma in 1961. The King Charles IV monument stands at its centre."
+      },
+      {
+        "name": "Plaza México",
+        "category": "Plazas & Gardens",
+        "fee": "Free",
+        "hours": "Open at all hours",
+        "visitTime": "15 min",
+        "where": "Aduana Street · Northern quarter, near the river",
+        "fromVenue": "11 min walk (880 m)",
+        "about": "A square commemorating the Manila–Acapulco galleon trade, which ran between these two ports for 250 years and made Intramuros the hinge of the first genuinely global trade route."
+      },
+      {
+        "name": "Plaza Moriones",
+        "category": "Plazas & Gardens",
+        "fee": "Inside Fort Santiago (₱75)",
+        "feeNote": "Covered by the Fort Santiago ticket",
+        "inPassport": "yes",
+        "hours": "With Fort Santiago",
+        "visitTime": "15 min",
+        "where": "Inside Fort Santiago · Fort Santiago",
+        "fromVenue": "11 min walk (920 m)",
+        "about": "The old parade ground inside Fort Santiago, now lawn and acacia. The open space that makes the fort a pleasant place to sit rather than only to tour."
+      },
+      {
+        "name": "Plazuela de Santa Isabel",
+        "category": "Plazas & Gardens",
+        "fee": "Free",
+        "hours": "Open at all hours",
+        "visitTime": "10 min",
+        "where": "Anda corner Real Street · Central Intramuros",
+        "fromVenue": "6 min walk (450 m)",
+        "about": "The small square that holds the Memorare monument, on the site of the Colegio de Santa Isabel — one of the oldest schools for girls in Asia."
+      },
+      {
+        "name": "Postigo del Palacio",
+        "category": "Walls, Gates & Bastions",
+        "fee": "Free",
+        "hours": "Open at all hours",
+        "visitTime": "10 min",
+        "where": "Muralla Street · Western wall",
+        "fromVenue": "8 min walk (640 m)",
+        "about": "The Postern of the Palace — the Governor-General's private gate to the river and the bay, small enough to be missed and carrying a relief of Our Lady of Solitude above the arch."
+      },
+      {
+        "name": "Puerta de Isabel II",
+        "category": "Walls, Gates & Bastions",
+        "fee": "Free",
+        "hours": "Open at all hours",
+        "visitTime": "10 min",
+        "where": "Magallanes Drive · Northern wall",
+        "fromVenue": "10 min walk (810 m)",
+        "about": "Opened in 1861 and named for Queen Isabella II of Spain, whose statue once stood before it. The newest of the original gates, cut to ease traffic to the river district."
+      },
+      {
+        "name": "Puerta de Santa Lucia",
+        "category": "Walls, Gates & Bastions",
+        "fee": "Free",
+        "hours": "Open at all hours",
+        "visitTime": "15 min",
+        "where": "Santa Lucia Street · Western wall, facing Manila Bay",
+        "fromVenue": "4 min walk (350 m)",
+        "about": "A western gate opening toward the bay, with one of the better-preserved stretches of curtain wall and a ravelin still in front of it."
+      },
+      {
+        "name": "Puerta Real",
+        "category": "Walls, Gates & Bastions",
+        "fee": "Free",
+        "feeNote": "Gardens close at dusk",
+        "hours": "Gardens roughly 8am–6pm",
+        "visitTime": "20 min",
+        "where": "Muralla Street · Southern wall",
+        "fromVenue": "1 min walk (100 m)",
+        "about": "The Royal Gate, reserved for the Governor-General and opened only on ceremonial occasions. Rebuilt in the 1960s; the sunken gardens beside it are a good quiet stop."
+      },
+      {
+        "name": "Rizal Shrine",
+        "category": "Museums",
+        "fee": "Included in Fort Santiago entry",
+        "feeNote": "No separate ticket",
+        "inPassport": "yes",
+        "hours": "Tue–Sun 8am–5pm (inside Fort Santiago)",
+        "visitTime": "45 min",
+        "where": "Inside Fort Santiago · Fort Santiago",
+        "fromVenue": "14 min walk (1.1 km)",
+        "about": "Museum in the barracks where Rizal spent his final hours, holding his manuscripts, personal effects and the original of \"Mi Último Adiós\", smuggled out in an oil lamp."
+      },
+      {
+        "name": "San Agustin Church",
+        "category": "Churches",
+        "fee": "Free",
+        "feeNote": "The adjoining museum is ticketed separately",
+        "hours": "Daily, roughly 8am–6pm (closed to visitors during Mass and weddings)",
+        "visitTime": "30 min",
+        "where": "General Luna Street · Opposite Plaza San Luis",
+        "fromVenue": "3 min walk (260 m)",
+        "about": "Completed in 1607, the oldest stone church in the Philippines and a UNESCO World Heritage Site. It was the only Intramuros church left standing after the 1945 Battle of Manila. The barrel-vaulted ceiling is a trompe-l'œil painted flat in 1875."
+      },
+      {
+        "name": "San Agustin Museum",
+        "category": "Museums",
+        "fee": "₱200",
+        "feeNote": "₱160 for students, seniors, PWD and frontliners",
+        "hours": "Mon/Wed/Fri–Sun 8am–5pm · Tue & Thu 8am–6pm",
+        "visitTime": "1–1.5 hrs",
+        "where": "General Luna Street · Augustinian monastery, beside the church",
+        "fromVenue": "3 min walk (260 m)",
+        "about": "The monastery beside San Agustin, now a museum of religious art, vestments and colonial-era furniture arranged around two storeys of cloisters. Quiet, and the best single introduction to Spanish-era ecclesiastical Manila."
+      },
+      {
+        "name": "Santa Lucia Barracks Ruins",
+        "category": "Monuments & Ruins",
+        "fee": "Free",
+        "hours": "Open at all hours",
+        "visitTime": "15 min",
+        "where": "Santa Lucia Street · Southern quarter",
+        "fromVenue": "3 min walk (220 m)",
+        "about": "What is left of the Spanish infantry barracks, flattened in 1945 and deliberately left unreconstructed. The clearest surviving evidence in Intramuros of how total the destruction was."
+      }
+    ],
+    "stay": [
+      {
+        "name": "The Bayleaf Intramuros",
+        "price": "₱2,800 – ₱13,300 per night",
+        "priceNote": "From about ₱2,765 for a Superior; suites reach roughly ₱13,000. Typical standard room ₱4,000 – ₱9,100.",
+        "rooms": 57,
+        "where": "Muralla corner Victoria Street · Eastern wall, beside Lyceum of the Philippines University",
+        "fromVenue": "5 min walk (430 m)",
+        "about": "The only full-service boutique hotel inside the walls. Operated by Lyceum of the Philippines University; also home to Cioccolata, which appears on the food map."
+      },
+      {
+        "name": "White Knight Hotel Intramuros",
+        "price": "₱1,750 – ₱5,100 per night",
+        "priceNote": "Typically around ₱2,000 a night; standard rooms roughly ₱1,900 – ₱2,500.",
+        "rooms": 29,
+        "where": "Plaza San Luis Complex, General Luna Street · Opposite San Agustin Church (mapped at Urdaneta Street)",
+        "fromVenue": "4 min walk (310 m)",
+        "about": "A 29-room boutique hotel in a restored Spanish colonial mansion in the Plaza San Luis complex — whitewashed walls, tile floors, wooden staircases. Has an in-house café."
+      }
+    ],
+    "arrivalPoints": [
+      {
+        "name": "Central Terminal (LRT-1)",
+        "note": "Nearest LRT station · 920 m out",
+        "outsideTheWalls": "yes",
+        "toVenue": "11 min walk (860 m)"
+      },
+      {
+        "name": "Park & Ride Lawton",
+        "note": "Jeepney and bus hub · 840 m out",
+        "outsideTheWalls": "yes",
+        "toVenue": "11 min walk (860 m)"
+      },
+      {
+        "name": "Escolta Ferry Station",
+        "note": "Pasig River Ferry · 670 m out",
+        "outsideTheWalls": "yes",
+        "toVenue": "13 min walk (1.1 km)"
+      },
+      {
+        "name": "Plaza de Roma",
+        "note": "Centre of the walled city",
+        "toVenue": "9 min walk (690 m)"
+      },
+      {
+        "name": "Fort Santiago gate",
+        "note": "Northern entrance",
+        "toVenue": "13 min walk (1.1 km)"
+      },
+      {
+        "name": "Puerta Real",
+        "note": "Southern gate · common taxi drop-off",
+        "toVenue": "1 min walk (100 m)"
+      }
+    ]
+  }
+}
