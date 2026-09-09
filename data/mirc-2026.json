@@ -34,7 +34,6 @@
     "Abstracts for the 89 contributed papers — the programme gives the paper number, presenter surname and title only",
     "Full room name for GA TOP",
     "Registration fees",
-    "Registration deadlines",
     "How to register",
     "On-site registration desk and its hours",
     "Meals and refreshments",
@@ -1443,7 +1442,9 @@
   },
   "registration": {
     "fees": [],
-    "deadlines": [],
+    "deadlines": [
+      "Registration ran May 16, 2026 – September 01, 2026 and has closed. Anyone asking about late or on-site registration should be sent to the organisers."
+    ],
     "howTo": null,
     "desk": null
   },
@@ -1839,5 +1840,539 @@
     "Concluding the Session As the session concludes, thank the presenters and the audience for their contributions. Summarize any key points or themes that emerged during the presentations and discussions. If there are any announcements or logistical details to share, such as upcoming sessions or breaks, provide this information before dismissing the attendees.",
     "Professional Conduct and Courtesy Throughout the session, maintain a professional and courteous demeanor. Your role as a members is not only to manage time but also to create a respectful and engaging environment. Ensure that all interactions are conducted in a manner that reflects the conference's standards of academic excellence and inclusivity.",
     "By following these guidelines, you will play a crucial role in ensuring that the sessions are both informative and well-organized, contributing to the overall success of MIRC 2026. Your leadership and attention to detail are greatly appreciated."
-  ]
+  ],
+  "registrationStats": {
+    "asOf": "2 September 2026 as stated inside the report (the file is named 'as of 9 September')",
+    "period": "May 16, 2026 – September 01, 2026",
+    "reported": {
+      "totalRegistrants": 231,
+      "registered": 229,
+      "preregistered": 2,
+      "countriesRepresented": 6,
+      "institutionsRepresented": 118
+    },
+    "caution": "These totals are not internally consistent — the Executive Summary says 231 registrants while the By Country sheet adds up to 248; it says 6 countries but lists 11; it says 118 institutions but lists 82. Give them as approximate and say which sheet a figure comes from.",
+    "byCountry": [
+      {
+        "country": "PH",
+        "registrants": 229
+      },
+      {
+        "country": "MY",
+        "registrants": 5
+      },
+      {
+        "country": "FR",
+        "registrants": 4
+      },
+      {
+        "country": "IN",
+        "registrants": 1
+      },
+      {
+        "country": "NZ",
+        "registrants": 1
+      },
+      {
+        "country": "BG",
+        "registrants": 1
+      },
+      {
+        "country": "AU",
+        "registrants": 1
+      },
+      {
+        "country": "Portugal",
+        "registrants": 1
+      },
+      {
+        "country": "Taiwan",
+        "registrants": 2
+      },
+      {
+        "country": "UK",
+        "registrants": 1
+      },
+      {
+        "country": "USA",
+        "registrants": 2
+      }
+    ],
+    "byInstitution": [
+      {
+        "institution": "Adamson University",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "Antipolo Institute of Technology",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "Bataan Peninsula State University",
+        "registrants": 2,
+        "total": 2
+      },
+      {
+        "institution": "Batangas State University",
+        "registrants": 6,
+        "total": 6
+      },
+      {
+        "institution": "Beijing Foreign Studies University",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "Benguet State University",
+        "registrants": 2,
+        "total": 2
+      },
+      {
+        "institution": "Cavite State University",
+        "registrants": 2,
+        "total": 2
+      },
+      {
+        "institution": "Cebu Institute of Technology University",
+        "registrants": 3,
+        "total": 3
+      },
+      {
+        "institution": "Centro Escolar University",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "City College of Calamba",
+        "registrants": 3,
+        "total": 3
+      },
+      {
+        "institution": "City College of Tagaytay",
+        "registrants": 8,
+        "total": 8
+      },
+      {
+        "institution": "City of Malabon University",
+        "registrants": 6,
+        "total": 6
+      },
+      {
+        "institution": "Colegio de la Ciudad de Tayabas",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "Colegio de San Juan de Letran",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "Colegio de San Juan de Letran Manila",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "Cordillera Hospital of the Divine Grace",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "Daraga Community College",
+        "registrants": 6,
+        "total": 6
+      },
+      {
+        "institution": "De La Salle Araneta University",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "De La Salle Santiago Zobel School",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "De La Salle University",
+        "registrants": 5,
+        "speakers": 1,
+        "total": 6,
+        "country": "Philippines"
+      },
+      {
+        "institution": "Department of Education",
+        "registrants": 2,
+        "total": 2
+      },
+      {
+        "institution": "Department of Science and Technology",
+        "registrants": 1,
+        "speakers": 1,
+        "total": 2
+      },
+      {
+        "institution": "Emilio Aguinaldo College",
+        "registrants": 2,
+        "total": 2
+      },
+      {
+        "institution": "Eulogio \"Amang\" Rodriguez Institute of Science and Technology",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "Far Eastern University",
+        "registrants": 2,
+        "total": 2
+      },
+      {
+        "institution": "First Asia Institute of Technology and Humanities",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "Goa Community College",
+        "registrants": 2,
+        "total": 2
+      },
+      {
+        "institution": "Gordon College",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "ICL Graduate Business School",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "Ilocos Norte National High School",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "Iloilo Science and Technology University",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "Independent Researcher",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "Institut de Science des Matériaux de Mulhouse (IS2M), CNRS, Université de Haute-Alsace",
+        "registrants": 1,
+        "speakers": 2,
+        "total": 3,
+        "country": "France"
+      },
+      {
+        "institution": "International Cultural Communication Center",
+        "registrants": 0,
+        "speakers": 1,
+        "total": 1,
+        "country": "Malaysia"
+      },
+      {
+        "institution": "INTI International University",
+        "registrants": 0,
+        "speakers": 1,
+        "total": 1,
+        "country": "Malaysia"
+      },
+      {
+        "institution": "John B. Lacson Colleges Foundation",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "Kun Shan University",
+        "registrants": 0,
+        "speakers": 1,
+        "total": 1,
+        "country": "Taiwan"
+      },
+      {
+        "institution": "Lakan Dula High School",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "Lyceum of Alabang",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "Maryhill College, Inc.",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "Mindanao State University",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "Misamis University",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "Nagaland University",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "National Aviation Academy of the Philippines",
+        "registrants": 2,
+        "total": 2
+      },
+      {
+        "institution": "National Cheng Kung University",
+        "registrants": 0,
+        "speakers": 2,
+        "total": 2,
+        "country": "Taiwan"
+      },
+      {
+        "institution": "National University",
+        "registrants": 8,
+        "total": 8
+      },
+      {
+        "institution": "National University Manila",
+        "registrants": 0,
+        "speakers": 1,
+        "total": 1,
+        "country": "Philippines"
+      },
+      {
+        "institution": "Nueva Ecija University of Science and Technolog",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "Padre Garcia Polytechnic College",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "Pamantasan ng Cabuyao",
+        "registrants": 13,
+        "total": 13
+      },
+      {
+        "institution": "Pamantasan ng Lungsod ng Maynila",
+        "registrants": 73,
+        "total": 73
+      },
+      {
+        "institution": "People Dynamics, Inc.",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "Philippine Normal University",
+        "registrants": 4,
+        "total": 4
+      },
+      {
+        "institution": "Philippine Science High School",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "Philippine Women's University",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "Polytechnic University of the Philiippines",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "Polytechnic University of the Philippines",
+        "registrants": 22,
+        "total": 22
+      },
+      {
+        "institution": "Pres. Corazon C. Aquino HIgh School",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "President Ramon Magsaysay State University",
+        "registrants": 5,
+        "total": 5
+      },
+      {
+        "institution": "Rizal Technological University",
+        "registrants": 2,
+        "total": 2
+      },
+      {
+        "institution": "Saint Paul University",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "San Lazaro Hospital",
+        "registrants": 2,
+        "total": 2
+      },
+      {
+        "institution": "San Sebastian College",
+        "registrants": 2,
+        "total": 2
+      },
+      {
+        "institution": "Signal Village National High School",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "Southern Cross University",
+        "registrants": 0,
+        "speakers": 1,
+        "total": 1,
+        "country": "Australia"
+      },
+      {
+        "institution": "St. Dominic College of Asia",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "Technological University of the Philippines",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "Universidade Nova de Lisbon",
+        "registrants": 0,
+        "speakers": 1,
+        "total": 1,
+        "country": "Portugal"
+      },
+      {
+        "institution": "Université Clermont Auvergne",
+        "registrants": 0,
+        "speakers": 1,
+        "total": 1,
+        "country": "France"
+      },
+      {
+        "institution": "Université de Haute-Alsace",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "Université de Rouen Normandie",
+        "registrants": 0,
+        "speakers": 1,
+        "total": 1,
+        "country": "France"
+      },
+      {
+        "institution": "Universiti PolyTech Malaysia",
+        "registrants": 0,
+        "speakers": 1,
+        "total": 1,
+        "country": "Malaysia"
+      },
+      {
+        "institution": "UNIVERSITI PUTRA MALAYSIA",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "University of Cabuyao",
+        "registrants": 2,
+        "total": 2
+      },
+      {
+        "institution": "University of Central Florida",
+        "registrants": 0,
+        "speakers": 2,
+        "total": 2,
+        "country": "USA"
+      },
+      {
+        "institution": "University of New South Wales Canberra",
+        "registrants": 0,
+        "speakers": 1,
+        "total": 1,
+        "country": "United Kingdom"
+      },
+      {
+        "institution": "University of Perpetual Help System",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "University of Perpetual Help System DALTA",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "University of Santo Tomas",
+        "registrants": 2,
+        "total": 2
+      },
+      {
+        "institution": "University of the Immaculate Conception",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "University of the Philippines",
+        "registrants": 5,
+        "speakers": 4,
+        "total": 9,
+        "country": "Philippines"
+      },
+      {
+        "institution": "Valenzuela City Technological College",
+        "registrants": 1,
+        "total": 1
+      }
+    ],
+    "byStatus": [
+      {
+        "status": "Registered",
+        "registrants": 229
+      },
+      {
+        "status": "Preregistered",
+        "registrants": 2
+      }
+    ],
+    "monthlyTrend": [
+      {
+        "month": "May 2026",
+        "registrants": 16
+      },
+      {
+        "month": "June 2026",
+        "registrants": 41
+      },
+      {
+        "month": "July 2026",
+        "registrants": 5
+      },
+      {
+        "month": "August 2026",
+        "registrants": 168
+      },
+      {
+        "month": "September 2026",
+        "registrants": 1
+      }
+    ],
+    "delegateList": "Not included. The registration workbook's per-delegate sheet (names, e-mail addresses, phone numbers, billing addresses) is deliberately excluded from this material. Never offer to look up an individual registrant's contact details."
+  }
 }

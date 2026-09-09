@@ -3,13 +3,17 @@ Import the committee's source documents into data/mirc-2026.json.
 
     python tools/import-program.py \
         "Program and Session Members.xlsx" \
-        "PLENARY and Keynote SPEAKERS MIRC 2026.md"
+        "PLENARY and Keynote SPEAKERS MIRC 2026.md" \
+        "Corrected_MIRC_2026_Registration_Tabulation_Report.xlsx"   # optional
 
-Two inputs, both authored by the organising committee:
+Three inputs, all authored by the organising committee:
 
   · the programme workbook  — sheets "Program as of ...", "Proposed Session Members"
                               and "Session Guidelines"
   · the speakers markdown   — plenary and keynote bios, titles and abstracts
+  · the registration report — optional; ONLY its aggregate sheets are read. The
+                              per-delegate "Source Data" sheet is never touched; see
+                              PII_SHEET below for why.
 
 Everything it writes is read from those files. Where a source is a placeholder
 ("PHOTO / BIONOTE / TITLE / ABSTRACT" with nothing under it) the speaker is marked
@@ -37,6 +41,11 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "data" / "mirc-2026.json"
+
+# Terminal colour, skipped when the output is piped or NO_COLOR is set — same
+# convention as tools/verify-in-intramuros.mjs.
+_tty = sys.stdout.isatty() and "NO_COLOR" not in __import__("os").environ
+amber = (lambda s: f"\x1b[33m{s}\x1b[0m") if _tty else (lambda s: s)
 
 
 def clean(v, sep=" "):
@@ -69,6 +78,12 @@ def prose(s):
     s = re.sub(r"(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)", r"\1", s)
     s = re.sub(r"\s+", " ", s)
     return s.strip() or None
+
+
+def drop(obj):
+    """Strip empty values, so a gap reads as absent rather than as a blank string."""
+    return {k: v for k, v in obj.items()
+            if v is not None and v != "" and v != [] and v != {}}
 
 
 def cell(ws, r, c):
@@ -258,6 +273,92 @@ def parse_guidelines(ws):
     return lines
 
 
+# ── the registration tabulation ──────────────────────────────────────────────────
+
+# The workbook's "Source Data" sheet holds one row per delegate: name, e-mail, phone,
+# username and Paybox invoicing address. NONE of it is read. data/chat-corpus.json is
+# fetched by the Worker over a public URL, so anything in it is published — ingesting
+# that sheet would put 239 people's contact and billing details on the open web, which
+# is not what they registered for. Only the aggregate sheets are taken.
+PII_SHEET = "Source Data"
+
+
+def parse_registration(path):
+    wb = openpyxl.load_workbook(path, data_only=True)
+
+    def rows(sheet, cols=2):
+        if sheet not in wb.sheetnames:
+            return []
+        out = []
+        for r in wb[sheet].iter_rows(min_row=2, values_only=True):
+            if r and r[0] is not None:
+                out.append(tuple(r[:cols]))
+        return out
+
+    summary = {}
+    if "Executive Summary" in wb.sheetnames:
+        for r in wb["Executive Summary"].iter_rows(min_row=1, values_only=True):
+            k, v = clean(r[0]), r[1]
+            if k and v is not None:
+                summary[k] = v
+
+    by_country = [{"country": clean(c), "registrants": n}
+                  for c, n in rows("By Country")
+                  if clean(c) and clean(c) not in ("Countries",) and isinstance(n, int)]
+
+    by_institution = []
+    for r in wb["By Institution"].iter_rows(min_row=2, values_only=True) if "By Institution" in wb.sheetnames else []:
+        name = clean(r[0])
+        if not name or name.lower().startswith("total number"):
+            continue
+        by_institution.append(drop({"institution": name, "registrants": r[1],
+                                    "speakers": r[2], "total": r[3], "country": clean(r[4])}))
+
+    by_status = [{"status": clean(s), "registrants": n} for s, n in rows("By Status")
+                 if clean(s) and isinstance(n, int)]
+    monthly = [{"month": clean(m), "registrants": n} for m, n in rows("Monthly Trend")
+               if clean(m) and isinstance(n, int)]
+
+    # The sheets disagree with each other on the headline figures. Record that rather
+    # than pick one, so Dan quotes a range and says where each number comes from.
+    country_sum = sum(x["registrants"] for x in by_country)
+    notes = []
+    reported_total = summary.get("Total Registrants")
+    if reported_total and country_sum and reported_total != country_sum:
+        notes.append(f"the Executive Summary says {reported_total} registrants while the "
+                     f"By Country sheet adds up to {country_sum}")
+    reported_countries = summary.get("Countries Represented")
+    if reported_countries and len(by_country) != reported_countries:
+        notes.append(f"it says {reported_countries} countries but lists {len(by_country)}")
+    reported_inst = summary.get("Institutions Represented")
+    if reported_inst and len(by_institution) != reported_inst:
+        notes.append(f"it says {reported_inst} institutions but lists {len(by_institution)}")
+
+    return drop({
+        "asOf": clean(summary.get("Registration data as of September 2, 2026")) or
+                "2 September 2026 as stated inside the report (the file is named 'as of 9 September')",
+        "period": clean(summary.get("Registration Period")),
+        "reported": drop({
+            "totalRegistrants": summary.get("Total Registrants"),
+            "registered": summary.get("Registered"),
+            "preregistered": summary.get("Preregistered"),
+            "countriesRepresented": summary.get("Countries Represented"),
+            "institutionsRepresented": summary.get("Institutions Represented"),
+        }),
+        "caution": ("These totals are not internally consistent — " + "; ".join(notes) +
+                    ". Give them as approximate and say which sheet a figure comes from.")
+                   if notes else None,
+        "byCountry": by_country,
+        "byInstitution": by_institution,
+        "byStatus": by_status,
+        "monthlyTrend": monthly,
+        "delegateList": "Not included. The registration workbook's per-delegate sheet "
+                        "(names, e-mail addresses, phone numbers, billing addresses) is "
+                        "deliberately excluded from this material. Never offer to look up "
+                        "an individual registrant's contact details.",
+    })
+
+
 # ── the speakers markdown ────────────────────────────────────────────────────────
 
 MARKER = re.compile(r"^\**\s*((?:PLENARY|[A-Z]{2,4}\s+KEYNOTE)\s+SPEAKER\s*\d+)\s*\**$", re.I)
@@ -359,6 +460,7 @@ def main():
     if len(sys.argv) < 3:
         sys.exit(__doc__)
     xlsx, md = Path(sys.argv[1]), Path(sys.argv[2])
+    reg_path = Path(sys.argv[3]) if len(sys.argv) > 3 else None
 
     wb = openpyxl.load_workbook(xlsx, data_only=True)
     prog_sheet = next(s for s in wb.sheetnames if s.lower().startswith("program"))
@@ -384,6 +486,17 @@ def main():
     doc["speakers"] = speakers
     doc["sessionMembers"] = members
     doc["sessionGuidelines"] = guidelines
+
+    registration = parse_registration(reg_path) if reg_path else None
+    if registration:
+        doc["registrationStats"] = registration
+        # The tabulation counts who registered, not what it cost — but it does pin the
+        # window, which answers "can I still sign up?".
+        if registration.get("period") and not doc["registration"].get("deadlines"):
+            doc["registration"]["deadlines"] = [
+                f"Registration ran {registration['period']} and has closed. "
+                "Anyone asking about late or on-site registration should be sent to the organisers."
+            ]
 
     # Room codes the programme legend now confirms.
     legend_rooms = {}
@@ -453,6 +566,13 @@ def main():
     print(f"  Speakers     {len(speakers)}  ({len(stubs)} still placeholders)")
     print(f"  Members      {len(members)} session assignments")
     print(f"  Guidelines   {len(guidelines)} lines")
+    if registration:
+        print(f"  Registration {registration['reported'].get('totalRegistrants')} registrants · "
+              f"{len(registration['byCountry'])} countries · "
+              f"{len(registration['byInstitution'])} institutions")
+        print(f"               {amber('per-delegate sheet excluded (names, e-mail, phone, billing)')}")
+        if registration.get("caution"):
+            print(f"               {amber('totals disagree between sheets — recorded as a caveat')}")
     print(f"  Rooms named  {', '.join(sorted(legend_rooms))}\n")
     if stubs:
         print("  Placeholders still to fill:")

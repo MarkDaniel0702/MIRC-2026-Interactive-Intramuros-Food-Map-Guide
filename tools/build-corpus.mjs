@@ -146,6 +146,7 @@ const corpus = {
   papers: mirc.papers,
   venue: mirc.venue,
   registration: mirc.registration,
+  registrationStats: mirc.registrationStats ?? null,
   logistics: mirc.logistics,
   sessionMembers: mirc.sessionMembers ?? [],
   sessionGuidelines: mirc.sessionGuidelines ?? [],

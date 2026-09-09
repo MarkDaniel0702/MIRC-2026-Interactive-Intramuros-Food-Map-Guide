@@ -70,7 +70,31 @@ have been imported — see *Training data* below. What remains:
 | 7 | The **congress theme** and the official **website / registration URL** | `meta` |
 | 8 | Full given names for paper presenters, if delegates should be able to search by them | programme workbook |
 
-### 2. Two things to confirm
+### 2. One thing already decided for you — the delegate list
+
+The registration workbook has a **`Source Data`** sheet with one row per delegate:
+name, e-mail, phone, username and Paybox invoicing address for all 239 of them.
+
+**It is not ingested, and should not be.** `data/chat-corpus.json` is fetched by the
+Worker over a public URL, so anything in it is published — putting that sheet in would
+place 239 people's contact and billing details on the open web, which is not what they
+registered for. The importer reads only the aggregate sheets (`Executive Summary`,
+`By Country`, `By Institution`, `By Status`, `Monthly Trend`), and Dan's prompt carries
+a standing rule never to give out anyone's contact details and to refer such questions
+to the organisers.
+
+If the committee *does* want per-delegate lookup ("am I registered?"), that needs a
+different design — an authenticated endpoint that checks one record at a time and never
+loads the roster into the model. Say the word and I'll scope it; it is not a
+five-minute change.
+
+**A caveat Dan now carries:** the report's own sheets disagree. The Executive Summary
+says 231 registrants, `By Country` adds to 248, and the per-delegate sheet has 239 rows;
+it claims 6 countries but lists 11, and 118 institutions but lists 82. Dan gives these
+as approximate and says which sheet a figure came from. Worth reconciling before the
+freeze.
+
+### 3. Two things to confirm
 
 - **`GA TOP`** is the only room code still unexpanded. The programme legend named the
   others — `GK BTB` is *Bukod Tanging Bulwagan* and `GEE KL` is *Katipunan Lounge*, both
@@ -80,7 +104,7 @@ have been imported — see *Training data* below. What remains:
   Speaker 3* (Osorio and Manansala), and *EASS Keynote Speaker 4* is missing — it jumps 3
   to 5. Worth a look before the content freeze.
 
-### 3. A model key
+### 4. A model key
 
 At least one. Two is better — the Worker falls through to the second when the first
 rate-limits, which is what keeps it steady during a coffee break.
@@ -90,12 +114,12 @@ rate-limits, which is what keeps it steady during a coffee break.
 - **Anthropic** (`ANTHROPIC_API_KEY`) — paid, and the one to use if abstracts are
   confidential; some free tiers train on submitted prompts.
 
-### 4. A Cloudflare account
+### 5. A Cloudflare account
 
 Free tier. Needed to deploy the Worker. If you would rather not, the same file runs on
 Vercel or Netlify Functions with a small change to the handler signature.
 
-### 5. Four decisions
+### 6. Four decisions
 
 - **Decline wording** — currently `scope.decline` in the knowledge base. Change it to
   whatever tone the committee wants.
@@ -109,10 +133,12 @@ Vercel or Netlify Functions with a small change to the handler signature.
 ## Setting it up
 
 ```bash
-# 1a. Import the committee's source documents (needs python + openpyxl)
+# 1a. Import the committee's source documents (needs python + openpyxl).
+#     The third argument is optional; only its aggregate sheets are read.
 python tools/import-program.py \
     "Program and Session Members.xlsx" \
-    "PLENARY and Keynote SPEAKERS MIRC 2026.md"
+    "PLENARY and Keynote SPEAKERS MIRC 2026.md" \
+    "Corrected_MIRC_2026_Registration_Tabulation_Report.xlsx"
 
 # 1b. Anything the sources do not cover — registration, logistics, committee —
 #     is typed straight into data/mirc-2026.json
