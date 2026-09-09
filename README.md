@@ -17,7 +17,7 @@ directions to any of it.
 
 | Tab | Contents |
 |---|---|
-| **Eat** | **61** restaurants, cafés, carinderias, fast-food branches and hotel dining rooms, with price ranges (53 OSM-verified + 8 address-estimated — see `DATA.md`) |
+| **Eat** | **60** restaurants, cafés, carinderias, fast-food branches and hotel dining rooms, with price ranges (52 OSM-verified + 8 address-estimated — see `DATA.md`) |
 | **See** | **21** heritage sights, with entrance fees, opening hours and realistic visit times |
 | **Stay** | **2** hotels — the properties inside the walls with both a public booking path and a real price. (A third, Residencia 729, is bookable but has no published rate — see `HOTELS.md`.) |
 
@@ -50,7 +50,7 @@ node tools/verify-in-intramuros.mjs
 ```
 
 ```
-  1. Location — is every spot inside Intramuros?      61/61 PASS
+  1. Location — is every spot inside Intramuros?      60/60 PASS
   2. Schema — is every record well formed?            PASS  (8 address-estimated)
   3. Tourist spots — is every sight inside?           21/21 PASS
   4. Accommodation — is every property inside?         8/8  PASS
@@ -126,7 +126,7 @@ styles.css                      design system, responsive layout, map + popup st
 app.js                          modes, markers, search, filters, list↔map sync, directions
 routing.js                      OSRM client + walking-instruction renderer
 
-data/food-spots.js              61 food spots  · 53 OSM-verified + 8 address-estimated
+data/food-spots.js              60 food spots  · 52 OSM-verified + 8 address-estimated
 data/tourist-spots.js           21 sights      · FEE_TIERS, VENUE_ANCHOR, passport info
 data/hotels.js                  8 properties   · 3 flagged `mapped` for the Stay tab
 data/start-points.js            6 arrival points for directions
@@ -146,11 +146,13 @@ list both read from the same data, so there is nothing to keep in step.
 ### Two edits worth knowing about
 
 **Set the venue anchor.** `VENUE_ANCHOR` in [`data/tourist-spots.js`](data/tourist-spots.js)
-defaults to Plaza de Roma and drives every "N min walk" on the site. Point it at the
-conference venue and all of them re-base themselves:
+drives every "N min walk" on the site. It is set to Pamantasan ng Lungsod ng Maynila
+(PLM), the campus flagged as the MIRC 2026 venue, using PLM's OSM centre point. If
+sessions run in a specific building or hall, point it there and every distance re-bases
+itself:
 
 ```js
-const VENUE_ANCHOR = { name: 'Your venue', lat: 14.5921, lng: 120.9730 };
+const VENUE_ANCHOR = { name: 'Your venue', lat: 14.5869, lng: 120.9764 };
 ```
 
 **Swap the tile provider** by editing the single `L.tileLayer(...)` call in `app.js`. The
@@ -162,12 +164,13 @@ survives the change.
 ## About the data
 
 Names and coordinates come from **OpenStreetMap** via the Overpass API, retrieved
-2026-09-03 and cross-checked against Nominatim.
+2026-09-03 and cross-checked against Nominatim (with later additions and corrections —
+see `DATA.md`).
 
 - **Entrance fees** are from the Intramuros Administration and site operators — published
   and reasonably stable. There's also a ₱350 **Intramuros Passport** covering five sites,
   which the See tab surfaces once it's worth buying.
-- **Restaurant prices are indicative estimates, not quotes.** Only a handful of the 61
+- **Restaurant prices are indicative estimates, not quotes.** Only a handful of the 60
   publish menu pricing, so each gets a tier plus an explicit peso band and a review date.
   Presenting a guess as an exact figure would be worse than an honest range.
 - **Eight eateries are address-estimated.** They have no OpenStreetMap node; their pins

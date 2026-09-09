@@ -186,6 +186,7 @@
   const cards = new Map();    // spot id -> button element
 
   let firstPaint = !reduceMotion;
+  let pendingSelect = null;   // id whose popup we're waiting to open after a fly
 
   // Precompute the search haystack, and the walk from the venue anchor, once.
   for (const [key, m] of Object.entries(MODES)) {
@@ -256,6 +257,30 @@
 
   const HOME = { bounds, options: { padding: [34, 34] } };
   map.fitBounds(HOME.bounds, HOME.options);
+
+  /* The map can initialise before the flex/grid layout has given #map its final
+     size (and again when the web fonts land and nudge the panel width), leaving
+     the first paint zoomed in on the wrong place. Re-measure and, if the user has
+     not yet interacted, re-fit — on load, once fonts are ready, and on any later
+     container resize. invalidateSize alone is cheap and always safe. */
+  function refitHome() {
+    map.invalidateSize({ animate: false });
+    if (!state.dirs.open && !state.activeId) {
+      map.fitBounds(HOME.bounds, { ...HOME.options, animate: false });
+    }
+  }
+  if (document.readyState === 'complete') refitHome();
+  else window.addEventListener('load', refitHome, { once: true });
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(() => map.invalidateSize({ animate: false }));
+  }
+  if ('ResizeObserver' in window) {
+    let roT;
+    new ResizeObserver(() => {
+      clearTimeout(roT);
+      roT = setTimeout(() => map.invalidateSize({ animate: false }), 150);
+    }).observe(document.getElementById('map'));
+  }
 
   const cluster = L.markerClusterGroup({
     maxClusterRadius: 42,
@@ -568,11 +593,35 @@
     hideMapNote();
 
     if (from === 'list') {
-      if (isMobile()) setSheet(false);           // don't cover the map we just flew to
-      cluster.zoomToShowLayer(marker, () => {
-        marker.openPopup();
-        setActive(id);                           // the pin element exists only now
-      });
+      if (isMobile()) setSheet(false);           // don't cover the map we're flying to
+
+      /* Fly the map to the spot and open its popup.
+
+         The old code used cluster.zoomToShowLayer(marker, cb) — but its callback
+         is unreliable (observed never firing), and a marker currently inside a
+         cluster has no `_map`, so `marker.openPopup()` silently no-ops. So instead
+         open the marker's own popup *on the map* at the marker's coordinates,
+         which works whether or not the marker is clustered right now. It's the
+         same bound popup instance, so the marker's `popupclose` handler still
+         deselects on close. */
+      map.flyTo([spot.lat, spot.lng], 18, { duration: reduceMotion ? 0 : 0.7 });
+
+      const popup = marker.getPopup();
+      if (popup) map.openPopup(popup, [spot.lat, spot.lng], { autoPanPadding: [26, 26] });
+
+      /* Once the fly settles the real pin element exists — re-apply the active
+         style to it (setActive above ran before the pin was rendered). */
+      pendingSelect = id;
+      let revealT;
+      const reveal = () => {
+        map.off('moveend', reveal);
+        clearTimeout(revealT);
+        if (pendingSelect !== id) return;        // superseded by a newer selection
+        pendingSelect = null;
+        setActive(id);
+      };
+      map.on('moveend', reveal);
+      revealT = setTimeout(reveal, reduceMotion ? 60 : 1200);
     } else {
       const card = cards.get(id);
       if (card) {
@@ -595,7 +644,21 @@
         <span class="chip__dot"></span>${esc(cat.label)}
       </button>`).join('');
 
-    $('#priceChips').innerHTML = Object.entries(m.tiers).map(([tier, meta]) => `
+    /* Only show a price chip for a tier that actually has members in this dataset.
+       Otherwise the Stay tab renders five chips for two hotels and three of them
+       always resolve to "nothing matches". */
+    const tierCounts = {};
+    for (const s of m.items) {
+      const t = m.tierOf(s);
+      if (t != null) tierCounts[t] = (tierCounts[t] || 0) + 1;
+    }
+    // Drop any saved filter value that no longer has a chip (it could only ever
+    // filter the list down to nothing with no visible control to switch it off).
+    for (const t of [...f.tiers]) if (!tierCounts[t]) f.tiers.delete(t);
+
+    $('#priceChips').innerHTML = Object.entries(m.tiers)
+      .filter(([tier]) => tierCounts[tier])
+      .map(([tier, meta]) => `
       <button type="button" class="chip" role="switch" aria-pressed="${f.tiers.has(Number(tier))}"
               data-group="tier" data-value="${tier}"
               aria-label="${esc(meta.label)}, ${esc(meta.range)}">
@@ -1080,9 +1143,12 @@
   $('#mastheadSub').textContent = mode().subtitle;
   $('#search').placeholder = mode().placeholder;
   $('#reviewedDate').textContent = mode().reviewed;
-  $('#dlgCount').textContent = FOOD_SPOTS.length + TOURIST_SPOTS.length;
+  const landmarkCount = (typeof LANDMARKS !== 'undefined' && Array.isArray(LANDMARKS)) ? LANDMARKS.length : 0;
+  // The verify gate checks food + sights + every hotel record + landmarks.
+  $('#dlgCount').textContent = FOOD_SPOTS.length + TOURIST_SPOTS.length + HOTELS.length + landmarkCount;
   $('#dlgFoodCount').textContent = FOOD_SPOTS.length;
   $('#dlgSightCount').textContent = TOURIST_SPOTS.length;
+  $('#dlgStayCount').textContent = HOTELS.filter(h => h.mapped).length;
   $('#dlgAnchor').textContent = VENUE_ANCHOR.name;
   for (const el of document.querySelectorAll('.reviewed-date')) el.textContent = DATA_REVIEWED;
   render();

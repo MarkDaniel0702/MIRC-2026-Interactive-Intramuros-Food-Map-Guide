@@ -132,12 +132,11 @@ const FOOD_SPOTS = [
     lat: 14.591670, lng: 120.974402, osm: 'node/11729816004',
     blurb: 'Diner-style café serving rice meals and pasta, with live music some evenings.'
   },
-  {
-    id: 'cafe-sofia', name: 'Cafe Sofia', category: 'heritage', priceTier: 2,
-    cuisine: ['Filipino', 'Café'], street: 'General Luna Street', area: null,
-    lat: 14.587756, lng: 120.976836, osm: 'node/11521200457',
-    blurb: 'Sit-down café-restaurant on General Luna Street near San Agustin Church.'
-  },
+  /* Cafe Sofia (id: cafe-sofia, OSM node/11521200457, General Luna St) removed
+     2026-09-09 — reported permanently closed. Note: still present in OpenStreetMap
+     and in Tripadvisor / 2025 listings at the time of removal, so the closure rests
+     on a first-hand report, not an independent public source. Restore this record
+     if it turns out to be trading. */
   {
     id: 'casa-marinero', name: 'Casa Marinero', category: 'heritage', priceTier: 2,
     cuisine: ['Filipino'], street: 'Santa Potenciana Street', area: null,

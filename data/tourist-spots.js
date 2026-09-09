@@ -34,15 +34,17 @@ const SIGHT_CATEGORIES = {
 };
 
 /**
- * Reference point for the "N min walk" shown on every sight.
+ * Reference point for the "N min walk" shown on every sight and hotel.
  *
- * >>> CHANGE THIS to the conference venue and every distance re-bases itself. <<<
- * Default is Plaza de Roma, the historic centre of the walled city.
+ * Set to Pamantasan ng Lungsod ng Maynila (PLM) — the campus highlighted as the
+ * MIRC 2026 venue (see data/landmarks.js). The coordinate is PLM's OSM centre;
+ * >>> if sessions are in a specific building/hall, pin this to that exact spot <<<
+ * and every walking time on the site re-bases itself.
  */
 const VENUE_ANCHOR = {
-  name: 'Plaza de Roma',
-  lat: 14.592183,
-  lng: 120.973083
+  name: 'Pamantasan ng Lungsod ng Maynila',
+  lat: 14.5868604,
+  lng: 120.9764378
 };
 
 /** Average walking pace used to turn metres into minutes. */

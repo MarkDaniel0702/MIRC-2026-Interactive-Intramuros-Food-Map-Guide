@@ -1,11 +1,17 @@
 # Data & method
 
-How the **61 food spots** and **21 heritage sights** on this map were chosen, where the
+How the **60 food spots** and **21 heritage sights** on this map were chosen, where the
 numbers come from, and what you should and shouldn't trust.
 
-Of the 61 food spots, **53 are OSM-derived and verified** and **8 are address-estimated**
+Of the 60 food spots, **52 are OSM-derived and verified** and **8 are address-estimated**
 (community-listed eateries with no OpenStreetMap node — see §2, "Address-estimated
 entries"). The map also carries a small **landmark layer** (§8).
+
+> **2026-09-09.** `Cafe Sofia` (General Luna Street, OSM `node/11521200457`) was removed
+> after a first-hand report that it has closed. It was still present in OpenStreetMap and
+> in 2025 listings at the time, so the closure is not independently corroborated —
+> restore the record if it turns out to be trading. Food spots went 61 → 60,
+> Restaurants & Heritage Dining 18 → 17, `₱₱` tier 31 → 30.
 
 Accommodation is documented separately in [`HOTELS.md`](HOTELS.md); deployment in
 [`DEPLOY.md`](DEPLOY.md).
@@ -166,14 +172,14 @@ Tiers were assigned from three sources, in order of preference:
 ### Why not exact peso figures per venue?
 
 Because they aren't available. Published prices could be verified for only a handful of
-these 53 establishments; several major Philippine food publications block automated
+these 60 establishments; several major Philippine food publications block automated
 access, and most independent Intramuros venues publish no menu pricing at all. Printing a
 specific range like "₱320–₱480" for a carinderia nobody has priced would present a guess
 as a fact. A labelled band is honest about its own precision.
 
 Every card and popup carries the review date and a "confirm with the venue" note.
 
-**Distribution:** 25 × `₱` · 31 × `₱₱` · 4 × `₱₱₱` · 1 × `₱₱₱₱`
+**Distribution:** 25 × `₱` · 30 × `₱₱` · 4 × `₱₱₱` · 1 × `₱₱₱₱`
 (the eight address-estimated entries from §2 are all `₱`).
 
 ---
@@ -187,7 +193,7 @@ filed under Restaurants with a `Korean` tag rather than needing a category of it
 
 | Key | Label | Count |
 |---|---|---|
-| `heritage` | Restaurants & Heritage Dining | 18 |
+| `heritage` | Restaurants & Heritage Dining | 17 |
 | `cafe` | Cafés & Coffee | 17 |
 | `fastfood` | Fast Food & Chains | 7 |
 | `budget` | Budget Eats & Carinderias | 15 |
@@ -329,10 +335,11 @@ coordinates could not be verified, and nothing unverified gets a pin.*
   `WALK_METRES_PER_MIN` (80 m/min). Straight-line under-reads real walking by roughly
   10–20% in a grid, so treat it as a floor.
 
-> **Set the anchor to your venue.** `VENUE_ANCHOR` in `data/tourist-spots.js` defaults to
-> Plaza de Roma. Change its `name`, `lat` and `lng` to the conference venue and every
-> walking time on the site re-bases itself. That is the single highest-value edit for
-> this audience.
+> **Set the anchor to your venue.** `VENUE_ANCHOR` in `data/tourist-spots.js` is set to
+> **Pamantasan ng Lungsod ng Maynila** (PLM), the campus highlighted as the MIRC 2026
+> venue, using PLM's OSM centre point. If sessions run in a specific building or hall,
+> change its `lat`/`lng` to that exact spot — every walking time on the site re-bases
+> itself. That is the single highest-value edit for this audience.
 
 ### Accuracy notes
 
@@ -348,8 +355,12 @@ coordinates could not be verified, and nothing unverified gets a pin.*
 
 - **OSM POIs can be stale.** A few entries have low OSM node ids, meaning they were mapped
   many years ago; venues in Intramuros open and close. `Ilustrado` (node 735198925) is the
-  clearest example — it is a long-standing listing whose current operating status was not
-  independently confirmed.
+  clearest example — its current operating status was not independently confirmed, and a
+  later check found its published address (744 Calle Real del Palacio / Real Street) does
+  not match the recorded `street` "Cabildo Street"; the pin and street both need a look.
+  `Cafe Sofia` was removed on 2026-09-09 on a closure report (see the note at the top).
+  The pre-2015 carinderia nodes (`Adams Canteen`, `Liezel's Place`, `Sunlai Foodhouse`,
+  `Kabayan Food House`, `Pepito Foodhouse`) carry the same staleness risk.
 - **Coverage is as good as OpenStreetMap's.** Small carinderias and stalls that nobody has
   mapped won't appear. A handful of known venues — for instance the in-house restaurants at
   The Bayleaf — are absent from OSM; none were added by hand for this build, so every
