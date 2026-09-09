@@ -158,9 +158,14 @@ itself:
 const VENUE_ANCHOR = { name: 'Your venue', lat: 14.5869, lng: 120.9764 };
 ```
 
-**Swap the tile provider** by editing the single `L.tileLayer(...)` call in `app.js`. The
-navy tinting in `styles.css` is applied on top of whatever tiles arrive, so the look
-survives the change.
+**Tiles** come from **Esri's "World Street Map"** (`server.arcgisonline.com`, `{z}/{y}/{x}`
+order), set in the single `L.tileLayer(...)` call in `app.js` — keyless, every zoom level,
+no watermark. The navy tinting in `styles.css` grayscales and inverts whatever tiles
+arrive, so a colour basemap comes through fine and the look survives a provider swap. The
+public `tile.openstreetmap.org` server was dropped (its usage policy forbids production
+traffic); keyless CARTO was rejected too (it now stamps "API KEY REQUIRED" on free tiles).
+For the cleanest result, get a free CARTO / Stadia / MapTiler key and swap that one URL;
+for full control, self-host a tile set for the Intramuros bounding box.
 
 ---
 

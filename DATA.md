@@ -142,12 +142,13 @@ Pastil-an Sayo · Bacolodnon Eatery · Zaqueo Sisigan · Cheftain Eatery · Ciod
 PLM Canteen. All were pinned from Google Maps coordinates supplied by a visitor across
 **2026-09-09** (the first eight were address-estimated before that). Caveats:
 
-- `Pastil-an Sayo` is confirmed at **729A Victoria Street** (address, Plus Code and pin
-  all agree). The other six carrying a `street` — `Pastil Sa Tabi (PST)`, `Vtan's Eatery`,
-  `Lacanilao's Tapsilogan`, `Bacolodnon Eatery`, `Zaqueo Sisigan`, `Cheftain Eatery` —
-  have pins that cluster in the south-central quarter near General Luna / Real / Sta.
-  Potenciana, ~100 m from the street label still on the record; those labels may need
-  correcting. `Cioden's Diner` has no street on record (coordinate only).
+- Street labels: `Pastil-an Sayo` is confirmed at **729A Victoria Street** (address, Plus
+  Code and pin agree). The other six were **re-derived by Nominatim reverse-geocoding the
+  confirmed pin** to its nearest road — `Pastil Sa Tabi (PST)`, `Vtan's Eatery` and
+  `Bacolodnon Eatery` → **Cabildo Street**; `Zaqueo Sisigan` → **Santa Potenciana Street**;
+  `Lacanilao's Tapsilogan` (Victoria Street) and `Cheftain Eatery` (Santa Potenciana
+  Street) already matched. These are nearest-road guesses, not verified addresses.
+  `Cioden's Diner` has no street on record (coordinate only).
 - `PLM Canteen`'s pin resolves to the PLM **Multi-Purpose Building** (General Luna Street),
   not a place named "Canteen" — the label and the exact spot are unconfirmed.
 - Two earlier pins offered for `Pastil-an Sayo` were superseded — one landed ~2 km outside
@@ -455,6 +456,7 @@ marker's blurb rather than given their own pins.
 Place names, coordinates and the boundary polygon are from **OpenStreetMap**,
 © OpenStreetMap contributors, licensed under the
 [Open Database Licence (ODbL)](https://www.openstreetmap.org/copyright).
-Base map tiles are served by the OpenStreetMap Foundation's standard tile layer.
+Base map tiles are Esri's "World Street Map" (`Tiles © Esri — Esri, HERE, Garmin,
+© OpenStreetMap contributors`), grayscaled and inverted in CSS into the navy night plate.
 
 Categories, price tiers and descriptions are editorial additions made for this project.
