@@ -407,22 +407,33 @@ curl "https://nominatim.openstreetmap.org/search?q=Intramuros,+Manila&format=geo
 
 ## 8. Landmarks
 
-`data/landmarks.js` holds a short list of **standalone highlighted markers**, separate
-from the Eat / See / Stay datasets. A landmark is always visible, sits above the
-clustered pins, is never touched by the tab switch or the filters, and **zooms the map
-in to its location when clicked** (`map.flyTo(..., 18)`).
+`data/landmarks.js` holds **standalone highlighted markers**, separate from the Eat / See
+/ Stay datasets. A landmark sits above the clustered pins, is never touched by the tab
+switch or the filters, and **zooms the map in to its location when clicked**
+(`map.flyTo(..., 18)`). Two kinds:
 
-Currently one entry:
+- **Top-level landmark** (no `campus` flag) — always visible.
+- **Campus sub-point** (`campus: true`) — a building or hall inside a landmark. These
+  cluster within tens of metres, so `app.js` only shows them once the map is zoomed past
+  `CAMPUS_MIN_ZOOM` (17); clicking the parent brings them in. Rendered smaller, no pulse.
 
-| Landmark | OSM | Coordinate |
-|---|---|---|
-| Pamantasan ng Lungsod ng Maynila (PLM) — the University of the City of Manila, General Luna Street | `way/27275574` | 14.5868604, 120.9764378 |
+| Landmark | Kind | Coordinate | Source |
+|---|---|---|---|
+| Pamantasan ng Lungsod ng Maynila (PLM) — University of the City of Manila; the MIRC 2026 venue | top-level | 14.5868604, 120.9764378 | OSM `way/27275574` centre (Overpass 2026-09-04) |
+| Justo Albert Auditorium (JAA) | campus | 14.586453, 120.975866 | visitor Google Maps pin |
+| Katipunan Building (Gusaling Katipunan) | campus | 14.587515, 120.976390 | visitor Google Maps pin ("Gusaling Katipunan" on Google) |
+| Gusaling Emilio Ejercito Sr. — AVR | campus | 14.587371, 120.976091 | visitor Google Maps pin |
+| Gusaling Emilio Ejercito Sr. — KL | campus | 14.586407, 120.976898 | visitor Google Maps pin |
 
-The coordinate is the OSM way centre, retrieved from Overpass on 2026-09-04 and gated by
-the same point-in-polygon check (`tools/verify-in-intramuros.mjs`, pass 5). Landmarks are
-navigation aids, not listings — they carry no price, category or filter state. Add more
-by appending to the `LANDMARKS` array (`id`, `name`, `short`, `lat`, `lng`, `blurb`
-required; `kind`, `osm`, `url` optional).
+All five are gated by the same point-in-polygon check (`tools/verify-in-intramuros.mjs`,
+pass 5). Landmarks are navigation aids — no price, category or filter state. Add more by
+appending to `LANDMARKS` (`id`, `name`, `short`, `lat`, `lng`, `blurb` required; `kind`,
+`osm`, `url`, `campus`, `provisional` optional).
+
+> **Provisional (2026-09-09).** The two GEE rooms are `provisional: true`: "AVR" is
+> assumed to mean Audio-Visual Room, "KL" is not yet expanded, and the AVR ↔ KL
+> assignment across the two pins is unconfirmed (the labels may need swapping). A
+> **PLM Canteen** was requested for the Eat tab but no coordinate has been supplied yet.
 
 > Note: PLM is *Pamantasan ng Lungsod ng Maynila*, not the Polytechnic University of the
 > Philippines (PUP), which is a different institution in Sta. Mesa.

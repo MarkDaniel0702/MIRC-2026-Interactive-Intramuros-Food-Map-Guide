@@ -1274,6 +1274,23 @@ body.is-picking .leaflet-container { cursor: crosshair !important; }
   100% { transform: scale(1.22); opacity: 0; }
 }
 
+/* Campus sub-points (buildings/halls within a landmark) — smaller, calmer, no
+   pulse; only shown when the map is zoomed in. */
+.landmark--campus {
+  font-size: 8px;
+  letter-spacing: .02em;
+  border-width: 1.5px;
+  border-color: var(--gold-dk);
+  color: var(--gold);
+  box-shadow: 0 1px 6px rgba(0, 0, 0, .55), 0 0 9px -3px var(--gold);
+}
+.landmark--campus::before { display: none; }
+.landmark--campus:hover {
+  transform: scale(1.14);
+  border-color: var(--gold);
+  box-shadow: 0 1px 6px rgba(0, 0, 0, .6), 0 0 12px -2px var(--gold-br);
+}
+
 /* ─────────────────────────────── dialog ────────────────────────────────── */
 
 .dialog {

@@ -314,29 +314,50 @@
       </div>`;
   }
 
+  function buildLandmarkMarker(lm, small) {
+    const marker = L.marker([lm.lat, lm.lng], {
+      icon: L.divIcon({
+        className: 'landmark-icon',
+        html: `<div class="landmark${small ? ' landmark--campus' : ''}"><span>${esc(lm.short || '★')}</span></div>`,
+        iconSize: small ? [30, 30] : [40, 40],
+        iconAnchor: small ? [15, 15] : [20, 20],
+        popupAnchor: [0, small ? -15 : -20]
+      }),
+      title: lm.name,
+      alt: lm.name,
+      zIndexOffset: small ? 900 : 1000,
+      riseOnHover: true,
+      keyboard: true
+    });
+    marker.bindPopup(landmarkPopupHTML(lm), { maxWidth: 260, minWidth: 220, autoPanPadding: [26, 26] });
+    marker.on('click', () => {
+      map.flyTo([lm.lat, lm.lng], 18, { duration: reduceMotion ? 0 : 0.8 });
+      marker.openPopup();
+    });
+    return marker;
+  }
+
+  /* Campus sub-points (buildings/halls within a landmark, tagged `campus: true`)
+     sit within tens of metres of each other, so they only appear once the map is
+     zoomed past CAMPUS_MIN_ZOOM — below that they would pile onto the parent.
+     Clicking the parent landmark flies to zoom 18, which brings them in. */
+  const CAMPUS_MIN_ZOOM = 17;
+  const campusLayer = L.layerGroup();
+
   if (typeof LANDMARKS !== 'undefined' && Array.isArray(LANDMARKS)) {
     for (const lm of LANDMARKS) {
-      const marker = L.marker([lm.lat, lm.lng], {
-        icon: L.divIcon({
-          className: 'landmark-icon',
-          html: `<div class="landmark"><span>${esc(lm.short || '★')}</span></div>`,
-          iconSize: [40, 40],
-          iconAnchor: [20, 20],
-          popupAnchor: [0, -20]
-        }),
-        title: lm.name,
-        alt: lm.name,
-        zIndexOffset: 1000,
-        riseOnHover: true,
-        keyboard: true
-      }).addTo(map);
-
-      marker.bindPopup(landmarkPopupHTML(lm), { maxWidth: 260, minWidth: 220, autoPanPadding: [26, 26] });
-      marker.on('click', () => {
-        map.flyTo([lm.lat, lm.lng], 18, { duration: reduceMotion ? 0 : 0.8 });
-        marker.openPopup();
-      });
+      if (lm.campus) campusLayer.addLayer(buildLandmarkMarker(lm, true));
+      else buildLandmarkMarker(lm, false).addTo(map);
     }
+    const syncCampus = () => {
+      if (map.getZoom() >= CAMPUS_MIN_ZOOM) {
+        if (!map.hasLayer(campusLayer)) campusLayer.addTo(map);
+      } else if (map.hasLayer(campusLayer)) {
+        map.removeLayer(campusLayer);
+      }
+    };
+    map.on('zoomend', syncCampus);
+    syncCampus();
   }
 
   /* ───────────────────────────── markers ─────────────────────────────────── */

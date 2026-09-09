@@ -21,9 +21,10 @@ directions to any of it.
 | **See** | **21** heritage sights, with entrance fees, opening hours and realistic visit times |
 | **Stay** | **2** hotels — the properties inside the walls with both a public booking path and a real price. (A third, Residencia 729, is bookable but has no published rate — see `HOTELS.md`.) |
 
-Plus a highlighted **PLM** (Pamantasan ng Lungsod ng Maynila) campus landmark that zooms
-the map in when tapped, and **walking directions** to any listing — from your location, a
-tapped point, or one of six arrival presets.
+Plus a highlighted **PLM** (Pamantasan ng Lungsod ng Maynila) campus landmark — the
+MIRC 2026 venue — that zooms the map in when tapped and reveals its buildings and halls
+(JAA, GEE, Katipunan…) once you're zoomed close; and **walking directions** to any
+listing — from your location, a tapped point, or one of six arrival presets.
 
 - **Search** by name, dish, cuisine, street or period — press <kbd>/</kbd> to jump to it
 - **Filter** by category and by price / entrance fee, in any combination
@@ -54,7 +55,7 @@ node tools/verify-in-intramuros.mjs
   2. Schema — is every record well formed?            PASS  (8 user-pinned)
   3. Tourist spots — is every sight inside?           21/21 PASS
   4. Accommodation — is every property inside?         8/8  PASS
-  5. Landmarks — is every landmark inside?             1/1  PASS
+  5. Landmarks — is every landmark inside?             5/5  PASS
 
   VERIFIED — every spot is inside Intramuros and every record is valid.
 ```
@@ -132,7 +133,7 @@ data/food-spots.js              60 food spots  · 52 OSM-verified + 8 user-pinne
 data/tourist-spots.js           21 sights      · FEE_TIERS, VENUE_ANCHOR, passport info
 data/hotels.js                  8 properties   · 3 flagged `mapped` for the Stay tab
 data/start-points.js            6 arrival points for directions
-data/landmarks.js               highlighted landmarks (PLM) — click to zoom in
+data/landmarks.js               PLM landmark + campus sub-points (shown when zoomed in)
 data/intramuros-boundary.js     the official boundary polygon (61 points)
 
 tools/verify-in-intramuros.mjs  the accuracy gate
