@@ -173,16 +173,11 @@
   const mode = () => MODES[state.mode];
   const filters = () => state.byMode[state.mode];
 
-  /** Find a record by id across every dataset — and the landmark layer — not just
-      the active one. A landmark match has `modeKey: null`. */
+  /** Find a record by id across every dataset, not just the active one. */
   function findAnywhere(id) {
     for (const [key, m] of Object.entries(MODES)) {
       const hit = m.items.find(s => s.id === id);
       if (hit) return { spot: hit, modeKey: key };
-    }
-    if (typeof LANDMARKS !== 'undefined' && Array.isArray(LANDMARKS)) {
-      const lm = LANDMARKS.find(l => l.id === id);
-      if (lm) return { spot: lm, modeKey: null };
     }
     return null;
   }
@@ -221,21 +216,13 @@
     attributionControl: true
   });
 
-  /* Esri "World Street Map" raster basemap. Note the {z}/{y}/{x} order (Esri puts
-     row before column). It arrives colourful and detailed at every zoom, no API
-     key; styles.css then grayscales + inverts + tints .leaflet-tile-pane into the
-     navy night map (the grayscale step exists precisely to strip a colour basemap
-     down to neutral before inverting).
-
-     Chosen over tile.openstreetmap.org, whose usage policy forbids production /
-     bulk traffic — a conference-day spike could be throttled or blocked. It was
-     also chosen over CARTO's basemap CDN, which now stamps "API KEY REQUIRED"
-     across keyless tiles. For the cleanest result, sign up for a free CARTO,
-     Stadia or MapTiler key and swap this one URL (see README); for full control,
-     self-host a tile set for the Intramuros bbox. */
-  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+  /* Standard OSM raster tiles: no API key, no sign-up, good detail down to z19.
+     They arrive as a light, colourful plate — styles.css inverts and tints
+     .leaflet-tile-pane into the navy night map the rest of the page is built on.
+     If this ever serves real traffic, swap in a keyed provider (see README). */
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
-    attribution: 'Tiles &copy; <a href="https://www.esri.com/">Esri</a> — Esri, HERE, Garmin, &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
   }).addTo(map);
 
   L.control.zoom({ position: 'topleft' }).addTo(map);
@@ -324,9 +311,6 @@
         <p class="pop__blurb">${esc(lm.blurb)}</p>
         <p class="pop__where">${MARKER_SVG}<span>${esc(lm.street || 'Intramuros')}<br>Intramuros, Manila</span></p>
         ${lm.url ? `<p class="pop__contact"><a href="${esc(lm.url)}" target="_blank" rel="noopener">Official site</a></p>` : ''}
-        <button type="button" class="pop__go" data-go="${esc(lm.id)}">
-          ${ROUTE_SVG} Get directions
-        </button>
       </div>`;
   }
 
@@ -785,18 +769,15 @@
   let destMarker = null;
 
   /** Dedicated destination pin. The ordinary marker may be inside a cluster and have
-      no element to restyle, so directions get their own, always-visible marker.
-      A landmark has no `_mode`/`category` — it gets a gold gate glyph. */
+      no element to restyle, so directions get their own, always-visible marker. */
   function showDestination(spot) {
     if (destMarker) map.removeLayer(destMarker);
-    const isLandmark = !spot._mode;
-    const color = isLandmark ? '#E3B23C' : MODES[spot._mode].categories[spot.category].color;
-    const glyph = isLandmark ? 'gate' : MODES[spot._mode].categories[spot.category].icon;
+    const cat = MODES[spot._mode].categories[spot.category];
     destMarker = L.marker([spot.lat, spot.lng], {
       icon: L.divIcon({
         className: 'dest-icon',
-        html: `<div class="dest-pin" style="--c:${color}">
-                 <span class="dest-pin__disc">${PIN_SVG(glyph)}</span>
+        html: `<div class="dest-pin" style="--c:${cat.color}">
+                 <span class="dest-pin__disc">${PIN_SVG(cat.icon)}</span>
                </div>`,
         iconSize: [38, 38], iconAnchor: [19, 42]
       }),
@@ -829,9 +810,8 @@
     if (!found) return;
 
     // Make sure the destination's own tab is active, so its marker is on the map
-    // and going "back" lands somewhere consistent. Landmarks (modeKey null) show
-    // on every tab, so leave the current tab as it is.
-    if (found.modeKey && found.modeKey !== state.mode) setMode(found.modeKey);
+    // and going "back" lands somewhere consistent.
+    if (found.modeKey !== state.mode) setMode(found.modeKey);
 
     state.dirs.open = true;
     state.dirs.destId = id;

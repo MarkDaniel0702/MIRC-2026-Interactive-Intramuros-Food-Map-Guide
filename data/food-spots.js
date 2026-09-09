@@ -378,9 +378,9 @@ const FOOD_SPOTS = [
      supplied by a visitor across 2026-09-09.                                    */
   {
     id: 'pastil-sa-tabi', name: 'Pastil Sa Tabi (PST)', category: 'budget', priceTier: 1,
-    cuisine: ['Filipino', 'Pastil', 'Rice Meals'], street: 'Cabildo Street', area: null,
+    cuisine: ['Filipino', 'Pastil', 'Rice Meals'], street: 'Victoria Street', area: null,
     lat: 14.588567, lng: 120.976931, osm: null, locationSource: 'user', verified: true,
-    blurb: 'Small pastil counter on Cabildo Street serving cheap banana-leaf parcels of rice with shredded chicken or beef, to go. Not in OpenStreetMap — the coordinate was supplied directly by a visitor; the street is the nearest road to that pin.'
+    blurb: 'Small pastil counter on Victoria Street serving cheap banana-leaf parcels of rice with shredded chicken or beef, to go. Not in OpenStreetMap — the coordinate was supplied directly by a visitor.'
   },
   {
     id: 'pastil-an-sayo', name: 'Pastil-an Sayo', category: 'budget', priceTier: 1,
@@ -390,9 +390,9 @@ const FOOD_SPOTS = [
   },
   {
     id: 'vtans-eatery', name: "Vtan's Eatery", category: 'budget', priceTier: 1,
-    cuisine: ['Filipino', 'Carinderia'], street: 'Cabildo Street', area: null,
+    cuisine: ['Filipino', 'Carinderia'], street: 'Victoria Street', area: null,
     lat: 14.588612, lng: 120.977135, osm: null, locationSource: 'user', verified: true,
-    blurb: 'Carinderia on Cabildo Street with a short daily menu of Filipino home dishes over rice. Not in OpenStreetMap — the coordinate was supplied directly by a visitor; the street is the nearest road to that pin.'
+    blurb: 'Carinderia on Victoria Street with a short daily menu of Filipino home dishes over rice. Not in OpenStreetMap — the coordinate was supplied directly by a visitor.'
   },
   {
     id: 'lacanilaos-tapsilogan', name: "Lacanilao's Tapsilogan", category: 'budget', priceTier: 1,
@@ -402,13 +402,13 @@ const FOOD_SPOTS = [
   },
   {
     id: 'bacolodnon-eatery', name: 'Bacolodnon Eatery', category: 'budget', priceTier: 1,
-    cuisine: ['Filipino', 'Bacolod', 'Inasal'], street: 'Cabildo Street', area: null,
+    cuisine: ['Filipino', 'Bacolod', 'Inasal'], street: 'Magallanes Street', area: null,
     lat: 14.588659, lng: 120.976512, osm: null, locationSource: 'user', verified: true,
     blurb: 'Bacolod-style carinderia — chicken inasal and Negrense home cooking over rice. Not in OpenStreetMap — the coordinate is from a Google Maps pin supplied by a visitor.'
   },
   {
     id: 'zaqueo-sisigan', name: 'Zaqueo Sisigan', category: 'budget', priceTier: 1,
-    cuisine: ['Filipino', 'Sisig'], street: 'Santa Potenciana Street', area: null,
+    cuisine: ['Filipino', 'Sisig'], street: 'Magallanes Street', area: null,
     lat: 14.589068, lng: 120.976010, osm: null, locationSource: 'user', verified: true,
     blurb: 'Sisig eatery plating the sizzling chopped-pork classic over rice. Not in OpenStreetMap — the coordinate is from a Google Maps pin supplied by a visitor.'
   },
