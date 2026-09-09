@@ -54,41 +54,31 @@ a confident wrong room sends someone to the wrong side of a campus.
 
 ## What I need from you
 
-### 1. Congress content — the long pole
+### 1. Congress content
 
-Everything goes into `data/mirc-2026.json`. The file has a slot for each of these and
-a `gaps` list naming what is still missing; Dan reads that list, so anything
-you leave out it will honestly report as unpublished.
+**Most of this is now in.** The committee's programme workbook and speakers document
+have been imported — see *Training data* below. What remains:
 
-| # | What | Where it goes | Needed for |
-|---|---|---|---|
-| 1 | What **MIRC** stands for, the edition, the theme | `meta` | Every "what is this" question |
-| 2 | **Congress dates** and daily start/end times | `meta.dates` | Nearly every question |
-| 3 | The **programme** — sessions, times, rooms, tracks, chairs | `schedule.days[]` | The single most-asked thing |
-| 4 | **Papers and posters** — titles, authors, abstracts | `papers[]` | "When am I presenting", "who is talking about X" |
-| 5 | **Keynotes and plenaries**, with speaker bios | `speakers[]` | Programme questions |
-| 6 | **Registration** — fees, deadlines, how to register | `registration` | Pre-congress questions |
-| 7 | **On-site desk** — where it is, when it opens | `registration.desk` | Arrival day |
-| 8 | **Logistics** — meals, breaks, Wi-Fi, certificates, proceedings | `logistics` | Constant, low-stakes questions |
-| 9 | **Emergency contacts** and the code of conduct | `logistics` | Duty of care |
-| 10 | **Organisers and committee**, plus a contact address | `event` | "Who do I ask about…" |
-| 11 | The official **website / registration URL** | `meta.website` | Handing off what it can't answer |
+| # | Still needed | Where it goes |
+|---|---|---|
+| 1 | Bios, talk titles and abstracts for the **7 placeholder speakers** — Plenary 1 (Dr. Hsiao-Yeh Chu), STEA 5 (Andres), STEA 6 (Dela Cruz), BGL 1 (Leong), BGL 3 (Osorio), HS 3 (Hedna), HS 5 (Dino) | speakers markdown, then re-import |
+| 2 | Keynote speakers for **BGL-5** and **EASS-6**, both blank in the programme | programme workbook |
+| 3 | **Abstracts for the 89 contributed papers** — the programme gives number, surname and title only | a new sheet or export |
+| 4 | **Registration**: fees, deadlines, how to register, desk location and hours | `registration` |
+| 5 | **Logistics**: meals, Wi-Fi, certificates, proceedings, emergency contacts, code of conduct | `logistics` |
+| 6 | **Organising committee** and a contact address | `event.organisers` |
+| 7 | The **congress theme** and the official **website / registration URL** | `meta` |
+| 8 | Full given names for paper presenters, if delegates should be able to search by them | programme workbook |
 
-### 2. Confirm the venue details I could not verify
+### 2. Two things to confirm
 
-The map already carries the PLM campus, and I have pre-filled it. Four things are
-marked `"confirmed": false` because the repo's own notes say they are unverified —
-please confirm or correct them:
-
-- **GEE** — `AVR` is *assumed* to mean Audio-Visual Room. **`KL` is not expanded at all.**
-- **GK** — room `BTB` is not expanded.
-- **GA** — room `TOP` is not expanded.
-- The building coordinates for GK, GEE and GA come from visitor-supplied Google Maps
-  pins, not survey data.
-
-Until these are confirmed Dan gives the detail *and* says it is unconfirmed,
-so nobody is misled. Also still missing: `venue.gettingThere`, `accessibility`,
-`parking` and `wifi`.
+- **`GA TOP`** is the only room code still unexpanded. The programme legend named the
+  others — `GK BTB` is *Bukod Tanging Bulwagan* and `GEE KL` is *Katipunan Lounge*, both
+  now marked confirmed. `GEE AVR` does not appear in the programme at all; if no session
+  uses it, say so and it can be dropped.
+- **The numbering in the speakers document**: two entries are both labelled *BGL Keynote
+  Speaker 3* (Osorio and Manansala), and *EASS Keynote Speaker 4* is missing — it jumps 3
+  to 5. Worth a look before the content freeze.
 
 ### 3. A model key
 
@@ -119,8 +109,13 @@ Vercel or Netlify Functions with a small change to the handler signature.
 ## Setting it up
 
 ```bash
-# 1. Fill in the knowledge base
-#    edit data/mirc-2026.json
+# 1a. Import the committee's source documents (needs python + openpyxl)
+python tools/import-program.py \
+    "Program and Session Members.xlsx" \
+    "PLENARY and Keynote SPEAKERS MIRC 2026.md"
+
+# 1b. Anything the sources do not cover — registration, logistics, committee —
+#     is typed straight into data/mirc-2026.json
 
 # 2. Build the corpus Dan reads
 node tools/build-corpus.mjs
@@ -213,6 +208,7 @@ assets/dan-phoenix.png      Dan's phoenix, cropped and scaled from the supplied 
 styles.css                  the .chat-launch / .chat and Dan's mark blocks at the end
 data/mirc-2026.json         the knowledge base — the file you edit
 data/chat-corpus.json       generated; do not edit by hand
+tools/import-program.py     reads the committee's xlsx + speakers markdown
 tools/build-corpus.mjs      the merge step
 worker/src/index.js         the proxy, the grounded prompt, the scope layers
 worker/wrangler.toml        corpus URL, allowed origins, model ids

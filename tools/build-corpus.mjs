@@ -140,12 +140,15 @@ const corpus = {
   gaps: mirc.gaps ?? [],
   scope: mirc.scope,
   event: mirc.event,
+  tracks: mirc.tracks ?? [],
   schedule: mirc.schedule,
   speakers: mirc.speakers,
   papers: mirc.papers,
   venue: mirc.venue,
   registration: mirc.registration,
   logistics: mirc.logistics,
+  sessionMembers: mirc.sessionMembers ?? [],
+  sessionGuidelines: mirc.sessionGuidelines ?? [],
   faq: mirc.faq,
 
   localGuide: {
@@ -181,15 +184,22 @@ try {
 
 const bytes = JSON.stringify(corpus).length;
 const approxTokens = Math.round(bytes / 3.6 / 100) * 100;
-const sessionCount = (mirc.schedule?.days ?? [])
-  .reduce((n, d) => n + (d.items?.length ?? 0), 0);
+const days = mirc.schedule?.days ?? [];
+const sessionCount = days.reduce((n, d) => n + (d.items?.length ?? 0), 0);
+const parallel = days.flatMap(d => (d.items ?? []).filter(i => i.type === 'parallel'))
+  .flatMap(i => i.sessions ?? []);
+const paperCount = parallel.reduce((n, s) => n + (s.papers?.length ?? 0), 0);
+const keynoteCount = parallel.filter(s => s.keynote).length;
+const namedSpeakers = (mirc.speakers ?? []).filter(s => !s.stub).length;
 
 console.log(`\n  ${bold('Chat corpus built')}  ${dim('data/chat-corpus.json')}\n`);
 console.log(`  Congress    ${mirc.meta?.name ?? amber('name not set')}`);
 console.log(`  Dates       ${mirc.meta?.dates ?? amber('not set')}`);
-console.log(`  Programme   ${sessionCount ? `${sessionCount} scheduled items` : amber('empty')}`);
-console.log(`  Speakers    ${mirc.speakers?.length ? `${mirc.speakers.length}` : amber('none')}`);
-console.log(`  Papers      ${mirc.papers?.length ? `${mirc.papers.length}` : amber('none')}`);
+console.log(`  Programme   ${sessionCount ? `${sessionCount} scheduled items over ${days.length} days` : amber('empty')}`);
+console.log(`  Sessions    ${parallel.length ? `${parallel.length} parallel · ${keynoteCount} keynote slots` : amber('none')}`);
+console.log(`  Speakers    ${mirc.speakers?.length ? `${namedSpeakers} written up, ${mirc.speakers.length - namedSpeakers} still placeholders` : amber('none')}`);
+console.log(`  Papers      ${paperCount ? `${paperCount} presentations` : amber('none')}`);
+console.log(`  Members     ${mirc.sessionMembers?.length ?? 0} session assignments`);
 console.log(`  Venue       ${corpus.venue.name} · ${corpus.venue.buildings.length} buildings`);
 console.log(`  Local guide ${food.length} to eat · ${sights.length} to see · ${stay.length} to stay`);
 console.log(`  Size        ${(bytes / 1024).toFixed(0)} KB · roughly ${approxTokens.toLocaleString()} tokens\n`);
