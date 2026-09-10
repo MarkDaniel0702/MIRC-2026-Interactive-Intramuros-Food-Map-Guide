@@ -78,6 +78,44 @@ labelled an extract. Dan is told to distinguish the two: "not published yet" onl
 `gaps`, and "I could not find that, try rephrasing or ask the desk" for anything else
 missing.
 
+### Answer caching
+
+Groq's free tier allows about one request a minute. That is fine for steady use and
+useless for the moment a session ends and everyone reaches for their phone at once —
+which is when the assistant is most worth having. Most of those questions are the
+same handful in different words, so they should not each cost a model call.
+
+Three tiers, cheapest first:
+
+1. **Warm answers** — a reviewed set shipped inside the corpus (`warmAnswers`).
+   Matched with no network call at all, so the commonest questions answer instantly
+   *even while the provider is rate-limited or down*.
+2. **Edge cache** — Cloudflare's Cache API, keyed on the normalised question. Free,
+   needs no binding or setup, and is per-datacentre — which for a congress in one
+   building is a feature, not a limitation: everyone lands in the same colo, so the
+   second asker gets the first asker's answer.
+3. **The model**, as before.
+
+Keys carry the corpus's generated-on date, so publishing content invalidates every
+entry rather than serving yesterday's programme. Declines, retries and "I could not
+find that" are **never** cached — a transient failure must not become sticky.
+
+Generating the warm set:
+
+    GROQ_API_KEY=... node tools/warm-cache.mjs      # resumable; --force to redo
+
+It answers each question in `tools/warm-questions.json` through the real prompt and
+real retrieval, and writes `data/warm-answers.json`. **Read them before committing.**
+A warm hit skips the model, the retrieval and every guard, and is returned verbatim:
+it is the one path where a wrong answer cannot be caught downstream.
+
+Which is why the matcher is deliberately strict — an exact normalised match, or 0.8
+Jaccard on content words — and why `tools/eval-cache.mjs` exists. Its negative cases
+are the point: "Which room is the HS track in?" must not match the BGL answer, and
+every generated question must be nearer its own answer than any other's.
+
+    node tools/eval-cache.mjs         # matcher + collision check, offline
+
     node tools/eval-retrieval.mjs     # 24 cases, offline, no API key, no quota
     PROVIDER=groq GROQ_API_KEY=... node tools/try-dan.mjs    # end-to-end
 
@@ -294,6 +332,10 @@ data/chat-corpus.json       generated; do not edit by hand
 tools/import-program.py     reads the committee's xlsx + speakers markdown
 tools/build-corpus.mjs      the merge step
 tools/eval-retrieval.mjs    retrieval recall, offline
+tools/eval-cache.mjs        warm-answer matcher + collisions, offline
+tools/warm-cache.mjs        pre-answers the common questions
+tools/warm-questions.json   the list it works from
+worker/src/cache.js         warm answers + edge cache
 tools/try-dan.mjs           end-to-end acceptance against Groq or Gemini
 worker/src/retrieve.js      the retrieval layer
 worker/src/index.js         the proxy, the grounded prompt, the scope layers

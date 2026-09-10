@@ -31,6 +31,7 @@
  */
 
 import { buildIndex, retrieve } from './retrieve.js';
+import { warmAnswer, cachedAnswer, storeAnswer } from './cache.js';
 
 const MAX_MESSAGE_CHARS = 600;
 const MAX_HISTORY_TURNS = 8;
@@ -364,7 +365,7 @@ const json = (body, status, headers) => new Response(JSON.stringify(body), {
 /* ── handler ─────────────────────────────────────────────────────────────────── */
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const cors = corsHeaders(request, env);
 
     if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: cors });
@@ -429,6 +430,22 @@ export default {
 
     const declineLine = corpus.scope?.decline ?? 'I can only help with MIRC 2026.';
 
+    /* Tier 1 — a reviewed answer shipped with the corpus. No network call at all,
+       so the commonest questions still answer instantly when the provider is
+       rate-limited or down, which is precisely when they are all being asked. */
+    const warm = warmAnswer(corpus, message);
+    if (warm) {
+      console.log(JSON.stringify({ event: 'warm-hit', message, matched: warm.matched }));
+      return json({ reply: warm.reply, source: 'warm', cached: true }, 200, cors);
+    }
+
+    /* Tier 2 — someone in this datacentre already asked this. */
+    const cached = await cachedAnswer(corpus, message);
+    if (cached) {
+      console.log(JSON.stringify({ event: 'cache-hit', message }));
+      return json({ ...cached, cached: true }, 200, cors);
+    }
+
     /* Layer 2 — heuristic pre-filter. Declined without spending a model call. */
     if (looksOffTopic(message)) {
       console.log(JSON.stringify({ event: 'declined', layer: 'prefilter', message }));
@@ -482,7 +499,15 @@ export default {
       console.log(JSON.stringify({ event: 'unanswered', message }));
     }
 
-    return json({ reply: reply.trim(), source: used, contextTokens: tokens }, 200, cors);
+    const answer = { reply: reply.trim(), source: used, contextTokens: tokens };
+
+    /* Cache only a clean answer. A decline, a retry message or an "I could not find
+       that" must never become sticky — the first two are transient and the third
+       may be fixed by the next content update. */
+    const isUnknown = unknownLine && reply.includes(unknownLine.slice(0, 30));
+    if (!isUnknown) await storeAnswer(ctx, corpus, message, answer);
+
+    return json(answer, 200, cors);
   }
 };
 

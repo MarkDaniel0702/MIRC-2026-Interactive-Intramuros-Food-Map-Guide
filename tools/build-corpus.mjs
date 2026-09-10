@@ -23,7 +23,7 @@
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
-import { readFileSync, writeFileSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 
 const require = createRequire(import.meta.url);
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -51,6 +51,23 @@ try {
   mirc = JSON.parse(readFileSync(data('mirc-2026.json'), 'utf8'));
 } catch (err) {
   die('could not read data/mirc-2026.json', err);
+}
+
+/* Pre-answered common questions, if tools/warm-cache.mjs has been run. Optional —
+   without them the assistant behaves exactly as before, just with a model call for
+   every question. */
+let warm = [];
+if (existsSync(data('warm-answers.json'))) {
+  try {
+    const f = JSON.parse(readFileSync(data('warm-answers.json'), 'utf8'));
+    warm = f.answers ?? [];
+    if (f.corpusVersion && f.corpusVersion !== mirc.meta?.updated) {
+      console.log(`  ${amber('warm answers were generated against an older corpus')}` +
+                  ` ${dim(`(${f.corpusVersion} vs ${mirc.meta?.updated}) — re-run tools/warm-cache.mjs --force`)}`);
+    }
+  } catch (err) {
+    die('could not read data/warm-answers.json', err);
+  }
 }
 
 let FOOD_SPOTS, PRICE_TIERS, CATEGORIES, DATA_REVIEWED;
@@ -151,6 +168,7 @@ const corpus = {
   sessionMembers: mirc.sessionMembers ?? [],
   sessionGuidelines: mirc.sessionGuidelines ?? [],
   faq: mirc.faq,
+  warmAnswers: warm,
 
   localGuide: {
     note: [
@@ -201,6 +219,7 @@ console.log(`  Sessions    ${parallel.length ? `${parallel.length} parallel · $
 console.log(`  Speakers    ${mirc.speakers?.length ? `${namedSpeakers} written up, ${mirc.speakers.length - namedSpeakers} still placeholders` : amber('none')}`);
 console.log(`  Papers      ${paperCount ? `${paperCount} presentations` : amber('none')}`);
 console.log(`  Members     ${mirc.sessionMembers?.length ?? 0} session assignments`);
+console.log(`  Warm        ${warm.length ? `${warm.length} pre-answered questions (no model call)` : amber('none — run tools/warm-cache.mjs')}`);
 console.log(`  Venue       ${corpus.venue.name} · ${corpus.venue.buildings.length} buildings`);
 console.log(`  Local guide ${food.length} to eat · ${sights.length} to see · ${stay.length} to stay`);
 console.log(`  Size        ${(bytes / 1024).toFixed(0)} KB · roughly ${approxTokens.toLocaleString()} tokens\n`);
