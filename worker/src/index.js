@@ -380,7 +380,16 @@ export default {
         ready = providerChain(env).length > 0;
         gaps = data.gaps?.length ?? 0;
       } catch { /* reported as not ready */ }
-      return json({ ok: true, ready, gaps, providers: providerChain(env).map(p => p.name) }, 200, cors);
+      /* Booleans only — never a value, never a prefix. Enough to tell "the secret
+         was never set" apart from "the secret is set but the code cannot see it",
+         which is otherwise guesswork from outside. */
+      const keys = {
+        GROQ_API_KEY: Boolean(env.GROQ_API_KEY),
+        GEMINI_API_KEY: Boolean(env.GEMINI_API_KEY),
+        ANTHROPIC_API_KEY: Boolean(env.ANTHROPIC_API_KEY)
+      };
+      return json({ ok: true, ready, gaps, keys, order: env.PROVIDER_ORDER ?? null,
+                    providers: providerChain(env).map(p => p.name) }, 200, cors);
     }
 
     if (request.method !== 'POST' || url.pathname !== '/chat') {

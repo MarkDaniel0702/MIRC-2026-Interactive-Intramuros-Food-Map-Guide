@@ -78,6 +78,42 @@ labelled an extract. Dan is told to distinguish the two: "not published yet" onl
 `gaps`, and "I could not find that, try rephrasing or ask the desk" for anything else
 missing.
 
+### Two deployment traps, both hit and both fixed
+
+**`wrangler secret put` through a non-interactive terminal stores an empty secret
+and reports success.** Wrangler prints "✨ Success! Uploaded secret", `wrangler secret
+list` shows the key, and every request still answers "not connected to a model yet",
+because `env.GROQ_API_KEY` is `""`. Set it by pipe instead, which needs no TTY:
+
+    printf '%s' '<key>' | npx wrangler secret put GROQ_API_KEY
+
+`/health` now reports `keys: { GROQ_API_KEY: true|false }` — booleans only, never a
+value — which is what tells "never set" apart from "set but invisible to the code".
+
+**`wrangler deploy` can drop a secret from the deployed version.** The key stays in
+`wrangler secret list`, because that reads the Worker's settings rather than the
+running version. `keep_vars = true` in `wrangler.toml` prevents it. Set secrets after
+the final deploy if in any doubt.
+
+### What the free tiers actually allow
+
+Measured, not quoted from documentation:
+
+| | Groq free | Gemini free |
+|---|---|---|
+| Per minute | 8,000 tokens | — |
+| Per day | **200,000 tokens** | **20 requests per model** |
+| Requests/day | 1,000 | — |
+
+At ~4,900 tokens a question that is **about 40 model-answered questions a day** on
+Groq. For 231 delegates over two days that is not enough on its own — which is
+exactly why the caching below is load-bearing rather than an optimisation. Warm
+answers and cache hits cost **zero** tokens, so only genuinely novel questions draw
+on the daily budget.
+
+If the congress needs more headroom than that, the cheapest fix is enabling billing
+on one provider; nothing in the code changes, only `PROVIDER_ORDER`.
+
 ### Answer caching
 
 Groq's free tier allows about one request a minute. That is fine for steady use and

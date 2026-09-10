@@ -14,6 +14,14 @@
 name = "mirc-2026-chat"
 main = "src/index.js"
 compatibility_date = "2026-01-01"
+# Keep bindings that were not declared here — specifically the API key set with
+# `wrangler secret put`. Without this, a later `wrangler deploy` builds a version
+# from this file alone and the running Worker silently loses the secret: the key
+# still shows in `wrangler secret list`, because that reads the Worker's settings
+# rather than the deployed version, so it looks configured while every request
+# answers "not connected to a model yet".
+keep_vars = true
+
 
 [vars]
 # Where the built corpus lives. Regenerate it with `node tools/build-corpus.mjs`
