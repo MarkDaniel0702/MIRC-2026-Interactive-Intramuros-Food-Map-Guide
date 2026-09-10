@@ -45,6 +45,43 @@ chat.js                    the phoenix, the launcher, the panel, the composer
 The site is static and served from GitHub Pages, so it cannot hold an API key. The
 Worker is the only server-side piece, and it exists mostly for that reason.
 
+### Why there is a retrieval step
+
+The corpus is about **43,000 tokens**. Sending all of it with every question is what
+the free tiers cannot afford, and the two fail in opposite ways:
+
+| Free tier | Ceiling | With the full corpus |
+|---|---|---|
+| **Groq** | 8,000 tokens/minute, 1,000 requests/day | `413` on every request — never works |
+| **Gemini** | large prompt, but **20 requests/day per model** | works ~4 times, then `429` |
+| Gemini context caching | `limit=0` | not offered on the free tier at all |
+
+So `worker/src/retrieve.js` cuts a question-shaped slice first — about **4,900
+tokens, an 8.6x reduction** — which fits inside Groq's per-minute ceiling and makes
+the free path viable. Groq leads the provider chain for that reason; Gemini's 20/day
+is enough to test with, not to run a congress on. On a paid Gemini key, set
+`PROVIDER_ORDER = "gemini,groq,anthropic"` and raise `RETRIEVAL_BUDGET`.
+
+It is a scored inverted index over the corpus records, not embeddings: no second API
+call, nothing to keep in sync, and a paper number or room code matches exactly rather
+than approximately. Three things make it work on this data — synonyms built from the
+corpus itself (so "health sciences" reaches the `HS` track), prefix stemming (so
+"present" reaches a guideline that only says "presenter"), and intent routing (so
+"how long do I get?" is guaranteed a guideline slot, which pure word overlap never
+gives a two-line rule competing against 2,000-character bios).
+
+**The failure mode it introduces, and the guard.** Retrieval can miss, and a miss
+would otherwise become "that is not published" — a confident wrong answer. So the
+always-on part of every slice carries `gaps`, which stays authoritative about what
+the committee genuinely has not supplied, and the retrieved part is explicitly
+labelled an extract. Dan is told to distinguish the two: "not published yet" only for
+`gaps`, and "I could not find that, try rephrasing or ask the desk" for anything else
+missing.
+
+    node tools/eval-retrieval.mjs     # 24 cases, offline, no API key, no quota
+    PROVIDER=groq GROQ_API_KEY=... node tools/try-dan.mjs    # end-to-end
+
+
 **Nothing is invented.** A field left `null` in the knowledge base means *not
 published yet*: the prompt requires Dan to say so and point at the
 organisers rather than produce a plausible-looking time or room. That is deliberate —
@@ -61,13 +98,12 @@ have been imported — see *Training data* below. What remains:
 
 | # | Still needed | Where it goes |
 |---|---|---|
-| 1 | Bios, talk titles and abstracts for the **7 placeholder speakers** — Plenary 1 (Dr. Hsiao-Yeh Chu), STEA 5 (Andres), STEA 6 (Dela Cruz), BGL 1 (Leong), BGL 3 (Osorio), HS 3 (Hedna), HS 5 (Dino) | speakers markdown, then re-import |
+| 1 | **Bios and abstracts** for the 7 placeholder speakers — Plenary 1 (Chu), STEA 5 (Andres), STEA 6 (Dela Cruz), BGL 1 (Leong), BGL 3 (Osorio), HS 3 (Hedna), HS 5 (Dino). Most already have a *talk title*, which the programme supplies; only Leong and Osorio lack one too. | speakers markdown, then re-import |
 | 2 | Keynote speakers for **BGL-5** and **EASS-6**, both blank in the programme | programme workbook |
 | 3 | **Abstracts for the 89 contributed papers** — the programme gives number, surname and title only | a new sheet or export |
 | 4 | **Registration**: fees, deadlines, how to register, desk location and hours | `registration` |
 | 5 | **Logistics**: meals, Wi-Fi, certificates, proceedings, emergency contacts, code of conduct | `logistics` |
-| 6 | **Organising committee** and a contact address | `event.organisers` |
-| 7 | The **congress theme** and the official **website / registration URL** | `meta` |
+| 6 | A **contact address** for the organisers (the committee names are in, from the website) | `event` |
 | 8 | Full given names for paper presenters, if delegates should be able to search by them | programme workbook |
 
 ### 2. One thing already decided for you — the delegate list
@@ -94,7 +130,25 @@ it claims 6 countries but lists 11, and 118 institutions but lists 82. Dan gives
 as approximate and says which sheet a figure came from. Worth reconciling before the
 freeze.
 
-### 3. Two things to confirm
+### 3. What the website export changed
+
+Adding `MIRC Extra infos.md` closed three gaps (theme, website, organising committee)
+and **corrected the dates**. MIRC 2026 is a **3-day hybrid congress, 27-30 September**:
+a Hospitality and Tourism sub-conference at De La Salle - College of Saint Benilde on
+**27 September**, then the main conference at PLM on 29-30 September. The programme
+workbook covers only the PLM days, so Dan knows the sub-conference exists and says its
+detailed programme has not been supplied.
+
+It also flagged a conflict worth resolving: the website gives the registration
+deadline as **20 August 2026**, while the registration tabulation shows sign-ups
+running to **1 September**. Dan reports both rather than choosing.
+
+One naming note, handled in the prompt: the **Conference Chair is Dr. Dan Michael A.
+Cortez**, and the assistant is called Dan. Asked "are you Dan Michael Cortez?", Dan
+now answers *"No, I'm Dan, the assistant... I'm not Dr Dan Michael A. Cortez, the
+Conference Chair."*
+
+### 4. Two things to confirm
 
 - **`GA TOP`** is the only room code still unexpanded. The programme legend named the
   others — `GK BTB` is *Bukod Tanging Bulwagan* and `GEE KL` is *Katipunan Lounge*, both
@@ -104,22 +158,25 @@ freeze.
   Speaker 3* (Osorio and Manansala), and *EASS Keynote Speaker 4* is missing — it jumps 3
   to 5. Worth a look before the content freeze.
 
-### 4. A model key
+### 5. A model key
 
 At least one. Two is better — the Worker falls through to the second when the first
 rate-limits, which is what keeps it steady during a coffee break.
 
-- **Google Gemini** (`GEMINI_API_KEY`) — free tier, ~1M-token context. Recommended primary.
-- **Groq** (`GROQ_API_KEY`) — free tier, Llama 3.3 70B. Recommended fallback.
+- **Groq** (`GROQ_API_KEY`) — **the primary for a free deployment**: 1,000 requests/day,
+  8,000 tokens/minute, which the retrieved slice fits inside. Model `openai/gpt-oss-120b`.
+- **Google Gemini** (`GEMINI_API_KEY`) — big context, but the free tier is **20 requests
+  per day per model**. Useful for testing and as overflow; not enough to run a congress
+  unless billing is enabled.
 - **Anthropic** (`ANTHROPIC_API_KEY`) — paid, and the one to use if abstracts are
   confidential; some free tiers train on submitted prompts.
 
-### 5. A Cloudflare account
+### 6. A Cloudflare account
 
 Free tier. Needed to deploy the Worker. If you would rather not, the same file runs on
 Vercel or Netlify Functions with a small change to the handler signature.
 
-### 6. Four decisions
+### 7. Four decisions
 
 - **Decline wording** — currently `scope.decline` in the knowledge base. Change it to
   whatever tone the committee wants.
@@ -236,6 +293,9 @@ data/mirc-2026.json         the knowledge base — the file you edit
 data/chat-corpus.json       generated; do not edit by hand
 tools/import-program.py     reads the committee's xlsx + speakers markdown
 tools/build-corpus.mjs      the merge step
+tools/eval-retrieval.mjs    retrieval recall, offline
+tools/try-dan.mjs           end-to-end acceptance against Groq or Gemini
+worker/src/retrieve.js      the retrieval layer
 worker/src/index.js         the proxy, the grounded prompt, the scope layers
 worker/wrangler.toml        corpus URL, allowed origins, model ids
 ```

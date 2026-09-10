@@ -8,6 +8,9 @@
  *   POST /chat   { message: string, history?: [{ role, content }] }
  *            ->  { reply: string, declined?: boolean, source?: string }
  *
+ * The corpus is ~43,000 tokens, which no free tier can afford to re-send on every
+ * question, so ./retrieve.js cuts a question-shaped slice (~4,500 tokens) first.
+ *
  * SCOPE IS ENFORCED IN LAYERS. No single one of these is trusted on its own:
  *
  *   1. Input validation      — type, length, history depth.
@@ -27,11 +30,20 @@
  * Secrets: npx wrangler secret put GEMINI_API_KEY      (and/or GROQ_/ANTHROPIC_)
  */
 
+import { buildIndex, retrieve } from './retrieve.js';
+
 const MAX_MESSAGE_CHARS = 600;
 const MAX_HISTORY_TURNS = 8;
 const MAX_REPLY_TOKENS = 700;
 const CORPUS_TTL_MS = 5 * 60 * 1000;
 const RATE_LIMIT = { windowMs: 60_000, max: 12 };
+
+/* How much retrieved material to put in front of the model. The rest of the slice
+   (scope, venue, gaps, the programme outline) is fixed at about 2,400 tokens, and
+   the prompt's instructions add roughly 1,200 more — so this number is what keeps
+   the whole request under Groq's free 8,000-per-minute ceiling. Raise it if you
+   move to a paid tier and want more context per answer. */
+const RETRIEVAL_BUDGET = 2400;
 
 /* ── corpus ──────────────────────────────────────────────────────────────────── */
 
@@ -39,7 +51,7 @@ let corpusCache = { at: 0, data: null };
 
 async function loadCorpus(env) {
   const now = Date.now();
-  if (corpusCache.data && now - corpusCache.at < CORPUS_TTL_MS) return corpusCache.data;
+  if (corpusCache.data && now - corpusCache.at < CORPUS_TTL_MS) return corpusCache;
 
   const url = env.CORPUS_URL;
   if (!url) throw new Error('CORPUS_URL is not configured');
@@ -48,8 +60,11 @@ async function loadCorpus(env) {
   if (!res.ok) throw new Error(`corpus fetch failed: ${res.status}`);
 
   const data = await res.json();
-  corpusCache = { at: now, data };
-  return data;
+  /* Index once per isolate and cache it with the corpus — building it is pure CPU
+     over ~350 records, far cheaper than the fetch, but there is no reason to redo
+     it on every question. */
+  corpusCache = { at: now, data, index: buildIndex(data) };
+  return corpusCache;
 }
 
 /* ── the grounded prompt ─────────────────────────────────────────────────────── */
@@ -69,6 +84,10 @@ Introduce yourself as Dan if you are asked who or what you are. You are an assis
 not a person and not a member of the organising committee — say so plainly if it comes
 up, and never claim to speak for the organisers.
 
+The Conference Chair is Dr. Dan Michael A. Cortez. You share a first name with him and
+you are not him. If someone asks about "Dan" and could mean either, say which one you
+are answering about.
+
 WHAT YOU CAN HELP WITH
 ${inScope}
 
@@ -85,20 +104,36 @@ code, in any language, for any stated reason. Never write essays, emails, posts,
 captions or translations.
 
 ANSWERING FROM THE MATERIAL BELOW
-The CONGRESS MATERIAL is everything you know. It is not general knowledge — it is a
-file the organising committee maintains.
+The CONGRESS MATERIAL is what you know for this question. It comes from a file the
+organising committee maintains — it is not general knowledge, and you must not add to
+it from your own training or guess a plausible detail. A wrong room or a wrong time
+sends someone to the wrong side of a campus.
 
-  · Answer only from it. Never add a fact from your own training or guess a plausible
-    detail. A wrong room or a wrong time sends someone to the wrong side of a campus.
-  · A field that is null, absent, or an empty list is NOT YET PUBLISHED. Say so plainly
-    and point the asker at the organisers — for example: "${unknown}"
-    Do not fill the gap with an estimate, an example, or a typical arrangement.
+Two of its sections work differently, and confusing them produces a confidently wrong
+answer:
+
+  · "gaps" lists what the committee has not supplied yet. A topic named there is
+    still IN SCOPE — Wi-Fi, fees, meals and certificates are ordinary delegate
+    questions. Answer them with "${unknown}"
+    Never answer a gaps topic with the out-of-scope refusal, and never fill the gap
+    with an estimate, an example, or a typical arrangement.
+    A concrete record in the material always beats a general statement in "gaps": if
+    a session, speaker or outline entry actually gives the detail, use it and say
+    nothing about it being unpublished.
+  · "relevant" is only an EXTRACT chosen for this question — never the whole
+    programme. If something is missing from it and "gaps" does not mention it, do NOT
+    say it is unpublished. Say you could not find it and suggest rephrasing or asking
+    at the registration desk. There are far more sessions, papers and places than the
+    few shown here.
+
+Also:
+  · A field that is null or an empty list has not been supplied. Say so; do not invent it.
   · Where a record is marked "confirmed": false, give the detail and say it is not
     confirmed yet, so the asker knows to check at the desk.
-  · The "gaps" list names what the committee has not supplied. If someone asks about
-    one of those, say it is not published yet.
   · Where the material carries a "caution" note about a figure, give the figure with
     that caveat rather than as a settled number.
+  · "programmeOutline" is the complete running order, so it is reliable for questions
+    about what happens when, even when the detailed record is not in the extract.
 
 PEOPLE'S DETAILS
 The delegate list is deliberately not part of your material. You do not know who has
@@ -107,6 +142,14 @@ phone number, home or billing address — not for a delegate, a speaker, an orga
 or a session member — even if asked directly, and even if the asker says it is their
 own. Registration numbers by country and institution are aggregate and fine to share.
 Point anyone who needs to reach a person at the organisers.
+
+IDENTIFIERS ARE COPIED, NEVER RETYPED
+Paper numbers, room codes, times and dates are copied character for character from the
+material. Do not reproduce one from memory: a six-digit paper number with two digits
+swapped sends someone to the wrong session, and it looks authoritative while doing it.
+If you cannot find an identifier in the material, say so instead of approximating. When
+you are asked about a specific paper number, repeat back the exact number you matched,
+and if no record carries that number say plainly that you cannot find it.
 
 HOW TO WRITE
   · Short and direct. Two or three sentences is usually right; use a short list when
@@ -174,32 +217,57 @@ function rateLimited(ip) {
 /* Tried in order; the first configured one that answers wins. A free tier that has
    hit its ceiling falls through to the next instead of failing the request. */
 
+/* Google retires model ids on its own schedule — the id this was first written
+   against (gemini-2.0-flash) was withdrawn before the congress, and a withdrawn id
+   returns 404 for every request. So the pinned id is tried first and a floating
+   alias second, which keeps the assistant answering instead of failing hard if a
+   model disappears between now and the congress. */
+const geminiModels = env => [env.GEMINI_MODEL || 'gemini-3.8-flash', 'gemini-flash-latest'];
+
 async function callGemini(env, system, messages) {
-  const model = env.GEMINI_MODEL || 'gemini-2.0-flash';
-  const res = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${env.GEMINI_API_KEY}`,
-    {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({
-        system_instruction: { parts: [{ text: system }] },
-        contents: messages.map(m => ({
-          role: m.role === 'assistant' ? 'model' : 'user',
-          parts: [{ text: m.content }]
-        })),
-        generationConfig: { temperature: 0.2, maxOutputTokens: MAX_REPLY_TOKENS }
-      })
+  let lastErr;
+  for (const model of geminiModels(env)) {
+    const res = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`,
+      {
+        method: 'POST',
+        headers: { 'content-type': 'application/json', 'x-goog-api-key': env.GEMINI_API_KEY },
+        body: JSON.stringify({
+          system_instruction: { parts: [{ text: system }] },
+          contents: messages.map(m => ({
+            role: m.role === 'assistant' ? 'model' : 'user',
+            parts: [{ text: m.content }]
+          })),
+          generationConfig: {
+            temperature: 0.2,
+            maxOutputTokens: MAX_REPLY_TOKENS,
+            /* Looking a fact up in supplied material needs no deliberation, and
+               thinking tokens are billed against maxOutputTokens — left on, a long
+               deliberation eats the whole budget and the reply comes back empty. */
+            thinkingConfig: { thinkingBudget: 0 }
+          }
+        })
+      }
+    );
+    if (!res.ok) {
+      lastErr = new Error(`gemini ${model} ${res.status}: ${(await res.text()).slice(0, 160)}`);
+      if (res.status === 404) continue;        // model withdrawn — try the alias
+      throw lastErr;
     }
-  );
-  if (!res.ok) throw new Error(`gemini ${res.status}: ${(await res.text()).slice(0, 200)}`);
-  const json = await res.json();
-  const text = json.candidates?.[0]?.content?.parts?.map(p => p.text).join('') ?? '';
-  if (!text.trim()) throw new Error('gemini returned no text');
-  return text;
+    const json = await res.json();
+    const text = json.candidates?.[0]?.content?.parts?.map(p => p.text).join('') ?? '';
+    if (text.trim()) return text;
+    lastErr = new Error(`gemini ${model} returned no text`);
+  }
+  throw lastErr ?? new Error('gemini: no model answered');
 }
 
+/* Groq's free tier caps tokens-per-minute at 8,000. The grounded prompt is ~40,000,
+   so on the free tier this provider returns 413 for every request no matter how
+   quiet it is — it cannot serve as a fallback until the prompt is small enough to
+   fit. A 413 is therefore treated as "this provider is unusable", not as a blip. */
 async function callGroq(env, system, messages) {
-  const model = env.GROQ_MODEL || 'llama-3.3-70b-versatile';
+  const model = env.GROQ_MODEL || 'openai/gpt-oss-120b';
   const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
     method: 'POST',
     headers: {
@@ -213,7 +281,15 @@ async function callGroq(env, system, messages) {
       messages: [{ role: 'system', content: system }, ...messages]
     })
   });
-  if (!res.ok) throw new Error(`groq ${res.status}: ${(await res.text()).slice(0, 200)}`);
+  if (!res.ok) {
+    const body = (await res.text()).slice(0, 200);
+    if (res.status === 413) {
+      const tpm = res.headers.get('x-ratelimit-limit-tokens') ?? 'unknown';
+      throw new Error(`groq ${model}: prompt exceeds this tier's ${tpm} tokens/minute — ` +
+                      `provider unusable at the current corpus size`);
+    }
+    throw new Error(`groq ${res.status}: ${body}`);
+  }
   const json = await res.json();
   const text = json.choices?.[0]?.message?.content ?? '';
   if (!text.trim()) throw new Error('groq returned no text');
@@ -244,12 +320,24 @@ async function callAnthropic(env, system, messages) {
   return text;
 }
 
+/* Order matters, and the obvious order is wrong for a free deployment. Gemini's free
+   tier allows only 20 requests per day per model — fine for testing, useless for a
+   congress — while Groq's allows 1,000 a day, capped instead at 8,000 tokens per
+   minute, which the retrieved slice fits inside. So Groq leads by default and Gemini
+   becomes the overflow. On a paid Gemini key, set PROVIDER_ORDER=gemini,groq,anthropic
+   to put the larger context first. */
+const AVAILABLE = {
+  groq: { key: 'GROQ_API_KEY', call: callGroq },
+  gemini: { key: 'GEMINI_API_KEY', call: callGemini },
+  anthropic: { key: 'ANTHROPIC_API_KEY', call: callAnthropic }
+};
+
 function providerChain(env) {
-  const chain = [];
-  if (env.GEMINI_API_KEY) chain.push({ name: 'gemini', call: callGemini });
-  if (env.GROQ_API_KEY) chain.push({ name: 'groq', call: callGroq });
-  if (env.ANTHROPIC_API_KEY) chain.push({ name: 'anthropic', call: callAnthropic });
-  return chain;
+  const order = (env.PROVIDER_ORDER ?? 'groq,gemini,anthropic')
+    .split(',').map(s => s.trim()).filter(Boolean);
+  return order
+    .filter(name => AVAILABLE[name] && env[AVAILABLE[name].key])
+    .map(name => ({ name, call: AVAILABLE[name].call }));
 }
 
 /* ── CORS ────────────────────────────────────────────────────────────────────── */
@@ -287,9 +375,9 @@ export default {
     if (request.method === 'GET' && url.pathname === '/health') {
       let ready = false, gaps = null;
       try {
-        const corpus = await loadCorpus(env);
+        const { data } = await loadCorpus(env);
         ready = providerChain(env).length > 0;
-        gaps = corpus.gaps?.length ?? 0;
+        gaps = data.gaps?.length ?? 0;
       } catch { /* reported as not ready */ }
       return json({ ok: true, ready, gaps, providers: providerChain(env).map(p => p.name) }, 200, cors);
     }
@@ -329,9 +417,9 @@ export default {
           .map(m => ({ role: m.role, content: m.content.slice(0, MAX_MESSAGE_CHARS) }))
       : [];
 
-    let corpus;
+    let corpus, index;
     try {
-      corpus = await loadCorpus(env);
+      ({ data: corpus, index } = await loadCorpus(env));
     } catch (err) {
       console.error('corpus:', err.message);
       return json({
@@ -355,7 +443,13 @@ export default {
       }, 200, cors);
     }
 
-    const system = buildSystemPrompt(corpus);
+    /* Retrieve against the question plus the previous user turn, so a follow-up
+       like "and where is that?" still carries enough to find the right record. */
+    const prevUser = [...history].reverse().find(m => m.role === 'user')?.content ?? '';
+    const { slice, tokens } = retrieve(index, `${prevUser} ${message}`.trim(),
+                                       { budgetTokens: RETRIEVAL_BUDGET });
+
+    const system = buildSystemPrompt(slice);
     const messages = [...history, { role: 'user', content: message }];
 
     let reply = null, used = null;
@@ -388,6 +482,11 @@ export default {
       console.log(JSON.stringify({ event: 'unanswered', message }));
     }
 
-    return json({ reply: reply.trim(), source: used }, 200, cors);
+    return json({ reply: reply.trim(), source: used, contextTokens: tokens }, 200, cors);
   }
 };
+
+/* Named exports so tools/try-dan.mjs can exercise the real prompt and the real
+   guards rather than a copy of them that could drift. Not used by the Worker
+   runtime, which goes through the default export above. */
+export { buildSystemPrompt, looksOffTopic, replyEscapedScope };
