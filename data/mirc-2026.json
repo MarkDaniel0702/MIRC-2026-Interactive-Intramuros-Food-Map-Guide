@@ -1,0 +1,2440 @@
+{
+  "_readme": [
+    "MIRC 2026 knowledge base — the ONLY thing the chatbot knows about the congress.",
+    "",
+    "HOW TO FILL THIS IN",
+    "  · null  = not yet supplied. The bot will say the detail is not published yet and",
+    "            point the asker at the organisers. It will NEVER invent a value.",
+    "  · []    = an empty list, treated the same way.",
+    "  · Anything you write here, the bot will state as fact. Only put in what is confirmed.",
+    "  · Add every remaining unknown to the \"gaps\" array so the bot can name what is missing.",
+    "",
+    "AFTER EDITING: run  node tools/build-corpus.mjs",
+    "  That merges this file with the map's own food / sights / hotels / landmark data",
+    "  into data/chat-corpus.json, which is what the chatbot actually reads.",
+    "",
+    "Set meta.contentFrozen to true once the committee has signed the content off."
+  ],
+  "meta": {
+    "id": "mirc-2026",
+    "shortName": "MIRC 2026",
+    "name": "Manila International Research Conference 2026",
+    "edition": null,
+    "theme": "The role of Artificial Intelligence, sustainability and innovation in building resilient, inclusive and future-ready communities",
+    "dates": "27-30 September 2026: a Hospitality and Tourism sub-conference at DLSU-CSB on 27 September, and the main conference at PLM on 29-30 September (Tuesday-Wednesday)",
+    "hostInstitution": "Pamantasan ng Lungsod ng Maynila (PLM)",
+    "city": "Intramuros, Manila, Philippines",
+    "website": "https://mirc2026.sciencesconf.org",
+    "updated": "2026-09-10",
+    "contentFrozen": false,
+    "format": "Hybrid — onsite and online"
+  },
+  "gaps": [
+    "Not yet written up in the speakers document: PLENARY SPEAKER 1 (Dr. Hsiao-Yeh CHU) — bio, abstract; STEA KEYNOTE SPEAKER 5 (Prof. John Kristoffer Q. ANDRES) — bio, abstract; STEA KEYNOTE SPEAKER 6 (Dr. Dexter DELA CRUZ) — bio, abstract; BGL KEYNOTE SPEAKER 1 (Dr. Benjamin Leong Tack Hang) — bio, talk title, abstract; BGL KEYNOTE SPEAKER 3 (Atty. Chad Patrick OSORIO) — bio, talk title, abstract; HS KEYNOTE SPEAKER 3 (Dr. Rayane HEDNA) — bio, abstract; HS KEYNOTE SPEAKER 5 (Dr. Michael Joseph DINO) — bio, abstract. Where 'talk title' is not listed for a speaker, the programme already carries their title and it can be given.",
+    "Keynote speaker not yet named for BGL-5, EASS-6",
+    "Abstracts for the 89 contributed papers — the programme gives the paper number, presenter surname and title only",
+    "Full room name for GA TOP",
+    "Registration fees",
+    "How to register",
+    "On-site registration desk and its hours",
+    "Meals and refreshments",
+    "Wi-Fi access for delegates",
+    "How certificates are issued",
+    "Proceedings and publication plans",
+    "Emergency contacts",
+    "Code of conduct"
+  ],
+  "scope": {
+    "inScope": [
+      "The MIRC 2026 programme: sessions, times, rooms and the running order across both days",
+      "The four tracks — STEA, BGL, HS and EASS — and which sessions belong to each",
+      "Plenary and keynote speakers, their talk titles, bios and abstracts",
+      "Contributed papers: paper number, presenting author and title",
+      "Session members and their assignments, and the guidelines they work to",
+      "The venue and its buildings and rooms on the PLM campus, and how to reach them",
+      "Registration, logistics and congress housekeeping, as far as they are published",
+      "Getting around Intramuros as a delegate: places to eat, heritage sights, places to stay"
+    ],
+    "outOfScope": [
+      "Writing, explaining or debugging code",
+      "Homework, assignments, maths problems and general study help",
+      "General knowledge, current affairs, news and trivia",
+      "Drafting essays, emails, posts or any other writing task",
+      "Translation, summarising or rewriting text the user supplies",
+      "Personal, medical, legal or financial advice",
+      "Anything about Manila beyond Intramuros, or travel unrelated to the congress"
+    ],
+    "decline": "I can only help with MIRC 2026 and getting around Intramuros. Ask me about the programme, a session, the venue, registration, or where to eat nearby.",
+    "unknown": "That is not in the congress material I have. The organisers at the registration desk will be able to tell you.",
+    "suggestions": [
+      "What's on first thing on day one?",
+      "Which room is the STEA track in?",
+      "Who are the plenary speakers?",
+      "When is registration open?",
+      "Where can I eat near the venue?"
+    ]
+  },
+  "event": {
+    "about": "The Manila International Research Conference 2026 (MIRC 2026) is a hybrid international academic conference designed to bring together researchers, academicians, practitioners, policymakers, and students from diverse disciplines. The conference will serve as a platform for the presentation, exchange, and discussion of research addressing the role of Artificial Intelligence (AI), sustainability, and innovation in building resilient, inclusive, and future-ready communities.",
+    "audience": null,
+    "organisers": [
+      {
+        "role": "Conference Chair",
+        "name": "Dr. Dan Michael A. CORTEZ",
+        "affiliation": "Pamantasan ng Lungsod ng Maynila, Philippines"
+      },
+      {
+        "role": "Conference Co-Chair",
+        "name": "Dr. Hernando S. SALAPARE III",
+        "affiliation": "DOST-Balik Scientist, Philippines and France"
+      },
+      {
+        "role": "Conference Vice-Chair",
+        "name": "Ms. Editha S. MEDINA",
+        "affiliation": "Pamantasan ng Lungsod ng Maynila, Philippines"
+      },
+      {
+        "role": "Conference Secretary",
+        "name": "Mr. Neil Marcus T. MANUBAY",
+        "affiliation": "Pamantasan ng Lungsod ng Maynila, Philippines"
+      }
+    ],
+    "contacts": [],
+    "partners": [
+      "De La Salle - College of Saint Benilde",
+      "Sejong University",
+      "NU Fairview",
+      "International Cultural Communication Center Malaysia (ICCCM)",
+      "International Transnational Education Association (ITEA)",
+      "DOST - PCIEERD Balik Scientist Program",
+      "CCSD - SciencesConf (France), which provides the conference website"
+    ],
+    "sponsor": "C&E Group (CE-Logic, Inc.)",
+    "subConference": {
+      "what": "The main conference will be conducted in the Pamantasan ng Lungsod ng Maynila (PLM) on September 29- 30, 2026 at PLM Campus. A Sub-conference on Hospitality and Tourism with the College of Saint Benilde and Sejong University will be hosted at DLSU-CSB on September 27, 2026.",
+      "date": "27 September 2026",
+      "venue": "De La Salle - College of Saint Benilde (DLSU-CSB), Manila",
+      "note": "Its detailed programme is not in the material — the session-by-session workbook covers only the 29-30 September days at PLM."
+    }
+  },
+  "schedule": {
+    "timezone": "Asia/Manila",
+    "source": "Program and Session Members.xlsx / sheet 'Program as of Sept9'",
+    "days": [
+      {
+        "date": "29 September 2026",
+        "weekday": "Tuesday",
+        "items": [
+          {
+            "time": "7:00 - 17:00",
+            "type": "event",
+            "title": "Registration",
+            "venue": "GEE Lobby"
+          },
+          {
+            "time": "8:00 - 8:30",
+            "type": "event",
+            "title": "Opening Ceremony",
+            "venue": "JAA"
+          },
+          {
+            "time": "8:30 - 9:15",
+            "type": "plenary",
+            "title": "AI-Enabled Smart Manufacturing Education: Sustainability, Inclusive Innovation, and Global Talent Development",
+            "venue": "JAA",
+            "number": 1,
+            "speaker": "Dr. Hsiao-Yeh CHU",
+            "affiliation": "Kun Shan University, Taiwan"
+          },
+          {
+            "time": "9:15 - 10:00",
+            "type": "plenary",
+            "title": "Shaping Resilient Institutions: Connecting Knowledge, Technology, and People",
+            "venue": "JAA",
+            "number": 2,
+            "speaker": "Ms. Daniella LAGMAN-EUGENIO",
+            "affiliation": "CE-Logic, Inc., Philippines"
+          },
+          {
+            "time": "10:00 - 10:30",
+            "type": "event",
+            "title": "Group Photo and Coffee Break",
+            "venue": null
+          },
+          {
+            "time": "10:30 - 12:00",
+            "type": "parallel",
+            "sessions": [
+              {
+                "session": "STEA-1",
+                "track": "STEA",
+                "number": 1,
+                "venue": "JAA",
+                "keynote": {
+                  "track": "STEA",
+                  "number": 1,
+                  "speaker": "Dr. Juvy BALBARONA",
+                  "title": "Small scale to large scale: Perspectives on heat transfer enhancement through surface modification"
+                },
+                "papers": [
+                  {
+                    "id": "743419",
+                    "presenter": "Bedis",
+                    "title": "Machine Learning-Based Prediction of Academic and Non-Academic Performance of College Students using Senior High School Academic Track in a Private University"
+                  },
+                  {
+                    "id": "747458",
+                    "presenter": "Merencilla",
+                    "title": "Dengue Outbreak Prediction System Leveraging Mosquito Trap Surveillance, and Lag Random Forest"
+                  },
+                  {
+                    "id": "754940",
+                    "presenter": "Dimafelix",
+                    "title": "An Optimized Hybrid Meta-Ensemble Model Guided by Correlation for URL-Based Phishing Detection"
+                  },
+                  {
+                    "id": "743661",
+                    "presenter": "Balmedina",
+                    "title": "Coconut Fruit Maturity Detection Using Convolutional Neural Network Based on Acoustic Signals"
+                  }
+                ]
+              },
+              {
+                "session": "BGL-1",
+                "track": "BGL",
+                "number": 1,
+                "venue": "GEE KL",
+                "keynote": {
+                  "track": "BGL",
+                  "number": 1,
+                  "speaker": "Dr. Benjamin Leong",
+                  "title": "From Global Collaboration to Sustainable Impact: ITEA's Transnational Education Partnership Framework for SDG-Driven Higher Education and TVET Cooperation"
+                },
+                "papers": [
+                  {
+                    "id": "753369",
+                    "presenter": "Gonzales",
+                    "title": "Click, Conform, Commit: Generational Cohorts, Cultural and Organizational Barriers in BPO Digital HR Adoption in the Philippines"
+                  },
+                  {
+                    "id": "752983",
+                    "presenter": "Zartiga",
+                    "title": "Designing a Human-Centered and Legally Compliant Governance Framework for AI-Enabled Data Analytics: A Qualitative Study on Workplace Accountability, Responsible Innovation, and Regulatory Compliance"
+                  },
+                  {
+                    "id": "753705",
+                    "presenter": "Medija",
+                    "title": "Artificial Intelligence Governance in Southeast Asia: Balancing Innovation, Regulation, and Public Trust"
+                  },
+                  {
+                    "id": "753359",
+                    "presenter": "Carreon",
+                    "title": "System Network and E-Resource Generativity (SYNERGY): A Strategic Framework for Digital Transformation in the Division of Imus City"
+                  }
+                ]
+              },
+              {
+                "session": "HS-1",
+                "track": "HS",
+                "number": 1,
+                "venue": "GK BTB",
+                "keynote": {
+                  "track": "HS",
+                  "number": 1,
+                  "speaker": "Dr. Mark Anthony FRAN",
+                  "title": "From Bench to Better Healthcare: AI, Sustainability & Inclusive Innovation in Filipino Cancer Genomics"
+                },
+                "papers": [
+                  {
+                    "id": "755242",
+                    "presenter": "Restauro",
+                    "title": "Beating The Odds: A Narrative Study on the First-Ever Open-Heart Surgery in Region 12"
+                  },
+                  {
+                    "id": "751165",
+                    "presenter": "Catingco",
+                    "title": "CAIretaker: An AI-Based Fall Detection System for Filipino Elderly Care Facilities Using Computer Vision and IoT Integration."
+                  },
+                  {
+                    "id": "748525",
+                    "presenter": "Aquino",
+                    "title": "Exploring Motivational Drivers and Understanding of Ethical Use of Generative Artificial Intelligence Among Physical Therapy Students in a Local University"
+                  },
+                  {
+                    "id": "745141",
+                    "presenter": "Yee",
+                    "title": "Knowledge, Attitudes, and Perceptions of Registered Medical Technologists on the Adoption of Artificial Intelligence Among University-Affiliated Hospital Clinical Laboratories in Metro Manila"
+                  }
+                ]
+              },
+              {
+                "session": "EASS-1",
+                "track": "EASS",
+                "number": 1,
+                "venue": "GA TOP",
+                "keynote": {
+                  "track": "EASS",
+                  "number": 1,
+                  "speaker": "Dr. Joana JAYA",
+                  "title": "Work-Integrated AI Leadership: Bridging Higher Education and Regional Innovation Through Student-Driven Summit Operations"
+                },
+                "papers": [
+                  {
+                    "id": "752010",
+                    "presenter": "Aquino",
+                    "title": "Baliktanawin ang Balintawak: A Comparative Policy Evaluation of Heritage Conservation in the Balintawak Area and the Escolta-Binondo District amid Urban Transformation"
+                  },
+                  {
+                    "id": "750389",
+                    "presenter": "Carandang",
+                    "title": "Enabling Confident AI Use in Higher Education by Identifying Classroom Conditions that Preserves Learning, Originality, and Academic Integrity"
+                  },
+                  {
+                    "id": "753980",
+                    "presenter": "Mortales",
+                    "title": "Explainable AI for Literacy and Digital Readiness Vulnerability Mapping in the Philippines"
+                  },
+                  {
+                    "id": "745100",
+                    "presenter": "Segundo",
+                    "title": "What is Worth Knowing? A Pinarian Analysis of Statements on the Proposed Reframed General Education Curriculum in Philippine Higher Education"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "time": "12:00 - 13:00",
+            "type": "event",
+            "title": "Lunch Break",
+            "venue": null
+          },
+          {
+            "time": "13:00 - 13:45",
+            "type": "plenary",
+            "title": "A Double-Edged Transformation: The Paradox of AI and Sustainability in / Education",
+            "venue": "JAA",
+            "number": 3,
+            "speaker": "Prof. Dr. Ricardo BAGARINAO",
+            "affiliation": "University of the Philippines Open University, Philippines"
+          },
+          {
+            "time": "13:45 - 15:00",
+            "type": "parallel",
+            "sessions": [
+              {
+                "session": "STEA-2",
+                "track": "STEA",
+                "number": 2,
+                "venue": "JAA",
+                "keynote": {
+                  "track": "STEA",
+                  "number": 2,
+                  "speaker": "Dr. Jared Aaron R. CRUZ",
+                  "title": "Are We (Still) Human? Or Are We Dancers (to the Beat of AI)?"
+                },
+                "papers": [
+                  {
+                    "id": "746570",
+                    "presenter": "Del Mar",
+                    "title": "Machine Learning-Based Prediction of Academic and Non-Academic Performance of College Students using Senior High School Academic Track in a Private University"
+                  },
+                  {
+                    "id": "747601",
+                    "presenter": "Pagsuguiron",
+                    "title": "BaHack: IoT-Based Real-Time Flood Level Detection and Safe Route Navigation System"
+                  },
+                  {
+                    "id": "749144",
+                    "presenter": "Rosos",
+                    "title": "AirHaven: A Smart Solar-Powered Air Quality Monitoring System Enhanced by IoT Technology and AI Predictive Analytics for Ambient Air Assessment"
+                  }
+                ]
+              },
+              {
+                "session": "BGL-2",
+                "track": "BGL",
+                "number": 2,
+                "venue": "GEE KL",
+                "keynote": {
+                  "track": "BGL",
+                  "number": 2,
+                  "speaker": "Dr. Emmanuel P. PAULINO",
+                  "title": "Governing Intelligence: Building Accountable, Sustainable, and Inclusive AI Ecosystems"
+                },
+                "papers": [
+                  {
+                    "id": "754771",
+                    "presenter": "Beronia",
+                    "title": "Leveraging Gcash Behavioral Data and Score as an Alternative Credit Metric for the Unbanked Construction Employees In Norzagaray, Bulacan"
+                  },
+                  {
+                    "id": "753357",
+                    "presenter": "Soquiat",
+                    "title": "FinTech Adoption as Sustainable Finance Infrastructure: Evidence from SMEs in Batangas Province, Philippines"
+                  },
+                  {
+                    "id": "754884",
+                    "presenter": "Resuello",
+                    "title": "The \"Care Penalty\" and Gender Asymmetry in the Philippine Labor Market: A Fairlie Decomposition Analysis of Labor Force Inactivity"
+                  }
+                ]
+              },
+              {
+                "session": "HS-2",
+                "track": "HS",
+                "number": 2,
+                "venue": "GK BTB",
+                "keynote": {
+                  "track": "HS",
+                  "number": 2,
+                  "speaker": "Ms. Mary Stephanie CARRANZA",
+                  "title": "Designing sustainable biomaterials for the future of 3D cell culture and healthcare"
+                },
+                "papers": [
+                  {
+                    "id": "751304",
+                    "presenter": "Lucero",
+                    "title": "Navigating Hilot, Google, and ChatGPT: Healthcare Decision-Making and Health Information Resilience in Rural Cavite"
+                  },
+                  {
+                    "id": "755154",
+                    "presenter": "Aton",
+                    "title": "Voices From The Spectrum: Lived Experiences of Employment Among Autistic Adults"
+                  },
+                  {
+                    "id": "752709",
+                    "presenter": "Pereyra",
+                    "title": "Artificial Intelligence in Client Care: Knowledge and Readiness of Nursing Students in Manila"
+                  }
+                ]
+              },
+              {
+                "session": "EASS-2",
+                "track": "EASS",
+                "number": 2,
+                "venue": "GA TOP",
+                "keynote": {
+                  "track": "EASS",
+                  "number": 2,
+                  "speaker": "Prof. Zarah Dane Dimagmaliw-Tan",
+                  "title": "AIyayay! Opportunities and Pitfalls of AI Use in Language Learning and Teaching"
+                },
+                "papers": [
+                  {
+                    "id": "758886",
+                    "presenter": "Guinto",
+                    "title": "From Traditional Lesson Planning to AI Governance: A Comparative Policy Analysis of DepEd Orders and Its Implications for Preservice Teachers' Field Studies"
+                  },
+                  {
+                    "id": "745235",
+                    "presenter": "Camino",
+                    "title": "Inverting the Digital Migrant: An Autoethnographic Inquiry into a Sustained Human-AI Dialogue-Generated N-Node Network Framework of Instructional Prompt Engineering"
+                  },
+                  {
+                    "id": "743965",
+                    "presenter": "Balazon",
+                    "title": "The Use of Artificial Intelligence in Higher Vocational Colleges in Sichuan, China: A Mixed-Methods Study of Adoption, Utilization, and Policy Implications"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "time": "15:00 - 15:15",
+            "type": "event",
+            "title": "Coffee Break",
+            "venue": null
+          },
+          {
+            "time": "15:15 - 16:15",
+            "type": "parallel",
+            "sessions": [
+              {
+                "session": "STEA-3",
+                "track": "STEA",
+                "number": 3,
+                "venue": "JAA",
+                "keynote": {
+                  "track": "STEA",
+                  "number": 3,
+                  "speaker": "Dr. Magin Benedict FERRER",
+                  "title": "Project Resin Green: Overview of Initiative and Focus on the Increased Efficiency of DUV Photolithography of Chitosan Bioresist with New Water-soluble PAGs"
+                },
+                "papers": [
+                  {
+                    "id": "752684",
+                    "presenter": "San Pascual",
+                    "title": "Effects of Plasma Priming Treatments on Seed Germination and Early Seedling Growth: An Innovative Approach for Enhancing Crop Establishment"
+                  },
+                  {
+                    "id": "755128",
+                    "presenter": "Cui",
+                    "title": "Design and Development of Air Contactor Geometry for Potassium Hydroxide (KOH)-Based Direct Air Capture Machine for CO2 Sequestration Yielding Liquid Potash as By-Product"
+                  }
+                ]
+              },
+              {
+                "session": "BGL-3",
+                "track": "BGL",
+                "number": 3,
+                "venue": "GEE KL",
+                "keynote": {
+                  "track": "BGL",
+                  "number": 3,
+                  "speaker": "Atty. Chad Patrick OSORIO",
+                  "title": null
+                },
+                "papers": [
+                  {
+                    "id": "750858",
+                    "presenter": "Bin Mohd Rashidi",
+                    "title": "The ASEAN Maritime Silk Road: A Comparative Analysis of Transboundary Digital Trade Regulation and Governance Between Malaysia and the Philippines"
+                  },
+                  {
+                    "id": "754004",
+                    "presenter": "Castillo",
+                    "title": "A Comparative Content Analysis of Facebook Pages of Selected Mayors for Good Governance (M4GG) in the Philippines"
+                  }
+                ]
+              },
+              {
+                "session": "HS-3",
+                "track": "HS",
+                "number": 3,
+                "venue": "GK BTB",
+                "keynote": {
+                  "track": "HS",
+                  "number": 3,
+                  "speaker": "Dr. Rayane HEDNA",
+                  "title": "Programmable Biointerfaces: Opportunities for Sustainable Biomaterial Design"
+                },
+                "papers": [
+                  {
+                    "id": "751325",
+                    "presenter": "Aviguetero",
+                    "title": "Digital Health Technologies and Self-Efficacy of Tuberculosis Patients: A Multi Phase Design"
+                  },
+                  {
+                    "id": "750316",
+                    "presenter": "Pascual",
+                    "title": "Effectiveness of Virtual Reality-Based Intervention in Enhancing Physical Function Among Young-Older Adults in Selected Barangays of La Trinidad, Benguet"
+                  }
+                ]
+              },
+              {
+                "session": "EASS-3",
+                "track": "EASS",
+                "number": 3,
+                "venue": "GA TOP",
+                "keynote": {
+                  "track": "EASS",
+                  "number": 3,
+                  "speaker": "Dr. Stephanie Marie R. COO",
+                  "title": "Reading Agency in Clothing: Sartorial History as a Lens for Resilient, Inclusive Futures"
+                },
+                "papers": [
+                  {
+                    "id": "755062",
+                    "presenter": "Almeda",
+                    "title": "Mga Pamilya ng Mater Dolorosa"
+                  },
+                  {
+                    "id": "755096",
+                    "presenter": "Antonio",
+                    "title": "Project Dapitan Blueprint: Eradicating Theoretical Performativity in Engineering Education Through Rizalian Applied Praxis and Inclusive Community Innovation"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "time": "16:15 - 17:30",
+            "type": "event",
+            "title": "Poster Session 1",
+            "venue": "GEE First Floor"
+          }
+        ]
+      },
+      {
+        "date": "30 September 2026",
+        "weekday": "Wednesday",
+        "items": [
+          {
+            "time": "7:00 - 12:00",
+            "type": "event",
+            "title": "Registration - GEE Lobby",
+            "venue": null
+          },
+          {
+            "time": "8:00 - 8:45",
+            "type": "plenary",
+            "title": "Human-Centred AI in Higher Education: From Intelligent Technology to Ethical, Inclusive and Future-Ready Universities",
+            "venue": "JAA",
+            "number": 4,
+            "speaker": "Dr. Mohd Erfino JOHARI",
+            "affiliation": "Universiti PolyTech Malaysia"
+          },
+          {
+            "time": "8:45 - 10:00",
+            "type": "event",
+            "title": "Poster Session 2",
+            "venue": "GEE First Floor + Coffee Break"
+          },
+          {
+            "time": "10:00 - 12:00",
+            "type": "parallel",
+            "sessions": [
+              {
+                "session": "STEA-4",
+                "track": "STEA",
+                "number": 4,
+                "venue": "JAA",
+                "keynote": {
+                  "track": "STEA",
+                  "number": 4,
+                  "speaker": "Prof. John Kristoffer Q. ANDRES",
+                  "title": "HABing a better future: Development of New tools for Harmful Algal Bloom mitigation"
+                },
+                "papers": [
+                  {
+                    "id": "752345",
+                    "presenter": "Barbosa",
+                    "title": "Triboelectric Rain Energy Harvesting System for Emergency Tent Lighting During Typhoon Evacuations"
+                  },
+                  {
+                    "id": "754317",
+                    "presenter": "Lopez",
+                    "title": "Design and Development of Food Waste Conversion Machine for Sustainable Chicken Pellet Production"
+                  },
+                  {
+                    "id": "755236",
+                    "presenter": "Pabona",
+                    "title": "An Integrated Map-Based Assistive Navigation Device with Sensor-Fused YOLOv11n Obstacle Detection and Semi-Autonomous Steering for the Visually Impaired"
+                  },
+                  {
+                    "id": "747468",
+                    "presenter": "Ginez",
+                    "title": "Microview Ai: Leveraging Large Vision-Language Models in an Augmentative Raspberry Pi-Based System for Automated Urine Microscopy Analysis"
+                  },
+                  {
+                    "id": "752017",
+                    "presenter": "Vitorio",
+                    "title": "Development of a LoRa-Based Diving System with Integrated Real-Time Health Monitoring and Depth Tracking for Small-Scale Shellfish Divers"
+                  }
+                ]
+              },
+              {
+                "session": "BGL-4",
+                "track": "BGL",
+                "number": 4,
+                "venue": "GEE KL",
+                "keynote": {
+                  "track": "BGL",
+                  "number": 4,
+                  "speaker": "Dr. Leo D. Manansala",
+                  "title": "When Everyone has AI, What Becomes the Competitive Advantage? Toward Sustainable and Inclusive AI Innovation"
+                },
+                "papers": [
+                  {
+                    "id": "754773",
+                    "presenter": "Linco",
+                    "title": "Evidence-Based Deep Dive into Filipino Work Styles: Integrating Competency and Personality"
+                  },
+                  {
+                    "id": "755541",
+                    "presenter": "Tolentino",
+                    "title": "Modeling Retirement Perspectives: Work Engagement and Financial Well‑Being in Public Employment"
+                  },
+                  {
+                    "id": "745880",
+                    "presenter": "Simbillo",
+                    "title": "Utilization of Tax Incentives, BIR Service Quality, and Tax Sanctions on MSME Tax Compliance and Business Sustainability in Malolos City During the COVID-19 Pandemic"
+                  },
+                  {
+                    "id": "752984",
+                    "presenter": "Montano",
+                    "title": "Entrepreneurial Inclinations of Maritime Students: Examining Skills, Attitudes, and Aspirations Toward Business Ventures"
+                  },
+                  {
+                    "id": "752065",
+                    "presenter": "Alcarde",
+                    "title": "Sustainable Recycling Network Optimization for Plastic Packaging Waste in the Philippines Using Linear Programming"
+                  }
+                ]
+              },
+              {
+                "session": "Special Workshop",
+                "track": null,
+                "number": null,
+                "venue": "GK BTB",
+                "keynote": {
+                  "track": null,
+                  "number": null,
+                  "speaker": "Dr. Jessie BARROT",
+                  "title": "Prompting with Purpose: The CLARIFIES+ Framework for Responsible AI Use in Research Writing",
+                  "talks": [
+                    {
+                      "speaker": "Dr. Jessie BARROT",
+                      "title": "Prompting with Purpose: The CLARIFIES+ Framework for Responsible AI Use in Research Writing"
+                    },
+                    {
+                      "speaker": "Mr. Joshua BENJAMIN",
+                      "title": "Research Integrity in the Age of AI: Responsible Practices and Smarter Research with ScienceDirect"
+                    }
+                  ]
+                },
+                "papers": []
+              },
+              {
+                "session": "EASS-4",
+                "track": "EASS",
+                "number": 4,
+                "venue": "GA TOP",
+                "keynote": {
+                  "track": "EASS",
+                  "number": 4,
+                  "speaker": "Dr. Io Mones Jularbal",
+                  "title": "Heritage, identity, and Artificial Intelligence: Perspectives and issues from the Cordilleras"
+                },
+                "papers": [
+                  {
+                    "id": "753851",
+                    "presenter": "Goyal",
+                    "title": "The ELEVATE Model: An Evidence-Based Institutional Model for Sustainable E-Waste Management"
+                  },
+                  {
+                    "id": "745356",
+                    "presenter": "Garcia",
+                    "title": "Sludge Content as Digital Pedagogy: A Mixed-Methods Study of Attention Span and Learning Outcomes Among Generation Alpha Students"
+                  },
+                  {
+                    "id": "751046",
+                    "presenter": "Fraginal",
+                    "title": "Institutional Implementation of Language Soft Skills Micro-Credentialing of Wadhwani Skilling at City College of Calamba: Basis for a Strategic Plan on Micro-Credentialing Compliance"
+                  },
+                  {
+                    "id": "752308",
+                    "presenter": "Martin",
+                    "title": "Level off Student Knowledge Retention on the Developed Mobile Application as an Alternative Assessment Tool in Gas Turbine Engine Subject"
+                  },
+                  {
+                    "id": "747871",
+                    "presenter": "Flores",
+                    "title": "The ELEVATE Model: An Evidence-Based Institutional Model for Sustainable E-Waste Management"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "time": "12:00 - 13:00",
+            "type": "event",
+            "title": "Lunch Break",
+            "venue": null
+          },
+          {
+            "time": "13:00 - 14:45",
+            "type": "parallel",
+            "sessions": [
+              {
+                "session": "STEA-5",
+                "track": "STEA",
+                "number": 5,
+                "venue": "JAA",
+                "keynote": {
+                  "track": "STEA",
+                  "number": 5,
+                  "speaker": "Prof. Larry V. PADILLA",
+                  "title": "Beyond the Surface: A Unitive Worldview Approach to Flood System Dynamics in Barangay Landayan, San Pedro City, Laguna"
+                },
+                "papers": [
+                  {
+                    "id": "752140",
+                    "presenter": "Concepcion",
+                    "title": "GaSolve: Development of IoT-Enabled LPG Leak Detection, Valve Auto Shut-Off System, and Weight Monitoring for Household Safety"
+                  },
+                  {
+                    "id": "753790",
+                    "presenter": "Aguila",
+                    "title": "Design and Development of an On-Grid Integrated System with Pulverizing, Gravimetric Dosing, and Solar Thermal-Assisted Drying for Organic Hydroponic Nutrient Production in Alfonso, Cavite"
+                  },
+                  {
+                    "id": "754537",
+                    "presenter": "Jayme",
+                    "title": "AGOS: Automated Graywater Operational System for Real-Time Monitoring and Reuse in Non-Potable Applications"
+                  },
+                  {
+                    "id": "755232",
+                    "presenter": "Sapundzhi",
+                    "title": "Artificial Intelligence in BIM under ISO 19650"
+                  },
+                  {
+                    "id": "753767",
+                    "presenter": "De Mata",
+                    "title": "Computational Study on Air Vorticity Distributions in Kitchen Rooms using k–ε Turbulence Model"
+                  }
+                ]
+              },
+              {
+                "session": "BGL-5",
+                "track": "BGL",
+                "number": 5,
+                "venue": "GEE KL",
+                "keynote": {
+                  "track": "BGL",
+                  "number": 5,
+                  "speaker": null,
+                  "title": null
+                },
+                "papers": [
+                  {
+                    "id": "758620",
+                    "presenter": "Chung",
+                    "title": "Type M Electric Vehicles (EVs) As a Potential Alternative for a Cleaner and Sustainable Urban Transport System in the Philippines"
+                  },
+                  {
+                    "id": "751899",
+                    "presenter": "Sison",
+                    "title": "Electrifying Mobility: Exploring the Electric Vehicle Transition of the Philippine Automotive Industry"
+                  },
+                  {
+                    "id": "744916",
+                    "presenter": "Ambeguia",
+                    "title": "Regulatory Capture and the 69% Premium: Institutional Failure in the Philippine Sugar Industry – Implications for Responsible Governance"
+                  },
+                  {
+                    "id": "752596",
+                    "presenter": "Batute",
+                    "title": "Social Security in the Informal Economy: Barriers to SSS Participation and Retirement Preparedness Among Women in Sari-Sari Store Businesses"
+                  }
+                ]
+              },
+              {
+                "session": "HS-4",
+                "track": "HS",
+                "number": 4,
+                "venue": "GK BTB",
+                "keynote": {
+                  "track": "HS",
+                  "number": 4,
+                  "speaker": "Dr. David Paul RAMOS",
+                  "title": "Simulating the Future: An Outcomes-based and Sustainable Approach to Preparing Future-Ready Nurses"
+                },
+                "papers": [
+                  {
+                    "id": "754781",
+                    "presenter": "Lanete",
+                    "title": "Building Resilient Communities Through Inclusive Health Innovation: Perceived Roles of Physical Therapists in Disaster Risk Reduction and Management"
+                  },
+                  {
+                    "id": "753020",
+                    "presenter": "Alcarde",
+                    "title": "Deep Learning for Early Breast Cancer Detection: A Convolutional Neural Network (CNN) Approach to Benign and Malignant Mammogram Classification"
+                  },
+                  {
+                    "id": "749762",
+                    "presenter": "Macalalad",
+                    "title": "AST/ALT Ratio as a Diagnostic Biomarker for Hepatocellular Carcinoma (HCC) in a Filipino Population and The Potential of AI Integration for Early Diagnosis"
+                  }
+                ]
+              },
+              {
+                "session": "EASS-5",
+                "track": "EASS",
+                "number": 5,
+                "venue": "GA TOP",
+                "keynote": {
+                  "track": "EASS",
+                  "number": 5,
+                  "speaker": "Dr. Feorillo Petronillo DEMETERIO III",
+                  "title": "Beyond Efficiency: Harnessing Generative AI for Research Excellence in Philippine HEIs"
+                },
+                "papers": [
+                  {
+                    "id": "758217",
+                    "presenter": "Clerigo",
+                    "title": "Gender-Inclusive Lessons in Purposive Communication"
+                  },
+                  {
+                    "id": "753815",
+                    "presenter": "Natividad",
+                    "title": "Reimagining Philippine Education for Human Flourishing: Beyond Access and Employability"
+                  },
+                  {
+                    "id": "752249",
+                    "presenter": "Chandra",
+                    "title": "Typologies of Sustainable AI Integration: Profiling Continuous Professional Adoption and Socio-Cultural Adaptability among Prospective Teachers Through the Lens of Industry 4.0"
+                  },
+                  {
+                    "id": "755077",
+                    "presenter": "Saplala",
+                    "title": "Academic Integrity in Generative AI Use among Pre-Service Teachers: A Systematic Review"
+                  },
+                  {
+                    "id": "749146",
+                    "presenter": "Bersoto",
+                    "title": "Navigating the Dual Life: A Mixed Methods Analysis of the Agonies and Triumphs of Working College Students in a State University"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "time": "14:45 - 15:00",
+            "type": "event",
+            "title": "Coffee Break",
+            "venue": null
+          },
+          {
+            "time": "15:00 - 16:00",
+            "type": "parallel",
+            "sessions": [
+              {
+                "session": "STEA-6",
+                "track": "STEA",
+                "number": 6,
+                "venue": "JAA",
+                "keynote": {
+                  "track": "STEA",
+                  "number": 6,
+                  "speaker": "Dr. Dexter DELA CRUZ",
+                  "title": "From coral reproduction to reef recovery: innovative technologies for large-scale coral restoration"
+                },
+                "papers": [
+                  {
+                    "id": "753821",
+                    "presenter": "Antipuesto",
+                    "title": "Design and Simulation of a Small-Scale Fresnel Lens Solar Concentrated Biochar System for Agri-Waste Utilization"
+                  },
+                  {
+                    "id": "751312",
+                    "presenter": "Espinosa",
+                    "title": "Utilizing the Phyphox Application for Replicable Modal Analysis: A Pedestrian Serviceability Assessment of the Baler Zibali Hanging Bridge in a Remote Coastal Zone"
+                  }
+                ]
+              },
+              {
+                "session": "BGL-6",
+                "track": "BGL",
+                "number": 6,
+                "venue": "GEE KL",
+                "keynote": null,
+                "papers": [
+                  {
+                    "id": "752008",
+                    "presenter": "Navarro",
+                    "title": "HYAHUB: An Integrated Water Hyacinth Processing and Livelihood Community for a Centralized Hub Towards Sustainable Tourism"
+                  },
+                  {
+                    "id": "752061",
+                    "presenter": "Relacion",
+                    "title": "Lived Experiences of Filipino Barangay Captains In Disaster Risk Reduction Management: A Phenomenological Study"
+                  },
+                  {
+                    "id": "743429",
+                    "presenter": "Arellano",
+                    "title": "Effects of Land Reclamation on Small-Scale Fisheries in Manila Bay Coastal Communities of Parañaque and Navotas"
+                  }
+                ]
+              },
+              {
+                "session": "HS-5",
+                "track": "HS",
+                "number": 5,
+                "venue": "GK BTB",
+                "keynote": {
+                  "track": "HS",
+                  "number": 5,
+                  "speaker": "Dr. Michael Joseph DINO",
+                  "title": "Hybrid Artificial Intelligence for Resilient and Inclusive Health Communities"
+                },
+                "papers": [
+                  {
+                    "id": "757941",
+                    "presenter": "Doctor",
+                    "title": "Development of a Data-Driven Predictive Framework for Early Heart Disease Detection Using Machine Learning: A Comparative Analysis Across KDD, DDDM, Health Informatics, and Statistical Learning Theory Frameworks"
+                  },
+                  {
+                    "id": "752243",
+                    "presenter": "Catalan",
+                    "title": "Experiences and Challenges of PT Interns from a Local University in Transitioning from Classroom to Clinical Environment: A Qualitative Study"
+                  }
+                ]
+              },
+              {
+                "session": "EASS-6",
+                "track": "EASS",
+                "number": 6,
+                "venue": "GA TOP",
+                "keynote": {
+                  "track": "EASS",
+                  "number": 6,
+                  "speaker": null,
+                  "title": null
+                },
+                "papers": [
+                  {
+                    "id": "744871",
+                    "presenter": "Zafra",
+                    "title": "Pagtatandok of the Ilocanos: Sustaining traditional way of treating animal bites in Anao, Tarlac"
+                  },
+                  {
+                    "id": "752987",
+                    "presenter": "Ramos",
+                    "title": "Unveiling the Shadows: Exploring Microaggression Towards People of Diverse Sogiesc in Basc as a Basis For Gender-Responsive Policy"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "time": "16:00 - 17:00",
+            "type": "parallel",
+            "sessions": [
+              {
+                "session": "STEA-7",
+                "track": "STEA",
+                "number": 7,
+                "venue": "JAA",
+                "keynote": {
+                  "track": "STEA",
+                  "number": 7,
+                  "speaker": "Prof. Dr. Aldrin BONTO",
+                  "title": "Exploring Food Structure and Functionalities: Unveiling Insights Through Material Science Perspectives"
+                },
+                "papers": [
+                  {
+                    "id": "752986",
+                    "presenter": "Juanzon",
+                    "title": "Enabling Circular Economy Practices in Sustainable Construction through Digital Technologies: A PRISMA-Based Systematic Literature Review and Conceptual Framework"
+                  },
+                  {
+                    "id": "749424",
+                    "presenter": "Tiansay",
+                    "title": "Development and Simulation-Based Validation of a Digital Twin-Driven Predictive Maintenance Framework for Electric Ground Support Equipment (e-GSE) in Airports"
+                  }
+                ]
+              },
+              {
+                "session": "EASS-7",
+                "track": "EASS",
+                "number": 7,
+                "venue": "GEE KL",
+                "keynote": null,
+                "papers": [
+                  {
+                    "id": "757522",
+                    "presenter": "Certeza",
+                    "title": "Citizenship Education in the Age of Inclusive AI: Integrating Sociological Frameworks for Educational and Social Transformation"
+                  },
+                  {
+                    "id": "754252",
+                    "presenter": "Paulin",
+                    "title": "Temporal Analysis on Verb Tense, Narrative Viewpoint, Immediacy Perception, and Character Identification in Literary Reading"
+                  },
+                  {
+                    "id": "743424",
+                    "presenter": "Cadion",
+                    "title": "Adaptability or Inadequacy: Lived Experiences of Out-of-Field English Teachers in Philippine Public High Schools"
+                  },
+                  {
+                    "id": "743441",
+                    "presenter": "Manila",
+                    "title": "Hybrid Automated and Written Corrective Feedback (HAWCF) on the Argumentative Synthesis Writing of Grade 11 ESL Learners"
+                  }
+                ]
+              },
+              {
+                "session": "HS-6",
+                "track": "HS",
+                "number": 6,
+                "venue": "GK BTB",
+                "keynote": {
+                  "track": "HS",
+                  "number": 6,
+                  "speaker": "Dr. Kuo-Sheng CHENG",
+                  "title": "The Characterization of Nasal Pressure for Obstructive Sleep Apnea in Treatment Response Analysis Using Machine Learning"
+                },
+                "papers": [
+                  {
+                    "id": "752534",
+                    "presenter": "Martinez",
+                    "title": "Demographic Profiles as Determinants of Self Efficacy and Self Management Behaviors of Diabetic Patients"
+                  },
+                  {
+                    "id": "755287",
+                    "presenter": "Mercado",
+                    "title": "Patient's profile Satisfaction and Experience with Diabetes Self Management support System (PSE-DMSS)"
+                  }
+                ]
+              },
+              {
+                "session": "EASS-8",
+                "track": "EASS",
+                "number": 8,
+                "venue": "GA TOP",
+                "keynote": null,
+                "papers": [
+                  {
+                    "id": "744144",
+                    "presenter": "Mendoza",
+                    "title": "Beyond Borders: Intercultural Teaching Experiences of English Pre-service Teachers in an International Practicum Immersion"
+                  },
+                  {
+                    "id": "753209",
+                    "presenter": "Clores",
+                    "title": "Resilience in Transition: Adversity Quotient and Coping Strategies of First-Year Education Students"
+                  },
+                  {
+                    "id": "745135",
+                    "presenter": "Gamboa",
+                    "title": "Silent Crisis: Work Engagement, Organizational Justice, and Commitment in Philippine Education"
+                  },
+                  {
+                    "id": "754805",
+                    "presenter": "Ancho",
+                    "title": "Faith, Food, Family: Investigating a Filipino Enclave in South Korea"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "time": "17:00 - 18:00",
+            "type": "event",
+            "title": "Closing and Awarding Ceremonies",
+            "venue": "JAA"
+          }
+        ]
+      }
+    ]
+  },
+  "speakers": [
+    {
+      "label": "PLENARY SPEAKER 1",
+      "name": "Dr. Hsiao-Yeh CHU",
+      "kind": "plenary",
+      "track": null,
+      "title": null,
+      "bio": null,
+      "abstract": null,
+      "keywords": null,
+      "stub": true,
+      "affiliation": "Mechanical Engineering Department, Kung Shan University, Taiwan",
+      "titleFromSite": "Shaping Resilient Futures through AI-Enabled Smart Manufacturing Education: Sustainability, Inclusive Innovation, and Global Talent Development",
+      "titleFromProgramme": "AI-Enabled Smart Manufacturing Education: Sustainability, Inclusive Innovation, and Global Talent Development"
+    },
+    {
+      "label": "PLENARY SPEAKER 2",
+      "name": "Dr. Daniella Lagman-Eugenio",
+      "kind": "plenary",
+      "track": null,
+      "title": "Shaping Resilient Institutions: Connecting Knowledge, Technology, and People",
+      "bio": "She is a graduate of Ateneo de Manila University with a degree in BS Management and currently serves as the Head of Product Marketing and Customer Success (PMCS) at CE-Logic, Inc.\n\nShe leads the team responsible for developing product-focused marketing, implementation, training, and customer engagement initiatives for CE-Logic's partner institutions. Through PMCS, she works to bridge the gap between providing access to academic resources and ensuring their meaningful adoption—helping institutions maximize their investments in digital solutions and achieve their desired outcomes in teaching, learning, and research.\n\nHer work is particularly relevant as Philippine higher education continues to advance digital transformation, research and innovation, and the development of future-ready learning ecosystems. In this evolving landscape, she advocates for a customer success approach that goes beyond implementation by fostering sustained product adoption, meaningful engagement, and long-term institutional value.\n\nThrough her leadership of PMCS, Daniella works closely with higher education institutions to help ensure that technology and academic resources translate into measurable impact for their faculty, researchers, students, and the broader academic community.",
+      "abstract": "As AI reshapes education and research, institutional resilience depends not only on technology but also on access to trusted knowledge, capable people, and sustainable systems. This session explores how institutions can build an inclusive research and learning ecosystem through digital solutions, quality information resources, capacity-building programs, and strategic partnerships. It will also highlight CE-Logic's role in connecting institutions with solutions and support that advance their academic, research, and innovation goals.",
+      "keywords": null,
+      "stub": false
+    },
+    {
+      "label": "PLENARY SPEAKER 3",
+      "name": "Dr. Ricardo BAGARINAO",
+      "kind": "plenary",
+      "track": null,
+      "title": "A Double-Edged Transformation: The Paradox of AI and Sustainability in Education",
+      "bio": "He has built a career that brings together teaching, academic leadership, environmental research, and the evolving field of open and digital learning. He joined the University of the Philippines Open University (UPOU) as a full-time faculty member in 2006, where he taught biology and related courses in the Faculty of Education and the Faculty of Management and Development Studies. His years at UPOU have taken him through various academic and administrative roles. He served as Program Chair of the PhD in Education, University Registrar, Dean of the Faculty of Education, and Director of the Center for Open and Digital Teaching and Learning. He currently serves as Assistant to the Chancellor for Sustainability and the Program Chair of the Doctor in Sustainability. His research interests reflect a continuing concern for the relationship between people, places, and the environment. These include landscape ecology, land use and land cover change, environmental management, disaster preparedness and risk reduction, and spatial analysis using geographic information systems. His work in open and distance education has likewise expanded his research into e-learning and open learning. He has published in peer-reviewed and indexed national and international journals and contributed chapters to books published locally and internationally. Behind these credentials is an academic journey that has moved across disciplines and institutions—from biology and environmental research to education, digital learning, and sustainability.",
+      "abstract": "Education shapes sustainability direction while artificial intelligence (AI) rapidly transforms education and re-shapes knowledge creation, access, sharing, and application. Though AI offers new opportunities for more inclusive and sustainable education, it also operates with growing concerns about energy and resource consumption, environmental impacts, privacy, unequal access, and social inequality. The paper examines this double-edged transformation, challenging the assumption that technological innovation is always progressive or sustainable. It also explores how educators and institutions can navigate the tensions between innovation and responsibility, efficiency and ecological cost, personalization and privacy, access and inequality, and technological capability and human judgment. More importantly, it positions education not simply as a user of AI, but as a force that can shape how societies understand, govern, and use AI. The paper concludes that sustainable use of AI in education must go beyond technological adoption. It requires critical AI literacy, ethical responsibility, ecological awareness, and informed human judgment to ensure that AI contributes to more inclusive, responsible, and sustainable futures.",
+      "keywords": [
+        "artificial intelligence",
+        "sustainable futures",
+        "inclusive education",
+        "transformation"
+      ],
+      "stub": false
+    },
+    {
+      "label": "PLENARY SPEAKER 4",
+      "name": "Dr. Mohd Erfino JOHARI",
+      "kind": "plenary",
+      "track": null,
+      "title": "Human-Centred AI in Higher Education: From Intelligent Technology to Ethical, Inclusive and Future-Ready Universities",
+      "bio": "Dr. Mohd Erfino Johari is a Malaysian academic leader with over 30 years of experience in higher education governance, international academic diplomacy, public service, and corporate leadership. He currently serves as Deputy Vice-Chancellor (Academic and Internationalisation) at Universiti Poly-Tech Malaysia (UPTM), where he leads academic transformation, global partnerships, dual-degree initiatives and institutional internationalisation strategies. He previously served as Director of Industrial Linkages and Academic Internationalisation (ILAI) and contributes actively to university governance through Senate committees and scholarly editorial boards.\n\nHis career spans significant roles within the Malaysian Ministry of Education and the Ministry of Higher Education, including service as Education Attaché for Malaysia in the United Kingdom and Ireland and later as Director & Counsellor (Education) at the Malaysian High Commission in New Zealand, advancing bilateral academic cooperation and cross-border education initiatives. He also held senior corporate leadership roles as Chief Corporate Officer and Acting Chief Marketing Officer, contributing expertise in strategic governance, institutional branding and organisational performance.\n\nInternationally engaged, he serves as Visiting Professor/Lecturer at Universidad De Ixtlahuaca Mexico, Universitas PGRI Indonesia, Universitas Nahdlatul Ulama Indonesia and Universitas Ahmad Dahlan Indonesia. Appointed as International Research Fellow at Shinawatra International University Thailand and the International Cultural Communication Center Malaysia (ICCCM). He was invited as Keynote Speaker at SCTE2025 in Cairo, Egypt. He currently holds ten research grants including the FRGS (MOHE) and published more than 20 indexed journal articles for the last 3 years across Scopus, Web of Science, ERA, and MyCite. His research has earned Best Paper Awards at ICAR2023 and ICAR2025, as well as the Best Presenter Award at ICAR2025. He holds a PhD from UPSI in Education, a Master's degree from OUM, and a Bachelor's degree from University of Jordan, with additional qualifications in education, management and counselling. His research focuses on Geo-Islamica education, Shariah-compliant governance, higher education policy, internationalisation strategy and nation-building. Guided by principles of integrity, inclusivity, and service, he continues to advance globally connected universities and future-ready graduates through scholarship, diplomacy, and strategic academic leadership.",
+      "abstract": "As Artificial Intelligence (AI) rapidly redefines the global educational landscape, higher education institutions stand at a critical crossroads. The mandate facing academic leaders is no longer merely adopting intelligent technologies, but strategically steering them to serve human flourishing, educational equity and institutional resilience. This keynote outlines a comprehensive framework for embedding Human-Centred AI (HCAI) across university ecosystems by integrating the universal ethical principles of Maqasid Shariah (the higher objectives of Islamic law). By translating these profound objectives, the preservation of values, human dignity, intellect, future generations and equitable resources, into a modern techno-academic context, the presentation offers a robust philosophical and practical model for AI governance. Drawing from strategic initiatives at Universiti Poly-Tech Malaysia (UPTM), the session addresses five interconnected pillars: ethical governance, authentic assessment, inclusive pedagogy, responsible innovation and sustainable institutional transformation. Ultimately, this presentation advocates for a balanced academic ecosystem where intelligent technology and human wisdom co-exist to prepare ethical leaders for an automated world.",
+      "keywords": [
+        "Human-Centred AI",
+        "Higher Education Leadership",
+        "Maqasid Shariah",
+        "Ethical Governance",
+        "Inclusive Pedagogy",
+        "Academic Integrity"
+      ],
+      "stub": false,
+      "affiliation": "Universiti PolyTech Malaysia, Malaysia"
+    },
+    {
+      "label": "STEA KEYNOTE SPEAKER 1",
+      "name": "Dr. Juvy BALBARONA",
+      "kind": "keynote",
+      "track": "STEA",
+      "title": "Small scale to large scale: Perspectives on heat transfer enhancement through surface modification",
+      "bio": "Dr. Juvy A. Balbarona is a professor and former Chairman of the Department of Mechanical Engineering at the University of the Philippines Diliman. She completed her B.S. and M.S. degrees in Mechanical Engineering and her Ph.D. in Energy Engineering at UP Diliman, later serving as the College of Engineering's Associate Dean for Student Affairs.\n\nShe specializes in thermal systems modelling, surface modification for heat transfer enhancement, and energy modeling. Her current research focuses on engineering metal surfaces to enhance pool boiling, application of nature inspired texture for improve water harvesting and dehumidification, and oscillating heat pipes. Currently, she is the head of the Nanomaterials and Heat Transfer Laboratory at the ME Department in UP Diliman.",
+      "abstract": null,
+      "keywords": null,
+      "stub": false,
+      "affiliation": "University of the Philippines Diliman, Philippines"
+    },
+    {
+      "label": "STEA KEYNOTE SPEAKER 2",
+      "name": "Dr. Jared Aaron R. CRUZ",
+      "kind": "keynote",
+      "track": "STEA",
+      "title": "Are We (Still) Human? Or Are We Dancers (to the Beat of AI)?",
+      "bio": "Dr. Jared Aaron R. Cruz is an architect by profession, a project manager by specialization, and an educator by vocation. A full-time faculty member for 14 years at the Pamantasan ng Lungsod ng Maynila, he concurrently serves as an Assistant Professor and Dean of its College of Architecture and Sustainable Built Environments. A Doctor of Philosophy in the Designed and Built Environment from the University of the Philippines Diliman College of Architecture and a Certified BERDE Professional for Districts, he has research interests in sustainability, resilience, architectural history, and built heritage conservation. Prior to his tenure in the academe, he engaged in residential and commercial design and construction consultancy services after passing and ranking 4th in the June 2010 Architect's Licensure Exam.",
+      "abstract": null,
+      "keywords": null,
+      "stub": false,
+      "affiliation": "Pamantasan ng Lungsod ng Maynila and University of the Philippines Diliman, Philippines"
+    },
+    {
+      "label": "STEA KEYNOTE SPEAKER 3",
+      "name": "Dr. Magin Benedict FERRER",
+      "kind": "keynote",
+      "track": "STEA",
+      "title": "Project Resin Green: Overview of Initiative and Focus on the Increased Efficiency of DUV Photolithography of Chitosan Bioresist with New Water-soluble PAGs",
+      "bio": "Magin Benedict F. Ferrer is currently a postdoctoral researcher at the Institut de Science de Matériaux de Mulhouse (IS2M) in France. His research interests include photochemistry, radiation detection and photolithography.\n\nAfter obtaining his Bachelor's degrees in Chemistry (2018) and Materials Science and Engineering (2019) at the Ateneo de Manila University, he moved to Europe for his postgraduate studies. Under the SERP+ Erasmus Mundus Program, he obtained Master's degrees in Chemistry from the Paris-Saclay University, France, and in Materials Science and Technology from the University of Genoa, Italy in 2021.\n\nIn 2024, he finished a double-degree PhD in Chemistry under joint supervision from the PPSM laboratory of Paris-Saclay University, and the Photonic and Reactive Molecular Science Laboratory of the Nara Institute of Science and Technology, Japan.",
+      "abstract": "Microchip production constitutes a very important industry; however, current fabrication processes use chemicals that pose health risks and environmental hazards during disposal. The RESIN GREEN Project aims to develop new resist materials and nanometrology methods with the goal of reducing the ecological footprint of digital technology. Bio-sourced polymers have been studied to aid in the transition to eco-friendlier processes. The polysaccharide chitosan has shown promise as a water-soluble photoresist in photolithography at 193 nm (Deep UV), already behaving as a positive tone resist via chain scission of its glycosidic bonds. A commercial photoacid generator (PAG 0) was tested to enhance this effect; however, its sensitivity is still lower than industrial standards. Two new fluorine-free water-soluble PAGs conceptually inspired by commercially available sulfonium salts were synthesized and incorporated in the chitosan resist platform significantly improving the sensitivity of the resulting films in DUV photolithography by reducing the dose-to-clear value and demonstrating the possibility for photomask patterning.",
+      "keywords": null,
+      "stub": false,
+      "affiliation": "Institut de Science des Matériaux de Mulhouse (IS2M), CNRS, Université de Haute-Alsace, France"
+    },
+    {
+      "label": "STEA KEYNOTE SPEAKER 4",
+      "name": "Prof. Larry V. Padilla",
+      "kind": "keynote",
+      "track": "STEA",
+      "title": "Beyond the Surface: A Unitive Worldview Approach to Flood System Dynamics in Barangay Landayan, San Pedro City, Laguna",
+      "bio": "Larry V. Padilla is an Associate Professor of the Biology Department, College of Science, Pamantasan ng Lungsod ng Maynila (PLM). He previously served as the Director of the University Research Center, the Department Chair of the Biology Department and the College Secretary of the College of Science of this university. His research interests span from harmful algal bloom mitigation and ecology, aquatic ecology, environmental assessments and monitoring, natural products, sustainability science to chronobiology of organisms. He obtained his BSc in Biology degree from PLM and his MSc in Marine Science (maj. in Marine Biology) degree from The Marine Science Institute of the University of the Philippines (UP-MSI) in Diliman. He is currently pursuing a Doctorate degree in Sustainability from the University of the Philippines – Open University after taking some course work in PhD in Biology.\n\nLarry is an educator, a marine and environmental scientist, and a researcher. As a researcher, he was able to publish several research works in scientific journals indexed in Web of Science, Scopus, and ASEAN Citation index. He is an associate member of the National Research Council of the Philippines (NRCP) among other professional and technical organizations and was also part of the pioneering batch of the National Academy of Science and Technology (NAST)- Future Science Leaders. He was one of the three recipients of the Most Outstanding Faculty Award during PLM's 50th Golden Anniversary and the Nemenzo Award in one of the National Symposium in Marine Science. Prior to teaching in PLM, he also worked as an Environmental Scientist for AECOM, a multinational consultancy firm, and as a University Research Associate at the Marine Science Institute in UP Diliman. He has also joined oceanographic research cruises in the past that traversed the inner and eastern seas of the Philippines, was involved in several environmental consultancy works, and is also serving as a biology consultant tasked as an item validator and an item writer for national admission examinations.",
+      "abstract": "Carl Addeb1,2, Lounelle Godinez1,3, Larry V. Padilla1,4*, Stephenn Rabano1,5, Christopher Niño Santos1,3, Roxanne Selmo1,6, Roda Valenzuela1\n\n1University of the Philippines - Open University, Los Baños, Laguna, Philippines\n\n2Polytechnic University of the Philippines - San Pedro Campus, San Pedro, Laguna, Philippines\n\nFlooding in the Philippines is a systemic and persistent problem affecting communities. One area consistently experiencing its devastating impacts is Barangay Landayan, San Pedro City in Laguna, a lakeshore community. It has been reported that flood waters in several areas have not subsided for several months. The root cause/s of this wicked problem has not been definitively determined, prompting ineffective actions and measures to address the issue. This study sought to determine the causes of flooding in the area to identify potential solutions and adaptations using the Unitive Worldview Framework. Geospatial analyses of selected historical maps and images to trace changes in green spaces, ecosystems, land area, and waterways, as supported by secondary data, were performed using QGIS software. Two focused discussions (FGD) were also conducted to obtain crucial insights from key informants. Findings revealed that flooding may be attributed to encroachment of waters caused by lakeshore subsidence, wetland conversion to built-up areas, loss of green ecosystem, and obstruction of waterways. Moreover, FGDs revealed anthropocentric causes of flooding clustered into three themes: problematic multi-partite planning and execution, questionable strategic disaster mitigation investments, and failed urban resilience. This study revealed that flooding in Barangay Landayan is multi-causal and a complex problem that requires appropriate and holistic interventions, mitigation measures, and adaptations by the stakeholders, with some detailed in this paper.",
+      "keywords": null,
+      "stub": false,
+      "affiliation": "University of the Philippines Open University and Pamantasan ng Lungsod ng Maynila, Philippines"
+    },
+    {
+      "label": "STEA KEYNOTE SPEAKER 5",
+      "name": "Prof. John Kristoffer Q. ANDRES",
+      "kind": "keynote",
+      "track": "STEA",
+      "title": "HABing a better future: Development of New tools for Harmful Algal Bloom mitigation",
+      "bio": null,
+      "abstract": null,
+      "keywords": null,
+      "stub": true,
+      "affiliation": "University of Central Florida, U.S.A."
+    },
+    {
+      "label": "STEA KEYNOTE SPEAKER 6",
+      "name": "Dr. Dexter DELA CRUZ",
+      "kind": "keynote",
+      "track": "STEA",
+      "title": "From coral reproduction to reef recovery: innovative technologies for large-scale coral restoration",
+      "bio": null,
+      "abstract": null,
+      "keywords": null,
+      "stub": true,
+      "affiliation": "Faculty of Science and Engineering Southern Cross University, Australia"
+    },
+    {
+      "label": "STEA KEYNOTE SPEAKER 7",
+      "name": "Dr. Aldrin BONTO",
+      "kind": "keynote",
+      "track": "STEA",
+      "title": "Exploring Food Structure and Functionalities: Unveiling Insights Through Material Science Perspectives",
+      "bio": null,
+      "abstract": "Food matrices are multiscale, heterogeneous materials whose physicochemical and functional properties emerge from complex interactions among biopolymers, water, micronutrients, and processing-induced structural transformations. This presentation examines food systems through a material science framework, focusing on structure–property–function relationships across molecular, microstructural, and macroscopic scales. Using cereal grains, starch-rich matrices, plant-derived flours, and polysaccharide-based materials as representative systems, the effects of emerging and conventional processing strategies, including ultrasonication, atmospheric cold plasma, germination, and fortification, on material organization and functionality are discussed. Particular attention is given to changes in surface characteristics, crystallinity, molecular interactions, thermal transitions, rheological behavior, hydration, texture, and nutrient accessibility. Complementary characterization using Fourier-transform infrared spectroscopy, X-ray diffraction, microscopy, differential scanning calorimetry, thermogravimetric analysis, particle and surface characterization, and multivariate chemometric approaches enables mechanistic interpretation of processing-induced transformations. The discussion further extends material science concepts toward engineered starch-based systems, highlighting how controlled structural modification can tailor mechanical and functional performance. This materials-driven approach provides a mechanistic platform for linking processing, structure, and functionality, supporting the rational design of next-generation food materials with improved nutritional and sustainability attributes.",
+      "keywords": null,
+      "stub": false
+    },
+    {
+      "label": "BGL KEYNOTE SPEAKER 1",
+      "name": "Dr. Benjamin Leong Tack Hang",
+      "kind": "keynote",
+      "track": "BGL",
+      "title": null,
+      "bio": null,
+      "abstract": null,
+      "keywords": null,
+      "stub": true
+    },
+    {
+      "label": "BGL KEYNOTE SPEAKER 2",
+      "name": "Dr. Emmanuel P. PAULINO",
+      "kind": "keynote",
+      "track": "BGL",
+      "title": "Governing Intelligence: Building Accountable, Sustainable, and Inclusive AI Ecosystems",
+      "bio": "Dr. Emmanuel P. Paulino is a published researcher whose scholarly works have appeared in journals indexed in Scopus and Clarivate Analytics, including publications in Q1–Q3-ranked journals. He has presented research papers at international conferences in Brunei, India, and the United States, demonstrating his commitment to advancing research and fostering international scholarly collaboration.\n\nHe is a recipient of the Best Competitive Paper Award at the Marketing Educators Association Conference in San Diego, California, where his research paper was selected from 94 submissions. He also serves as a peer reviewer for high-impact academic journals published by Emerald Publishing and Taylor & Francis.\n\nCurrently, Dr. Paulino serves as the University Research Planning Officer and a Graduate School faculty member at Pamantasan ng Lungsod ng Maynila. He has also served as faculty in research methods, statistics, and business analytics at Ateneo de Manila University, De La Salle University–Dasmariñas, and San Beda College Alabang.\n\nWith extensive experience in research and higher education, Dr. Paulino actively contributes to research capacity building, scholarly publication, and the promotion of academic excellence in higher education.",
+      "abstract": null,
+      "keywords": null,
+      "stub": false,
+      "affiliation": "Ateneo de Manila University, Graduate School of Business, Philippines"
+    },
+    {
+      "label": "BGL KEYNOTE SPEAKER 3",
+      "name": "Atty. Chad Patrick OSORIO",
+      "kind": "keynote",
+      "track": "BGL",
+      "title": null,
+      "bio": null,
+      "abstract": null,
+      "keywords": null,
+      "stub": true,
+      "affiliation": "University of the Philippines Los Baños, Philippines; Wageningen University, Netherlands, DOST Balik Scientist 2026"
+    },
+    {
+      "label": "BGL KEYNOTE SPEAKER 3",
+      "name": "Dr. Leo D. Manansala",
+      "kind": "keynote",
+      "track": "BGL",
+      "title": "WHEN EVERYONE HAS AI, WHAT BECOMES THE COMPETITIVE ADVANTAGE?",
+      "bio": "Leo D. Manansala, PhD is a higher-education executive, management scholar, and researcher with more than two decades of experience in academic leadership, teaching, research, and institutional administration. He currently serves as Vice Dean of the College of Professional and Graduate Studies and concurrently leads the School of Governance, Public Service, and Corporate Leadership at De La Salle University–Dasmariñas, where he is also a faculty member in Business Management.\n\nDr. Manansala's research interests span strategic management, digital transformation, business analytics, organizational development, human capital, ESG and sustainability, entrepreneurship, consumer behavior, and technology-mediated decision-making. His research has examined digital transformation and organizational innovation, financial and operational performance, human capital, ESG and sustainability, enterprise resilience, and the influence of social media and digital platforms on consumer behavior.\n\nHe serves as Editor-in-Chief of the Lasallian Journal of Business and Tourism and as an Academic Editor for PLOS ONE. He also serves as a peer reviewer for various reputable international journals, in addition to his work as a research mentor, graduate research supervisor, and academic leader.\n\nHis current research agenda increasingly focuses on the intersection of technology, sustainability, and human behavior, including AI-enabled transformation, sustainable consumption, digitalization and cultural tourism, sustainability disclosure, and technology's influence on consumer choices.\n\nThrough his academic, research, and leadership work, Dr. Manansala is particularly interested in one overarching question: How can technological innovation be transformed into sustainable value for organizations, institutions, and communities?",
+      "abstract": "Artificial intelligence is rapidly becoming ubiquitous across organizations, universities, businesses, and communities. As access to generative AI becomes increasingly democratized, a critical strategic question emerges: when everyone has AI, what becomes the competitive advantage?\n\nThis keynote argues that AI itself will not remain the primary source of competitive advantage. Rather, the differentiating factor will be the ability of individuals and organizations to transform access to AI into meaningful, sustainable, and inclusive value. The central proposition is simple: AI is the enabler. Capability is the differentiator. Sustainable value is the test.\n\nDrawing from research on digital transformation, organizational innovation, human capital, ESG, digitalization, technology-mediated consumer behavior, and enterprise resilience, the presentation examines how technological capabilities interact with organizational conditions, institutional environments, human judgment, and societal outcomes. Evidence from research on generative AI productivity further illustrates both the potential of AI to enhance performance and the risks of relying on AI without sufficient human judgment and critical evaluation.\n\nThe keynote proposes an AI Sustainability Test centered on a single question: Does AI strengthen human capability? Does it create sustainable economic value? Does it expand social opportunity? What are its environmental costs? And is it supported by responsible institutional governance?\n\nUltimately, the challenge is no longer simply how to adopt AI, but how to use it wisely. For researchers, educators, business leaders, and policymakers, the imperative is to move beyond asking whether AI works toward asking when it works, for whom, at what cost, and toward what kind of future. The future competitive advantage may therefore belong not to those with the most AI, but to those who can use AI without losing purpose, inclusion, resilience, and humanity.",
+      "keywords": null,
+      "stub": false
+    },
+    {
+      "label": "HS KEYNOTE SPEAKER 1",
+      "name": "Dr. Mark Anthony FRAN",
+      "kind": "keynote",
+      "track": "HS",
+      "title": "From Bench to Better Healthcare: AI, Sustainability & Inclusive",
+      "bio": "Dr. Mark Anthony G. Fran is a Science and Technology Fellow II at the Virology and Vaccine Institute of the Philippines (VIP) under the Industrial Technology Development Institute (ITDI), Department of Science and Technology (DOST). His work supports the development of the country's virology and vaccine research capabilities, with particular involvement in biosafety, biosecurity, research governance, and science policy. He is also a certified biosafety professional of the International Federation of Biosafety Associations (IFBA). He earned his PhD in Biology from the University of Santo Tomas. His doctoral research focused on molecular oncology, particularly the characterization of novel oncogenic mutations associated with young-onset colorectal cancer among Filipino patients. His broader research interests include molecular and cancer biology, natural products, biosafety, biosecurity, and science policy. Prior to joining DOST, Dr. Fran served as a University Research Associate and Laboratory Manager at the National Institute of Molecular Biology and Biotechnology (NIMBB), University of the Philippines Diliman. Dr. Fran also serves as a Board Member of the Philippine Society for Cell Biology (PSCB), an organization in which he has been actively involved since 2009, contributing to the advancement of cell biology research, scientific collaboration, and professional development in the Philippines. Complementing his scientific career, he is currently pursuing a Juris Doctor degree at the Arellano University School of Law, reflecting his growing engagement at the intersection of science, law, and public policy.",
+      "abstract": "S&T Fellows Program Industrial Technology Development Institute (DOST-ITDI) Virology and Vaccine Institute of the Philippines (VIP) Program\n\nAdvances in cancer genomics are transforming our understanding of cancer biology and creating new opportunities for precision medicine. However, the benefits of genomic innovation remain unevenly distributed, particularly in low- and middle-income countries, where limited genomic data, research infrastructure, and access to advanced technologies can hinder translation into clinical practice. In the Philippines, these challenges highlight the need for approaches that are not only scientifically innovative but also sustainable, inclusive, and responsive to local health priorities. This talk explores how cancer genomics can move from laboratory discoveries toward better and more accessible healthcare for Filipinos. Drawing from research on molecular alterations in Filipino cancer patients, particularly those with young-onset colorectal cancer, it highlights the importance of generating local genomic data to better understand cancer within the Philippine population. It also examines how artificial intelligence (AI) can support the analysis of complex genomic and clinical data, facilitate biomarker discovery, and advance precision medicine. Beyond technological innovation, the talk emphasizes the importance of sustainable research infrastructure, responsible data use, local capacity-building, and inclusive innovation to ensure that Filipino patients are adequately represented and can benefit from advances in cancer genomics. Ultimately, integrating science, AI, sustainability, and inclusivity can help bridge the gap between laboratory discoveries and practical, equitable, and locally relevant healthcare solutions.",
+      "keywords": null,
+      "stub": false,
+      "affiliation": "S&T Fellow II Department of Science and Technology (DOST) S&T Fellows Program Industrial Technology Development Institute (DOST-ITDI) Virology and Vaccine Institute of the Philippines (VIP) Program, Philippines"
+    },
+    {
+      "label": "HS KEYNOTE SPEAKER 2",
+      "name": "Ms. Mary Stephanie CARRANZA",
+      "kind": "keynote",
+      "track": "HS",
+      "title": "Designing Sustainable Bioinks: Biomaterials as the Foundation of a Bioprinting Ecosystem",
+      "bio": "Mary Stephanie S. Carranza is Co-Founder and Managing Director of BIOMATS PH, a Philippine biotechnology startup developing bioprinting technologies and biomaterials for biomedical research. She also serves as Head of the Biomedical Research Unit (BRU) at the Clinical and Translational Research Institute of The Medical City – Ortigas, where she leads research programs supporting translational biomedical innovation. Ms. Carranza is currently leading her own DOST project and is a consultant to several government-funded tissue engineering projects. She previously served as Laboratory Manager (University Researcher II) at the Philippine Genome Center's Protein, Proteomics, and Metabolomics Facility, supporting national research initiatives in metabolomics and proteomics.\n\nCarranza has over eight years of research experience in biomaterials, tissue engineering, metabolomics, and translational biomedical research. Her expertise includes biomaterial modification, bioink development, 3D cell culture, and 3D bioprinting for next-generation in vitro models. She also serves as a consultant to several tissue engineering projects, with a particular focus on 3D bioprinting and bio fabrication.\n\nHer honors include the Leaders in Innovation Fellowship of the Royal Academy of Engineering (2026), the Short-Stay Scholar Award from the Japan Student Services Organization (2025), and recognition as a finalist in the 2021 Merck Young Scientist Award in the Philippines.\n\nCarranza holds a B.S. in Biochemistry and an M.S. in Chemistry, specializing in biomaterials, from De La Salle University - Manila. She also pursued graduate training in biomaterials at Osaka University as a Japanese government (MEXT) scholar.",
+      "abstract": "Three-dimensional (3D) bioprinting sits at the intersection of biomaterials, engineering, and biology, offering new opportunities to develop physiologically relevant in vitro models and regenerative tissue technologies. However, the success of a bioprinted construct is not determined by the printer alone. The choice of polymer, method of processing, and design of biomaterials fundamentally influence printability, structural fidelity, cell compatibility, and ultimately the biological function of the printed tissue.\n\nThis talk will explore key considerations in bioink design, from the intrinsic properties of biomaterials and their rheological behavior to crosslinking, degradation, mechanical performance, and interactions with cells. Examples will illustrate how these considerations change depending on the intended application, from scaffold-based tissue regeneration to the development of reproducible in vitro disease and drug-testing models.\n\nBeyond individual bioinks and applications, the discussion will consider sustainability as an ecosystem-level challenge. Developing accessible, adaptable, and locally relevant biomaterials and bioprinting technologies can reduce dependence on imported materials and equipment while enabling researchers to build capabilities suited to regional needs. Establishing shared expertise, characterization infrastructure, standardized approaches, and collaborations across academia, industry, and healthcare can create a more sustainable pathway for bioprinting research and translation.\n\nUltimately, advancing bioprinting in the region requires more than developing better materials or printers, it requires building an ecosystem that allows researchers to move from biomaterial design to functional biological models and, eventually, regenerative applications.",
+      "keywords": null,
+      "stub": false,
+      "affiliation": "De La Salle University and Biomedical Research Unit (BRU), Clinical and Translational Research Institute (CTRI), The Medical City, Philippines"
+    },
+    {
+      "label": "HS KEYNOTE SPEAKER 3",
+      "name": "Dr. Rayane HEDNA",
+      "kind": "keynote",
+      "track": "HS",
+      "title": "Programmable Biointerfaces: Opportunities for Sustainable Biomaterial Design",
+      "bio": null,
+      "abstract": null,
+      "keywords": null,
+      "stub": true,
+      "affiliation": "Institut de Science des Matériaux de Mulhouse (IS2M), CNRS, Université de Haute-Alsace, France"
+    },
+    {
+      "label": "HS KEYNOTE SPEAKER 4",
+      "name": "Dr. David Paul RAMOS",
+      "kind": "keynote",
+      "track": "HS",
+      "title": "Simulating the Future: An Outcomes-based and Sustainable Approach to Preparing Future-Ready Nurses",
+      "bio": "Dr. David Paul R. Ramos is an Associate Professor III and former Dean of the College of Nursing at the Pamantasan ng Lungsod ng Maynila. He holds a Doctor of Philosophy in Nursing Education, a Master's in Nursing Education from the University of the Philippines Manila, and a Master of Arts in Nursing major in Nursing Administration. A registered nurse with clinical experience in perioperative nursing, he has devoted more than two decades to nursing practice, education, research, and academic leadership.\n\nDr. Ramos has authored and co-authored studies on nursing education, academic motivation, organizational commitment, exercise dependence, and data privacy. His scholarly work has been presented at national and international conferences, including the Sigma Nursing International Nursing Research Congress in Seattle, Washington. He is an Associate Member of the National Research Council of the Philippines and previously served as a Board Director of the Philippine Nurses Association–NCR Zone 1 and Vice President of the Sigma Theta Tau International Honor Society of Nursing–Phi Gamma Chapter.\n\nHis professional interests include simulation-based nursing education, perioperative nursing, curriculum development, evidence-based teaching, research, and educational innovation. Through his work, he continues to advocate for transformative learning experiences that prepare future nurses to provide safe, competent, compassionate, and responsive care.",
+      "abstract": "Preparing future-ready nurses requires educational approaches that can address limited clinical placements, resource constraints, and the increasing complexity of healthcare practice. This plenary presentation examines simulation-based nursing education as an outcomes-based, innovative, and sustainable strategy for strengthening clinical readiness and preparing nurses to contribute to resilient and inclusive communities. This presentation describes the integration of a structured, low-fidelity perioperative simulation module into third-year Adult Health Nursing. Guided by Bondy's Clinical Performance Path Model, the module was designed to support students' progression from assisted toward supervised clinical performance. It combined prebriefing, skills stations, role-based operating-room scenarios, structured debriefing, and competency-based evaluation. Learners managed simulated situations involving breaks in sterile technique, incorrect surgical counts, intraoperative bleeding, patient-safety risks, prioritization, and interdisciplinary communication. Pilot qualitative validation based on student narratives indicated that participants exposed to simulation perceived stronger clinical understanding, confidence, procedural skills, communication, teamwork, and ability to connect theory with practice. Narratives from students without simulation exposure reflected greater dependence on lectures, return demonstrations, observation, and clinical-instructor guidance, together with continuing difficulty applying knowledge in realistic situations. These findings support the curricular value of structured simulation while remaining limited to students' reported experiences rather than controlled measures of effectiveness. Such applications must remain ethical, transparent, culturally responsive, and educator-guided. By enabling safe repetition, reducing exclusive dependence on scarce clinical placements, and permitting locally developed, resource-conscious learning experiences, simulation can advance sustainability and educational inclusion.",
+      "keywords": null,
+      "stub": false,
+      "affiliation": "Pamantasan ng Lungsod ng Maynila and University of the Philippines Manila, Philippines"
+    },
+    {
+      "label": "HS KEYNOTE SPEAKER 5",
+      "name": "Dr. Michael Joseph DINO",
+      "kind": "keynote",
+      "track": "HS",
+      "title": "Hybrid Artificial Intelligence for Resilient and Inclusive Health Communities",
+      "bio": null,
+      "abstract": null,
+      "keywords": null,
+      "stub": true,
+      "affiliation": "University of Central Florida (UCF), Orlando, Florida, U.S.A. and Our Lady of Fatima University (OLFU), Philippines"
+    },
+    {
+      "label": "HS KEYNOTE SPEAKER 6",
+      "name": "Dr. Kuo-Sheng CHENG",
+      "kind": "keynote",
+      "track": "HS",
+      "title": "The Characterization of Nasal Pressure for Obstructive Sleep Apnea in Treatment Response Analysis Using Machine Learning",
+      "bio": "Prof. Kuo-Sheng Cheng was born in Taipei, Taiwan. He received his B.Sc. and M.Sc. degrees in Electrical Engineering from National Cheng Kung University (NCKU), Tainan, Taiwan, in 1980 and 1982, respectively. He later earned an M.S. degree in Biomedical Engineering from Rensselaer Polytechnic Institute, Troy, NY, USA, in 1988, and a Ph.D. in Electrical Engineering from NCKU in 1990.\n\nDr. Cheng is currently a Professor in the Department of Biomedical Engineering and an Adjunct Professor in the Institute of Oral Medicine at National Cheng Kung University. He also serves as the Director of the Department of Medical Engineering at National Cheng Kung University Hospital and the Director of the Engineering and Technology Promotion Center, funded by the Ministry of Science and Technology, Taiwan.\n\nHe is a former President of the Taiwan Society of Biomedical Engineering, TAIWAN. He is also a former Chair of the IEEE Tainan Section and currently serves as Chair of the IEEE Engineering in Medicine and Biology Society (EMBS) Tainan Chapter. His research interests include medical image analysis, electrical impedance imaging, and biomedical instrumentation and measurement. Prof. Cheng has authored more than 150 papers in academic journals and conferences and has been invited as a keynote speaker at numerous international conferences.",
+      "abstract": null,
+      "keywords": null,
+      "stub": false,
+      "affiliation": "National Cheng Kung University, Taiwan"
+    },
+    {
+      "label": "EASS KEYNOTE SPEAKER1",
+      "name": "Dr. Joana JAYA",
+      "kind": "keynote",
+      "track": "EASS",
+      "title": "Work-Integrated AI Leadership: Bridging Higher Education and Regional Innovation Through Student-Driven Summit Operations",
+      "bio": "Dr Joana Jaya is a recognized Senior Lecturer, communication scholar and higher education professional with more than 20 years of experience spanning Mass Communication, Public Relations, Strategic Communication, Corporate Communication, Event Management, media, management and international engagement. She holds a PhD in Management from INTI International University, with research focusing on talent, human values, cultural diversity and strategic communication within Malaysia's private higher education sector.\n\nCurrently serving as a Senior Lecturer at INTI International University, Dr Jaya has established herself particularly in the fields of Strategic Communication, Public Relations, Corporate Communication and Events. Her academic and professional interests centre on how communication can support organisations, communities and institutions in managing relationships, reputation, cultural diversity, engagement and change.\n\nThroughout her career, she has contributed extensively to programme leadership, curriculum development, academic quality assurance and internationalisation. She has previously served as Head of Programme for communication and business-related programmes and has played an active role in developing academic collaborations, institutional partnerships and MOUs with universities and organisations across Asia, Europe and the Middle East.\n\nHer teaching portfolio covers Mass Communication, Public Relations, Organisational Communication, Strategic Communication, Media Studies, Corporate Communication and Event Management. Beyond undergraduate teaching, she supervises PhD and MBA candidates and contributes to postgraduate academic development through thesis examination, research supervision and scholarly mentoring. Her research and publications encompass communication, higher education, health communication, sustainability and organisational issues.\n\nDr Jaya maintains a strong connection between academia and professional practice. She has been involved in corporate and public communication initiatives, major events, public awareness campaigns, student development projects and government- and state-related development programmes. Her extensive experience in planning and coordinating events has allowed her to integrate practical industry realities into her teaching and research, particularly in strategic communication, stakeholder engagement, media relations and event communication.\n\nHer professional engagement also extends into the media and creative industries. She has participated in independent film productions, including award-winning short film projects, and has appeared in radio talk shows and other media platforms. These experiences have strengthened her perspective on storytelling, media engagement, public communication and the relationship between academic knowledge and contemporary communication practice.\n\nAs a speaker and moderator, Dr Jaya has participated in academic, professional and industry conferences, forums and public discussions. Her speaking engagements have covered a diverse range of topics including culture and intercultural communication, strategic communication, event management, corporate communication, artificial intelligence, education, development, leadership and the changing communication landscape. Her ability to connect academic perspectives with practical and contemporary issues has enabled her to engage audiences across education, industry and community settings.\n\nShe is also an experienced Master of Ceremony who has hosted academic, corporate, international and high-level institutional events. Her communication style combines academic depth with professional presentation, audience engagement and practical industry understanding.\n\nThrough her work, Dr Jaya continues to advocate for stronger connections between higher education, communication practice, industry collaboration and societal development. Her professional philosophy centers on preparing students not only to understand communication theoretically, but also to apply it confidently and responsibly within real organizational, cultural and increasingly technology-driven environments.",
+      "abstract": "Higher education is increasingly challenged to prepare students for rapidly evolving artificial intelligence environments while ensuring that learning remains practical, ethical, and industry-relevant. Work-integrated learning offers an opportunity to move beyond theoretical AI literacy by involving students directly in authentic operational, governance, and leadership activities. Drawing on the student-driven operational model developed for the Borneo AI Summit 2026, this presentation highlights how university students can contribute meaningfully to live industry and regional innovation ecosystems. Student Virtual Assistants are embedded within functional areas including commercial research, ticketing, public relations and media production, protocol, certification logistics, data management, and structured operational handovers. Through these responsibilities, students gain practical exposure to leadership, communication, teamwork, data privacy, PDPA compliance, responsible AI practices, and cross-border collaboration. The model also demonstrates how higher education institutions can strengthen university-industry partnerships by positioning students as accountable contributors rather than passive observers. By connecting experiential learning with regional priorities such as Inclusive Intelligence and cross-border AI collaboration, the approach supports graduate readiness and ASEAN talent development. A scalable framework is proposed for educators seeking to integrate live industry projects into university learning while strengthening responsible AI leadership and regional innovation capacity.",
+      "keywords": null,
+      "stub": false,
+      "affiliation": "INTI International University, Malaysia"
+    },
+    {
+      "label": "EASS KEYNOTE SPEAKER 2",
+      "name": "Prof. Zarah Dane Dimagmaliw-Tan",
+      "kind": "keynote",
+      "track": "EASS",
+      "title": "AIyayay! Opportunities and Pitfalls of AI Use in Language Learning and Teaching",
+      "bio": "Zarah Dane R. Dimagmaliw-Tan is an Assistant Professor at the University of the Philippines Diliman. Currently on study leave to pursue a doctorate in Language Sciences at the Université de Rouen Normandie, her dissertation aims to study and propose a sustainable training program for DepEd French-language teachers. She holds two master's degrees: one in French Translation from the UP Diliman and one in language didactics from the Université Sorbonne Nouvelle. She is an active member of the Association des professeurs de français aux Philippines where she served as president from 2011-2018 and 2024-2025.",
+      "abstract": "How is Artificial Intelligence transforming foreign language learning and teaching? Before ChatGPT, students were already using AI in the form of machine translation tools like Google Translate to understand or produce a text in the target foreign language that is beyond their current proficiency level. But for this, the student needs to be able to understand or produce a text in another language where the student has a higher proficiency in. Now, with generative AI such as ChatGPT, there is no need even for that. Students can simply transform what they need to accomplish into a prompt that the AI can execute.\n\nYet AI should not be viewed solely as a shortcut or a threat to language learning. When used critically and appropriately, AI can become a powerful tool for learning, teaching, and creating more inclusive and innovative language-learning environments. This raises important questions: Is AI use in language learning sustainable? What does sustainable AI use mean in foreign language learning? How can educators harness AI without undermining the development of genuine linguistic competence, critical thinking, and learner autonomy? And how can AI help transform foreign language learning communities into resilient, inclusive, and future-ready communities?\n\nThis keynote explores these questions by examining the opportunities and challenges presented by AI in foreign language education through personal experiences in the field and by reflecting on how its responsible integration can contribute to more sustainable and innovative approaches to language learning and teaching.",
+      "keywords": null,
+      "stub": false
+    },
+    {
+      "label": "EASS Keynote Speaker 3",
+      "name": "Dr. Stephanie Marie R. COO",
+      "kind": "keynote",
+      "track": "EASS",
+      "title": "Reading Agency in Clothing: Sartorial History as a Lens for Resilient, Inclusive Futures",
+      "bio": "Stephanie Marie R. Coo is an Associate Professor of History at the Ateneo de Manila University (Philippines) and a researcher at CHAM – Centro de Humanidades, Universidade Nova de Lisboa (Portugal). She holds a PhD in History from Université Nice Sophia Antipolis (France) and has held research fellowships at the Universidad de Granada (Spain), NOVA School of Law, Universidade Nova de Lisboa (Portugal) and Ruhr-Universität Bochum (Germany), including a Marie Skłodowska-Curie Postdoctoral Fellowship. She is the award-winning author of Clothing the Colony: Nineteenth-Century Philippine Sartorial Culture, 1820–1896, recipient of the IIAS-ICAS International Book Prize for Best Book in Humanities (Netherlands, 2021), National Book Award and the John C. Kaw Prize for Best Book in History (Philippines, 2022). Her second book, Seams of Sedition: Sartorial Symbols in José Rizal´s Noli Me Tángere (Ateneo de Naga University Press, 2025), expands the study to clothing, literature, and resistance in late colonial Philippines. It was launched internationally at the Leipzig Book Fair 2025, Frankfurt Book Fair - Philippines as Guest of Honor Nation 2025, Berlin Ibero-American Institute (Berlin, 2025), Biblioteca Palácio Galveias (Lisbon, 2025), and at the National Museum of Fine Arts (Manila, 2026). Her work explores the intersections of material culture, dress, gender, and colonial society in the nineteenth-century Philippines and the broader Iberian world.",
+      "abstract": "Drawing on two book-length studies of Philippine sartorial history, Clothing the Colony: Nineteenth-Century Philippine Sartorial Culture, 1820–1896 and Seams of Sedition: Sartorial Symbols in José Rizal's Noli Me Tangere, this keynote examines clothing as an underused archive of human agency, identity, and adaptation, treating dress not as decorative or peripheral but as a primary source through which marginalized groups negotiated power, expressed dignity, and shaped their own narratives within colonial systems and their aftermaths.\n\nOrganized around several guiding questions, this seeks to address how individuals exercise agency within systems of imposed regulation, whether sartorial, colonial, or technological. What can material and literary details reveal about identity formation that formal records omit? How did power, everyday practice, and encoded meaning intersect in the lived experience of colonial subjects, and how might that intersection be traced in other systems of constraint? And, most centrally for this audience, how might historical methods of reading agency, resilience, and adaptation inform the design, evaluation, and study of present-day inclusive systems and emerging technologies? Though these questions are first posed in a nineteenth-century colonial context, they are deliberately framed to travel forward, since any system that regulates behavior through unstated rules, whether a sumptuary ordinance or an algorithm, raises the same basic question of who is served and who must quietly adapt.\n\nTo answer these questions, the study is grounded in a layered theoretical framework spanning power, practice, and meaning. Pierre Bourdieu's theory of cultural and symbolic capital and Michel Foucault's analysis of power and the disciplined body explain how dress functioned as both currency and mechanism of colonial stratification. James C. Scott's concept of everyday resistance and Michel de Certeau's distinction between imposed strategies and improvised tactics inform how small, low-visibility sartorial choices are read as meaningful acts of agency within constraint. Marcel Mauss's theory of gift and reciprocal exchange and Daniel Miller's work in material culture studies anchor clothing as socially constitutive rather than merely decorative, while Roland Barthes's semiotics of fashion, Homi Bhabha's theory of colonial hybridity, and Jacques Derrida's method of deconstruction provide the interpretive tools for reading garments and texts as unstable, layered sign systems.\n\nGuided by this framework, the underlying research draws on an extensive body of primary sources, including nineteenth-century artworks, studio and family photographs, period newspapers, foreign travelers' accounts, novels, and surviving garments, cross-referenced with one another and combined with close literary reading of Rizal's prose, allowing material and textual evidence to illuminate one another. This body of evidence shows how clothing functioned as both a tool of colonial control and a medium through which Filipinos exercised choice and self-determination, and how literary and historical sources, read together, reveal the ways sartorial detail encodes social hierarchy, aspiration, and emerging national identity, with agency often expressed in small, easily overlooked acts rather than overt confrontation.\n\nIn seeking to answer these questions, the keynote aims to establish clothing and literature as rigorous sources for understanding social agency, to model an interdisciplinary method linking material culture, literary analysis, and history, and to translate these historical insights into a practical framework for evaluating inclusivity in contemporary innovation. In line with the conference theme, \"Shaping Resilient Futures: AI, Sustainability, and Inclusive Innovation,\" the keynote extends this framework to invite researchers across disciplines to bring the same attentiveness to overlooked detail, adaptation, and agency when designing, deploying, and studying technologies and systems meant to serve plural communities.\n\nAn Igorot born and raised in Baguio City with ancestral roots from the Mountain Provinces. Dr. Jularbal received his PhD from the UPD Tri-College under its Philippine studies program. His research and published works include Cordilleran and highland public policy, Northern Local Language and literatures, as well as indigenous traditions and material culture. He is currently Dean of the College of Arts and Communication, University of the Philippines Baguio where he is also faculty of the department of language and literature and researcher for the cordillera studies center (CSC).\n\nCurrently, the use of Artificial Intelligence (AI) as a tool in bolstering representation capabilities of indigenous communities in the Cordillera has received much prominence and fashionability. From image generation to song and text composition etc., AI technology has taken indigenous representation to a wider audience with vast interactive capability, but despite all this, AI has proven itself to be revolutionary on a double-edged perspective, straddling a thin line between heritage preservation and misrepresentation.\n\nMy keynote presentation will take into consideration the duality of AI as potential conservator and destroyer of cultural heritage and as such, posing ethical and technical issues, risks, and challenges. At present, both Indigenous representation and Artificial intelligence are rapidly evolving and to see the intersection between the two is indeed inevitable. The potential of AI in the promotion of Indigenous knowledge and heritage constructs also exists with the reality that such a promotion can lead to misinformation, misrepresentation, and eventual erosion of cultural and life ways for many indigenous communities.",
+      "keywords": null,
+      "stub": false,
+      "affiliation": "Ateneo de Manila University, Philippines; Universidade Nova de Lisbon, Portugal"
+    },
+    {
+      "label": "EASS KEYNOTE SPEAKER 5",
+      "name": "Dr. Feorillo Petronillo DEMETERIO III",
+      "kind": "keynote",
+      "track": "EASS",
+      "title": "Beyond Efficiency: Harnessing Generative AI for Research Excellence in Philippine HEIs",
+      "bio": "Dr. Feorillo A. Demeterio III is a Distinguished Full Professor of the Department of Filipino, College of Liberal Arts, De La Salle University, and Head of the Matter and Memory Research Laboratory. He has extensive experience in research administration, capacity building, and scholarly mentoring, being the Executive Director of the University's Research and Grants Management Office for more than a decade now. In recent years, Dr. Demeterio has developed particular expertise in AI-assisted research mentoring, especially in guiding faculty members, graduate students, and researchers in the strategic use of generative AI across different stages of the research process. His mentoring work covers the development and refinement of research titles and problems, systematic and scoping literature reviews, conceptual and theoretical frameworks, research design, qualitative and quantitative analysis, article extraction, results-and-discussion writing, journal targeting, and manuscript development. He has designed and facilitated numerous workshops and writeshops on AI-assisted research and scholarly publication. Dr. Demeterio is the author or co-author of several books and more than a hundred scholarly articles in hermeneutics, cultural studies, Philippine studies, and Filipino philosophy. He has held visiting research appointments in Washington, D.C., and Hong Kong, and is a co-founder of the Andrew Gonzalez Philippine Citation Index.",
+      "abstract": "Full Professor,Department of Filipino, College of Liberal Arts, De La Salle University\n\nExecutive Director University Research and Grants Management Office, De La Salle University\n\nGenerative artificial intelligence is rapidly transforming research from a largely individual and sequential process into a more interactive, iterative, and computationally augmented form of knowledge production. This keynote argues that the value of generative AI for Philippine higher education institutions extends far beyond efficiency and automation. Properly integrated, generative AI can strengthen research excellence by supporting researchers across the research cycle—from problem formulation, literature searching and synthesis, conceptual and theoretical framing, research design, data analysis, interpretation, visualization, and scholarly writing to publication preparation. It can likewise enhance research mentoring by enabling more sustained feedback, scaffolding methodological reasoning, diagnosing weaknesses in manuscripts, and helping mentors guide larger and more diverse groups of researchers. The presentation further examines how generative AI is reshaping the research ecosystem by changing expectations regarding researcher competencies, mentoring practices, publication workflows, institutional research support, and research governance. It argues that Philippine HEIs must move from defensive or purely regulatory responses toward deliberate institutional adaptation. This requires developing AI literacy, ethical and transparent research practices, appropriate governance frameworks, and AI-assisted research mentoring systems. The central challenge is therefore not whether Philippine HEIs should use generative AI, but how they can harness it responsibly to expand research capacity, improve scholarly quality, and strengthen their participation in global knowledge production.",
+      "keywords": null,
+      "stub": false,
+      "affiliation": "De La Salle University, Philippines"
+    }
+  ],
+  "papers": [],
+  "venue": {
+    "name": "Pamantasan ng Lungsod ng Maynila (PLM)",
+    "alsoKnownAs": "University of the City of Manila",
+    "address": "Gen. Luna Cor. Muralla Streets, Intramuros Manila, Philippines 1002",
+    "lat": 14.5868604,
+    "lng": 120.9764378,
+    "website": "https://plm.edu.ph",
+    "osm": "way/27275574",
+    "description": "A full campus of colleges, gymnasiums and the PLM Chapel behind its own gate, in the southern quarter of the walled city. Sessions run in several buildings across the campus.",
+    "buildings": [
+      {
+        "code": "JAA",
+        "name": "Justo Albert Auditorium",
+        "lat": 14.586453,
+        "lng": 120.975866,
+        "confirmed": true,
+        "notes": "A single auditorium venue, not a multi-room building.",
+        "rooms": []
+      },
+      {
+        "code": "GK",
+        "name": "Gusaling Katipunan (Katipunan Building)",
+        "lat": 14.587515,
+        "lng": 120.97639,
+        "confirmed": false,
+        "notes": "Coordinate from a visitor-supplied Google Maps pin; not independently verified.",
+        "rooms": [
+          {
+            "code": "BTB",
+            "name": "GK Bukod Tanging Bulwagan",
+            "confirmed": true
+          }
+        ]
+      },
+      {
+        "code": "GEE",
+        "name": "Gusaling Emilio Ejercito Sr. (Emilio Ejercito Sr. Building)",
+        "lat": 14.586407,
+        "lng": 120.976898,
+        "confirmed": false,
+        "notes": "A visitor confirmed both the AVR and KL rooms are in this one building.",
+        "rooms": [
+          {
+            "code": "AVR",
+            "name": "Audio-Visual Room",
+            "confirmed": false
+          },
+          {
+            "code": "KL",
+            "name": "GEE Katipunan Lounge",
+            "confirmed": true
+          }
+        ]
+      },
+      {
+        "code": "GA",
+        "name": "Gusaling Don Pepe Atienza (Don Pepe Atienza Building)",
+        "lat": 14.58626,
+        "lng": 120.976835,
+        "confirmed": false,
+        "notes": "On the Muralla Street side; home of the College / Mass Communication Office.",
+        "rooms": [
+          {
+            "code": "TOP",
+            "name": null,
+            "confirmed": false
+          }
+        ]
+      }
+    ],
+    "gettingThere": null,
+    "accessibility": null,
+    "parking": null,
+    "wifi": null,
+    "about": "Pamantasan ng Lungsod ng Maynila (PLM) is the first and only chartered and autonomous university funded by a city government. It was created by the Congress of the Philippines by virtue of Republic Act No. 4196 or \"An Act Authorizing the City of Manila to Establish and Operate the University of City of Manila\" on June 19, 1965. The university first opened its gates on July 17, 1967 to 556 first-year students at its campus in the historic Intramuros district, which served as the seat of power during the Spanish occupation. Currently, about 10,000 graduate and post-graduate students grace its halls to receive PLM's quality education.PLM takes pride in being one of the country's leading institutions for higher education, consistently achieving high passing rates in board examinations and producing competent professionals across various fields. The university offers a comprehensive range of undergraduate and graduate programs in medicine, engineering, business, arts and sciences, education, and other disciplines, all while maintaining its commitment to providing quality yet accessible education to deserving students."
+  },
+  "registration": {
+    "fees": [],
+    "deadlines": [
+      "Call for abstracts opened: 30 May 2026",
+      "Abstract submission deadline: 30 June 2026 25 July 2026  CLOSED",
+      "Acceptance notifications: 15 August 2026",
+      "Conference programme released: 25 August 2026 28 August 2026",
+      "Registration deadline: 20 August 2026, 11:59 p.m.",
+      "Note: the conference website gives the registration deadline as 20 August 2026, 11:59 p.m., while the registration tabulation reports sign-ups continuing to 1 September 2026. Registration is closed either way; anyone asking about late or on-site registration should be sent to the organisers."
+    ],
+    "howTo": null,
+    "desk": null
+  },
+  "logistics": {
+    "meals": null,
+    "breaks": null,
+    "certificates": null,
+    "proceedings": null,
+    "emergency": null,
+    "codeOfConduct": null,
+    "photography": null
+  },
+  "faq": [],
+  "tracks": [
+    {
+      "code": "BGL",
+      "name": "Business, Government, Law"
+    },
+    {
+      "code": "EASS",
+      "name": "Education, Arts, Social Science, Social Work"
+    },
+    {
+      "code": "HS",
+      "name": "Health Sciences"
+    },
+    {
+      "code": "STEA",
+      "name": "Science, Technology, Engineering, Architecture"
+    }
+  ],
+  "sessionMembers": [
+    {
+      "session": "PLENARY 1",
+      "date": "29 September 2026",
+      "time": "8:30 - 9:15",
+      "venue": "JAA",
+      "members": [
+        "Evangeline A. Lubao",
+        "Aristotle Zabala"
+      ]
+    },
+    {
+      "session": "PLENARY 2",
+      "date": "29 September 2026",
+      "time": "9:15 - 10:00",
+      "venue": "JAA",
+      "members": [
+        "Raymund Mijares"
+      ]
+    },
+    {
+      "session": "PLENARY 3",
+      "date": "29 September 2026",
+      "time": "13:00 - 13:45",
+      "venue": "JAA",
+      "members": [
+        "Annie C. Gallardo",
+        "Criselle Centeno"
+      ]
+    },
+    {
+      "session": "PLENARY 4",
+      "date": "30 September 2026",
+      "time": "8:00 - 8:45",
+      "venue": "JAA",
+      "members": [
+        "Leonardo Sawal"
+      ]
+    },
+    {
+      "session": "STEA 1",
+      "date": "29 September 2026",
+      "time": "10:30 - 12:00",
+      "venue": "JAA",
+      "members": [
+        "Vivien A. Agustin"
+      ]
+    },
+    {
+      "session": "STEA 2",
+      "date": "29 September 2026",
+      "time": "13:45 - 15:00",
+      "venue": "JAA",
+      "members": [
+        "Clydelle M. Rondaris"
+      ]
+    },
+    {
+      "session": "STEA 3",
+      "date": "29 September 2026",
+      "time": "15:15 - 16:15",
+      "venue": "JAA",
+      "members": [
+        "Francis Jeremy A. Castillo",
+        "Lemmor Josh Dela Peña"
+      ]
+    },
+    {
+      "session": "STEA 4",
+      "date": "30 September 2026",
+      "time": "10:00 - 12:00",
+      "venue": "JAA",
+      "members": [
+        "Rebecca C. Tolentino",
+        "Larry V. Padilla"
+      ]
+    },
+    {
+      "session": "STEA 5",
+      "date": "30 September 2026",
+      "time": "13:00 -14:45",
+      "venue": "JAA",
+      "members": [
+        "Josephine R. Macasieb",
+        "Jennifer C. Sy"
+      ]
+    },
+    {
+      "session": "STEA 6",
+      "date": "30 September 2026",
+      "time": "15:00 - 16:00",
+      "venue": "JAA",
+      "members": [
+        "Charles A. Juarizo"
+      ]
+    },
+    {
+      "session": "STEA 7",
+      "date": "30 September 2026",
+      "time": "16:00 - 17:00",
+      "venue": "JAA",
+      "members": [
+        "Marivic G. Molina",
+        "Janette C. Lagos"
+      ]
+    },
+    {
+      "session": "BGL 1",
+      "date": "29 September 2026",
+      "time": "10:30 - 12:00",
+      "venue": "GEE KL",
+      "members": [
+        "Dennis Ariel Tan",
+        "Ragrciel Manalo"
+      ]
+    },
+    {
+      "session": "BGL 2",
+      "date": "29 September 2026",
+      "time": "13:45 - 15:00",
+      "venue": "GEE KL",
+      "members": [
+        "Cristopher J. Malanum",
+        "Don Rommel Dais"
+      ]
+    },
+    {
+      "session": "BGL 3",
+      "date": "29 September 2026",
+      "time": "15:15 - 16:15",
+      "venue": "GEE KL",
+      "members": [
+        "Jenely S. Almirol"
+      ]
+    },
+    {
+      "session": "BGL 4",
+      "date": "30 September 2026",
+      "time": "10:00 - 12:00",
+      "venue": "GEE KL",
+      "members": [
+        "Noemi C. Gocuyo"
+      ]
+    },
+    {
+      "session": "BGL 5",
+      "date": "30 September 2026",
+      "time": "13:00 -14:45",
+      "venue": "GEE KL",
+      "members": [
+        "Heherson M. Angel",
+        "Almira M. Jallores"
+      ]
+    },
+    {
+      "session": "BGL 6",
+      "date": "30 September 2026",
+      "time": "15:00 - 16:00",
+      "venue": "GEE KL",
+      "members": [
+        "Lou-rena Boquila"
+      ]
+    },
+    {
+      "session": "HS 1",
+      "date": "29 September 2026",
+      "time": "10:30 - 12:00",
+      "venue": "GK BTB",
+      "members": [
+        "Ernesto Mania"
+      ]
+    },
+    {
+      "session": "HS 2",
+      "date": "29 September 2026",
+      "time": "13:45 - 15:00",
+      "venue": "GK BTB",
+      "members": [
+        "Ma. Cecilia A. Martinez"
+      ]
+    },
+    {
+      "session": "HS 3",
+      "date": "29 September 2026",
+      "time": "15:15 - 16:15",
+      "venue": "GK BTB",
+      "members": [
+        "Imelda C. Ang",
+        "Merry Clamor"
+      ]
+    },
+    {
+      "session": "HS 4",
+      "date": "30 September 2026",
+      "time": "13:00 -14:45",
+      "venue": "GK BTB",
+      "members": [
+        "Ma. Teresa A. Monderin",
+        "Benjamin Tablizo"
+      ]
+    },
+    {
+      "session": "HS 5",
+      "date": "30 September 2026",
+      "time": "15:00 - 16:00",
+      "venue": "GK BTB",
+      "members": [
+        "Jennifer P. Reyes"
+      ]
+    },
+    {
+      "session": "HS 6",
+      "date": "30 September 2026",
+      "time": "16:00 - 17:00",
+      "venue": "GK BTB",
+      "members": [
+        "Ma. Eufemia A. Collao"
+      ]
+    },
+    {
+      "session": "EASS 1",
+      "date": "29 September 2026",
+      "time": "10:30 - 12:00",
+      "venue": "GA TOP",
+      "members": [
+        "Imelda B. Dometita"
+      ]
+    },
+    {
+      "session": "EASS 2",
+      "date": "29 September 2026",
+      "time": "13:45 - 15:00",
+      "venue": "GA TOP",
+      "members": [
+        "Risa Asuncion"
+      ]
+    },
+    {
+      "session": "EASS 3",
+      "date": "29 September 2026",
+      "time": "15:15 - 16:15",
+      "venue": "GA TOP",
+      "members": [
+        "Leopoldo H. Lareza Jr."
+      ]
+    },
+    {
+      "session": "EASS 4",
+      "date": "30 September 2026",
+      "time": "10:00 - 12:00",
+      "venue": "GA TOP",
+      "members": [
+        "Liezel Agliam Zafra",
+        "Allan Jay Natividad"
+      ]
+    },
+    {
+      "session": "EASS 5",
+      "date": "30 September 2026",
+      "time": "13:00 -14:45",
+      "venue": "GA TOP",
+      "members": [
+        "Jimmy M. Romero"
+      ]
+    },
+    {
+      "session": "EASS 6",
+      "date": "30 September 2026",
+      "time": "15:00 - 16:00",
+      "venue": "GA TOP",
+      "members": [
+        "Regina Pena",
+        "Caroline Manlapit"
+      ]
+    },
+    {
+      "session": "EASS 7",
+      "date": "30 September 2026",
+      "time": "16:00 - 17:00",
+      "venue": "GEE KL",
+      "members": [
+        "Jennifer Monje"
+      ]
+    },
+    {
+      "session": "EASS 8",
+      "date": "30 September 2026",
+      "time": "16:00 - 17:00",
+      "venue": "GA TOP",
+      "members": [
+        "Concepcion P. Deymos",
+        "Jeaniffer L. Muyot"
+      ]
+    },
+    {
+      "session": "Special Session",
+      "date": "30 September 2026",
+      "time": "10:00 - 12:00",
+      "venue": "GK BTB",
+      "members": [
+        "Khatalyn E. Mata",
+        "Raymund Dioses"
+      ]
+    },
+    {
+      "session": "Poster Session 1",
+      "date": "29 September 2026",
+      "time": "16:15 - 17:30",
+      "venue": "GEE Open Area",
+      "members": [
+        "Mary Grace A. Aquino",
+        "John Rafael Granada"
+      ]
+    },
+    {
+      "session": "Poster Session 1",
+      "date": "29 September 2026",
+      "time": "16:15 - 17:30",
+      "venue": "GEE Open Area",
+      "members": [
+        "Algerico S. Odal"
+      ]
+    },
+    {
+      "session": "Poster Session 2",
+      "date": "30 September 2026",
+      "time": "8:45 -10:00",
+      "venue": "GEE Open Area",
+      "members": [
+        "Jacklyn Anne D. Toldoya"
+      ]
+    },
+    {
+      "session": "Poster Session 2",
+      "date": "30 September 2026",
+      "time": "8:45 -10:00",
+      "venue": "GEE Open Area",
+      "members": [
+        "Christopher E. Bandojo"
+      ]
+    }
+  ],
+  "sessionGuidelines": [
+    "MANILA INTERNATIONAL RESEARCH CONFERENCE 2026",
+    "SEPTEMBER 29-30, 2026",
+    "GUIDELINES FOR SESSION MEMBERS",
+    "Note: Please get your ID, List of Presenters, and Certificates one or two days before your assigned conference date to allow sufficient time for preparation and checking.",
+    "The role of a session members is pivotal to the success of each parallel session at the Manila International Research Conference (MIRC) 2026. As a session members, you are responsible for ensuring that the session proceeds smoothly, adhering to the schedule, and fostering a productive and respectful environment for both presenters and attendees. Your leadership will contribute significantly to the overall effectiveness and professionalism of the conference.",
+    "Guidelines for Session Members",
+    "Pre-Session Preparation Arrive at the designated session room at least 15 minutes before the session begins. Use this time to familiarize yourself with the room setup and the schedule. Verify the attendance of all scheduled presenters by cross-checking the list provided in the conference program. If any presenter is absent, please notify the conference staff immediately.",
+    "Starting the Session. Begin the session promptly at the scheduled time. As the host, welcome the attendees warmly and introduce the session's theme. Clearly state the ground rules at the outset, emphasizing the importance of adhering to the time limits for presentations and the Q&A segment. Highlight that respecting the schedule is crucial for maintaining the flow of the session and allowing equal opportunity for all presenters.",
+    "For online participants, please remind them to register their attendance using the attendance link or QR code provided.",
+    "For onsite participants, attendance registration is expected to have been completed at the registration area, including the required attendance form accessible through the provided link/Google Form. Session hosts may remind participants to ensure that their attendance has been properly recorded.",
+    "Managing Presentations",
+    "Each presenter is allocated 12 minutes for their presentation. It is essential to monitor the time closely to ensure that each presenter adheres to this limit. Politely remind presenters of their remaining time at the following intervals:",
+    "5 minutes remaining",
+    "2 minutes remaining",
+    "Time is up",
+    "If a presenter appears to be off-track or exceeding their time, intervene tactfully to keep the session on schedule. This may involve providing a discreet reminder or signaling the need to conclude.",
+    "Facilitating the Q&A Session After each presentation, initiate the Q&A session (3 minutes) and encourage audience participation by inviting questions. If the audience is hesitant, be prepared to ask insightful questions yourself to stimulate discussion. Ensure that the Q&A is concise and focused, with questions and comments from the audience kept brief to allow for multiple interactions. A Certificate of Presentation will be provided to the presenter after the completion of their presentation and Q&A.",
+    "Awarding of Certificates After all paper presentations have been completed, certificates will be awarded to each presenter. Please ensure that a photo opportunity is arranged for each presenter upon receiving their certificate. After all certificates have been awarded, a group photo of all presenters and the awarding committee/organizers should also be taken.",
+    "Concluding the Session As the session concludes, thank the presenters and the audience for their contributions. Summarize any key points or themes that emerged during the presentations and discussions. If there are any announcements or logistical details to share, such as upcoming sessions or breaks, provide this information before dismissing the attendees.",
+    "Professional Conduct and Courtesy Throughout the session, maintain a professional and courteous demeanor. Your role as a members is not only to manage time but also to create a respectful and engaging environment. Ensure that all interactions are conducted in a manner that reflects the conference's standards of academic excellence and inclusivity.",
+    "By following these guidelines, you will play a crucial role in ensuring that the sessions are both informative and well-organized, contributing to the overall success of MIRC 2026. Your leadership and attention to detail are greatly appreciated."
+  ],
+  "registrationStats": {
+    "asOf": "2 September 2026 as stated inside the report (the file is named 'as of 9 September')",
+    "period": "May 16, 2026 – September 01, 2026",
+    "reported": {
+      "totalRegistrants": 231,
+      "registered": 229,
+      "preregistered": 2,
+      "countriesRepresented": 6,
+      "institutionsRepresented": 118
+    },
+    "caution": "These totals are not internally consistent — the Executive Summary says 231 registrants while the By Country sheet adds up to 248; it says 6 countries but lists 11; it says 118 institutions but lists 82. Give them as approximate and say which sheet a figure comes from.",
+    "byCountry": [
+      {
+        "country": "PH",
+        "registrants": 229
+      },
+      {
+        "country": "MY",
+        "registrants": 5
+      },
+      {
+        "country": "FR",
+        "registrants": 4
+      },
+      {
+        "country": "IN",
+        "registrants": 1
+      },
+      {
+        "country": "NZ",
+        "registrants": 1
+      },
+      {
+        "country": "BG",
+        "registrants": 1
+      },
+      {
+        "country": "AU",
+        "registrants": 1
+      },
+      {
+        "country": "Portugal",
+        "registrants": 1
+      },
+      {
+        "country": "Taiwan",
+        "registrants": 2
+      },
+      {
+        "country": "UK",
+        "registrants": 1
+      },
+      {
+        "country": "USA",
+        "registrants": 2
+      }
+    ],
+    "byInstitution": [
+      {
+        "institution": "Adamson University",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "Antipolo Institute of Technology",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "Bataan Peninsula State University",
+        "registrants": 2,
+        "total": 2
+      },
+      {
+        "institution": "Batangas State University",
+        "registrants": 6,
+        "total": 6
+      },
+      {
+        "institution": "Beijing Foreign Studies University",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "Benguet State University",
+        "registrants": 2,
+        "total": 2
+      },
+      {
+        "institution": "Cavite State University",
+        "registrants": 2,
+        "total": 2
+      },
+      {
+        "institution": "Cebu Institute of Technology University",
+        "registrants": 3,
+        "total": 3
+      },
+      {
+        "institution": "Centro Escolar University",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "City College of Calamba",
+        "registrants": 3,
+        "total": 3
+      },
+      {
+        "institution": "City College of Tagaytay",
+        "registrants": 8,
+        "total": 8
+      },
+      {
+        "institution": "City of Malabon University",
+        "registrants": 6,
+        "total": 6
+      },
+      {
+        "institution": "Colegio de la Ciudad de Tayabas",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "Colegio de San Juan de Letran",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "Colegio de San Juan de Letran Manila",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "Cordillera Hospital of the Divine Grace",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "Daraga Community College",
+        "registrants": 6,
+        "total": 6
+      },
+      {
+        "institution": "De La Salle Araneta University",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "De La Salle Santiago Zobel School",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "De La Salle University",
+        "registrants": 5,
+        "speakers": 1,
+        "total": 6,
+        "country": "Philippines"
+      },
+      {
+        "institution": "Department of Education",
+        "registrants": 2,
+        "total": 2
+      },
+      {
+        "institution": "Department of Science and Technology",
+        "registrants": 1,
+        "speakers": 1,
+        "total": 2
+      },
+      {
+        "institution": "Emilio Aguinaldo College",
+        "registrants": 2,
+        "total": 2
+      },
+      {
+        "institution": "Eulogio \"Amang\" Rodriguez Institute of Science and Technology",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "Far Eastern University",
+        "registrants": 2,
+        "total": 2
+      },
+      {
+        "institution": "First Asia Institute of Technology and Humanities",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "Goa Community College",
+        "registrants": 2,
+        "total": 2
+      },
+      {
+        "institution": "Gordon College",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "ICL Graduate Business School",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "Ilocos Norte National High School",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "Iloilo Science and Technology University",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "Independent Researcher",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "Institut de Science des Matériaux de Mulhouse (IS2M), CNRS, Université de Haute-Alsace",
+        "registrants": 1,
+        "speakers": 2,
+        "total": 3,
+        "country": "France"
+      },
+      {
+        "institution": "International Cultural Communication Center",
+        "registrants": 0,
+        "speakers": 1,
+        "total": 1,
+        "country": "Malaysia"
+      },
+      {
+        "institution": "INTI International University",
+        "registrants": 0,
+        "speakers": 1,
+        "total": 1,
+        "country": "Malaysia"
+      },
+      {
+        "institution": "John B. Lacson Colleges Foundation",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "Kun Shan University",
+        "registrants": 0,
+        "speakers": 1,
+        "total": 1,
+        "country": "Taiwan"
+      },
+      {
+        "institution": "Lakan Dula High School",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "Lyceum of Alabang",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "Maryhill College, Inc.",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "Mindanao State University",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "Misamis University",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "Nagaland University",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "National Aviation Academy of the Philippines",
+        "registrants": 2,
+        "total": 2
+      },
+      {
+        "institution": "National Cheng Kung University",
+        "registrants": 0,
+        "speakers": 2,
+        "total": 2,
+        "country": "Taiwan"
+      },
+      {
+        "institution": "National University",
+        "registrants": 8,
+        "total": 8
+      },
+      {
+        "institution": "National University Manila",
+        "registrants": 0,
+        "speakers": 1,
+        "total": 1,
+        "country": "Philippines"
+      },
+      {
+        "institution": "Nueva Ecija University of Science and Technolog",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "Padre Garcia Polytechnic College",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "Pamantasan ng Cabuyao",
+        "registrants": 13,
+        "total": 13
+      },
+      {
+        "institution": "Pamantasan ng Lungsod ng Maynila",
+        "registrants": 73,
+        "total": 73
+      },
+      {
+        "institution": "People Dynamics, Inc.",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "Philippine Normal University",
+        "registrants": 4,
+        "total": 4
+      },
+      {
+        "institution": "Philippine Science High School",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "Philippine Women's University",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "Polytechnic University of the Philiippines",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "Polytechnic University of the Philippines",
+        "registrants": 22,
+        "total": 22
+      },
+      {
+        "institution": "Pres. Corazon C. Aquino HIgh School",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "President Ramon Magsaysay State University",
+        "registrants": 5,
+        "total": 5
+      },
+      {
+        "institution": "Rizal Technological University",
+        "registrants": 2,
+        "total": 2
+      },
+      {
+        "institution": "Saint Paul University",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "San Lazaro Hospital",
+        "registrants": 2,
+        "total": 2
+      },
+      {
+        "institution": "San Sebastian College",
+        "registrants": 2,
+        "total": 2
+      },
+      {
+        "institution": "Signal Village National High School",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "Southern Cross University",
+        "registrants": 0,
+        "speakers": 1,
+        "total": 1,
+        "country": "Australia"
+      },
+      {
+        "institution": "St. Dominic College of Asia",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "Technological University of the Philippines",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "Universidade Nova de Lisbon",
+        "registrants": 0,
+        "speakers": 1,
+        "total": 1,
+        "country": "Portugal"
+      },
+      {
+        "institution": "Université Clermont Auvergne",
+        "registrants": 0,
+        "speakers": 1,
+        "total": 1,
+        "country": "France"
+      },
+      {
+        "institution": "Université de Haute-Alsace",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "Université de Rouen Normandie",
+        "registrants": 0,
+        "speakers": 1,
+        "total": 1,
+        "country": "France"
+      },
+      {
+        "institution": "Universiti PolyTech Malaysia",
+        "registrants": 0,
+        "speakers": 1,
+        "total": 1,
+        "country": "Malaysia"
+      },
+      {
+        "institution": "UNIVERSITI PUTRA MALAYSIA",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "University of Cabuyao",
+        "registrants": 2,
+        "total": 2
+      },
+      {
+        "institution": "University of Central Florida",
+        "registrants": 0,
+        "speakers": 2,
+        "total": 2,
+        "country": "USA"
+      },
+      {
+        "institution": "University of New South Wales Canberra",
+        "registrants": 0,
+        "speakers": 1,
+        "total": 1,
+        "country": "United Kingdom"
+      },
+      {
+        "institution": "University of Perpetual Help System",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "University of Perpetual Help System DALTA",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "University of Santo Tomas",
+        "registrants": 2,
+        "total": 2
+      },
+      {
+        "institution": "University of the Immaculate Conception",
+        "registrants": 1,
+        "total": 1
+      },
+      {
+        "institution": "University of the Philippines",
+        "registrants": 5,
+        "speakers": 4,
+        "total": 9,
+        "country": "Philippines"
+      },
+      {
+        "institution": "Valenzuela City Technological College",
+        "registrants": 1,
+        "total": 1
+      }
+    ],
+    "byStatus": [
+      {
+        "status": "Registered",
+        "registrants": 229
+      },
+      {
+        "status": "Preregistered",
+        "registrants": 2
+      }
+    ],
+    "monthlyTrend": [
+      {
+        "month": "May 2026",
+        "registrants": 16
+      },
+      {
+        "month": "June 2026",
+        "registrants": 41
+      },
+      {
+        "month": "July 2026",
+        "registrants": 5
+      },
+      {
+        "month": "August 2026",
+        "registrants": 168
+      },
+      {
+        "month": "September 2026",
+        "registrants": 1
+      }
+    ],
+    "delegateList": "Not included. The registration workbook's per-delegate sheet (names, e-mail addresses, phone numbers, billing addresses) is deliberately excluded from this material. Never offer to look up an individual registrant's contact details."
+  }
+}

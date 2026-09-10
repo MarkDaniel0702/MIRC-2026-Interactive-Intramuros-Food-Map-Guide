@@ -1,0 +1,35 @@
+# MIRC 2026 chatbot Worker.
+#
+#   cd worker
+#   npx wrangler deploy
+#
+# Then set at least one model key as a secret (never put keys in this file):
+#   npx wrangler secret put GEMINI_API_KEY
+#   npx wrangler secret put GROQ_API_KEY
+#   npx wrangler secret put ANTHROPIC_API_KEY
+#
+# Providers are tried in the order gemini -> groq -> anthropic, so configuring two
+# free tiers gives the congress a fallback when one hits its rate ceiling.
+
+name = "mirc-2026-chat"
+main = "src/index.js"
+compatibility_date = "2026-01-01"
+
+[vars]
+# Where the built corpus lives. Regenerate it with `node tools/build-corpus.mjs`
+# and push, and the Worker picks it up within five minutes.
+CORPUS_URL = "https://markdaniel0702.github.io/MIRC-2026-Interactive-Intramuros-Food-Map-Guide/data/chat-corpus.json"
+
+# Origins allowed to call this Worker. Leave the localhost entry for development.
+ALLOWED_ORIGINS = "https://markdaniel0702.github.io,http://localhost:8000"
+
+# Model ids are pinned here rather than in code so a provider renaming a model is a
+# one-line change. Check the provider's current model list before the congress.
+GEMINI_MODEL = "gemini-3.8-flash"
+GROQ_MODEL = "openai/gpt-oss-120b"   # 131k context; free tier is 8k tokens/min
+ANTHROPIC_MODEL = "claude-sonnet-5"
+
+# Provider order. Groq leads because its free tier allows 1,000 requests a day,
+# whereas Gemini's allows 20 per model per day — enough to test, not to run a
+# congress. On a paid Gemini key, flip this to "gemini,groq,anthropic".
+PROVIDER_ORDER = "groq,gemini,anthropic"

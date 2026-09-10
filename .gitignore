@@ -1,0 +1,11 @@
+# Secrets. API keys live in `wrangler secret put`, never in the repo — this site is
+# public, and anything committed here is served from GitHub Pages.
+.dev.vars
+.dev.vars.*
+.env
+.env.*
+*.key
+
+# Wrangler build/state
+worker/.wrangler/
+node_modules/
