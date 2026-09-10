@@ -41,6 +41,25 @@ export const normalise = q => String(q ?? '')
   .filter(w => w && !FILLER.has(w))
   .join(' ');
 
+/**
+ * The prompt asks for plain text, and the models mostly comply — but not always, and
+ * the chat panel escapes HTML rather than rendering markdown, so a stray `**GK BTB**`
+ * reaches the reader as literal asterisks. Strip the emphasis rather than teach the
+ * panel to render markdown: the answers genuinely are plain prose, and a renderer
+ * would be a new surface for a model to put something unexpected through.
+ */
+export function plainText(s) {
+  return String(s ?? '')
+    .replace(/^#{1,6}\s+/gm, '')                 // headings
+    .replace(/\*\*(.+?)\*\*/gs, '$1')            // bold
+    .replace(/(?<![*\w])\*(?!\s)(.+?)(?<!\s)\*(?!\*)/gs, '$1')   // italic
+    .replace(/(?<![_\w])__(.+?)__(?!\w)/gs, '$1')
+    .replace(/`{1,3}([^`]*)`{1,3}/gs, '$1')      // inline code
+    .replace(/^\s*[-*+]\s+/gm, '- ')             // normalise bullets
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+}
+
 /** FNV-1a — short, stable, and enough to key a cache. Not a security hash. */
 function hash(s) {
   let h = 0x811c9dc5;

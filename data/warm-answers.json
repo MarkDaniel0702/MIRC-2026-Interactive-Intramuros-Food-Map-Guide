@@ -127,6 +127,34 @@
       "keys": [
         "Which room is the EASS track in?"
       ]
+    },
+    {
+      "q": "What does BTB stand for?",
+      "a": "BTB is the room code for **GK Bukod Tanging Bulwagan** in the Gusaling Katipunan (GK) building.",
+      "keys": [
+        "What does BTB stand for?"
+      ]
+    },
+    {
+      "q": "What does KL stand for?",
+      "a": "KL is the abbreviation for the **Katipunan Lounge**, the room code “KL” in the GEE (Gusaling Emilio Ejercito Sr.) building.",
+      "keys": [
+        "What does KL stand for?"
+      ]
+    },
+    {
+      "q": "Where is the Justo Albert Auditorium?",
+      "a": "The Justo Albert Auditorium (building code JAA) is on the Pamantasan ng Lungsod ng Maynila (PLM) campus, at Gen. Luna Cor. Muralla Streets, Intramuros, Manila 1002, Philippines. It is one of the main lecture halls where the opening ceremony, plenary talks and many STEA sessions are held.",
+      "keys": [
+        "Where is the Justo Albert Auditorium?"
+      ]
+    },
+    {
+      "q": "Who is the conference chair?",
+      "a": "The Conference Chair is Dr. Dan Michael A. Cortez. (I’m Dan, the Intramuros Guide assistant—not the Chair.)",
+      "keys": [
+        "Who is the conference chair?"
+      ]
     }
   ]
 }

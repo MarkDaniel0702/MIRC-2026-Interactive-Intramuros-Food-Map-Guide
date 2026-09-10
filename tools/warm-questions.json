@@ -15,9 +15,15 @@
     "verbatim, with nothing downstream able to catch a bad one.",
     "",
     "Add questions as the committee learns what people actually ask; the unanswered-",
-    "question log (wrangler tail) is the place to look."
+    "question log (wrangler tail) is the place to look.",
+    "",
+    "A CAUTION LEARNED THE HARD WAY: questions whose answer is a LIST are risky to",
+    "warm. 'Who are the plenary speakers?' came back with three of the four, because",
+    "retrieval had shown it only three — and a truncated list reads as complete, so",
+    "nobody would notice. Single-fact questions ('what does BTB stand for') are safe;",
+    "enumerations should be checked against the programme by hand, or left to the",
+    "model where retrieval and the guards still apply."
   ],
-
   "questions": [
     "What is MIRC 2026?",
     "When is the conference?",

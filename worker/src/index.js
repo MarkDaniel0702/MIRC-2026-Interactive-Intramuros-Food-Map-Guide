@@ -31,7 +31,7 @@
  */
 
 import { buildIndex, retrieve } from './retrieve.js';
-import { warmAnswer, cachedAnswer, storeAnswer } from './cache.js';
+import { warmAnswer, cachedAnswer, storeAnswer, plainText } from './cache.js';
 
 const MAX_MESSAGE_CHARS = 600;
 const MAX_HISTORY_TURNS = 8;
@@ -445,14 +445,14 @@ export default {
     const warm = warmAnswer(corpus, message);
     if (warm) {
       console.log(JSON.stringify({ event: 'warm-hit', message, matched: warm.matched }));
-      return json({ reply: warm.reply, source: 'warm', cached: true }, 200, cors);
+      return json({ reply: plainText(warm.reply), source: 'warm', cached: true }, 200, cors);
     }
 
     /* Tier 2 — someone in this datacentre already asked this. */
     const cached = await cachedAnswer(corpus, message);
     if (cached) {
       console.log(JSON.stringify({ event: 'cache-hit', message }));
-      return json({ ...cached, cached: true }, 200, cors);
+      return json({ ...cached, reply: plainText(cached.reply), cached: true }, 200, cors);
     }
 
     /* Layer 2 — heuristic pre-filter. Declined without spending a model call. */
@@ -508,7 +508,7 @@ export default {
       console.log(JSON.stringify({ event: 'unanswered', message }));
     }
 
-    const answer = { reply: reply.trim(), source: used, contextTokens: tokens };
+    const answer = { reply: plainText(reply), source: used, contextTokens: tokens };
 
     /* Cache only a clean answer. A decline, a retry message or an "I could not find
        that" must never become sticky — the first two are transient and the third

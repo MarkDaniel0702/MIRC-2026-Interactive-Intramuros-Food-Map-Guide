@@ -88,12 +88,23 @@ async function ask(question) {
 console.log(`\n  provider ${PROVIDER} · model ${MODEL}`);
 console.log(`  ${questions.length} questions, ${done.size} already answered\n`);
 
-const answers = [];
+/* Keyed by normalised question and seeded from what is already on disk, so a write
+   part-way through the run emits the WHOLE set rather than just the questions
+   iterated so far. Accumulating into a plain array and writing that was quietly
+   destructive: a run killed at position N truncated the file to the first N entries
+   and discarded finished answers further down the list. */
+const merged = new Map(done);
+const write = () => writeFileSync(OUT, JSON.stringify({
+  generated: new Date().toISOString().slice(0, 10),
+  corpusVersion: corpus._generated,
+  answers: questions.map(q => merged.get(normalise(q))).filter(Boolean)
+}, null, 2) + '\n', 'utf8');
+
 let asked = 0, skipped = 0, refused = 0;
 
 for (const q of questions) {
-  const prior = done.get(normalise(q));
-  if (prior) { answers.push(prior); skipped++; continue; }
+  const prior = merged.get(normalise(q));
+  if (prior) { skipped++; continue; }
 
   /* A question that the guards would refuse must never become a warm answer — it
      would be served without the guards ever running. */
@@ -110,7 +121,7 @@ for (const q of questions) {
       refused++;
       continue;
     }
-    answers.push({ q, a, keys: [q] });
+    merged.set(normalise(q), { q, a, keys: [q] });
     asked++;
     console.log(`  OK   ${q}`);
     console.log(`       ${a.replace(/\s+/g, ' ').slice(0, 110)}`);
@@ -118,14 +129,12 @@ for (const q of questions) {
     console.log(`  FAIL ${q}\n       ${err.message}`);
   }
 
-  writeFileSync(OUT, JSON.stringify(
-    { generated: new Date().toISOString().slice(0, 10), corpusVersion: corpus._generated, answers },
-    null, 2) + '\n', 'utf8');
-
+  write();
   await new Promise(r => setTimeout(r, 1200));
 }
 
-console.log(`\n  ${answers.length} warm answers written to data/warm-answers.json`);
+write();
+console.log(`\n  ${merged.size} warm answers written to data/warm-answers.json`);
 console.log(`  ${asked} newly asked, ${skipped} carried over, ${refused} skipped\n`);
 console.log('  Read them before committing — they are served verbatim, and none of');
 console.log('  the runtime guards run on a warm hit.\n');
