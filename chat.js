@@ -20,7 +20,7 @@
      The deployed Worker's URL. After `npx wrangler deploy` in worker/, paste the
      address it prints here — no trailing slash. Leave it empty to keep the panel
      in its "not connected yet" state. */
-  const ENDPOINT = '';
+  const ENDPOINT = 'https://mirc-2026-chat.plm-mirc2026.workers.dev';
   /* ─────────────────────────────────────────────────────────────────────────── */
 
   const CORPUS_URL = 'data/chat-corpus.json';
