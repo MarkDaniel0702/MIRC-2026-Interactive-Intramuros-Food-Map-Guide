@@ -20,16 +20,17 @@
     "shortName": "MIRC 2026",
     "name": "Manila International Research Conference 2026",
     "edition": null,
-    "theme": null,
-    "dates": "29–30 September 2026 (Tuesday–Wednesday)",
+    "theme": "The role of Artificial Intelligence, sustainability and innovation in building resilient, inclusive and future-ready communities",
+    "dates": "27-30 September 2026: a Hospitality and Tourism sub-conference at DLSU-CSB on 27 September, and the main conference at PLM on 29-30 September (Tuesday-Wednesday)",
     "hostInstitution": "Pamantasan ng Lungsod ng Maynila (PLM)",
     "city": "Intramuros, Manila, Philippines",
-    "website": null,
-    "updated": "2026-09-09",
-    "contentFrozen": false
+    "website": "https://mirc2026.sciencesconf.org",
+    "updated": "2026-09-10",
+    "contentFrozen": false,
+    "format": "Hybrid — onsite and online"
   },
   "gaps": [
-    "Bio, talk title and/or abstract for 7 speakers still marked as placeholders in the source: PLENARY SPEAKER 1, STEA KEYNOTE SPEAKER 5, STEA KEYNOTE SPEAKER 6, BGL KEYNOTE SPEAKER 1, BGL KEYNOTE SPEAKER 3, HS KEYNOTE SPEAKER 3, HS KEYNOTE SPEAKER 5",
+    "Not yet written up in the speakers document: PLENARY SPEAKER 1 (Dr. Hsiao-Yeh CHU) — bio, abstract; STEA KEYNOTE SPEAKER 5 (Prof. John Kristoffer Q. ANDRES) — bio, abstract; STEA KEYNOTE SPEAKER 6 (Dr. Dexter DELA CRUZ) — bio, abstract; BGL KEYNOTE SPEAKER 1 (Dr. Benjamin Leong Tack Hang) — bio, talk title, abstract; BGL KEYNOTE SPEAKER 3 (Atty. Chad Patrick OSORIO) — bio, talk title, abstract; HS KEYNOTE SPEAKER 3 (Dr. Rayane HEDNA) — bio, abstract; HS KEYNOTE SPEAKER 5 (Dr. Michael Joseph DINO) — bio, abstract. Where 'talk title' is not listed for a speaker, the programme already carries their title and it can be given.",
     "Keynote speaker not yet named for BGL-5, EASS-6",
     "Abstracts for the 89 contributed papers — the programme gives the paper number, presenter surname and title only",
     "Full room name for GA TOP",
@@ -41,10 +42,7 @@
     "How certificates are issued",
     "Proceedings and publication plans",
     "Emergency contacts",
-    "Code of conduct",
-    "Organising and technical committee members, and a contact address",
-    "The official website or registration page",
-    "The congress theme"
+    "Code of conduct"
   ],
   "scope": {
     "inScope": [
@@ -77,10 +75,47 @@
     ]
   },
   "event": {
-    "about": null,
+    "about": "The Manila International Research Conference 2026 (MIRC 2026) is a hybrid international academic conference designed to bring together researchers, academicians, practitioners, policymakers, and students from diverse disciplines. The conference will serve as a platform for the presentation, exchange, and discussion of research addressing the role of Artificial Intelligence (AI), sustainability, and innovation in building resilient, inclusive, and future-ready communities.",
     "audience": null,
-    "organisers": [],
-    "contacts": []
+    "organisers": [
+      {
+        "role": "Conference Chair",
+        "name": "Dr. Dan Michael A. CORTEZ",
+        "affiliation": "Pamantasan ng Lungsod ng Maynila, Philippines"
+      },
+      {
+        "role": "Conference Co-Chair",
+        "name": "Dr. Hernando S. SALAPARE III",
+        "affiliation": "DOST-Balik Scientist, Philippines and France"
+      },
+      {
+        "role": "Conference Vice-Chair",
+        "name": "Ms. Editha S. MEDINA",
+        "affiliation": "Pamantasan ng Lungsod ng Maynila, Philippines"
+      },
+      {
+        "role": "Conference Secretary",
+        "name": "Mr. Neil Marcus T. MANUBAY",
+        "affiliation": "Pamantasan ng Lungsod ng Maynila, Philippines"
+      }
+    ],
+    "contacts": [],
+    "partners": [
+      "De La Salle - College of Saint Benilde",
+      "Sejong University",
+      "NU Fairview",
+      "International Cultural Communication Center Malaysia (ICCCM)",
+      "International Transnational Education Association (ITEA)",
+      "DOST - PCIEERD Balik Scientist Program",
+      "CCSD - SciencesConf (France), which provides the conference website"
+    ],
+    "sponsor": "C&E Group (CE-Logic, Inc.)",
+    "subConference": {
+      "what": "The main conference will be conducted in the Pamantasan ng Lungsod ng Maynila (PLM) on September 29- 30, 2026 at PLM Campus. A Sub-conference on Hospitality and Tourism with the College of Saint Benilde and Sejong University will be hosted at DLSU-CSB on September 27, 2026.",
+      "date": "27 September 2026",
+      "venue": "De La Salle - College of Saint Benilde (DLSU-CSB), Manila",
+      "note": "Its detailed programme is not in the material — the session-by-session workbook covers only the 29-30 September days at PLM."
+    }
   },
   "schedule": {
     "timezone": "Asia/Manila",
@@ -1085,7 +1120,10 @@
       "bio": null,
       "abstract": null,
       "keywords": null,
-      "stub": true
+      "stub": true,
+      "affiliation": "Mechanical Engineering Department, Kung Shan University, Taiwan",
+      "titleFromSite": "Shaping Resilient Futures through AI-Enabled Smart Manufacturing Education: Sustainability, Inclusive Innovation, and Global Talent Development",
+      "titleFromProgramme": "AI-Enabled Smart Manufacturing Education: Sustainability, Inclusive Innovation, and Global Talent Development"
     },
     {
       "label": "PLENARY SPEAKER 2",
@@ -1130,7 +1168,8 @@
         "Inclusive Pedagogy",
         "Academic Integrity"
       ],
-      "stub": false
+      "stub": false,
+      "affiliation": "Universiti PolyTech Malaysia, Malaysia"
     },
     {
       "label": "STEA KEYNOTE SPEAKER 1",
@@ -1141,7 +1180,8 @@
       "bio": "Dr. Juvy A. Balbarona is a professor and former Chairman of the Department of Mechanical Engineering at the University of the Philippines Diliman. She completed her B.S. and M.S. degrees in Mechanical Engineering and her Ph.D. in Energy Engineering at UP Diliman, later serving as the College of Engineering's Associate Dean for Student Affairs.\n\nShe specializes in thermal systems modelling, surface modification for heat transfer enhancement, and energy modeling. Her current research focuses on engineering metal surfaces to enhance pool boiling, application of nature inspired texture for improve water harvesting and dehumidification, and oscillating heat pipes. Currently, she is the head of the Nanomaterials and Heat Transfer Laboratory at the ME Department in UP Diliman.",
       "abstract": null,
       "keywords": null,
-      "stub": false
+      "stub": false,
+      "affiliation": "University of the Philippines Diliman, Philippines"
     },
     {
       "label": "STEA KEYNOTE SPEAKER 2",
@@ -1152,7 +1192,8 @@
       "bio": "Dr. Jared Aaron R. Cruz is an architect by profession, a project manager by specialization, and an educator by vocation. A full-time faculty member for 14 years at the Pamantasan ng Lungsod ng Maynila, he concurrently serves as an Assistant Professor and Dean of its College of Architecture and Sustainable Built Environments. A Doctor of Philosophy in the Designed and Built Environment from the University of the Philippines Diliman College of Architecture and a Certified BERDE Professional for Districts, he has research interests in sustainability, resilience, architectural history, and built heritage conservation. Prior to his tenure in the academe, he engaged in residential and commercial design and construction consultancy services after passing and ranking 4th in the June 2010 Architect's Licensure Exam.",
       "abstract": null,
       "keywords": null,
-      "stub": false
+      "stub": false,
+      "affiliation": "Pamantasan ng Lungsod ng Maynila and University of the Philippines Diliman, Philippines"
     },
     {
       "label": "STEA KEYNOTE SPEAKER 3",
@@ -1163,7 +1204,8 @@
       "bio": "Magin Benedict F. Ferrer is currently a postdoctoral researcher at the Institut de Science de Matériaux de Mulhouse (IS2M) in France. His research interests include photochemistry, radiation detection and photolithography.\n\nAfter obtaining his Bachelor's degrees in Chemistry (2018) and Materials Science and Engineering (2019) at the Ateneo de Manila University, he moved to Europe for his postgraduate studies. Under the SERP+ Erasmus Mundus Program, he obtained Master's degrees in Chemistry from the Paris-Saclay University, France, and in Materials Science and Technology from the University of Genoa, Italy in 2021.\n\nIn 2024, he finished a double-degree PhD in Chemistry under joint supervision from the PPSM laboratory of Paris-Saclay University, and the Photonic and Reactive Molecular Science Laboratory of the Nara Institute of Science and Technology, Japan.",
       "abstract": "Microchip production constitutes a very important industry; however, current fabrication processes use chemicals that pose health risks and environmental hazards during disposal. The RESIN GREEN Project aims to develop new resist materials and nanometrology methods with the goal of reducing the ecological footprint of digital technology. Bio-sourced polymers have been studied to aid in the transition to eco-friendlier processes. The polysaccharide chitosan has shown promise as a water-soluble photoresist in photolithography at 193 nm (Deep UV), already behaving as a positive tone resist via chain scission of its glycosidic bonds. A commercial photoacid generator (PAG 0) was tested to enhance this effect; however, its sensitivity is still lower than industrial standards. Two new fluorine-free water-soluble PAGs conceptually inspired by commercially available sulfonium salts were synthesized and incorporated in the chitosan resist platform significantly improving the sensitivity of the resulting films in DUV photolithography by reducing the dose-to-clear value and demonstrating the possibility for photomask patterning.",
       "keywords": null,
-      "stub": false
+      "stub": false,
+      "affiliation": "Institut de Science des Matériaux de Mulhouse (IS2M), CNRS, Université de Haute-Alsace, France"
     },
     {
       "label": "STEA KEYNOTE SPEAKER 4",
@@ -1174,7 +1216,8 @@
       "bio": "Larry V. Padilla is an Associate Professor of the Biology Department, College of Science, Pamantasan ng Lungsod ng Maynila (PLM). He previously served as the Director of the University Research Center, the Department Chair of the Biology Department and the College Secretary of the College of Science of this university. His research interests span from harmful algal bloom mitigation and ecology, aquatic ecology, environmental assessments and monitoring, natural products, sustainability science to chronobiology of organisms. He obtained his BSc in Biology degree from PLM and his MSc in Marine Science (maj. in Marine Biology) degree from The Marine Science Institute of the University of the Philippines (UP-MSI) in Diliman. He is currently pursuing a Doctorate degree in Sustainability from the University of the Philippines – Open University after taking some course work in PhD in Biology.\n\nLarry is an educator, a marine and environmental scientist, and a researcher. As a researcher, he was able to publish several research works in scientific journals indexed in Web of Science, Scopus, and ASEAN Citation index. He is an associate member of the National Research Council of the Philippines (NRCP) among other professional and technical organizations and was also part of the pioneering batch of the National Academy of Science and Technology (NAST)- Future Science Leaders. He was one of the three recipients of the Most Outstanding Faculty Award during PLM's 50th Golden Anniversary and the Nemenzo Award in one of the National Symposium in Marine Science. Prior to teaching in PLM, he also worked as an Environmental Scientist for AECOM, a multinational consultancy firm, and as a University Research Associate at the Marine Science Institute in UP Diliman. He has also joined oceanographic research cruises in the past that traversed the inner and eastern seas of the Philippines, was involved in several environmental consultancy works, and is also serving as a biology consultant tasked as an item validator and an item writer for national admission examinations.",
       "abstract": "Carl Addeb1,2, Lounelle Godinez1,3, Larry V. Padilla1,4*, Stephenn Rabano1,5, Christopher Niño Santos1,3, Roxanne Selmo1,6, Roda Valenzuela1\n\n1University of the Philippines - Open University, Los Baños, Laguna, Philippines\n\n2Polytechnic University of the Philippines - San Pedro Campus, San Pedro, Laguna, Philippines\n\nFlooding in the Philippines is a systemic and persistent problem affecting communities. One area consistently experiencing its devastating impacts is Barangay Landayan, San Pedro City in Laguna, a lakeshore community. It has been reported that flood waters in several areas have not subsided for several months. The root cause/s of this wicked problem has not been definitively determined, prompting ineffective actions and measures to address the issue. This study sought to determine the causes of flooding in the area to identify potential solutions and adaptations using the Unitive Worldview Framework. Geospatial analyses of selected historical maps and images to trace changes in green spaces, ecosystems, land area, and waterways, as supported by secondary data, were performed using QGIS software. Two focused discussions (FGD) were also conducted to obtain crucial insights from key informants. Findings revealed that flooding may be attributed to encroachment of waters caused by lakeshore subsidence, wetland conversion to built-up areas, loss of green ecosystem, and obstruction of waterways. Moreover, FGDs revealed anthropocentric causes of flooding clustered into three themes: problematic multi-partite planning and execution, questionable strategic disaster mitigation investments, and failed urban resilience. This study revealed that flooding in Barangay Landayan is multi-causal and a complex problem that requires appropriate and holistic interventions, mitigation measures, and adaptations by the stakeholders, with some detailed in this paper.",
       "keywords": null,
-      "stub": false
+      "stub": false,
+      "affiliation": "University of the Philippines Open University and Pamantasan ng Lungsod ng Maynila, Philippines"
     },
     {
       "label": "STEA KEYNOTE SPEAKER 5",
@@ -1185,7 +1228,8 @@
       "bio": null,
       "abstract": null,
       "keywords": null,
-      "stub": true
+      "stub": true,
+      "affiliation": "University of Central Florida, U.S.A."
     },
     {
       "label": "STEA KEYNOTE SPEAKER 6",
@@ -1196,7 +1240,8 @@
       "bio": null,
       "abstract": null,
       "keywords": null,
-      "stub": true
+      "stub": true,
+      "affiliation": "Faculty of Science and Engineering Southern Cross University, Australia"
     },
     {
       "label": "STEA KEYNOTE SPEAKER 7",
@@ -1229,7 +1274,8 @@
       "bio": "Dr. Emmanuel P. Paulino is a published researcher whose scholarly works have appeared in journals indexed in Scopus and Clarivate Analytics, including publications in Q1–Q3-ranked journals. He has presented research papers at international conferences in Brunei, India, and the United States, demonstrating his commitment to advancing research and fostering international scholarly collaboration.\n\nHe is a recipient of the Best Competitive Paper Award at the Marketing Educators Association Conference in San Diego, California, where his research paper was selected from 94 submissions. He also serves as a peer reviewer for high-impact academic journals published by Emerald Publishing and Taylor & Francis.\n\nCurrently, Dr. Paulino serves as the University Research Planning Officer and a Graduate School faculty member at Pamantasan ng Lungsod ng Maynila. He has also served as faculty in research methods, statistics, and business analytics at Ateneo de Manila University, De La Salle University–Dasmariñas, and San Beda College Alabang.\n\nWith extensive experience in research and higher education, Dr. Paulino actively contributes to research capacity building, scholarly publication, and the promotion of academic excellence in higher education.",
       "abstract": null,
       "keywords": null,
-      "stub": false
+      "stub": false,
+      "affiliation": "Ateneo de Manila University, Graduate School of Business, Philippines"
     },
     {
       "label": "BGL KEYNOTE SPEAKER 3",
@@ -1240,7 +1286,8 @@
       "bio": null,
       "abstract": null,
       "keywords": null,
-      "stub": true
+      "stub": true,
+      "affiliation": "University of the Philippines Los Baños, Philippines; Wageningen University, Netherlands, DOST Balik Scientist 2026"
     },
     {
       "label": "BGL KEYNOTE SPEAKER 3",
@@ -1262,7 +1309,8 @@
       "bio": "Dr. Mark Anthony G. Fran is a Science and Technology Fellow II at the Virology and Vaccine Institute of the Philippines (VIP) under the Industrial Technology Development Institute (ITDI), Department of Science and Technology (DOST). His work supports the development of the country's virology and vaccine research capabilities, with particular involvement in biosafety, biosecurity, research governance, and science policy. He is also a certified biosafety professional of the International Federation of Biosafety Associations (IFBA). He earned his PhD in Biology from the University of Santo Tomas. His doctoral research focused on molecular oncology, particularly the characterization of novel oncogenic mutations associated with young-onset colorectal cancer among Filipino patients. His broader research interests include molecular and cancer biology, natural products, biosafety, biosecurity, and science policy. Prior to joining DOST, Dr. Fran served as a University Research Associate and Laboratory Manager at the National Institute of Molecular Biology and Biotechnology (NIMBB), University of the Philippines Diliman. Dr. Fran also serves as a Board Member of the Philippine Society for Cell Biology (PSCB), an organization in which he has been actively involved since 2009, contributing to the advancement of cell biology research, scientific collaboration, and professional development in the Philippines. Complementing his scientific career, he is currently pursuing a Juris Doctor degree at the Arellano University School of Law, reflecting his growing engagement at the intersection of science, law, and public policy.",
       "abstract": "S&T Fellows Program Industrial Technology Development Institute (DOST-ITDI) Virology and Vaccine Institute of the Philippines (VIP) Program\n\nAdvances in cancer genomics are transforming our understanding of cancer biology and creating new opportunities for precision medicine. However, the benefits of genomic innovation remain unevenly distributed, particularly in low- and middle-income countries, where limited genomic data, research infrastructure, and access to advanced technologies can hinder translation into clinical practice. In the Philippines, these challenges highlight the need for approaches that are not only scientifically innovative but also sustainable, inclusive, and responsive to local health priorities. This talk explores how cancer genomics can move from laboratory discoveries toward better and more accessible healthcare for Filipinos. Drawing from research on molecular alterations in Filipino cancer patients, particularly those with young-onset colorectal cancer, it highlights the importance of generating local genomic data to better understand cancer within the Philippine population. It also examines how artificial intelligence (AI) can support the analysis of complex genomic and clinical data, facilitate biomarker discovery, and advance precision medicine. Beyond technological innovation, the talk emphasizes the importance of sustainable research infrastructure, responsible data use, local capacity-building, and inclusive innovation to ensure that Filipino patients are adequately represented and can benefit from advances in cancer genomics. Ultimately, integrating science, AI, sustainability, and inclusivity can help bridge the gap between laboratory discoveries and practical, equitable, and locally relevant healthcare solutions.",
       "keywords": null,
-      "stub": false
+      "stub": false,
+      "affiliation": "S&T Fellow II Department of Science and Technology (DOST) S&T Fellows Program Industrial Technology Development Institute (DOST-ITDI) Virology and Vaccine Institute of the Philippines (VIP) Program, Philippines"
     },
     {
       "label": "HS KEYNOTE SPEAKER 2",
@@ -1273,7 +1321,8 @@
       "bio": "Mary Stephanie S. Carranza is Co-Founder and Managing Director of BIOMATS PH, a Philippine biotechnology startup developing bioprinting technologies and biomaterials for biomedical research. She also serves as Head of the Biomedical Research Unit (BRU) at the Clinical and Translational Research Institute of The Medical City – Ortigas, where she leads research programs supporting translational biomedical innovation. Ms. Carranza is currently leading her own DOST project and is a consultant to several government-funded tissue engineering projects. She previously served as Laboratory Manager (University Researcher II) at the Philippine Genome Center's Protein, Proteomics, and Metabolomics Facility, supporting national research initiatives in metabolomics and proteomics.\n\nCarranza has over eight years of research experience in biomaterials, tissue engineering, metabolomics, and translational biomedical research. Her expertise includes biomaterial modification, bioink development, 3D cell culture, and 3D bioprinting for next-generation in vitro models. She also serves as a consultant to several tissue engineering projects, with a particular focus on 3D bioprinting and bio fabrication.\n\nHer honors include the Leaders in Innovation Fellowship of the Royal Academy of Engineering (2026), the Short-Stay Scholar Award from the Japan Student Services Organization (2025), and recognition as a finalist in the 2021 Merck Young Scientist Award in the Philippines.\n\nCarranza holds a B.S. in Biochemistry and an M.S. in Chemistry, specializing in biomaterials, from De La Salle University - Manila. She also pursued graduate training in biomaterials at Osaka University as a Japanese government (MEXT) scholar.",
       "abstract": "Three-dimensional (3D) bioprinting sits at the intersection of biomaterials, engineering, and biology, offering new opportunities to develop physiologically relevant in vitro models and regenerative tissue technologies. However, the success of a bioprinted construct is not determined by the printer alone. The choice of polymer, method of processing, and design of biomaterials fundamentally influence printability, structural fidelity, cell compatibility, and ultimately the biological function of the printed tissue.\n\nThis talk will explore key considerations in bioink design, from the intrinsic properties of biomaterials and their rheological behavior to crosslinking, degradation, mechanical performance, and interactions with cells. Examples will illustrate how these considerations change depending on the intended application, from scaffold-based tissue regeneration to the development of reproducible in vitro disease and drug-testing models.\n\nBeyond individual bioinks and applications, the discussion will consider sustainability as an ecosystem-level challenge. Developing accessible, adaptable, and locally relevant biomaterials and bioprinting technologies can reduce dependence on imported materials and equipment while enabling researchers to build capabilities suited to regional needs. Establishing shared expertise, characterization infrastructure, standardized approaches, and collaborations across academia, industry, and healthcare can create a more sustainable pathway for bioprinting research and translation.\n\nUltimately, advancing bioprinting in the region requires more than developing better materials or printers, it requires building an ecosystem that allows researchers to move from biomaterial design to functional biological models and, eventually, regenerative applications.",
       "keywords": null,
-      "stub": false
+      "stub": false,
+      "affiliation": "De La Salle University and Biomedical Research Unit (BRU), Clinical and Translational Research Institute (CTRI), The Medical City, Philippines"
     },
     {
       "label": "HS KEYNOTE SPEAKER 3",
@@ -1284,7 +1333,8 @@
       "bio": null,
       "abstract": null,
       "keywords": null,
-      "stub": true
+      "stub": true,
+      "affiliation": "Institut de Science des Matériaux de Mulhouse (IS2M), CNRS, Université de Haute-Alsace, France"
     },
     {
       "label": "HS KEYNOTE SPEAKER 4",
@@ -1295,7 +1345,8 @@
       "bio": "Dr. David Paul R. Ramos is an Associate Professor III and former Dean of the College of Nursing at the Pamantasan ng Lungsod ng Maynila. He holds a Doctor of Philosophy in Nursing Education, a Master's in Nursing Education from the University of the Philippines Manila, and a Master of Arts in Nursing major in Nursing Administration. A registered nurse with clinical experience in perioperative nursing, he has devoted more than two decades to nursing practice, education, research, and academic leadership.\n\nDr. Ramos has authored and co-authored studies on nursing education, academic motivation, organizational commitment, exercise dependence, and data privacy. His scholarly work has been presented at national and international conferences, including the Sigma Nursing International Nursing Research Congress in Seattle, Washington. He is an Associate Member of the National Research Council of the Philippines and previously served as a Board Director of the Philippine Nurses Association–NCR Zone 1 and Vice President of the Sigma Theta Tau International Honor Society of Nursing–Phi Gamma Chapter.\n\nHis professional interests include simulation-based nursing education, perioperative nursing, curriculum development, evidence-based teaching, research, and educational innovation. Through his work, he continues to advocate for transformative learning experiences that prepare future nurses to provide safe, competent, compassionate, and responsive care.",
       "abstract": "Preparing future-ready nurses requires educational approaches that can address limited clinical placements, resource constraints, and the increasing complexity of healthcare practice. This plenary presentation examines simulation-based nursing education as an outcomes-based, innovative, and sustainable strategy for strengthening clinical readiness and preparing nurses to contribute to resilient and inclusive communities. This presentation describes the integration of a structured, low-fidelity perioperative simulation module into third-year Adult Health Nursing. Guided by Bondy's Clinical Performance Path Model, the module was designed to support students' progression from assisted toward supervised clinical performance. It combined prebriefing, skills stations, role-based operating-room scenarios, structured debriefing, and competency-based evaluation. Learners managed simulated situations involving breaks in sterile technique, incorrect surgical counts, intraoperative bleeding, patient-safety risks, prioritization, and interdisciplinary communication. Pilot qualitative validation based on student narratives indicated that participants exposed to simulation perceived stronger clinical understanding, confidence, procedural skills, communication, teamwork, and ability to connect theory with practice. Narratives from students without simulation exposure reflected greater dependence on lectures, return demonstrations, observation, and clinical-instructor guidance, together with continuing difficulty applying knowledge in realistic situations. These findings support the curricular value of structured simulation while remaining limited to students' reported experiences rather than controlled measures of effectiveness. Such applications must remain ethical, transparent, culturally responsive, and educator-guided. By enabling safe repetition, reducing exclusive dependence on scarce clinical placements, and permitting locally developed, resource-conscious learning experiences, simulation can advance sustainability and educational inclusion.",
       "keywords": null,
-      "stub": false
+      "stub": false,
+      "affiliation": "Pamantasan ng Lungsod ng Maynila and University of the Philippines Manila, Philippines"
     },
     {
       "label": "HS KEYNOTE SPEAKER 5",
@@ -1306,7 +1357,8 @@
       "bio": null,
       "abstract": null,
       "keywords": null,
-      "stub": true
+      "stub": true,
+      "affiliation": "University of Central Florida (UCF), Orlando, Florida, U.S.A. and Our Lady of Fatima University (OLFU), Philippines"
     },
     {
       "label": "HS KEYNOTE SPEAKER 6",
@@ -1317,7 +1369,8 @@
       "bio": "Prof. Kuo-Sheng Cheng was born in Taipei, Taiwan. He received his B.Sc. and M.Sc. degrees in Electrical Engineering from National Cheng Kung University (NCKU), Tainan, Taiwan, in 1980 and 1982, respectively. He later earned an M.S. degree in Biomedical Engineering from Rensselaer Polytechnic Institute, Troy, NY, USA, in 1988, and a Ph.D. in Electrical Engineering from NCKU in 1990.\n\nDr. Cheng is currently a Professor in the Department of Biomedical Engineering and an Adjunct Professor in the Institute of Oral Medicine at National Cheng Kung University. He also serves as the Director of the Department of Medical Engineering at National Cheng Kung University Hospital and the Director of the Engineering and Technology Promotion Center, funded by the Ministry of Science and Technology, Taiwan.\n\nHe is a former President of the Taiwan Society of Biomedical Engineering, TAIWAN. He is also a former Chair of the IEEE Tainan Section and currently serves as Chair of the IEEE Engineering in Medicine and Biology Society (EMBS) Tainan Chapter. His research interests include medical image analysis, electrical impedance imaging, and biomedical instrumentation and measurement. Prof. Cheng has authored more than 150 papers in academic journals and conferences and has been invited as a keynote speaker at numerous international conferences.",
       "abstract": null,
       "keywords": null,
-      "stub": false
+      "stub": false,
+      "affiliation": "National Cheng Kung University, Taiwan"
     },
     {
       "label": "EASS KEYNOTE SPEAKER1",
@@ -1328,7 +1381,8 @@
       "bio": "Dr Joana Jaya is a recognized Senior Lecturer, communication scholar and higher education professional with more than 20 years of experience spanning Mass Communication, Public Relations, Strategic Communication, Corporate Communication, Event Management, media, management and international engagement. She holds a PhD in Management from INTI International University, with research focusing on talent, human values, cultural diversity and strategic communication within Malaysia's private higher education sector.\n\nCurrently serving as a Senior Lecturer at INTI International University, Dr Jaya has established herself particularly in the fields of Strategic Communication, Public Relations, Corporate Communication and Events. Her academic and professional interests centre on how communication can support organisations, communities and institutions in managing relationships, reputation, cultural diversity, engagement and change.\n\nThroughout her career, she has contributed extensively to programme leadership, curriculum development, academic quality assurance and internationalisation. She has previously served as Head of Programme for communication and business-related programmes and has played an active role in developing academic collaborations, institutional partnerships and MOUs with universities and organisations across Asia, Europe and the Middle East.\n\nHer teaching portfolio covers Mass Communication, Public Relations, Organisational Communication, Strategic Communication, Media Studies, Corporate Communication and Event Management. Beyond undergraduate teaching, she supervises PhD and MBA candidates and contributes to postgraduate academic development through thesis examination, research supervision and scholarly mentoring. Her research and publications encompass communication, higher education, health communication, sustainability and organisational issues.\n\nDr Jaya maintains a strong connection between academia and professional practice. She has been involved in corporate and public communication initiatives, major events, public awareness campaigns, student development projects and government- and state-related development programmes. Her extensive experience in planning and coordinating events has allowed her to integrate practical industry realities into her teaching and research, particularly in strategic communication, stakeholder engagement, media relations and event communication.\n\nHer professional engagement also extends into the media and creative industries. She has participated in independent film productions, including award-winning short film projects, and has appeared in radio talk shows and other media platforms. These experiences have strengthened her perspective on storytelling, media engagement, public communication and the relationship between academic knowledge and contemporary communication practice.\n\nAs a speaker and moderator, Dr Jaya has participated in academic, professional and industry conferences, forums and public discussions. Her speaking engagements have covered a diverse range of topics including culture and intercultural communication, strategic communication, event management, corporate communication, artificial intelligence, education, development, leadership and the changing communication landscape. Her ability to connect academic perspectives with practical and contemporary issues has enabled her to engage audiences across education, industry and community settings.\n\nShe is also an experienced Master of Ceremony who has hosted academic, corporate, international and high-level institutional events. Her communication style combines academic depth with professional presentation, audience engagement and practical industry understanding.\n\nThrough her work, Dr Jaya continues to advocate for stronger connections between higher education, communication practice, industry collaboration and societal development. Her professional philosophy centers on preparing students not only to understand communication theoretically, but also to apply it confidently and responsibly within real organizational, cultural and increasingly technology-driven environments.",
       "abstract": "Higher education is increasingly challenged to prepare students for rapidly evolving artificial intelligence environments while ensuring that learning remains practical, ethical, and industry-relevant. Work-integrated learning offers an opportunity to move beyond theoretical AI literacy by involving students directly in authentic operational, governance, and leadership activities. Drawing on the student-driven operational model developed for the Borneo AI Summit 2026, this presentation highlights how university students can contribute meaningfully to live industry and regional innovation ecosystems. Student Virtual Assistants are embedded within functional areas including commercial research, ticketing, public relations and media production, protocol, certification logistics, data management, and structured operational handovers. Through these responsibilities, students gain practical exposure to leadership, communication, teamwork, data privacy, PDPA compliance, responsible AI practices, and cross-border collaboration. The model also demonstrates how higher education institutions can strengthen university-industry partnerships by positioning students as accountable contributors rather than passive observers. By connecting experiential learning with regional priorities such as Inclusive Intelligence and cross-border AI collaboration, the approach supports graduate readiness and ASEAN talent development. A scalable framework is proposed for educators seeking to integrate live industry projects into university learning while strengthening responsible AI leadership and regional innovation capacity.",
       "keywords": null,
-      "stub": false
+      "stub": false,
+      "affiliation": "INTI International University, Malaysia"
     },
     {
       "label": "EASS KEYNOTE SPEAKER 2",
@@ -1350,7 +1404,8 @@
       "bio": "Stephanie Marie R. Coo is an Associate Professor of History at the Ateneo de Manila University (Philippines) and a researcher at CHAM – Centro de Humanidades, Universidade Nova de Lisboa (Portugal). She holds a PhD in History from Université Nice Sophia Antipolis (France) and has held research fellowships at the Universidad de Granada (Spain), NOVA School of Law, Universidade Nova de Lisboa (Portugal) and Ruhr-Universität Bochum (Germany), including a Marie Skłodowska-Curie Postdoctoral Fellowship. She is the award-winning author of Clothing the Colony: Nineteenth-Century Philippine Sartorial Culture, 1820–1896, recipient of the IIAS-ICAS International Book Prize for Best Book in Humanities (Netherlands, 2021), National Book Award and the John C. Kaw Prize for Best Book in History (Philippines, 2022). Her second book, Seams of Sedition: Sartorial Symbols in José Rizal´s Noli Me Tángere (Ateneo de Naga University Press, 2025), expands the study to clothing, literature, and resistance in late colonial Philippines. It was launched internationally at the Leipzig Book Fair 2025, Frankfurt Book Fair - Philippines as Guest of Honor Nation 2025, Berlin Ibero-American Institute (Berlin, 2025), Biblioteca Palácio Galveias (Lisbon, 2025), and at the National Museum of Fine Arts (Manila, 2026). Her work explores the intersections of material culture, dress, gender, and colonial society in the nineteenth-century Philippines and the broader Iberian world.",
       "abstract": "Drawing on two book-length studies of Philippine sartorial history, Clothing the Colony: Nineteenth-Century Philippine Sartorial Culture, 1820–1896 and Seams of Sedition: Sartorial Symbols in José Rizal's Noli Me Tangere, this keynote examines clothing as an underused archive of human agency, identity, and adaptation, treating dress not as decorative or peripheral but as a primary source through which marginalized groups negotiated power, expressed dignity, and shaped their own narratives within colonial systems and their aftermaths.\n\nOrganized around several guiding questions, this seeks to address how individuals exercise agency within systems of imposed regulation, whether sartorial, colonial, or technological. What can material and literary details reveal about identity formation that formal records omit? How did power, everyday practice, and encoded meaning intersect in the lived experience of colonial subjects, and how might that intersection be traced in other systems of constraint? And, most centrally for this audience, how might historical methods of reading agency, resilience, and adaptation inform the design, evaluation, and study of present-day inclusive systems and emerging technologies? Though these questions are first posed in a nineteenth-century colonial context, they are deliberately framed to travel forward, since any system that regulates behavior through unstated rules, whether a sumptuary ordinance or an algorithm, raises the same basic question of who is served and who must quietly adapt.\n\nTo answer these questions, the study is grounded in a layered theoretical framework spanning power, practice, and meaning. Pierre Bourdieu's theory of cultural and symbolic capital and Michel Foucault's analysis of power and the disciplined body explain how dress functioned as both currency and mechanism of colonial stratification. James C. Scott's concept of everyday resistance and Michel de Certeau's distinction between imposed strategies and improvised tactics inform how small, low-visibility sartorial choices are read as meaningful acts of agency within constraint. Marcel Mauss's theory of gift and reciprocal exchange and Daniel Miller's work in material culture studies anchor clothing as socially constitutive rather than merely decorative, while Roland Barthes's semiotics of fashion, Homi Bhabha's theory of colonial hybridity, and Jacques Derrida's method of deconstruction provide the interpretive tools for reading garments and texts as unstable, layered sign systems.\n\nGuided by this framework, the underlying research draws on an extensive body of primary sources, including nineteenth-century artworks, studio and family photographs, period newspapers, foreign travelers' accounts, novels, and surviving garments, cross-referenced with one another and combined with close literary reading of Rizal's prose, allowing material and textual evidence to illuminate one another. This body of evidence shows how clothing functioned as both a tool of colonial control and a medium through which Filipinos exercised choice and self-determination, and how literary and historical sources, read together, reveal the ways sartorial detail encodes social hierarchy, aspiration, and emerging national identity, with agency often expressed in small, easily overlooked acts rather than overt confrontation.\n\nIn seeking to answer these questions, the keynote aims to establish clothing and literature as rigorous sources for understanding social agency, to model an interdisciplinary method linking material culture, literary analysis, and history, and to translate these historical insights into a practical framework for evaluating inclusivity in contemporary innovation. In line with the conference theme, \"Shaping Resilient Futures: AI, Sustainability, and Inclusive Innovation,\" the keynote extends this framework to invite researchers across disciplines to bring the same attentiveness to overlooked detail, adaptation, and agency when designing, deploying, and studying technologies and systems meant to serve plural communities.\n\nAn Igorot born and raised in Baguio City with ancestral roots from the Mountain Provinces. Dr. Jularbal received his PhD from the UPD Tri-College under its Philippine studies program. His research and published works include Cordilleran and highland public policy, Northern Local Language and literatures, as well as indigenous traditions and material culture. He is currently Dean of the College of Arts and Communication, University of the Philippines Baguio where he is also faculty of the department of language and literature and researcher for the cordillera studies center (CSC).\n\nCurrently, the use of Artificial Intelligence (AI) as a tool in bolstering representation capabilities of indigenous communities in the Cordillera has received much prominence and fashionability. From image generation to song and text composition etc., AI technology has taken indigenous representation to a wider audience with vast interactive capability, but despite all this, AI has proven itself to be revolutionary on a double-edged perspective, straddling a thin line between heritage preservation and misrepresentation.\n\nMy keynote presentation will take into consideration the duality of AI as potential conservator and destroyer of cultural heritage and as such, posing ethical and technical issues, risks, and challenges. At present, both Indigenous representation and Artificial intelligence are rapidly evolving and to see the intersection between the two is indeed inevitable. The potential of AI in the promotion of Indigenous knowledge and heritage constructs also exists with the reality that such a promotion can lead to misinformation, misrepresentation, and eventual erosion of cultural and life ways for many indigenous communities.",
       "keywords": null,
-      "stub": false
+      "stub": false,
+      "affiliation": "Ateneo de Manila University, Philippines; Universidade Nova de Lisbon, Portugal"
     },
     {
       "label": "EASS KEYNOTE SPEAKER 5",
@@ -1361,17 +1416,18 @@
       "bio": "Dr. Feorillo A. Demeterio III is a Distinguished Full Professor of the Department of Filipino, College of Liberal Arts, De La Salle University, and Head of the Matter and Memory Research Laboratory. He has extensive experience in research administration, capacity building, and scholarly mentoring, being the Executive Director of the University's Research and Grants Management Office for more than a decade now. In recent years, Dr. Demeterio has developed particular expertise in AI-assisted research mentoring, especially in guiding faculty members, graduate students, and researchers in the strategic use of generative AI across different stages of the research process. His mentoring work covers the development and refinement of research titles and problems, systematic and scoping literature reviews, conceptual and theoretical frameworks, research design, qualitative and quantitative analysis, article extraction, results-and-discussion writing, journal targeting, and manuscript development. He has designed and facilitated numerous workshops and writeshops on AI-assisted research and scholarly publication. Dr. Demeterio is the author or co-author of several books and more than a hundred scholarly articles in hermeneutics, cultural studies, Philippine studies, and Filipino philosophy. He has held visiting research appointments in Washington, D.C., and Hong Kong, and is a co-founder of the Andrew Gonzalez Philippine Citation Index.",
       "abstract": "Full Professor,Department of Filipino, College of Liberal Arts, De La Salle University\n\nExecutive Director University Research and Grants Management Office, De La Salle University\n\nGenerative artificial intelligence is rapidly transforming research from a largely individual and sequential process into a more interactive, iterative, and computationally augmented form of knowledge production. This keynote argues that the value of generative AI for Philippine higher education institutions extends far beyond efficiency and automation. Properly integrated, generative AI can strengthen research excellence by supporting researchers across the research cycle—from problem formulation, literature searching and synthesis, conceptual and theoretical framing, research design, data analysis, interpretation, visualization, and scholarly writing to publication preparation. It can likewise enhance research mentoring by enabling more sustained feedback, scaffolding methodological reasoning, diagnosing weaknesses in manuscripts, and helping mentors guide larger and more diverse groups of researchers. The presentation further examines how generative AI is reshaping the research ecosystem by changing expectations regarding researcher competencies, mentoring practices, publication workflows, institutional research support, and research governance. It argues that Philippine HEIs must move from defensive or purely regulatory responses toward deliberate institutional adaptation. This requires developing AI literacy, ethical and transparent research practices, appropriate governance frameworks, and AI-assisted research mentoring systems. The central challenge is therefore not whether Philippine HEIs should use generative AI, but how they can harness it responsibly to expand research capacity, improve scholarly quality, and strengthen their participation in global knowledge production.",
       "keywords": null,
-      "stub": false
+      "stub": false,
+      "affiliation": "De La Salle University, Philippines"
     }
   ],
   "papers": [],
   "venue": {
     "name": "Pamantasan ng Lungsod ng Maynila (PLM)",
     "alsoKnownAs": "University of the City of Manila",
-    "address": "General Luna Street, Intramuros, Manila",
+    "address": "Gen. Luna Cor. Muralla Streets, Intramuros Manila, Philippines 1002",
     "lat": 14.5868604,
     "lng": 120.9764378,
-    "website": "https://www.plm.edu.ph/",
+    "website": "https://plm.edu.ph",
     "osm": "way/27275574",
     "description": "A full campus of colleges, gymnasiums and the PLM Chapel behind its own gate, in the southern quarter of the walled city. Sessions run in several buildings across the campus.",
     "buildings": [
@@ -1438,12 +1494,18 @@
     "gettingThere": null,
     "accessibility": null,
     "parking": null,
-    "wifi": null
+    "wifi": null,
+    "about": "Pamantasan ng Lungsod ng Maynila (PLM) is the first and only chartered and autonomous university funded by a city government. It was created by the Congress of the Philippines by virtue of Republic Act No. 4196 or \"An Act Authorizing the City of Manila to Establish and Operate the University of City of Manila\" on June 19, 1965. The university first opened its gates on July 17, 1967 to 556 first-year students at its campus in the historic Intramuros district, which served as the seat of power during the Spanish occupation. Currently, about 10,000 graduate and post-graduate students grace its halls to receive PLM's quality education.PLM takes pride in being one of the country's leading institutions for higher education, consistently achieving high passing rates in board examinations and producing competent professionals across various fields. The university offers a comprehensive range of undergraduate and graduate programs in medicine, engineering, business, arts and sciences, education, and other disciplines, all while maintaining its commitment to providing quality yet accessible education to deserving students."
   },
   "registration": {
     "fees": [],
     "deadlines": [
-      "Registration ran May 16, 2026 – September 01, 2026 and has closed. Anyone asking about late or on-site registration should be sent to the organisers."
+      "Call for abstracts opened: 30 May 2026",
+      "Abstract submission deadline: 30 June 2026 25 July 2026  CLOSED",
+      "Acceptance notifications: 15 August 2026",
+      "Conference programme released: 25 August 2026 28 August 2026",
+      "Registration deadline: 20 August 2026, 11:59 p.m.",
+      "Note: the conference website gives the registration deadline as 20 August 2026, 11:59 p.m., while the registration tabulation reports sign-ups continuing to 1 September 2026. Registration is closed either way; anyone asking about late or on-site registration should be sent to the organisers."
     ],
     "howTo": null,
     "desk": null
