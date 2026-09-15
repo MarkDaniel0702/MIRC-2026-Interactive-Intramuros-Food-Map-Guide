@@ -19,7 +19,7 @@ import { buildIndex, retrieve } from '../worker/src/retrieve.js';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const budgetTokens = Number(process.argv[2]) || 2400;   // matches RETRIEVAL_BUDGET in the Worker
-const corpus = JSON.parse(readFileSync(join(root, 'data', 'chat-corpus.json'), 'utf8'));
+const corpus = JSON.parse(readFileSync(join(root, 'public', 'data', 'chat-corpus.json'), 'utf8'));
 const index = buildIndex(corpus);
 
 /** Does the rendered slice contain this text anywhere? */

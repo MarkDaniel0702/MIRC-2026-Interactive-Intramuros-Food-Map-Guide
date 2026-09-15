@@ -4,12 +4,12 @@ A chat panel on the map that answers questions about the congress and about gett
 around Intramuros — and declines everything else.
 
 **Dan** is the assistant's name; his mark is the phoenix artwork in
-`assets/dan-phoenix.png` — supplied art, cropped to the bird and scaled to 256px wide so
-it stays sharp on a high-DPI screen. It drifts on a slow cycle, quickens on hover, and
-beats fast while he is composing an answer, so the mark carries the state and the panel
-needs no separate spinner; `prefers-reduced-motion` stops it. Both placements come from
-one `phoenix()` helper in `chat.js`, sized by `.phx--sm` / `.phx--lg` in the *Dan's mark*
-block at the end of `styles.css`.
+`public/assets/dan-phoenix.png` — supplied art, cropped to the bird and scaled to 256px
+wide so it stays sharp on a high-DPI screen. It drifts on a slow cycle, quickens on
+hover, and beats fast while he is composing an answer, so the mark carries the state and
+the panel needs no separate spinner; `prefers-reduced-motion` stops it. Both placements
+render from `src/components/ChatPanel.tsx`, sized by `.phx--sm` / `.phx--lg` in the
+*Dan's mark* block at the end of `src/styles.css`.
 
 Two things about it worth knowing. Its oranges run hotter than the interface's gold
 (`#E3B23C`) — deliberate, it reads as a badge rather than another control glyph — which
@@ -26,21 +26,27 @@ both are listed under [What I need from you](#what-i-need-from-you) below.
 ## How it fits together
 
 ```
-data/mirc-2026.json        the congress knowledge base — you fill this in
+data/mirc-2026.json                the congress knowledge base — you fill this in
         │
         │  node tools/build-corpus.mjs
         │  (merges in the map's own food / sights / hotels / arrival points)
         ▼
-data/chat-corpus.json      the single file Dan answers from
+public/data/chat-corpus.json       the single file Dan answers from
         │
-        │  fetched and cached by the Worker
+        │  fetched and cached by the Worker; also fetched client-side for
+        │  suggestions/decline text (src/components/ChatPanel.tsx)
         ▼
-worker/src/index.js        holds the API key · grounds the model · enforces scope
+worker/src/index.js                holds the API key · grounds the model · enforces scope
         ▲
         │  POST /chat
         │
-chat.js                    the phoenix, the launcher, the panel, the composer
+src/components/ChatPanel.tsx       the phoenix, the launcher, the panel, the composer
 ```
+
+The corpus moved from `data/` to `public/data/` when the site became a Vite build: it
+must be served as a static asset at a stable URL both the browser and the Worker can
+fetch, and Vite only copies `public/` verbatim into the build. `tools/build-corpus.mjs`
+writes there directly; nothing else about the pipeline changed.
 
 The site is static and served from GitHub Pages, so it cannot hold an API key. The
 Worker is the only server-side piece, and it exists mostly for that reason.
@@ -185,8 +191,8 @@ have been imported — see *Training data* below. What remains:
 The registration workbook has a **`Source Data`** sheet with one row per delegate:
 name, e-mail, phone, username and Paybox invoicing address for all 239 of them.
 
-**It is not ingested, and should not be.** `data/chat-corpus.json` is fetched by the
-Worker over a public URL, so anything in it is published — putting that sheet in would
+**It is not ingested, and should not be.** `public/data/chat-corpus.json` is fetched by
+the Worker over a public URL, so anything in it is published — putting that sheet in would
 place 239 people's contact and billing details on the open web, which is not what they
 registered for. The importer reads only the aggregate sheets (`Executive Summary`,
 `By Country`, `By Institution`, `By Status`, `Monthly Trend`), and Dan's prompt carries
@@ -283,14 +289,16 @@ npx wrangler deploy
 npx wrangler secret put GEMINI_API_KEY      # and/or GROQ_API_KEY
 ```
 
-Then paste the Worker URL that `wrangler deploy` prints into the one marked constant
-at the top of [`chat.js`](chat.js):
+Then paste the Worker URL that `wrangler deploy` prints into the constant near the top
+of [`src/components/ChatPanel.tsx`](src/components/ChatPanel.tsx), and into the dev
+proxy target in [`vite.config.ts`](vite.config.ts):
 
-```js
-const ENDPOINT = 'https://mirc-2026-chat.<your-subdomain>.workers.dev';
+```ts
+// src/components/ChatPanel.tsx
+const WORKER_URL = 'https://mirc-2026-chat.<your-subdomain>.workers.dev';
 ```
 
-Push, and it is live. Until `ENDPOINT` is set the panel still opens and says plainly
+Push, and it is live. Until `WORKER_URL` is set the panel still opens and says plainly
 that it is not connected yet, rather than failing at the first question.
 
 Check `worker/wrangler.toml` before deploying — `CORPUS_URL` and `ALLOWED_ORIGINS`
@@ -311,7 +319,7 @@ Four layers, because no single one is enough. A determined person will try
 
 | Layer | Where | What it does |
 |---|---|---|
-| 0 | `chat.js` | Narrow patterns for the obviously off-topic — declined without touching the network |
+| 0 | `src/components/ChatPanel.tsx` | Narrow patterns for the obviously off-topic — declined without touching the network |
 | 1 | Worker | Input validation: type, 600-character cap, history depth, rate limit |
 | 2 | Worker | The same pattern filter server-side, so a modified client gains nothing |
 | 3 | Worker | The grounded prompt: identity, in/out scope lists, and a refusal that survives "I'm a developer" and "ignore previous instructions" |
@@ -336,13 +344,25 @@ Manila beyond Intramuros.
 ## Running it locally
 
 ```bash
-python -m http.server 8000
-# then open http://localhost:8000
+npm install
+npm run dev
+# then open the printed http://localhost:5173/... URL
 ```
 
-The panel works offline in its not-connected state. To test against a live Worker,
-run `npx wrangler dev` in `worker/` and point `ENDPOINT` at `http://localhost:8787`.
-`http://localhost:8000` is already in `ALLOWED_ORIGINS`.
+`vite.config.ts` proxies `/chat` to the deployed Worker, so the panel talks to the real,
+live Worker by default in dev — no `ALLOWED_ORIGINS` entry is needed for the Vite dev
+origin, because the browser only ever talks to Vite; Vite's own server makes the outbound
+request to the Worker, which isn't subject to CORS at all.
+
+To test against a **local** Worker instead (`npx wrangler dev` in `worker/`, which serves
+on `http://localhost:8787` by default), point the proxy at it temporarily:
+
+```ts
+// vite.config.ts
+server: { proxy: { '/chat': { target: 'http://localhost:8787', changeOrigin: true } } }
+```
+
+Revert that before committing — the proxy is meant to point at the deployed Worker.
 
 ---
 
@@ -360,11 +380,11 @@ small paid Anthropic key removes the ceiling for roughly the price of lunch.
 ## Files
 
 ```
-chat.js                     mark, launcher, panel, composer, client-side guards
-assets/dan-phoenix.png      Dan's phoenix, cropped and scaled from the supplied art
-styles.css                  the .chat-launch / .chat and Dan's mark blocks at the end
-data/mirc-2026.json         the knowledge base — the file you edit
-data/chat-corpus.json       generated; do not edit by hand
+src/components/ChatPanel.tsx   mark, launcher, panel, composer, client-side guards
+public/assets/dan-phoenix.png  Dan's phoenix, cropped and scaled from the supplied art
+src/styles.css                  the .chat-launch / .chat and Dan's mark blocks at the end
+data/mirc-2026.json             the knowledge base — the file you edit
+public/data/chat-corpus.json    generated; do not edit by hand
 tools/import-program.py     reads the committee's xlsx + speakers markdown
 tools/build-corpus.mjs      the merge step
 tools/eval-retrieval.mjs    retrieval recall, offline

@@ -3,12 +3,17 @@
  *
  *   node tools/build-corpus.mjs
  *
- * The chatbot answers only from a single file, data/chat-corpus.json. This script
- * builds that file by merging two sources:
+ * The chatbot answers only from a single file, public/data/chat-corpus.json. This
+ * script builds that file by merging two sources:
  *
  *   1. data/mirc-2026.json  — the congress knowledge base, filled in by the committee.
  *   2. data/*.js            — the map's own food, sights, hotels and arrival points,
  *                             compacted and annotated with a walking time from the venue.
+ *
+ * The output lives under public/ (not data/) because it must be served at runtime as
+ * a static asset — both by the browser (chat.js) and by the Cloudflare Worker, which
+ * fetches it from the deployed site's absolute URL. Vite copies public/ verbatim into
+ * the build, so this is the one data output that cannot live next to its siblings.
  *
  * Neither source is edited here; this only combines them. Nothing is invented: a
  * field left null in mirc-2026.json stays null, and the worker instructs the model
@@ -20,14 +25,13 @@
  * Exit code 0 = written. Exit code 1 = a source file was missing or malformed.
  */
 
-import { createRequire } from 'node:module';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { dirname, join } from 'node:path';
-import { readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 
-const require = createRequire(import.meta.url);
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const data = (...p) => join(root, 'data', ...p);
+const importData = p => import(pathToFileURL(data(p)).href);
 
 /* ── terminal colours (skipped when output is piped or NO_COLOR is set) ───────── */
 const tty = process.stdout.isTTY && !process.env.NO_COLOR;
@@ -74,11 +78,11 @@ let FOOD_SPOTS, PRICE_TIERS, CATEGORIES, DATA_REVIEWED;
 let TOURIST_SPOTS, FEE_TIERS, SIGHT_CATEGORIES, VENUE_ANCHOR, WALK_METRES_PER_MIN, INTRAMUROS_PASSPORT;
 let HOTELS, START_POINTS;
 try {
-  ({ FOOD_SPOTS, PRICE_TIERS, CATEGORIES, DATA_REVIEWED } = require(data('food-spots.js')));
+  ({ FOOD_SPOTS, PRICE_TIERS, CATEGORIES, DATA_REVIEWED } = await importData('food-spots.js'));
   ({ TOURIST_SPOTS, FEE_TIERS, SIGHT_CATEGORIES, VENUE_ANCHOR, WALK_METRES_PER_MIN, INTRAMUROS_PASSPORT } =
-    require(data('tourist-spots.js')));
-  ({ HOTELS } = require(data('hotels.js')));
-  ({ START_POINTS } = require(data('start-points.js')));
+    await importData('tourist-spots.js'));
+  ({ HOTELS } = await importData('hotels.js'));
+  ({ START_POINTS } = await importData('start-points.js'));
 } catch (err) {
   die('could not load the map data files', err);
 }
@@ -192,11 +196,12 @@ const corpus = {
   }
 };
 
-const out = data('chat-corpus.json');
+const out = join(root, 'public', 'data', 'chat-corpus.json');
 try {
+  mkdirSync(dirname(out), { recursive: true });
   writeFileSync(out, JSON.stringify(corpus, null, 2) + '\n', 'utf8');
 } catch (err) {
-  die('could not write data/chat-corpus.json', err);
+  die('could not write public/data/chat-corpus.json', err);
 }
 
 /* ── report ──────────────────────────────────────────────────────────────────── */
@@ -211,7 +216,7 @@ const paperCount = parallel.reduce((n, s) => n + (s.papers?.length ?? 0), 0);
 const keynoteCount = parallel.filter(s => s.keynote).length;
 const namedSpeakers = (mirc.speakers ?? []).filter(s => !s.stub).length;
 
-console.log(`\n  ${bold('Chat corpus built')}  ${dim('data/chat-corpus.json')}\n`);
+console.log(`\n  ${bold('Chat corpus built')}  ${dim('public/data/chat-corpus.json')}\n`);
 console.log(`  Congress    ${mirc.meta?.name ?? amber('name not set')}`);
 console.log(`  Dates       ${mirc.meta?.dates ?? amber('not set')}`);
 console.log(`  Programme   ${sessionCount ? `${sessionCount} scheduled items over ${days.length} days` : amber('empty')}`);

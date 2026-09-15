@@ -26,7 +26,7 @@
  */
 
 /** The one price scale used everywhere: legend, filters, list cards, popups. */
-const PRICE_TIERS = {
+export const PRICE_TIERS = {
   1: { symbol: '₱',       label: 'Budget',      range: 'under ₱200',            short: '<₱200'      },
   2: { symbol: '₱₱', label: 'Moderate',    range: '₱200 – ₱500',  short: '₱200–500'  },
   3: { symbol: '₱₱₱', label: 'Upscale', range: '₱500 – ₱1,000', short: '₱500–1k' },
@@ -36,7 +36,7 @@ const PRICE_TIERS = {
 /** Category keys -> display label + marker colour.
  *  Colours sit inside the navy / green / gold system; bright gold is reserved for
  *  selection and highlights, so categories use a brass, not the accent gold. */
-const CATEGORIES = {
+export const CATEGORIES = {
   heritage: { label: 'Restaurants & Heritage Dining', color: '#D4A82F', icon: 'fork'   },
   cafe:     { label: 'Cafes & Coffee',                color: '#2FA37A', icon: 'cup'    },
   fastfood: { label: 'Fast Food & Chains',            color: '#C4643C', icon: 'burger' },
@@ -45,9 +45,10 @@ const CATEGORIES = {
 };
 
 /** When the price tiers and the spot list were last reviewed. */
-const DATA_REVIEWED = '2026-09-04';
+export const DATA_REVIEWED = '2026-09-04';
 
-const FOOD_SPOTS = [
+/** @type {import('./types').FoodSpot[]} */
+export const FOOD_SPOTS = [
   {
     id: 'nine-spoons', name: '9 Spoons', category: 'heritage', priceTier: 3,
     cuisine: ['Filipino', 'Breakfast', 'Buffet'], street: 'Muralla corner Victoria Street', area: 'The Bayleaf Intramuros, 9th floor',
@@ -432,7 +433,3 @@ const FOOD_SPOTS = [
     blurb: 'Campus canteen at Pamantasan ng Lungsod ng Maynila, on General Luna Street. The visitor-supplied pin resolves to the PLM Multi-Purpose Building — confirm the exact spot and whether it is open to conference visitors.'
   }
 ];
-
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { FOOD_SPOTS, PRICE_TIERS, CATEGORIES, DATA_REVIEWED };
-}

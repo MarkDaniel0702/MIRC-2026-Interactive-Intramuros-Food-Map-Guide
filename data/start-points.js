@@ -12,7 +12,8 @@
  *
  * `outside: true` drives the "outside the walls" note in the picker.
  */
-const START_POINTS = [
+/** @type {import('./types').StartPoint[]} */
+export const START_POINTS = [
   {
     id: 'lrt-central-terminal',
     name: 'Central Terminal (LRT-1)',
@@ -62,7 +63,3 @@ const START_POINTS = [
     outside: false
   }
 ];
-
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { START_POINTS };
-}

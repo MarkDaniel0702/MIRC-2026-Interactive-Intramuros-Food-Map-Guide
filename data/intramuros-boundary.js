@@ -13,7 +13,8 @@
  * Coordinates are [longitude, latitude] per the GeoJSON spec.
  */
 
-const INTRAMUROS_BOUNDARY = {
+/** @type {import('./types').BoundaryFeature} */
+export const INTRAMUROS_BOUNDARY = {
   "type": "Feature",
   "properties": {
     "name": "Intramuros",
@@ -271,7 +272,3 @@ const INTRAMUROS_BOUNDARY = {
     ]
   }
 };
-
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { INTRAMUROS_BOUNDARY };
-}

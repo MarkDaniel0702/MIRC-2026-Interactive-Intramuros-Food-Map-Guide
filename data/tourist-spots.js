@@ -18,14 +18,14 @@
  */
 
 /** Entrance-fee bands. Tier 0 is free, which is most of the walled city. */
-const FEE_TIERS = {
+export const FEE_TIERS = {
   0: { symbol: 'FREE', label: 'Free entry', range: 'No entrance fee',  short: 'Free'      },
   1: { symbol: '₱',    label: 'Low',        range: '₱75 – ₱100',       short: '₱75–100'   },
   2: { symbol: '₱₱',   label: 'Standard',   range: '₱150 – ₱200',      short: '₱150–200'  }
 };
 
 /** Sight categories -> display label + marker colour (same navy/green/gold system). */
-const SIGHT_CATEGORIES = {
+export const SIGHT_CATEGORIES = {
   museum:   { label: 'Museums',                 color: '#D4A82F', icon: 'museum'   },
   church:   { label: 'Churches',                color: '#C9D6E6', icon: 'church'   },
   fort:     { label: 'Walls, Gates & Bastions', color: '#6C8FD4', icon: 'gate'     },
@@ -41,20 +41,20 @@ const SIGHT_CATEGORIES = {
  * >>> if sessions are in a specific building/hall, pin this to that exact spot <<<
  * and every walking time on the site re-bases itself.
  */
-const VENUE_ANCHOR = {
+export const VENUE_ANCHOR = {
   name: 'Pamantasan ng Lungsod ng Maynila',
   lat: 14.5868604,
   lng: 120.9764378
 };
 
 /** Average walking pace used to turn metres into minutes. */
-const WALK_METRES_PER_MIN = 80;
+export const WALK_METRES_PER_MIN = 80;
 
 /**
  * The Intramuros Administration sells a combined ticket. Worth flagging to anyone
  * planning to see more than two of the paid sites.
  */
-const INTRAMUROS_PASSPORT = {
+export const INTRAMUROS_PASSPORT = {
   price: '₱350',
   covers: ['Fort Santiago', 'Casa Manila', 'Museo de Intramuros', 'Baluarte de San Diego', 'Centro de Turismo'],
   extra: 'Includes a free guided tranvía tour.',
@@ -62,9 +62,10 @@ const INTRAMUROS_PASSPORT = {
   url: 'https://intramuros.gov.ph/guide-museums/'
 };
 
-const SIGHTS_REVIEWED = '2026-09-03';
+export const SIGHTS_REVIEWED = '2026-09-03';
 
-const TOURIST_SPOTS = [
+/** @type {import('./types').TouristSpot[]} */
+export const TOURIST_SPOTS = [
   /* ── Paid sites ───────────────────────────────────────────────────────────── */
   {
     id: 'fort-santiago', name: 'Fort Santiago', category: 'fort',
@@ -258,10 +259,3 @@ const TOURIST_SPOTS = [
     blurb: 'The old parade ground inside Fort Santiago, now lawn and acacia. The open space that makes the fort a pleasant place to sit rather than only to tour.'
   }
 ];
-
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = {
-    TOURIST_SPOTS, FEE_TIERS, SIGHT_CATEGORIES,
-    VENUE_ANCHOR, WALK_METRES_PER_MIN, INTRAMUROS_PASSPORT, SIGHTS_REVIEWED
-  };
-}

@@ -692,6 +692,12 @@ body {
   cursor: pointer;
 }
 
+/* Invisible, larger click/tap target -- widens what's hittable on a mouse
+   without changing the pin's visual size. Leaflet's marker click handler is
+   bound on the ancestor icon element, so a click landing out here still
+   bubbles up to it normally. */
+.pin__hit { position: absolute; inset: -7px; }
+
 .pin__disc {
   position: absolute; inset: 0;
   display: grid; place-items: center;
@@ -1096,6 +1102,31 @@ body.is-picking .leaflet-container { cursor: crosshair !important; }
   color: var(--slate) !important;
 }
 .leaflet-popup-close-button:hover { color: var(--gold-br) !important; }
+
+/* ───────────────────────── pin hover preview (Phase B) ─────────────────────
+   A Leaflet tooltip, not a popup -- opens on hover with no camera movement,
+   so it costs nothing to peek at several pins before committing to a click.
+   Hidden outright where hover isn't a real gesture (touch), since it would
+   otherwise flash open on a tap right before the real popup takes over. */
+.leaflet-tooltip.pin-preview {
+  display: none;
+  padding: 6px 10px;
+  background: var(--navy-800);
+  color: var(--paper);
+  border: 1px solid var(--navy-400);
+  border-radius: var(--r);
+  box-shadow: var(--shadow-m);
+  font: 600 12px/1.3 var(--ui);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity .12s var(--ease);
+}
+.leaflet-tooltip.pin-preview.leaflet-tooltip-top::before { border-top-color: var(--navy-400); }
+@media (hover: hover) {
+  .leaflet-tooltip.pin-preview { display: flex; align-items: baseline; gap: 8px; }
+}
+.pin-preview__name { color: var(--white); }
+.pin-preview__price { font-family: var(--mono); color: var(--gold-br); }
 
 .pop { padding: 15px 16px 14px; border-top: 2px solid var(--c); }
 

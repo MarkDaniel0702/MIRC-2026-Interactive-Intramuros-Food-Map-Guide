@@ -3,7 +3,7 @@
  *
  *   GEMINI_API_KEY=... node tools/try-dan.mjs [model]
  *
- * Loads data/chat-corpus.json, builds the SAME system prompt the Worker builds
+ * Loads public/data/chat-corpus.json, builds the SAME system prompt the Worker builds
  * (imported from worker/src/index.js, not copied), runs the same client-side and
  * server-side guards, and sends what survives to Gemini.
  *
@@ -38,7 +38,7 @@ if (!KEY) {
   process.exit(1);
 }
 
-const corpus = JSON.parse(readFileSync(join(root, 'data', 'chat-corpus.json'), 'utf8'));
+const corpus = JSON.parse(readFileSync(join(root, 'public', 'data', 'chat-corpus.json'), 'utf8'));
 const index = buildIndex(corpus);
 /* Built per question now, exactly as the Worker does — the whole point is that the
    prompt is no longer the same for every question. */

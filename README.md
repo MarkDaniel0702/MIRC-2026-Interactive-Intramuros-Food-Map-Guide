@@ -89,8 +89,8 @@ Routing comes from the **FOSSGIS OSRM pedestrian service** — the same one
 openstreetmap.org uses for its own directions. No API key, nothing secret in the client.
 
 OSRM returns maneuver *objects* rather than sentences, and the usual companion library
-isn't published on any CDN, so [`routing.js`](routing.js) renders the instructions itself.
-That keeps the dependency list unchanged.
+isn't published on any CDN, so [`src/lib/routing.ts`](src/lib/routing.ts) renders the
+instructions itself. That keeps the dependency list unchanged.
 
 **If routing is unavailable**, the feature degrades instead of breaking: you still get a
 straight-line distance, a walking estimate, and a link out to OpenStreetMap directions.
@@ -101,33 +101,44 @@ explains what happened.
 
 ## Run it locally
 
-No build step, no `npm install`, no API keys.
+React + TypeScript, built with Vite. No API keys needed for the map itself.
 
 ```bash
-python -m http.server 8000
-# then open http://localhost:8000
+npm install
+npm run dev
+# then open the printed http://localhost:5173/... URL
 ```
 
-Opening `index.html` straight from disk mostly works too, but serving it over HTTP is
-better — and note that **"Near me" needs HTTPS or localhost**, so it only really works on
-the deployed site or via `localhost`.
+The dev server proxies `/chat` to the deployed Worker (see `vite.config.ts`), so the
+assistant panel works locally too — the Worker's CORS allowlist only needs the
+production origin, not every developer's local port.
+
+`npm run build` produces `dist/`; `npm run preview` serves that build locally so you can
+check it before pushing. `npm run typecheck` runs a standalone type check.
 
 ---
 
 ## Deploy
 
-Push to `main`; GitHub Pages serves the repo root as-is. Full instructions, the
-post-deploy checklist and troubleshooting are in **[`DEPLOY.md`](DEPLOY.md)**.
+Push to `main`. A GitHub Actions workflow (`.github/workflows/deploy.yml`) builds the
+site and publishes `dist/` to GitHub Pages — no manual build step. Full instructions,
+the post-deploy checklist and troubleshooting are in **[`DEPLOY.md`](DEPLOY.md)**.
 
 ---
 
 ## Project structure
 
 ```
-index.html                      page shell, tabs, directions panel, about dialog
-styles.css                      design system, responsive layout, map + popup styling
-app.js                          modes, markers, search, filters, list↔map sync, directions
-routing.js                      OSRM client + walking-instruction renderer
+index.html                      Vite entry point
+src/main.tsx                    mounts React, imports Leaflet + styles.css
+src/App.tsx                     top-level layout: Panel + MapView + ChatPanel + AboutDialog
+src/styles.css                  design system, responsive layout, map + popup styling
+src/state/store.ts              app state (useReducer) -- mode, filters, selection, directions
+src/hooks/useLeafletMap.ts      the imperative map core -- markers, popups, flyTo sequencing
+src/hooks/useVisibleSpots.ts    filtered + sorted spot list, derived from state
+src/components/                Panel, SpotList, DirectionsPanel, ChatPanel, etc.
+src/lib/                        routing.ts (OSRM client), format/icons/filter/popupHtml helpers
+src/data/modes.ts               the Eat/See/Stay MODES config + one-time search index
 
 data/food-spots.js              61 food spots  · 52 OSM-verified + 9 user-pinned
 data/tourist-spots.js           21 sights      · FEE_TIERS, VENUE_ANCHOR, passport info
@@ -135,16 +146,20 @@ data/hotels.js                  8 properties   · 3 flagged `mapped` for the Sta
 data/start-points.js            6 arrival points for directions
 data/landmarks.js               PLM landmark + campus sub-points (shown when zoomed in)
 data/intramuros-boundary.js     the official boundary polygon (61 points)
+data/types.d.ts                 shared TypeScript interfaces for the data above
 
 tools/verify-in-intramuros.mjs  the accuracy gate
+tools/build-corpus.mjs          builds public/data/chat-corpus.json for the chat assistant
+
+.github/workflows/deploy.yml    builds and publishes dist/ to GitHub Pages
 
 DATA.md                         sources, method, price methodology, known limitations
 HOTELS.md                       accommodation research in full
 DEPLOY.md                       GitHub Pages instructions
 ```
 
-Adding a place means editing one array and re-running the verify script. The map and the
-list both read from the same data, so there is nothing to keep in step.
+Adding a place means editing one array in `data/` and re-running the verify script. The
+map and the list both read from the same data, so there is nothing to keep in step.
 
 ### Two edits worth knowing about
 
@@ -155,12 +170,12 @@ sessions run in a specific building or hall, point it there and every distance r
 itself:
 
 ```js
-const VENUE_ANCHOR = { name: 'Your venue', lat: 14.5869, lng: 120.9764 };
+export const VENUE_ANCHOR = { name: 'Your venue', lat: 14.5869, lng: 120.9764 };
 ```
 
-**Swap the tile provider** by editing the single `L.tileLayer(...)` call in `app.js`. The
-navy tinting in `styles.css` is applied on top of whatever tiles arrive, so the look
-survives the change.
+**Swap the tile provider** by editing the single `L.tileLayer(...)` call in
+`src/hooks/useLeafletMap.ts`. The navy tinting in `src/styles.css` is applied on top of
+whatever tiles arrive, so the look survives the change.
 
 ---
 
@@ -187,8 +202,9 @@ The reasoning behind all of that, including what *couldn't* be verified, is in
 
 ## Built with
 
-Leaflet 1.9.4 · Leaflet.markercluster 1.5.3 · Archivo + IBM Plex Mono — all from CDN.
-No framework, no bundler, no backend.
+React 18 + TypeScript, built with Vite. Leaflet 1.9.4 · Leaflet.markercluster 1.5.3 ·
+Archivo + IBM Plex Mono (Google Fonts). The chat assistant is served by a small
+Cloudflare Worker (see `worker/` and `CHATBOT.md`); everything else is static.
 
 ## Attribution
 

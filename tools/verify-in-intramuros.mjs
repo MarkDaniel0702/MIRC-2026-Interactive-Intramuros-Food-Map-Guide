@@ -20,33 +20,55 @@
  * Re-run this after any edit to data/food-spots.js.
  */
 
-import { createRequire } from 'node:module';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { dirname, join } from 'node:path';
+import { existsSync } from 'node:fs';
 
-const require = createRequire(import.meta.url);
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 
-const { FOOD_SPOTS, PRICE_TIERS, CATEGORIES, DATA_REVIEWED } = require(join(root, 'data', 'food-spots.js'));
-const { INTRAMUROS_BOUNDARY } = require(join(root, 'data', 'intramuros-boundary.js'));
+const failures = [];
 
-/* Accommodation data is optional — the food map works without it. */
-let HOTELS = null, ACCESS_TYPES = null;
-try {
-  ({ HOTELS, ACCESS_TYPES } = require(join(root, 'data', 'hotels.js')));
-} catch { /* hotels.js not present; skip that pass */ }
+/**
+ * Load an OPTIONAL data module by path (hotels / tourist spots / landmarks -- the
+ * food map works without any of them). Distinguishes two failure modes:
+ *
+ *   - the file genuinely does not exist  -> skip that pass, print a dim note.
+ *   - the file exists but failed to load -> this is a broken data file, not an
+ *     absent one. It must NOT be swallowed silently: it is logged as a FAILURE
+ *     and folded into the exit code, exactly like any other verification failure.
+ *
+ * This exists because a bare `catch {}` here previously made this script exit 0
+ * even when a data file could not be loaded at all (e.g. after a bad edit, or a
+ * module-format mismatch) -- turning the project's accuracy gate into a silent
+ * no-op for three of its five passes.
+ */
+async function loadOptional(relPath, label) {
+  const abs = join(root, relPath);
+  if (!existsSync(abs)) {
+    console.log(`  (${relPath} not present -- skipping the ${label} pass)`);
+    return null;
+  }
+  try {
+    return await import(pathToFileURL(abs).href);
+  } catch (err) {
+    console.log(`  FAILED to load ${relPath} -- the ${label} pass could not run:`);
+    console.log(`    ${err.code ? `${err.code}: ` : ''}${err.message}`);
+    failures.push(`${relPath} failed to load (${err.code || err.constructor.name})`);
+    return null;
+  }
+}
 
-/* Tourist spots likewise. */
-let TOURIST_SPOTS = null, SIGHT_CATEGORIES = null, FEE_TIERS = null;
-try {
-  ({ TOURIST_SPOTS, SIGHT_CATEGORIES, FEE_TIERS } = require(join(root, 'data', 'tourist-spots.js')));
-} catch { /* tourist-spots.js not present; skip that pass */ }
+const { FOOD_SPOTS, PRICE_TIERS, CATEGORIES, DATA_REVIEWED } = await import(pathToFileURL(join(root, 'data', 'food-spots.js')).href);
+const { INTRAMUROS_BOUNDARY } = await import(pathToFileURL(join(root, 'data', 'intramuros-boundary.js')).href);
 
-/* Standalone landmarks likewise. */
-let LANDMARKS = null;
-try {
-  ({ LANDMARKS } = require(join(root, 'data', 'landmarks.js')));
-} catch { /* landmarks.js not present; skip that pass */ }
+const hotelsMod = await loadOptional('data/hotels.js', 'accommodation');
+const { HOTELS = null, ACCESS_TYPES = null } = hotelsMod ?? {};
+
+const touristMod = await loadOptional('data/tourist-spots.js', 'tourist spots');
+const { TOURIST_SPOTS = null, SIGHT_CATEGORIES = null, FEE_TIERS = null } = touristMod ?? {};
+
+const landmarksMod = await loadOptional('data/landmarks.js', 'landmarks');
+const { LANDMARKS = null } = landmarksMod ?? {};
 
 /* ── terminal colours (skipped when output is piped or NO_COLOR is set) ───────── */
 const tty = process.stdout.isTTY && !process.env.NO_COLOR;
@@ -83,7 +105,6 @@ function insideBoundary(lng, lat, geometry) {
 
 /* ── pass 1: location ────────────────────────────────────────────────────────── */
 
-const failures = [];
 const outside = [];
 
 console.log(bold('\n  Intramuros Food Map — data verification'));

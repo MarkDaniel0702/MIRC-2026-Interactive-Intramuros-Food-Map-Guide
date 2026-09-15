@@ -9,3 +9,12 @@
 # Wrangler build/state
 worker/.wrangler/
 node_modules/
+
+# Vite build output -- published by .github/workflows/deploy.yml, not committed
+dist/
+.vite/
+*.local
+.DS_Store
+
+# TypeScript project-reference build cache (tsc -b)
+*.tsbuildinfo

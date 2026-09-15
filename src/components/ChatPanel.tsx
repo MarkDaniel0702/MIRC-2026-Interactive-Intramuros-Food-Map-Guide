@@ -1,0 +1,328 @@
+/**
+ * MIRC 2026 assistant -- the chat panel on the map. Ported from chat.js, which
+ * was already fully self-contained (no dependency on app.js/Leaflet), so this
+ * ports over with no architectural change, just DOM -> JSX and imperative state
+ * -> useState/refs.
+ *
+ * Two things change from the original on purpose:
+ *  - ENDPOINT becomes a dev-vs-prod split: the Vite dev server proxies /chat to
+ *    the Worker (vite.config.ts) because worker/wrangler.toml's ALLOWED_ORIGINS
+ *    does not include the Vite dev origin -- see plan contract #2.
+ *  - CORPUS_URL and the phoenix image path are resolved against
+ *    import.meta.env.BASE_URL, since both moved under public/ (plan A2) and must
+ *    still resolve under the GitHub Pages sub-path in production.
+ */
+import { Fragment, useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
+import { reduceMotionOnce } from '../lib/motion';
+
+const WORKER_URL = 'https://mirc-2026-chat.plm-mirc2026.workers.dev';
+const CHAT_URL = import.meta.env.DEV ? '/chat' : `${WORKER_URL}/chat`;
+const CORPUS_URL = `${import.meta.env.BASE_URL}data/chat-corpus.json`;
+const MARK = `${import.meta.env.BASE_URL}assets/dan-phoenix.png`;
+
+const MAX_CHARS = 600;
+const HISTORY_TURNS = 8;
+const RATE = { windowMs: 60000, max: 10 };
+
+const FALLBACK_SUGGESTIONS = [
+  'Where is the venue?',
+  'Where can I eat near the venue?',
+  'What is there to see in Intramuros?'
+];
+
+const DEFAULT_DECLINE =
+  'I can only help with MIRC 2026 and getting around Intramuros. Ask me about the ' +
+  'programme, a session, the venue, registration, or where to eat nearby.';
+
+// Mirrors the clearest cases the Worker rejects, so the most obvious off-topic
+// asks never leave the browser. Kept narrow on purpose -- anything less than
+// certain goes to the server, which can read the whole question in context.
+const OFF_TOPIC = [
+  /```/,
+  /\b(?:write|generate|create|fix|debug|refactor)\b[^.?!]{0,40}\b(?:code|function|script|program|regex|sql|query|algorithm)\b/i,
+  /\bin\s+(?:python|javascript|typescript|java|c\+\+|c#|php|ruby|golang|rust)\b/i,
+  /\bwrite\s+(?:me\s+)?(?:an?|the|my)\s+(?:essay|poem|song|story|letter|email|blog|article|caption|speech|thesis|assignment|homework)\b/i,
+  /\b(?:ignore|disregard|forget)\b[^.?!]{0,30}\b(?:previous|prior|above|your)\b[^.?!]{0,20}\b(?:instruction|prompt|rule)/i,
+  /\b(?:system prompt|your instructions|jailbreak|developer mode)\b/i
+];
+
+interface ChatMessage {
+  id: number;
+  role: 'user' | 'bot';
+  text: string;
+  muted?: boolean;
+  thinking?: boolean;
+}
+
+interface HistoryTurn { role: 'user' | 'assistant'; content: string; }
+
+function MessageBody({ text }: { text: string }) {
+  return (
+    <>
+      {text.split(/\n{2,}/).map((para, i) => (
+        <p key={i}>
+          {para.split('\n').map((line, j, arr) => (
+            <Fragment key={j}>{line}{j < arr.length - 1 && <br />}</Fragment>
+          ))}
+        </p>
+      ))}
+    </>
+  );
+}
+
+export function ChatPanel() {
+  const [open, setOpen] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [suggestions, setSuggestions] = useState<string[]>(FALLBACK_SUGGESTIONS);
+  const [inputValue, setInputValue] = useState('');
+
+  const openRef = useRef(false);
+  const busyRef = useRef(false);
+  const builtRef = useRef(false);
+  const corpusLoadedRef = useRef(false);
+  const historyRef = useRef<HistoryTurn[]>([]);
+  const hitsRef = useRef<number[]>([]);
+  const declineRef = useRef(DEFAULT_DECLINE);
+  const lastFocusRef = useRef<HTMLElement | null>(null);
+  const nextId = useRef(0);
+
+  const panelRef = useRef<HTMLElement>(null);
+  const launcherRef = useRef<HTMLButtonElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+  const logRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    logRef.current && (logRef.current.scrollTop = logRef.current.scrollHeight);
+  }, [messages]);
+
+  function appendMessage(msg: Omit<ChatMessage, 'id'>): number {
+    const id = ++nextId.current;
+    setMessages(m => [...m, { ...msg, id }]);
+    return id;
+  }
+  function removeMessage(id: number) {
+    setMessages(m => m.filter(x => x.id !== id));
+  }
+
+  // Only for the suggested questions and the decline wording, so those stay in
+  // step with what the committee wrote. A failure here is not worth surfacing.
+  async function loadCorpus() {
+    if (corpusLoadedRef.current) return;
+    corpusLoadedRef.current = true;
+    try {
+      const res = await fetch(CORPUS_URL, { cache: 'no-cache' });
+      if (!res.ok) return;
+      const corpus = await res.json();
+      if (Array.isArray(corpus.scope?.suggestions) && corpus.scope.suggestions.length) {
+        setSuggestions(corpus.scope.suggestions);
+      }
+      if (typeof corpus.scope?.decline === 'string') declineRef.current = corpus.scope.decline;
+    } catch {
+      // suggestions stay on their fallbacks
+    }
+  }
+
+  function rateLimited(): boolean {
+    const now = Date.now();
+    hitsRef.current = hitsRef.current.filter(t => now - t < RATE.windowMs);
+    if (hitsRef.current.length >= RATE.max) return true;
+    hitsRef.current.push(now);
+    return false;
+  }
+
+  function setBusyBoth(on: boolean) {
+    busyRef.current = on;
+    setBusy(on);
+  }
+
+  async function send(overrideValue?: string) {
+    const message = (overrideValue ?? inputValue).trim();
+    if (!message || busyRef.current) return;
+
+    appendMessage({ role: 'user', text: message });
+    setInputValue('');
+    if (inputRef.current) inputRef.current.style.height = 'auto';
+
+    if (rateLimited()) {
+      appendMessage({ role: 'bot', text: 'Give me a moment to catch up — try again in a few seconds.', muted: true });
+      return;
+    }
+
+    // Layer 0: the obviously off-topic never reaches the network.
+    if (OFF_TOPIC.some(re => re.test(message))) {
+      appendMessage({ role: 'bot', text: declineRef.current });
+      return;
+    }
+
+    if (!WORKER_URL) {
+      appendMessage({
+        role: 'bot',
+        text: "I'm not switched on yet. The organisers still need to publish the MIRC 2026 " +
+          'programme and connect me — until then this panel is here, but I cannot answer.',
+        muted: true
+      });
+      return;
+    }
+
+    setBusyBoth(true);
+    const thinkingId = appendMessage({ role: 'bot', text: '', thinking: true });
+
+    try {
+      const res = await fetch(CHAT_URL, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ message, history: historyRef.current.slice(-HISTORY_TURNS) })
+      });
+      const data = await res.json().catch(() => ({}));
+      removeMessage(thinkingId);
+
+      const reply = data.reply || 'I could not answer that one. Try asking it another way.';
+      appendMessage({ role: 'bot', text: reply });
+
+      // Declines and errors are not worth carrying into the next question.
+      if (!data.declined && !data.retry && res.ok) {
+        historyRef.current = [
+          ...historyRef.current,
+          { role: 'user', content: message } satisfies HistoryTurn,
+          { role: 'assistant', content: reply } satisfies HistoryTurn
+        ].slice(-HISTORY_TURNS);
+      }
+    } catch {
+      removeMessage(thinkingId);
+      appendMessage({
+        role: 'bot',
+        text: 'I could not reach the assistant. Check your connection and try again — or ask ' +
+          'at the registration desk.',
+        muted: true
+      });
+    } finally {
+      setBusyBoth(false);
+      inputRef.current?.focus();
+    }
+  }
+
+  function openPanel() {
+    lastFocusRef.current = document.activeElement as HTMLElement | null;
+    const panel = panelRef.current;
+    if (panel) {
+      panel.hidden = false;
+      // Force a reflow so the transition runs from the un-hidden state. A rAF
+      // would read better but does not fire in a throttled or backgrounded tab,
+      // which left the panel visible-but-transparent.
+      void panel.offsetHeight;
+      panel.classList.add('is-open');
+    }
+    openRef.current = true;
+    setOpen(true);
+
+    if (!builtRef.current) {
+      builtRef.current = true;
+      appendMessage({
+        role: 'bot',
+        text: "I'm Dan. I can help with MIRC 2026 — the programme, sessions, the venue at PLM, " +
+          'registration — and with finding your way around Intramuros. What do you need?'
+      });
+      loadCorpus();
+    }
+    inputRef.current?.focus();
+  }
+
+  function closePanel() {
+    panelRef.current?.classList.remove('is-open');
+    openRef.current = false;
+    setOpen(false);
+    // Guarded, so a re-open during the fade is not hidden by the stale timer.
+    const hide = () => { if (!openRef.current && panelRef.current) panelRef.current.hidden = true; };
+    if (reduceMotionOnce) hide(); else setTimeout(hide, 220);
+    if (lastFocusRef.current && document.contains(lastFocusRef.current)) lastFocusRef.current.focus();
+    else launcherRef.current?.focus();
+  }
+
+  useEffect(() => {
+    function onKeydown(e: KeyboardEvent) {
+      if (e.key === 'Escape' && openRef.current) { e.stopPropagation(); closePanel(); }
+    }
+    document.addEventListener('keydown', onKeydown);
+    return () => document.removeEventListener('keydown', onKeydown);
+  }, []);
+
+  function onInputChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
+    setInputValue(e.target.value);
+    const el = e.target;
+    el.style.height = 'auto';
+    el.style.height = `${Math.min(el.scrollHeight, 120)}px`;
+  }
+
+  function onInputKeydown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); }
+  }
+
+  // The launcher stays in .mapwrap (its position:absolute is anchored to it,
+  // app.js:346-347 appended it there); the panel portals to document.body, since
+  // it is position:fixed and app.js:348 appended it there too -- matching the
+  // original DOM structure exactly rather than relying on .chat's fixed
+  // positioning happening to still work if it were nested instead.
+  return (
+    <>
+      <button type="button" className={`chat-launch${open ? ' is-on' : ''}`} ref={launcherRef}
+        aria-expanded={open} aria-controls="chatPanel"
+        title="Ask Dan about MIRC 2026" aria-label="Ask Dan about MIRC 2026"
+        onClick={() => (openRef.current ? closePanel() : openPanel())}>
+        <img className="phx phx--sm" src={MARK} alt="" aria-hidden="true" draggable={false} />
+        <span className="chat-launch__text">Ask Dan</span>
+      </button>
+
+      {createPortal(
+      <section className={`chat${open ? ' is-open' : ''}${busy ? ' is-busy' : ''}`} id="chatPanel"
+        ref={panelRef} hidden aria-label="Dan, the MIRC 2026 assistant">
+        <header className="chat__head">
+          <div className="chat__ident">
+            <img className="phx phx--lg" src={MARK} alt="" aria-hidden="true" draggable={false} />
+            <div>
+              <p className="chat__eyebrow">MIRC 2026</p>
+              <h2 className="chat__title">Dan</h2>
+            </div>
+          </div>
+          <button type="button" className="chat__close" aria-label="Close Dan" onClick={closePanel}>&times;</button>
+        </header>
+
+        <div className="chat__log" ref={logRef} role="log" aria-live="polite" aria-atomic="false">
+          {messages.map(m => (
+            m.thinking
+              ? <div key={m.id} className="chat__msg chat__msg--bot chat__thinking" aria-label="Thinking">
+                  <span></span><span></span><span></span>
+                </div>
+              : <div key={m.id} className={`chat__msg chat__msg--${m.role}${m.muted ? ' is-muted' : ''}`}>
+                  <MessageBody text={m.text} />
+                </div>
+          ))}
+        </div>
+
+        <div className="chat__suggest">
+          {!busy && suggestions.slice(0, 3).map((q, i) => (
+            <button key={i} type="button" className="chat__chip" onClick={() => send(q)}>{q}</button>
+          ))}
+        </div>
+
+        <form className="chat__form" onSubmit={e => { e.preventDefault(); send(); }}>
+          <label className="chat__label" htmlFor="chatInput">Your question</label>
+          <textarea id="chatInput" className="chat__input" rows={1} maxLength={MAX_CHARS}
+            placeholder="Ask about a session or the venue…"
+            autoComplete="off" spellCheck={false}
+            ref={inputRef} value={inputValue} disabled={busy}
+            onChange={onInputChange} onKeyDown={onInputKeydown} />
+          <button type="submit" className="chat__send" aria-label="Send" disabled={busy}>
+            <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M8.6 3.4 13.2 8l-4.6 4.6" /></svg>
+          </button>
+        </form>
+
+        <p className="chat__foot">Answers come from the congress material only. Check anything
+          critical at the registration desk.</p>
+      </section>,
+      document.body
+      )}
+    </>
+  );
+}

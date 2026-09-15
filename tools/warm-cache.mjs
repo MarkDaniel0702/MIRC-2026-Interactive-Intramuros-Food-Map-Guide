@@ -37,7 +37,7 @@ if (!KEY) {
   process.exit(1);
 }
 
-const corpus = JSON.parse(readFileSync(join(root, 'data', 'chat-corpus.json'), 'utf8'));
+const corpus = JSON.parse(readFileSync(join(root, 'public', 'data', 'chat-corpus.json'), 'utf8'));
 const index = buildIndex(corpus);
 const { questions } = JSON.parse(readFileSync(join(root, 'tools', 'warm-questions.json'), 'utf8'));
 

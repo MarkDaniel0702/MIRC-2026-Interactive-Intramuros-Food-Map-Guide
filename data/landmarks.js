@@ -14,7 +14,8 @@
  * Every entry is boundary-checked by tools/verify-in-intramuros.mjs.
  * Coordinates from OpenStreetMap and visitor-supplied Google Maps pins.
  */
-const LANDMARKS = [
+/** @type {import('./types').Landmark[]} */
+export const LANDMARKS = [
   {
     id: 'plm',
     name: 'Pamantasan ng Lungsod ng Maynila',
@@ -72,7 +73,3 @@ const LANDMARKS = [
     blurb: 'Don Pepe Atienza Building on the PLM campus, Muralla Street side — home of the College / Mass Communication Office, where MIRC 2026 sessions are held. Rooms inside it (e.g. "TOP") are not separately pinned. Coordinate refined 2026-09-09 to a visitor Google Maps pin on the Mass Communication Office.'
   }
 ];
-
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { LANDMARKS };
-}

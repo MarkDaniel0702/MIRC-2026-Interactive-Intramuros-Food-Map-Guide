@@ -25,7 +25,7 @@
  */
 
 /** Indicative nightly bands, used only to group properties at a glance. */
-const STAY_TIERS = {
+export const STAY_TIERS = {
   0: { symbol: '—',       label: 'Not published', range: 'No rate published', short: 'n/a' },
   1: { symbol: '₱',       label: 'Budget',    range: 'under ₱1,500',     short: '<₱1.5k'  },
   2: { symbol: '₱₱', label: 'Mid-range', range: '₱1,500 – ₱3,500', short: '₱1.5–3.5k' },
@@ -34,22 +34,23 @@ const STAY_TIERS = {
 };
 
 /** The Stay tab shows a single kind of thing, so one category is honest. */
-const STAY_CATEGORIES = {
+export const STAY_CATEGORIES = {
   stay: { label: 'Places to stay', color: '#C9D6E6', icon: 'bed' }
 };
 
-const ACCESS_TYPES = {
+export const ACCESS_TYPES = {
   public:     { label: 'Open to travellers',  note: 'Bookable by the general public.' },
   restricted: { label: 'Members only',        note: 'Not available to the general public.' },
   longstay:   { label: 'Student / long-stay', note: 'Dormitory or boarding house, not nightly tourist accommodation.' }
 };
 
 /** FX used for any USD-sourced figure below. */
-const FX_USD_PHP = { rate: 62.5, asOf: '2026-09-02' };
+export const FX_USD_PHP = { rate: 62.5, asOf: '2026-09-02' };
 
-const STAY_REVIEWED = '2026-09-03';
+export const STAY_REVIEWED = '2026-09-03';
 
-const HOTELS = [
+/** @type {import('./types').Hotel[]} */
+export const HOTELS = [
   {
     id: 'the-bayleaf-intramuros',
     name: 'The Bayleaf Intramuros',
@@ -216,7 +217,7 @@ const HOTELS = [
  * not be resolved and therefore could not be tested against the boundary polygon.
  * Listed separately rather than mixed in with verified entries.
  */
-const HOTELS_UNVERIFIED = [
+export const HOTELS_UNVERIFIED = [
   {
     name: 'Intramuros Stay by IN CAFE',
     claim: 'Marketed as being "at the heart of Intramuros"; a 1-bedroom unit with a cinema area across 4 floors, open since June 2024.',
@@ -225,7 +226,3 @@ const HOTELS_UNVERIFIED = [
     why: 'No street address published and not resolvable in Nominatim, so its position could not be verified against the Intramuros boundary.'
   }
 ];
-
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { HOTELS, HOTELS_UNVERIFIED, STAY_TIERS, STAY_CATEGORIES, ACCESS_TYPES, FX_USD_PHP, STAY_REVIEWED };
-}
