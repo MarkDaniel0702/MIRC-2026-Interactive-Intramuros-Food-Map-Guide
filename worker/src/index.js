@@ -514,18 +514,25 @@ export default {
       return json({ reply: declineLine, declined: true }, 200, cors);
     }
 
+    /* Layer 3 declines too: the prompt has the model answer an off-topic question
+       with the decline line verbatim. Treat that like the other layers — flagged, so
+       the panel drops it from the conversation, logged, and never cached. It used
+       to fall through to the cache below, so a decline given while the corpus was
+       briefly stale — or the model having an off moment — stuck for six hours. */
+    if (reply.includes(declineLine.slice(0, 30))) {
+      console.log(JSON.stringify({ event: 'declined', layer: 'model', message }));
+      return json({ reply: plainText(reply), declined: true }, 200, cors);
+    }
+
     /* Log what the material could not answer, so the committee can fill the gap. */
     const unknownLine = corpus.scope?.unknown ?? '';
-    if (unknownLine && reply.includes(unknownLine.slice(0, 30))) {
-      console.log(JSON.stringify({ event: 'unanswered', message }));
-    }
+    const isUnknown = Boolean(unknownLine) && reply.includes(unknownLine.slice(0, 30));
+    if (isUnknown) console.log(JSON.stringify({ event: 'unanswered', message }));
 
     const answer = { reply: plainText(reply), source: used, contextTokens: tokens, focus };
 
-    /* Cache only a clean answer. A decline, a retry message or an "I could not find
-       that" must never become sticky — the first two are transient and the third
-       may be fixed by the next content update. */
-    const isUnknown = unknownLine && reply.includes(unknownLine.slice(0, 30));
+    /* Cache only a clean answer. An "I could not find that" must not become sticky:
+       the next content update may fix it. Declines and retries returned above. */
     if (!isUnknown) await storeAnswer(ctx, corpus, message, answer);
 
     return json(answer, 200, cors);

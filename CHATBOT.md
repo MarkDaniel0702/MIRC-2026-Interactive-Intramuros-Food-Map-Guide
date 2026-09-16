@@ -139,8 +139,12 @@ Three tiers, cheapest first:
 3. **The model**, as before.
 
 Keys carry the corpus's generated-on date, so publishing content invalidates every
-entry rather than serving yesterday's programme. Declines, retries and "I could not
-find that" are **never** cached — a transient failure must not become sticky.
+entry rather than serving yesterday's programme. They also carry `CACHE_VERSION` from
+`worker/src/cache.js`: bump it when the *prompt* changes, which the date cannot see,
+or after two builds on one day. Declines, retries and "I could not find that" are
+**never** cached — a transient failure must not become sticky. That includes a decline
+the model writes itself (layer 3), which for a while slipped through and could pin a
+refusal to a legitimate question for six hours.
 
 Generating the warm set:
 

@@ -110,8 +110,15 @@ export function warmAnswer(corpus, question) {
 
 const TTL_SECONDS = 60 * 60 * 6;
 
+/* Bump this to throw away every cached answer at the next deploy. The corpus date
+   in the key handles a content update, but not a prompt change — the same question
+   under a new prompt still lands on yesterday's answer — and not two builds on the
+   same day, which share a date. Bumped to 2 when model-written declines stopped
+   being cached, to drop the ones already stored. */
+const CACHE_VERSION = 2;
+
 const cacheKey = (corpus, question) => new Request(
-  `https://dan.cache/${corpus?._generated ?? 'v0'}/${hash(normalise(question))}`,
+  `https://dan.cache/v${CACHE_VERSION}/${corpus?._generated ?? 'v0'}/${hash(normalise(question))}`,
   { method: 'GET' }
 );
 
