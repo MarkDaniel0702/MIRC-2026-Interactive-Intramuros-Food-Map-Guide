@@ -47,15 +47,27 @@ const OFF_TOPIC = [
   /\b(?:system prompt|your instructions|jailbreak|developer mode)\b/i
 ];
 
+/** What worker/src/focus.js returns for a question that plainly names one
+ *  eat/see/stay spot -- matched against the corpus's own records server-side,
+ *  never invented by the model, so `id` always names a real marker. */
+interface ChatFocus { kind: 'eat' | 'see' | 'stay'; id: string; name: string; lat: number; lng: number; }
+
 interface ChatMessage {
   id: number;
   role: 'user' | 'bot';
   text: string;
   muted?: boolean;
   thinking?: boolean;
+  focus?: ChatFocus;
 }
 
 interface HistoryTurn { role: 'user' | 'assistant'; content: string; }
+
+export interface ChatPanelProps {
+  /** Fly the map to a spot by id and open its popup; false if the id is not a
+   *  real spot. Wired to useLeafletMap's focusById via App.tsx. */
+  onFocus?: (id: string) => boolean;
+}
 
 function MessageBody({ text }: { text: string }) {
   return (
@@ -71,7 +83,7 @@ function MessageBody({ text }: { text: string }) {
   );
 }
 
-export function ChatPanel() {
+export function ChatPanel({ onFocus }: ChatPanelProps) {
   const [open, setOpen] = useState(false);
   const [busy, setBusy] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -179,7 +191,12 @@ export function ChatPanel() {
       removeMessage(thinkingId);
 
       const reply = data.reply || 'I could not answer that one. Try asking it another way.';
-      appendMessage({ role: 'bot', text: reply });
+      const focus: ChatFocus | undefined = data.focus?.id ? data.focus : undefined;
+      appendMessage({ role: 'bot', text: reply, focus });
+
+      // The map follows the answer, not the other way round: fly to it once the
+      // reply naming it has actually landed, never speculatively while waiting.
+      if (focus) onFocus?.(focus.id);
 
       // Declines and errors are not worth carrying into the next question.
       if (!data.declined && !data.retry && res.ok) {
@@ -296,6 +313,15 @@ export function ChatPanel() {
                 </div>
               : <div key={m.id} className={`chat__msg chat__msg--${m.role}${m.muted ? ' is-muted' : ''}`}>
                   <MessageBody text={m.text} />
+                  {m.focus && (
+                    <button type="button" className="chat__locate" onClick={() => onFocus?.(m.focus!.id)}>
+                      <svg viewBox="0 0 16 16" aria-hidden="true">
+                        <path d="M8 14.5S13 10 13 6.4a5 5 0 0 0-10 0C3 10 8 14.5 8 14.5z" />
+                        <circle cx="8" cy="6.3" r="1.7" />
+                      </svg>
+                      Show {m.focus.name} on the map
+                    </button>
+                  )}
                 </div>
           ))}
         </div>

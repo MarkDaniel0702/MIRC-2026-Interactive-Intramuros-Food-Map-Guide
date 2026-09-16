@@ -57,7 +57,7 @@ export function App() {
         sheetOpen={sheetOpen} setSheet={setSheetOpen}
         onAbout={() => aboutDialogRef.current?.showModal()} />
       <MapView containerRef={mapContainerRef} mapNoteRef={mapNoteRef} toasts={toasts} />
-      <ChatPanel />
+      <ChatPanel onFocus={mapApi.focusById} />
       <AboutDialog dialogRef={aboutDialogRef} />
     </div>
   );

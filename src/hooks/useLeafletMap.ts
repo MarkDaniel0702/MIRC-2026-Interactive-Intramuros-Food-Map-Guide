@@ -70,6 +70,11 @@ export interface MapApi {
    *  map's own background-click deselect (app.js:1166), which does not need this:
    *  Leaflet closes a popup on any map click by default, but not on a keypress. */
   clearSelection: () => void;
+  /** Chat-driven navigation: fly to and open the popup for any spot by id, across
+   *  whichever mode it belongs to -- unlike `select`, not limited to the tab
+   *  currently open. Returns false immediately if the id names no real spot,
+   *  which the caller (ChatPanel) uses to say so rather than silently do nothing. */
+  focusById: (id: string) => boolean;
 }
 
 interface UseLeafletMapParams {
@@ -95,6 +100,12 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
   const firstPaintRef = useRef(!reduceMotionOnce);
   const pendingSelectRef = useRef<string | null>(null);
   const activePinIdRef = useRef<string | null>(null);
+  /** Set by focusById when the target spot's mode/filters had to change first --
+   *  a marker only joins the cluster (and so becomes flyTo/popup-able) once the
+   *  visibleIds-sync effect below has run against the new state. Resolved there,
+   *  the same deferred-until-ready shape pendingSelectRef already uses for the
+   *  moveend race, just gated on cluster membership instead of camera movement. */
+  const pendingFocusRef = useRef<string | null>(null);
 
   // Live mirrors so the stable callbacks below always see fresh values -- the
   // same thing app.js gets for free by closing over one mutable `state` object.
@@ -668,6 +679,16 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
       .filter((l): l is L.Marker => Boolean(l));
     cluster.addLayers(layers);
 
+    // A chat-driven focus on a spot outside the previous mode/filters is
+    // completed here, once that spot's marker has actually rejoined the
+    // cluster -- calling select() any earlier would find a real marker object
+    // (markersRef always holds one) but one not yet part of the visible map.
+    if (pendingFocusRef.current && params.visibleIds.includes(pendingFocusRef.current)) {
+      const id = pendingFocusRef.current;
+      pendingFocusRef.current = null;
+      select(id, { from: 'list' });
+    }
+
     if (firstPaintRef.current) {
       firstPaintRef.current = false;
       requestAnimationFrame(() => {
@@ -727,6 +748,25 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
     mapRef.current?.closePopup();
   }, [setActive]);
 
+  /* `select` is scoped to the currently open tab (`MODES[state.mode].items`) --
+     fine for a click, since a list card can only ever show the active mode's own
+     items, but chat can name a hotel while Eat is open. So this always switches
+     to the spot's own mode and clears that mode's filters -- unconditionally,
+     even when the mode already matches, because a category/tier/search filter
+     alone can hide the target just as completely as the wrong tab can. Both
+     dispatches land in the same batch and fold in order, so RESET_FILTERS
+     clears whichever mode SET_MODE just switched to, not the one being left. */
+  const focusById = useCallback((id: string): boolean => {
+    const hit = findAnywhere(id);
+    if (!hit) return false;
+    pendingFocusRef.current = id;
+    if (stateRef.current.mode !== hit.modeKey) {
+      dispatchRef.current({ type: 'SET_MODE', mode: hit.modeKey });
+    }
+    dispatchRef.current({ type: 'RESET_FILTERS' });
+    return true;
+  }, []);
+
   return {
     selectTab,
     select,
@@ -738,6 +778,7 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
     locateMe,
     resetAll,
     setPinHover,
-    clearSelection
+    clearSelection,
+    focusById
   };
 }

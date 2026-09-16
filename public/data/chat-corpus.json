@@ -2738,6 +2738,9 @@
     },
     "eat": [
       {
+        "id": "nine-spoons",
+        "lat": 14.590004,
+        "lng": 120.978725,
         "name": "9 Spoons",
         "category": "Restaurants & Heritage Dining",
         "price": "Upscale — ₱500 – ₱1,000 per person",
@@ -2747,6 +2750,9 @@
         "about": "All-day dining restaurant on the top floor of The Bayleaf, serving Filipino heritage dishes — kare-kare, bagnet, sizzling bulalo — plus a weekday lunch buffet. Shares its coordinates with the hotel building; no separate OSM node exists for the restaurant itself."
       },
       {
+        "id": "adams-canteen",
+        "lat": 14.588943,
+        "lng": 120.977993,
         "name": "Adams Canteen",
         "category": "Budget Eats & Carinderias",
         "price": "Budget — under ₱200 per person",
@@ -2756,6 +2762,9 @@
         "about": "Neighbourhood canteen serving Filipino rice meals on the streets behind the southern wall."
       },
       {
+        "id": "aujens-coffee",
+        "lat": 14.591738,
+        "lng": 120.974225,
         "name": "Aujen's Coffee",
         "category": "Cafes & Coffee",
         "price": "Moderate — ₱200 – ₱500 per person",
@@ -2765,6 +2774,9 @@
         "about": "Small independent coffee bar a short walk from Manila Cathedral."
       },
       {
+        "id": "bacolod-chk-n-bbq",
+        "lat": 14.593288,
+        "lng": 120.973522,
         "name": "Bacolod Chk-N-Bbq",
         "category": "Fast Food & Chains",
         "price": "Moderate — ₱200 – ₱500 per person",
@@ -2774,6 +2786,9 @@
         "about": "Chain grill for Bacolod-style chicken inasal and barbecue skewers over rice."
       },
       {
+        "id": "bacolodnon-eatery",
+        "lat": 14.588659,
+        "lng": 120.976512,
         "name": "Bacolodnon Eatery",
         "category": "Budget Eats & Carinderias",
         "price": "Budget — under ₱200 per person",
@@ -2783,6 +2798,9 @@
         "about": "Bacolod-style carinderia — chicken inasal and Negrense home cooking over rice. Not in OpenStreetMap — the coordinate is from a Google Maps pin supplied by a visitor."
       },
       {
+        "id": "balai-maria",
+        "lat": 14.590828,
+        "lng": 120.973268,
         "name": "Balai Maria",
         "category": "Restaurants & Heritage Dining",
         "price": "Moderate — ₱200 – ₱500 per person",
@@ -2792,6 +2810,9 @@
         "about": "Filipino kitchen on the quieter western side of the walled city."
       },
       {
+        "id": "bamboo-intramuros",
+        "lat": 14.594598,
+        "lng": 120.977585,
         "name": "Bamboo Intramuros",
         "category": "Restaurants & Heritage Dining",
         "price": "Moderate — ₱200 – ₱500 per person",
@@ -2801,6 +2822,9 @@
         "about": "Art-filled restaurant and bar on the northern edge of Intramuros — listed locally as Bambu Intramuros Art Bar and Restaurant — known for lechon kawali and cocktails amid bamboo-themed décor."
       },
       {
+        "id": "barbaras-casa-manila",
+        "lat": 14.589439,
+        "lng": 120.975215,
         "name": "Barbara's Casa Manila",
         "category": "Restaurants & Heritage Dining",
         "price": "Fine dining — ₱1,000 and up per person",
@@ -2810,6 +2834,9 @@
         "about": "Heritage buffet inside a Spanish-era mansion, with a Filipino cultural show at dinner."
       },
       {
+        "id": "bataka-bar",
+        "lat": 14.589301,
+        "lng": 120.975319,
         "name": "Bataka Bar",
         "category": "Restaurants & Heritage Dining",
         "price": "Moderate — ₱200 – ₱500 per person",
@@ -2819,6 +2846,9 @@
         "about": "One of the dining spots inside the Plaza San Luis heritage complex, a few steps from Casa Manila, serving Filipino plates alongside its drinks list."
       },
       {
+        "id": "batala-ice-cream",
+        "lat": 14.587318,
+        "lng": 120.977635,
         "name": "Batala",
         "category": "Desserts & Snacks",
         "price": "Budget — under ₱200 per person",
@@ -2828,6 +2858,9 @@
         "about": "Ice cream counter in the southern quarter of the walled city — a separate venue from Batala Bar below, despite the near-identical name."
       },
       {
+        "id": "batala-bar",
+        "lat": 14.58957,
+        "lng": 120.97506,
         "name": "Batala Bar",
         "category": "Restaurants & Heritage Dining",
         "price": "Moderate — ₱200 – ₱500 per person",
@@ -2837,6 +2870,9 @@
         "about": "Craft beer bar and kitchen in the Plaza San Luis complex serving Filipino bar chow — crispy sisig, kare-kare, bagnet — alongside house-made ice cream and coffee, with vegan versions of several dishes."
       },
       {
+        "id": "beanleaf",
+        "lat": 14.592758,
+        "lng": 120.972201,
         "name": "Beanleaf",
         "category": "Cafes & Coffee",
         "price": "Moderate — ₱200 – ₱500 per person",
@@ -2846,6 +2882,9 @@
         "about": "Coffee and tea house on the western side, busy with students and office workers."
       },
       {
+        "id": "belfry-cafe",
+        "lat": 14.59191,
+        "lng": 120.973632,
         "name": "Belfry Café",
         "category": "Cafes & Coffee",
         "price": "Moderate — ₱200 – ₱500 per person",
@@ -2855,6 +2894,9 @@
         "about": "Café on Cabildo Street named for the bell towers it sits beneath."
       },
       {
+        "id": "cafe-intramuros",
+        "lat": 14.589617,
+        "lng": 120.97501,
         "name": "Cafe Intramuros",
         "category": "Cafes & Coffee",
         "price": "Moderate — ₱200 – ₱500 per person",
@@ -2864,6 +2906,9 @@
         "about": "Courtyard café in the Plaza San Luis complex, opposite San Agustin Church."
       },
       {
+        "id": "cafe-janealo",
+        "lat": 14.59167,
+        "lng": 120.974402,
         "name": "Cafe Janealo",
         "category": "Cafes & Coffee",
         "price": "Budget — under ₱200 per person",
@@ -2873,6 +2918,9 @@
         "about": "Diner-style café serving rice meals and pasta, with live music some evenings."
       },
       {
+        "id": "casa-marinero",
+        "lat": 14.58901,
+        "lng": 120.975918,
         "name": "Casa Marinero",
         "category": "Restaurants & Heritage Dining",
         "price": "Moderate — ₱200 – ₱500 per person",
@@ -2882,6 +2930,9 @@
         "about": "Filipino dining room on Santa Potenciana Street."
       },
       {
+        "id": "casa-marinero-ii",
+        "lat": 14.589069,
+        "lng": 120.975864,
         "name": "Casa Marinero II",
         "category": "Restaurants & Heritage Dining",
         "price": "Moderate — ₱200 – ₱500 per person",
@@ -2891,6 +2942,9 @@
         "about": "Second branch of Casa Marinero, a few doors from the original."
       },
       {
+        "id": "chamber-cafe",
+        "lat": 14.592713,
+        "lng": 120.971177,
         "name": "Chamber Café",
         "category": "Cafes & Coffee",
         "price": "Moderate — ₱200 – ₱500 per person",
@@ -2900,6 +2954,9 @@
         "about": "Compact coffee spot on the western side of the walled city."
       },
       {
+        "id": "cheftain-eatery",
+        "lat": 14.58911,
+        "lng": 120.976163,
         "name": "Cheftain Eatery",
         "category": "Budget Eats & Carinderias",
         "price": "Budget — under ₱200 per person",
@@ -2909,6 +2966,9 @@
         "about": "Turo-turo canteen with a rotating tray of Filipino ulam over rice; Google lists it as \"Cheftain Eatery and Catering\". Not in OpenStreetMap — the coordinate is from a Google Maps pin supplied by a visitor."
       },
       {
+        "id": "chowking",
+        "lat": 14.592926,
+        "lng": 120.973056,
         "name": "Chowking",
         "category": "Fast Food & Chains",
         "price": "Budget — under ₱200 per person",
@@ -2918,6 +2978,9 @@
         "about": "Chinese-Filipino fast food chain — rice toppings, noodles and siomai."
       },
       {
+        "id": "cioccolata",
+        "lat": 14.589866,
+        "lng": 120.978827,
         "name": "Cioccolata",
         "category": "Desserts & Snacks",
         "price": "Moderate — ₱200 – ₱500 per person",
@@ -2927,6 +2990,9 @@
         "about": "Coffee, churros and pastries at the foot of The Bayleaf hotel — one of four in-house dining spots at the hotel, alongside 9 Spoons, Raffaele and Sky Deck View Bar."
       },
       {
+        "id": "cioden-diner",
+        "lat": 14.589113,
+        "lng": 120.975281,
         "name": "Cioden's Diner",
         "category": "Budget Eats & Carinderias",
         "price": "Budget — under ₱200 per person",
@@ -2935,6 +3001,9 @@
         "about": "Carinderia serving budget Filipino rice meals from about ₱35. Not in OpenStreetMap — the coordinate is from a Google Maps pin supplied by a visitor."
       },
       {
+        "id": "club-intramuros",
+        "lat": 14.593005,
+        "lng": 120.970375,
         "name": "Club Intramuros",
         "category": "Restaurants & Heritage Dining",
         "price": "Upscale — ₱500 – ₱1,000 per person",
@@ -2944,6 +3013,9 @@
         "about": "Clubhouse restaurant at the golf course laid out in the old moat, still within the Intramuros district."
       },
       {
+        "id": "cold-treats",
+        "lat": 14.589672,
+        "lng": 120.975072,
         "name": "Cold Treats",
         "category": "Desserts & Snacks",
         "price": "Budget — under ₱200 per person",
@@ -2953,6 +3025,9 @@
         "about": "Ice cream and cold snacks stall in the Plaza San Luis complex."
       },
       {
+        "id": "dexter-pizza-sisays",
+        "lat": 14.591489,
+        "lng": 120.974403,
         "name": "Dexter Pizza - Sisay's",
         "category": "Budget Eats & Carinderias",
         "price": "Budget — under ₱200 per person",
@@ -2962,6 +3037,9 @@
         "about": "Neighbourhood pizza and short-order counter near Beaterio Street."
       },
       {
+        "id": "figaro",
+        "lat": 14.593133,
+        "lng": 120.973349,
         "name": "Figaro",
         "category": "Cafes & Coffee",
         "price": "Moderate — ₱200 – ₱500 per person",
@@ -2971,6 +3049,9 @@
         "about": "Branch of the Filipino coffee chain on Andres Soriano Avenue."
       },
       {
+        "id": "flower-stories-cafe",
+        "lat": 14.591516,
+        "lng": 120.975038,
         "name": "Flower Stories Cafe",
         "category": "Cafes & Coffee",
         "price": "Moderate — ₱200 – ₱500 per person",
@@ -2980,6 +3061,9 @@
         "about": "Small flower-shop café near Magallanes Street."
       },
       {
+        "id": "greenwich",
+        "lat": 14.592955,
+        "lng": 120.973115,
         "name": "Greenwich",
         "category": "Fast Food & Chains",
         "price": "Budget — under ₱200 per person",
@@ -2989,6 +3073,9 @@
         "about": "Pizza and pasta fast food chain on Andres Soriano Avenue."
       },
       {
+        "id": "ilustrado",
+        "lat": 14.587787,
+        "lng": 120.977404,
         "name": "Ilustrado",
         "category": "Restaurants & Heritage Dining",
         "price": "Upscale — ₱500 – ₱1,000 per person",
@@ -2998,6 +3085,9 @@
         "about": "Long-established Spanish-Filipino restaurant in the walled city, known for paella and heritage set menus."
       },
       {
+        "id": "js-cuisine",
+        "lat": 14.593072,
+        "lng": 120.977183,
         "name": "J's Cuisine",
         "category": "Restaurants & Heritage Dining",
         "price": "Moderate — ₱200 – ₱500 per person",
@@ -3007,6 +3097,9 @@
         "about": "Casual Filipino restaurant in the northeastern quarter, near Anda Street."
       },
       {
+        "id": "jollibee",
+        "lat": 14.593882,
+        "lng": 120.974017,
         "name": "Jollibee",
         "category": "Fast Food & Chains",
         "price": "Budget — under ₱200 per person",
@@ -3016,6 +3109,9 @@
         "about": "The country's biggest fast food chain — Chickenjoy, burger steak and sweet spaghetti."
       },
       {
+        "id": "kabayan-food-house",
+        "lat": 14.589558,
+        "lng": 120.976646,
         "name": "Kabayan Food House",
         "category": "Budget Eats & Carinderias",
         "price": "Budget — under ₱200 per person",
@@ -3025,6 +3121,9 @@
         "about": "Turo-turo food house ladling out Filipino home cooking by the plate."
       },
       {
+        "id": "kfc",
+        "lat": 14.592777,
+        "lng": 120.97289,
         "name": "KFC",
         "category": "Fast Food & Chains",
         "price": "Budget — under ₱200 per person",
@@ -3034,6 +3133,9 @@
         "about": "Fried chicken chain branch off Andres Soriano Avenue."
       },
       {
+        "id": "la-cathedral-cafe",
+        "lat": 14.591231,
+        "lng": 120.974121,
         "name": "La Cathedral Cafe",
         "category": "Cafes & Coffee",
         "price": "Moderate — ₱200 – ₱500 per person",
@@ -3043,6 +3145,9 @@
         "about": "Multi-storey café with a roof deck looking straight across at the dome of Manila Cathedral."
       },
       {
+        "id": "la-events-cafe",
+        "lat": 14.592474,
+        "lng": 120.97134,
         "name": "La Events Cafe",
         "category": "Cafes & Coffee",
         "price": "Moderate — ₱200 – ₱500 per person",
@@ -3052,6 +3157,9 @@
         "about": "All-day breakfast and sandwiches on the western side of the walled city."
       },
       {
+        "id": "lacanilaos-tapsilogan",
+        "lat": 14.588328,
+        "lng": 120.976926,
         "name": "Lacanilao's Tapsilogan",
         "category": "Budget Eats & Carinderias",
         "price": "Budget — under ₱200 per person",
@@ -3061,6 +3169,9 @@
         "about": "Tapsilogan on Victoria Street doing the standard silog line-up — tapa, longganisa and tocino with garlic rice and egg — through the day. Not in OpenStreetMap — the coordinate was supplied directly by a visitor."
       },
       {
+        "id": "liezels-place",
+        "lat": 14.588142,
+        "lng": 120.977422,
         "name": "Liezel's Place",
         "category": "Budget Eats & Carinderias",
         "price": "Budget — under ₱200 per person",
@@ -3070,6 +3181,9 @@
         "about": "Carinderia serving Filipino rice meals near the southern wall."
       },
       {
+        "id": "los-frailes-cafe",
+        "lat": 14.589359,
+        "lng": 120.974758,
         "name": "Los Frailes Cafe",
         "category": "Cafes & Coffee",
         "price": "Moderate — ₱200 – ₱500 per person",
@@ -3079,6 +3193,9 @@
         "about": "Café named for the friars, steps from San Agustin Church."
       },
       {
+        "id": "maxs-restaurant",
+        "lat": 14.593568,
+        "lng": 120.973847,
         "name": "Max's Restaurant",
         "category": "Fast Food & Chains",
         "price": "Moderate — ₱200 – ₱500 per person",
@@ -3088,6 +3205,9 @@
         "about": "The classic Filipino chain built on fried chicken, with full rice meals and sharing platters."
       },
       {
+        "id": "mcdonalds",
+        "lat": 14.592822,
+        "lng": 120.977764,
         "name": "McDonald's",
         "category": "Fast Food & Chains",
         "price": "Budget — under ₱200 per person",
@@ -3097,6 +3217,9 @@
         "about": "Burger chain branch on Muralla Street by the university campuses."
       },
       {
+        "id": "mk-cookies-pastries",
+        "lat": 14.591424,
+        "lng": 120.974137,
         "name": "MK Cookies & Pastries",
         "category": "Desserts & Snacks",
         "price": "Budget — under ₱200 per person",
@@ -3106,6 +3229,9 @@
         "about": "Cookie and pastry counter on Beaterio Street."
       },
       {
+        "id": "moonleaf",
+        "lat": 14.589284,
+        "lng": 120.978147,
         "name": "Moonleaf",
         "category": "Cafes & Coffee",
         "price": "Budget — under ₱200 per person",
@@ -3115,6 +3241,9 @@
         "about": "Milk tea shop on Victoria Street."
       },
       {
+        "id": "papa-kape",
+        "lat": 14.594656,
+        "lng": 120.969735,
         "name": "Papa Kape",
         "category": "Cafes & Coffee",
         "price": "Moderate — ₱200 – ₱500 per person",
@@ -3124,6 +3253,9 @@
         "about": "Coffee bar within the grounds of Fort Santiago, pouring Philippine-grown beans."
       },
       {
+        "id": "paper-cup",
+        "lat": 14.588266,
+        "lng": 120.978494,
         "name": "Paper + Cup",
         "category": "Cafes & Coffee",
         "price": "Moderate — ₱200 – ₱500 per person",
@@ -3133,6 +3265,9 @@
         "about": "Quiet specialty coffee spot near the eastern wall."
       },
       {
+        "id": "parers-kimchi",
+        "lat": 14.591962,
+        "lng": 120.974531,
         "name": "Parers Kimchi",
         "category": "Restaurants & Heritage Dining",
         "price": "Moderate — ₱200 – ₱500 per person",
@@ -3142,6 +3277,9 @@
         "about": "Korean kitchen serving kimchi stews and grilled plates near Beaterio Street."
       },
       {
+        "id": "pastil-sa-tabi",
+        "lat": 14.588567,
+        "lng": 120.976931,
         "name": "Pastil Sa Tabi (PST)",
         "category": "Budget Eats & Carinderias",
         "price": "Budget — under ₱200 per person",
@@ -3151,6 +3289,9 @@
         "about": "Small pastil counter on Victoria Street serving cheap banana-leaf parcels of rice with shredded chicken or beef, to go. Not in OpenStreetMap — the coordinate was supplied directly by a visitor."
       },
       {
+        "id": "pastil-an-sayo",
+        "lat": 14.589078,
+        "lng": 120.977857,
         "name": "Pastil-an Sayo",
         "category": "Budget Eats & Carinderias",
         "price": "Budget — under ₱200 per person",
@@ -3160,6 +3301,9 @@
         "about": "Pastil stall at 729A Victoria Street selling banana-leaf parcels of rice with shredded chicken or beef, from about ₱25. Not in OpenStreetMap — the coordinate is from a Google Maps pin supplied by a visitor."
       },
       {
+        "id": "patio-de-conchita",
+        "lat": 14.591848,
+        "lng": 120.974346,
         "name": "Patio de Conchita",
         "category": "Budget Eats & Carinderias",
         "price": "Budget — under ₱200 per person",
@@ -3169,6 +3313,9 @@
         "about": "Rustic carinderia set in an old Spanish house, known for complete Filipino rice meals at around ₱140."
       },
       {
+        "id": "pepito-foodhouse",
+        "lat": 14.590476,
+        "lng": 120.977135,
         "name": "Pepito Foodhouse",
         "category": "Budget Eats & Carinderias",
         "price": "Budget — under ₱200 per person",
@@ -3178,6 +3325,9 @@
         "about": "Grill house on Solana Street doing barbecue, chicken and rice plates."
       },
       {
+        "id": "plm-canteen",
+        "lat": 14.587149,
+        "lng": 120.976675,
         "name": "PLM Canteen",
         "category": "Budget Eats & Carinderias",
         "price": "Budget — under ₱200 per person",
@@ -3187,6 +3337,9 @@
         "about": "Campus canteen at Pamantasan ng Lungsod ng Maynila, on General Luna Street. The visitor-supplied pin resolves to the PLM Multi-Purpose Building — confirm the exact spot and whether it is open to conference visitors."
       },
       {
+        "id": "raffaele-woodfired-pizza",
+        "lat": 14.590004,
+        "lng": 120.978725,
         "name": "Raffaele Woodfired Pizza",
         "category": "Restaurants & Heritage Dining",
         "price": "Moderate — ₱200 – ₱500 per person",
@@ -3196,6 +3349,9 @@
         "about": "Wood-fired pizza restaurant on The Bayleaf's third floor. Shares its coordinates with the hotel building; no separate OSM node exists for the restaurant itself."
       },
       {
+        "id": "ristorante-delle-mitre",
+        "lat": 14.589488,
+        "lng": 120.974704,
         "name": "Ristorante delle Mitre",
         "category": "Restaurants & Heritage Dining",
         "price": "Moderate — ₱200 – ₱500 per person",
@@ -3205,6 +3361,9 @@
         "about": "Catholic-themed dining room opposite San Agustin Church, known for very large sharing portions."
       },
       {
+        "id": "savor-kribs",
+        "lat": 14.589707,
+        "lng": 120.978639,
         "name": "Savor & Kribs",
         "category": "Restaurants & Heritage Dining",
         "price": "Moderate — ₱200 – ₱500 per person",
@@ -3214,6 +3373,9 @@
         "about": "Casual grill and Filipino plates on Victoria Street."
       },
       {
+        "id": "sky-deck-view-bar",
+        "lat": 14.589941,
+        "lng": 120.978735,
         "name": "Sky Deck View Bar",
         "category": "Restaurants & Heritage Dining",
         "price": "Upscale — ₱500 – ₱1,000 per person",
@@ -3223,6 +3385,9 @@
         "about": "Rooftop lounge atop The Bayleaf serving cocktails and bar snacks, with a view over the walls, the Intramuros golf course and the Manila Bay sunset."
       },
       {
+        "id": "starbucks-general-luna-north",
+        "lat": 14.592643,
+        "lng": 120.972005,
         "name": "Starbucks — General Luna (North)",
         "category": "Cafes & Coffee",
         "price": "Moderate — ₱200 – ₱500 per person",
@@ -3232,6 +3397,9 @@
         "about": "Coffee chain branch on the northern stretch of General Luna Street."
       },
       {
+        "id": "starbucks-general-luna-south",
+        "lat": 14.588501,
+        "lng": 120.975849,
         "name": "Starbucks — General Luna (South)",
         "category": "Cafes & Coffee",
         "price": "Moderate — ₱200 – ₱500 per person",
@@ -3241,6 +3409,9 @@
         "about": "Coffee chain branch on the southern stretch of General Luna Street."
       },
       {
+        "id": "starbucks-muralla",
+        "lat": 14.592976,
+        "lng": 120.977702,
         "name": "Starbucks — Muralla",
         "category": "Cafes & Coffee",
         "price": "Moderate — ₱200 – ₱500 per person",
@@ -3250,6 +3421,9 @@
         "about": "Coffee chain branch on Muralla Street beside the university campuses."
       },
       {
+        "id": "sunlai-foodhouse",
+        "lat": 14.588158,
+        "lng": 120.977402,
         "name": "Sunlai Foodhouse",
         "category": "Budget Eats & Carinderias",
         "price": "Budget — under ₱200 per person",
@@ -3259,6 +3433,9 @@
         "about": "Food house near the southern wall serving Filipino plates over rice."
       },
       {
+        "id": "tesoros",
+        "lat": 14.589585,
+        "lng": 120.975042,
         "name": "Tesoros",
         "category": "Restaurants & Heritage Dining",
         "price": "Moderate — ₱200 – ₱500 per person",
@@ -3268,6 +3445,9 @@
         "about": "Café and dining room attached to the Tesoro's handicrafts store in Plaza San Luis."
       },
       {
+        "id": "vtans-eatery",
+        "lat": 14.588612,
+        "lng": 120.977135,
         "name": "Vtan's Eatery",
         "category": "Budget Eats & Carinderias",
         "price": "Budget — under ₱200 per person",
@@ -3277,6 +3457,9 @@
         "about": "Carinderia on Victoria Street with a short daily menu of Filipino home dishes over rice. Not in OpenStreetMap — the coordinate was supplied directly by a visitor."
       },
       {
+        "id": "zaqueo-sisigan",
+        "lat": 14.589068,
+        "lng": 120.97601,
         "name": "Zaqueo Sisigan",
         "category": "Budget Eats & Carinderias",
         "price": "Budget — under ₱200 per person",
@@ -3288,6 +3471,9 @@
     ],
     "see": [
       {
+        "id": "ayuntamiento",
+        "lat": 14.592508,
+        "lng": 120.973327,
         "name": "Ayuntamiento de Manila",
         "category": "Monuments & Ruins",
         "fee": "Free (exterior)",
@@ -3299,6 +3485,9 @@
         "about": "The Casas Consistoriales — city hall of Spanish Manila, destroyed in 1945 and rebuilt in 2013 behind its original neoclassical facade. Now the Bureau of the Treasury."
       },
       {
+        "id": "bahay-tsinoy",
+        "lat": 14.590901,
+        "lng": 120.975036,
         "name": "Bahay Tsinoy",
         "category": "Museums",
         "fee": "₱100",
@@ -3310,6 +3499,9 @@
         "about": "Museum of Chinese life in the Philippines, run by Kaisa Para Sa Kaunlaran. Traces the Tsinoy community from pre-colonial trade through the Parián, the galleon era and the Second World War. Strong on primary material."
       },
       {
+        "id": "baluarte-de-san-andres",
+        "lat": 14.58707,
+        "lng": 120.978627,
         "name": "Baluarte de San Andrés",
         "category": "Walls, Gates & Bastions",
         "fee": "Free",
@@ -3320,6 +3512,9 @@
         "about": "A bastion on the south-eastern angle of the walls, one of the quieter points to get up onto the ramparts and see how thick the Spanish defences actually were."
       },
       {
+        "id": "baluarte-de-san-diego",
+        "lat": 14.585478,
+        "lng": 120.975655,
         "name": "Baluarte de San Diego",
         "category": "Walls, Gates & Bastions",
         "fee": "₱75",
@@ -3332,6 +3527,9 @@
         "about": "A circular bastion begun in 1586 to a design by the Jesuit Antonio Sedeño — among the oldest stone fortifications in the country. Excavated ruins now sit inside landscaped gardens, and you can walk the rampart."
       },
       {
+        "id": "casa-manila",
+        "lat": 14.589733,
+        "lng": 120.97525,
         "name": "Casa Manila",
         "category": "Museums",
         "fee": "₱75",
@@ -3344,6 +3542,9 @@
         "about": "A 1980s reconstruction of an 1850s colonial merchant house, furnished room by room to show how a wealthy Manila family lived — from the caída and sala down to the paired lavatories."
       },
       {
+        "id": "fort-santiago",
+        "lat": 14.594252,
+        "lng": 120.970362,
         "name": "Fort Santiago",
         "category": "Walls, Gates & Bastions",
         "fee": "₱75",
@@ -3356,6 +3557,9 @@
         "about": "The Spanish citadel guarding the mouth of the Pasig, begun 1571 on the site of Rajah Sulayman's settlement. José Rizal was held here before his execution in 1896; brass footsteps trace his last walk across the courtyard. The pin marks the main gate, where tickets are sold."
       },
       {
+        "id": "manila-cathedral",
+        "lat": 14.591506,
+        "lng": 120.973611,
         "name": "Manila Cathedral",
         "category": "Churches",
         "fee": "Free",
@@ -3367,6 +3571,9 @@
         "about": "The Minor Basilica of the Immaculate Conception. The present building, finished in 1958, is the eighth on this site — its predecessors were taken in turn by fire, typhoon, earthquake and the 1945 battle. Belgian stained glass and a Dutch pipe organ."
       },
       {
+        "id": "memorare-manila-1945",
+        "lat": 14.590514,
+        "lng": 120.974513,
         "name": "Memorare — Manila 1945",
         "category": "Monuments & Ruins",
         "fee": "Free",
@@ -3377,6 +3584,9 @@
         "about": "Peter de Guzman's 1995 memorial to the roughly 100,000 civilians killed in the month-long Battle of Manila. A huddled group of figures beneath a grieving woman, with an inscription worth reading in full — the most affecting thing in Intramuros."
       },
       {
+        "id": "museo-de-intramuros",
+        "lat": 14.58994,
+        "lng": 120.973225,
         "name": "Museo de Intramuros",
         "category": "Museums",
         "fee": "₱200",
@@ -3389,6 +3599,9 @@
         "about": "The Intramuros Administration's ecclesiastical art collection, opened 2019 inside the rebuilt shell of San Ignacio Church. Colonial santos, retablos and ivory carvings, shown in a deliberately modern interior."
       },
       {
+        "id": "plaza-de-roma",
+        "lat": 14.592183,
+        "lng": 120.973083,
         "name": "Plaza de Roma",
         "category": "Plazas & Gardens",
         "fee": "Free",
@@ -3399,6 +3612,9 @@
         "about": "The main square of Spanish Manila and the natural place to start. It was a bullring until the 1790s, then Plaza McKinley under the Americans, renamed Plaza de Roma in 1961. The King Charles IV monument stands at its centre."
       },
       {
+        "id": "plaza-mexico",
+        "lat": 14.594547,
+        "lng": 120.974557,
         "name": "Plaza México",
         "category": "Plazas & Gardens",
         "fee": "Free",
@@ -3409,6 +3625,9 @@
         "about": "A square commemorating the Manila–Acapulco galleon trade, which ran between these two ports for 250 years and made Intramuros the hinge of the first genuinely global trade route."
       },
       {
+        "id": "plaza-moriones",
+        "lat": 14.593274,
+        "lng": 120.971102,
         "name": "Plaza Moriones",
         "category": "Plazas & Gardens",
         "fee": "Inside Fort Santiago (₱75)",
@@ -3421,6 +3640,9 @@
         "about": "The old parade ground inside Fort Santiago, now lawn and acacia. The open space that makes the fort a pleasant place to sit rather than only to tour."
       },
       {
+        "id": "plazuela-de-santa-isabel",
+        "lat": 14.590474,
+        "lng": 120.974457,
         "name": "Plazuela de Santa Isabel",
         "category": "Plazas & Gardens",
         "fee": "Free",
@@ -3431,6 +3653,9 @@
         "about": "The small square that holds the Memorare monument, on the site of the Colegio de Santa Isabel — one of the oldest schools for girls in Asia."
       },
       {
+        "id": "postigo-del-palacio",
+        "lat": 14.590872,
+        "lng": 120.972235,
         "name": "Postigo del Palacio",
         "category": "Walls, Gates & Bastions",
         "fee": "Free",
@@ -3441,6 +3666,9 @@
         "about": "The Postern of the Palace — the Governor-General's private gate to the river and the bay, small enough to be missed and carrying a relief of Our Lady of Solitude above the arch."
       },
       {
+        "id": "puerta-de-isabel-ii",
+        "lat": 14.59415,
+        "lng": 120.976253,
         "name": "Puerta de Isabel II",
         "category": "Walls, Gates & Bastions",
         "fee": "Free",
@@ -3451,6 +3679,9 @@
         "about": "Opened in 1861 and named for Queen Isabella II of Spain, whose statue once stood before it. The newest of the original gates, cut to ease traffic to the river district."
       },
       {
+        "id": "puerta-de-santa-lucia",
+        "lat": 14.588503,
+        "lng": 120.973714,
         "name": "Puerta de Santa Lucia",
         "category": "Walls, Gates & Bastions",
         "fee": "Free",
@@ -3461,6 +3692,9 @@
         "about": "A western gate opening toward the bay, with one of the better-preserved stretches of curtain wall and a ravelin still in front of it."
       },
       {
+        "id": "puerta-real",
+        "lat": 14.586164,
+        "lng": 120.977048,
         "name": "Puerta Real",
         "category": "Walls, Gates & Bastions",
         "fee": "Free",
@@ -3472,6 +3706,9 @@
         "about": "The Royal Gate, reserved for the Governor-General and opened only on ceremonial occasions. Rebuilt in the 1960s; the sunken gardens beside it are a good quiet stop."
       },
       {
+        "id": "rizal-shrine",
+        "lat": 14.594514,
+        "lng": 120.969708,
         "name": "Rizal Shrine",
         "category": "Museums",
         "fee": "Included in Fort Santiago entry",
@@ -3484,6 +3721,9 @@
         "about": "Museum in the barracks where Rizal spent his final hours, holding his manuscripts, personal effects and the original of \"Mi Último Adiós\", smuggled out in an oil lamp."
       },
       {
+        "id": "san-agustin-church",
+        "lat": 14.588915,
+        "lng": 120.975345,
         "name": "San Agustin Church",
         "category": "Churches",
         "fee": "Free",
@@ -3495,6 +3735,9 @@
         "about": "Completed in 1607, the oldest stone church in the Philippines and a UNESCO World Heritage Site. It was the only Intramuros church left standing after the 1945 Battle of Manila. The barrel-vaulted ceiling is a trompe-l'œil painted flat in 1875."
       },
       {
+        "id": "san-agustin-museum",
+        "lat": 14.588562,
+        "lng": 120.974782,
         "name": "San Agustin Museum",
         "category": "Museums",
         "fee": "₱200",
@@ -3506,6 +3749,9 @@
         "about": "The monastery beside San Agustin, now a museum of religious art, vestments and colonial-era furniture arranged around two storeys of cloisters. Quiet, and the best single introduction to Spanish-era ecclesiastical Manila."
       },
       {
+        "id": "santa-lucia-barracks",
+        "lat": 14.587591,
+        "lng": 120.974513,
         "name": "Santa Lucia Barracks Ruins",
         "category": "Monuments & Ruins",
         "fee": "Free",
@@ -3518,6 +3764,9 @@
     ],
     "stay": [
       {
+        "id": "the-bayleaf-intramuros",
+        "lat": 14.590004,
+        "lng": 120.978725,
         "name": "The Bayleaf Intramuros",
         "price": "₱2,800 – ₱13,300 per night",
         "priceNote": "From about ₱2,765 for a Superior; suites reach roughly ₱13,000. Typical standard room ₱4,000 – ₱9,100.",
@@ -3527,6 +3776,9 @@
         "about": "The only full-service boutique hotel inside the walls. Operated by Lyceum of the Philippines University; also home to Cioccolata, which appears on the food map."
       },
       {
+        "id": "white-knight-hotel-intramuros",
+        "lat": 14.589591,
+        "lng": 120.975686,
         "name": "White Knight Hotel Intramuros",
         "price": "₱1,750 – ₱5,100 per night",
         "priceNote": "Typically around ₱2,000 a night; standard rooms roughly ₱1,900 – ₱2,500.",

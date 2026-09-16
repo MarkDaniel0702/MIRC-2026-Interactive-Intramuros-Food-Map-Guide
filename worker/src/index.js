@@ -32,6 +32,7 @@
 
 import { buildIndex, retrieve } from './retrieve.js';
 import { warmAnswer, cachedAnswer, storeAnswer, plainText } from './cache.js';
+import { findFocus } from './focus.js';
 
 const MAX_MESSAGE_CHARS = 600;
 const MAX_HISTORY_TURNS = 8;
@@ -439,20 +440,26 @@ export default {
 
     const declineLine = corpus.scope?.decline ?? 'I can only help with MIRC 2026.';
 
+    /* "Find X on the map" — worked out from the corpus's own eat/see/stay records,
+       not asked of the model, so it can only ever point at a place that is really
+       there; see focus.js. Independent of which tier answers below, and cheap
+       enough to compute on every request rather than store per cached/warm entry. */
+    const focus = findFocus(corpus, message);
+
     /* Tier 1 — a reviewed answer shipped with the corpus. No network call at all,
        so the commonest questions still answer instantly when the provider is
        rate-limited or down, which is precisely when they are all being asked. */
     const warm = warmAnswer(corpus, message);
     if (warm) {
       console.log(JSON.stringify({ event: 'warm-hit', message, matched: warm.matched }));
-      return json({ reply: plainText(warm.reply), source: 'warm', cached: true }, 200, cors);
+      return json({ reply: plainText(warm.reply), source: 'warm', cached: true, focus }, 200, cors);
     }
 
     /* Tier 2 — someone in this datacentre already asked this. */
     const cached = await cachedAnswer(corpus, message);
     if (cached) {
       console.log(JSON.stringify({ event: 'cache-hit', message }));
-      return json({ ...cached, reply: plainText(cached.reply), cached: true }, 200, cors);
+      return json({ ...cached, reply: plainText(cached.reply), cached: true, focus }, 200, cors);
     }
 
     /* Layer 2 — heuristic pre-filter. Declined without spending a model call. */
@@ -508,7 +515,7 @@ export default {
       console.log(JSON.stringify({ event: 'unanswered', message }));
     }
 
-    const answer = { reply: plainText(reply), source: used, contextTokens: tokens };
+    const answer = { reply: plainText(reply), source: used, contextTokens: tokens, focus };
 
     /* Cache only a clean answer. A decline, a retry message or an "I could not find
        that" must never become sticky — the first two are transient and the third

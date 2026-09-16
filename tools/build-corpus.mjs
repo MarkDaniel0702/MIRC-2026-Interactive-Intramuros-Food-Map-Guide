@@ -111,7 +111,12 @@ const drop = obj => Object.fromEntries(Object.entries(obj).filter(([, v]) =>
 
 /* ── compact the map data ────────────────────────────────────────────────────── */
 
+/* id/lat/lng ride along on every eat/see/stay record so the Worker can point the
+   map at one deterministically (see worker/src/focus.js) -- matched against the
+   exact id the React app already keys every marker by (src/data/modes.ts), so
+   there is nothing to keep in sync by hand. */
 const food = FOOD_SPOTS.map(s => drop({
+  id: s.id, lat: s.lat, lng: s.lng,
   name: s.name,
   category: CATEGORIES[s.category]?.label ?? s.category,
   price: `${PRICE_TIERS[s.priceTier].label} — ${PRICE_TIERS[s.priceTier].range} per person`,
@@ -122,6 +127,7 @@ const food = FOOD_SPOTS.map(s => drop({
 })).sort((a, b) => a.name.localeCompare(b.name));
 
 const sights = TOURIST_SPOTS.map(s => drop({
+  id: s.id, lat: s.lat, lng: s.lng,
   name: s.name,
   category: SIGHT_CATEGORIES?.[s.category]?.label ?? s.category,
   fee: s.fee,
@@ -135,6 +141,7 @@ const sights = TOURIST_SPOTS.map(s => drop({
 })).sort((a, b) => a.name.localeCompare(b.name));
 
 const stay = HOTELS.filter(h => h.mapped).map(h => drop({
+  id: h.id, lat: h.lat, lng: h.lng,
   name: h.name,
   price: h.priceRange,
   priceNote: h.priceNote,
