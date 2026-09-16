@@ -175,12 +175,19 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
   const select = useCallback((id: string, opts: { from: 'list' | 'map' }) => {
     const map = mapRef.current;
     if (!map) return;
-    const s = stateRef.current;
-    const modeConfig = MODES[s.mode];
-    const spot = modeConfig.items.find(sp => sp.id === id);
+    // Mode-agnostic on purpose: since the map can now show pins from every
+    // toggled-on mode at once (mapModes), a pin click no longer implies the
+    // clicked spot belongs to whichever tab happens to be open. A from:'list'
+    // call is still always same-mode in practice -- SpotList only ever renders
+    // the active tab's own cards -- so this is a no-op change for that path.
+    const found = findAnywhere(id);
     const marker = markersRef.current.get(id);
-    if (!spot || !marker) return;
+    if (!found || !marker) return;
+    const { spot, modeKey } = found;
 
+    if (modeKey !== stateRef.current.mode) {
+      dispatchRef.current({ type: 'SET_MODE', mode: modeKey });
+    }
     setActive(id, opts.from);
     hideMapNoteNow();
 

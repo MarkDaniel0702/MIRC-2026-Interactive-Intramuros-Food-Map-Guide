@@ -1,7 +1,8 @@
-import { useEffect, useMemo, useReducer, useRef, useState } from 'react';
+import { useEffect, useReducer, useRef, useState } from 'react';
 import { reducer, initialState } from './state/store';
 import { useLeafletMap } from './hooks/useLeafletMap';
 import { useVisibleSpots } from './hooks/useVisibleSpots';
+import { useMapVisibleIds } from './hooks/useMapVisibleIds';
 import { useToasts } from './hooks/useToasts';
 import { Panel } from './components/Panel';
 import { MapView } from './components/MapView';
@@ -13,7 +14,9 @@ const isMobile = () => window.matchMedia('(max-width: 760px)').matches;
 export function App() {
   const [state, dispatch] = useReducer(reducer, undefined, initialState);
   const visible = useVisibleSpots(state);
-  const visibleIds = useMemo(() => visible.map(v => v.spot.id), [visible]);
+  // What the MAP shows can now be a superset of what the LIST shows -- see
+  // useMapVisibleIds's own doc comment for why these are two separate hooks.
+  const mapVisibleIds = useMapVisibleIds(state);
 
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapNoteRef = useRef<HTMLDivElement>(null);
@@ -27,7 +30,7 @@ export function App() {
     mapNoteRef,
     state,
     dispatch,
-    visibleIds,
+    visibleIds: mapVisibleIds,
     onToast: showToast,
     onSetSheet: setSheetOpen,
     isMobile

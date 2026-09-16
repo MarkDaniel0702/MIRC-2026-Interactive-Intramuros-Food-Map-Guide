@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import type { Dispatch } from 'react';
 import { Masthead } from './Masthead';
 import { Tabs } from './Tabs';
+import { MapLayers } from './MapLayers';
 import { SearchBox } from './SearchBox';
 import { CategoryChips } from './CategoryChips';
 import { PriceChips } from './PriceChips';
@@ -88,6 +89,7 @@ export function Panel({ state, dispatch, mapApi, visible, sheetOpen, setSheet, o
       <div className="panel__body" id="panelBody">
         <Masthead mode={state.mode} />
         <Tabs mode={state.mode} mapApi={mapApi} />
+        <MapLayers mode={state.mode} mapModes={state.mapModes} dispatch={dispatch} />
 
         <div className="controls">
           <SearchBox key={`${state.mode}-${state.resetNonce}`} mode={state.mode}

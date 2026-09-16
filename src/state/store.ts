@@ -36,6 +36,13 @@ export interface FullAppState {
    *  uncontrolled-feeling input without diffing state to detect an external reset
    *  (app.js:766 just writes $('#search').value = '' directly). */
   resetNonce: number;
+  /** Which datasets' pins appear on the map right now -- independent of `mode`,
+   *  which only ever names the ONE tab the sidebar LIST is showing. Lets a user
+   *  browse Eat while also seeing Sights pins on the map. Always a superset of
+   *  {mode}: SET_MODE adds the tab being switched to (see below) and
+   *  TOGGLE_MAP_MODE refuses to remove it, so the tab you are looking at can
+   *  never vanish from the map out from under you. */
+  mapModes: Set<ModeKey>;
 }
 
 export function initialState(): FullAppState {
@@ -48,7 +55,8 @@ export function initialState(): FullAppState {
     activeFrom: null,
     userPos: null,
     dirs: { open: false, destId: null, start: null, picking: false, busy: false, message: null, result: null },
-    resetNonce: 0
+    resetNonce: 0,
+    mapModes: new Set<ModeKey>(['food'])
   };
 }
 
@@ -71,6 +79,7 @@ export type Action =
   | { type: 'TOGGLE_CHIP'; group: 'cat' | 'tier'; value: string }
   | { type: 'RESET_FILTERS' }
   | { type: 'SET_ACTIVE'; id: string | null; from: 'list' | 'map' | null }
+  | { type: 'TOGGLE_MAP_MODE'; mode: ModeKey }
   | { type: 'SET_USER_POS'; pos: LatLng }
   | { type: 'DIRS_OPEN'; destId: string; mode: ModeKey }
   | { type: 'DIRS_CLOSE' }
@@ -87,7 +96,10 @@ export function reducer(state: FullAppState, action: Action): FullAppState {
       return {
         ...state,
         mode: action.mode,
-        byMode: { ...state.byMode, [action.mode]: pruneTiers(state.byMode[action.mode], action.mode) }
+        byMode: { ...state.byMode, [action.mode]: pruneTiers(state.byMode[action.mode], action.mode) },
+        // The tab you are switching to must be on the map, or the list and the
+        // map would show different things the moment you land on it.
+        mapModes: state.mapModes.has(action.mode) ? state.mapModes : new Set(state.mapModes).add(action.mode)
       };
     }
 
@@ -109,6 +121,15 @@ export function reducer(state: FullAppState, action: Action): FullAppState {
 
     case 'SET_ACTIVE':
       return { ...state, activeId: action.id, activeFrom: action.from };
+
+    // Refuses to drop the active tab -- toggling that off would hide the very
+    // pins the open list is describing, which reads as a bug, not a filter.
+    case 'TOGGLE_MAP_MODE': {
+      if (action.mode === state.mode) return state;
+      const next = new Set(state.mapModes);
+      next.has(action.mode) ? next.delete(action.mode) : next.add(action.mode);
+      return { ...state, mapModes: next };
+    }
 
     case 'SET_USER_POS':
       return { ...state, userPos: action.pos };
