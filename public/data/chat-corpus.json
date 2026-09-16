@@ -1,5 +1,5 @@
 {
-  "_generated": "2026-09-16",
+  "_generated": "2026-09-16T09:29:44.923Z",
   "_source": "node tools/build-corpus.mjs — do not edit by hand; edit data/mirc-2026.json",
   "meta": {
     "id": "mirc-2026",

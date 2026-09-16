@@ -65,7 +65,11 @@ if (existsSync(data('warm-answers.json'))) {
   try {
     const f = JSON.parse(readFileSync(data('warm-answers.json'), 'utf8'));
     warm = f.answers ?? [];
-    if (f.corpusVersion && f.corpusVersion !== mirc.meta?.updated) {
+    /* The warm answers were made against a corpus built at corpusVersion (an ISO
+       stamp, so string order is time order). They are stale if the knowledge base
+       has been edited since — not merely if the two strings differ, which they
+       always do now that one is a timestamp and the other a date. */
+    if (f.corpusVersion && mirc.meta?.updated && f.corpusVersion < mirc.meta.updated) {
       console.log(`  ${amber('warm answers were generated against an older corpus')}` +
                   ` ${dim(`(${f.corpusVersion} vs ${mirc.meta?.updated}) — re-run tools/warm-cache.mjs --force`)}`);
     }
@@ -161,7 +165,10 @@ const arrivals = START_POINTS.map(p => drop({
 /* ── assemble ────────────────────────────────────────────────────────────────── */
 
 const corpus = {
-  _generated: new Date().toISOString().slice(0, 10),
+  /* A full timestamp, not a date. The Worker keys its edge cache on this, so two
+     builds on the same day must not share it — the second would go on serving
+     answers cached against the first. Every rebuild therefore changes this line. */
+  _generated: new Date().toISOString(),
   _source: 'node tools/build-corpus.mjs — do not edit by hand; edit data/mirc-2026.json',
 
   meta: mirc.meta,
