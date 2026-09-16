@@ -1,6 +1,6 @@
 {
   "generated": "2026-09-16",
-  "corpusVersion": "2026-09-16T09:29:44.923Z",
+  "corpusVersion": "2026-09-16T14:08:02.092Z",
   "answers": [
     {
       "q": "What is MIRC 2026?",
@@ -68,10 +68,11 @@
     },
     {
       "q": "How long is the question and answer portion?",
-      "a": "Each presentation is followed by a 3‑minute question‑and‑answer segment.",
+      "a": "Each presentation’s question‑and‑answer segment is allocated 3 minutes.",
       "keys": [
         "How long is the question and answer portion?"
-      ]
+      ],
+      "at": "2026-09-16T14:08:02.092Z"
     },
     {
       "q": "What are the tracks?",
@@ -91,17 +92,19 @@
     },
     {
       "q": "What does BGL stand for?",
-      "a": "BGL stands for **Business, Government, Law**.",
+      "a": "BGL is the code for the **Business, Government, Law** track.",
       "keys": [
         "What does BGL stand for?"
-      ]
+      ],
+      "at": "2026-09-16T14:08:02.092Z"
     },
     {
       "q": "What does HS stand for?",
-      "a": "HS stands for Health Sciences.",
+      "a": "HS stands for **Health Sciences**, one of the four conference tracks.",
       "keys": [
         "What does HS stand for?"
-      ]
+      ],
+      "at": "2026-09-16T14:08:02.092Z"
     },
     {
       "q": "What does EASS stand for?",
