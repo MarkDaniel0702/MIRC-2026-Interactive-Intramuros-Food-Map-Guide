@@ -12,7 +12,15 @@
  *
  * RESUMABLE. Anything already in data/warm-answers.json is skipped, so a run that is
  * interrupted — or paced across a rate limit — can simply be run again. Pass --force
- * to re-answer everything, e.g. after a content update.
+ * after a content update: it re-answers what is older than meta.updated and keeps
+ * what is not (each answer records the corpus build it came from, in `at`), so a
+ * --force run that drops halfway can also just be run again. --force --all redoes
+ * everything, which is what a prompt change needs.
+ *
+ * "I could not find that" is never stored, whatever the run. A warm hit has no second
+ * try and no guard behind it, and the prior answer — if there is one — stays instead.
+ * Groq's daily budget shows up as a 429 asking for hours; that stops the run rather
+ * than looping on it, and it resumes where it stopped when run again.
  *
  * REVIEW WHAT IT WRITES. These answers are served verbatim, and none of the runtime
  * guards can catch a bad one. Read data/warm-answers.json before committing it.
@@ -34,6 +42,7 @@ import { normalise } from '../worker/src/cache.js';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = join(root, 'data', 'warm-answers.json');
 const FORCE = process.argv.includes('--force');
+const ALL = FORCE && process.argv.includes('--all');
 
 const PROVIDER = process.env.PROVIDER || (process.env.GROQ_API_KEY ? 'groq' : 'gemini');
 const KEY = PROVIDER === 'groq' ? process.env.GROQ_API_KEY : process.env.GEMINI_API_KEY;
@@ -55,6 +64,24 @@ const existing = existsSync(OUT)
    arrives: a run that fails on the first question — a bad key, say — must not
    truncate the file to the pinned entries, which is what dropping them here did. */
 const done = new Map((existing.answers ?? []).map(a => [normalise(a.q), a]));
+
+/* How long the provider asks us to wait. Groq says it in the message — "try again
+   in 1m23.4s", or "3h12m34s" once the daily budget is gone — and sometimes in
+   retry-after; Gemini uses a retryDelay field. 35s when none of them say. */
+function retryAfterSeconds(res, body) {
+  const hdr = Number(res.headers.get('retry-after'));
+  if (hdr > 0) return hdr;
+  const g = body.match(/try again in (?:(\d+)h)?(?:(\d+)m)?(?:([\d.]+)s)?/i);
+  if (g && (g[1] || g[2] || g[3])) return Math.ceil((+g[1] || 0) * 3600 + (+g[2] || 0) * 60 + (+g[3] || 0));
+  const d = body.match(/"retryDelay":\s*"(\d+)s"/);
+  return d ? Number(d[1]) : 35;
+}
+
+/* The could-not-find form, as distinct from the scope.unknown line: "not published
+   yet" is a reviewed answer to a real gap and may be warmed; a retrieval or model
+   miss may not. */
+const couldNotFind = a =>
+  /\b(?:could\s*not|couldn['’]t|unable to|did\s*not|didn['’]t|cannot|can['’]t)\s+(?:find|locate)\b/i.test(a);
 
 async function ask(question) {
   const { slice } = retrieve(index, question, { budgetTokens: 2400 });
@@ -81,7 +108,15 @@ async function ask(question) {
 
   if (res.status === 429 || res.status === 503) {
     const body = await res.text();
-    const wait = Number((body.match(/"retryDelay":\s*"(\d+)s"/) || [])[1] || 35);
+    const wait = retryAfterSeconds(res, body);
+    if (wait > 600) {
+      /* A wait this long is the daily ceiling, not the per-minute one. Looping on
+         it would spin for hours; stop cleanly, and the next run resumes. */
+      const err = new Error(`rate limited for ~${Math.round(wait / 60)} min — the daily token budget is ` +
+                            'spent. Run again later; it resumes where it stopped.');
+      err.fatal = true;
+      throw err;
+    }
     process.stdout.write(`    (rate limited, waiting ${wait}s)\n`);
     await new Promise(r => setTimeout(r, (wait + 2) * 1000));
     return ask(question);
@@ -123,7 +158,10 @@ let asked = 0, skipped = 0, refused = 0;
 
 for (const q of questions) {
   const prior = merged.get(normalise(q));
-  if (prior && (!FORCE || prior.pinned)) { skipped++; continue; }
+  if (prior) {
+    const fresh = Boolean(prior.at && corpus.meta?.updated && prior.at >= corpus.meta.updated);
+    if (prior.pinned || !FORCE || (fresh && !ALL)) { skipped++; continue; }
+  }
 
   /* A question that the guards would refuse must never become a warm answer — it
      would be served without the guards ever running. */
@@ -140,7 +178,13 @@ for (const q of questions) {
       refused++;
       continue;
     }
-    merged.set(normalise(q), { q, a, keys: [q] });
+    if (couldNotFind(a)) {
+      console.log(`  SKIP (unanswered) ${q}${prior ? '  — keeping the previous answer' : ''}`);
+      console.log(`       ${a.replace(/\s+/g, ' ').slice(0, 110)}`);
+      refused++;
+      continue;
+    }
+    merged.set(normalise(q), { q, a, keys: [q], at: corpus._generated });
     asked++;
     console.log(`  OK   ${q}`);
     console.log(`       ${a.replace(/\s+/g, ' ').slice(0, 110)}`);
