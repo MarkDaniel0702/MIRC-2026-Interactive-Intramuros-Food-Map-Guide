@@ -1,5 +1,5 @@
 {
-  "_generated": "2026-09-16T14:13:40.495Z",
+  "_generated": "2026-09-16T14:25:17.961Z",
   "_source": "node tools/build-corpus.mjs — do not edit by hand; edit data/mirc-2026.json",
   "meta": {
     "id": "mirc-2026",
@@ -2458,7 +2458,7 @@
     },
     {
       "q": "When is the conference?",
-      "a": "The conference runs from 27 to 30 September 2026.  \n- 27 Sept 2026: Hospitality & Tourism sub‑conference at DLSU‑CSB.  \n- 29–30 Sept 2026: Main conference at Pamantasan ng Lungsod ng Maynila (PLM).",
+      "a": "The conference runs from 27 to 30 September 2026.  \n- 27 Sept 2026: Hospitality & Tourism sub‑conference at DLSU‑CSB.  \n- 29–30 Sept 2026: Main conference at Pamantasan ng Lungsod ng Maynila (PLM).",
       "keys": [
         "When is the conference?"
       ],
@@ -2498,7 +2498,7 @@
     },
     {
       "q": "Where is registration?",
-      "a": "Registration takes place in the **GEE Lobby** (the lobby of the Gusaling Emilio Ejercito Sr. building).  \n\n- **Tuesday 29 September 2026:** 07:00 – 17:00, GEE Lobby  \n- **Wednesday 30 September 2026:** 07:00 – 12:00, GEE Lobby.",
+      "a": "Registration takes place in the GEE Lobby (the lobby of the Gusaling Emilio Ejercito Sr. building).  \n- Tuesday 29 September 2026: 07:00 – 17:00, GEE Lobby  \n- Wednesday 30 September 2026: 07:00 – 12:00, GEE Lobby.",
       "keys": [
         "Where is registration?"
       ],
@@ -2522,7 +2522,7 @@
     },
     {
       "q": "What are the tracks?",
-      "a": "The conference has four tracks:\n\n- BGL – Business, Government, Law  \n- EASS – Education, Arts, Social Science, Social Work  \n- HS – Health Sciences  \n- STEA – Science, Technology, Engineering, Architecture",
+      "a": "The conference has four tracks:\n- BGL – Business, Government, Law  \n- EASS – Education, Arts, Social Science, Social Work  \n- HS – Health Sciences  \n- STEA – Science, Technology, Engineering, Architecture",
       "keys": [
         "What are the tracks?"
       ],
@@ -2530,7 +2530,7 @@
     },
     {
       "q": "What does STEA stand for?",
-      "a": "STEA stands for **Science, Technology, Engineering, Architecture**. It’s one of the four conference tracks.",
+      "a": "STEA stands for Science, Technology, Engineering, Architecture. It’s one of the four conference tracks.",
       "keys": [
         "What does STEA stand for?"
       ],
@@ -2538,7 +2538,7 @@
     },
     {
       "q": "What does BGL stand for?",
-      "a": "BGL is the code for the **Business, Government, Law** track.",
+      "a": "BGL is the code for the Business, Government, Law track.",
       "keys": [
         "What does BGL stand for?"
       ],
@@ -2546,7 +2546,7 @@
     },
     {
       "q": "What does HS stand for?",
-      "a": "HS stands for **Health Sciences**, one of the four conference tracks.",
+      "a": "HS stands for Health Sciences, one of the four conference tracks.",
       "keys": [
         "What does HS stand for?"
       ],
@@ -2554,7 +2554,7 @@
     },
     {
       "q": "What does EASS stand for?",
-      "a": "EASS stands for **Education, Arts, Social Science, Social Work**.",
+      "a": "EASS stands for Education, Arts, Social Science, Social Work.",
       "keys": [
         "What does EASS stand for?"
       ]
@@ -2568,7 +2568,7 @@
     },
     {
       "q": "Which room is the BGL track in?",
-      "a": "The BGL track sessions are held in the **GEE Katipunan Lounge (room code KL)**, which is part of the **Gusaling Emilio Ejercito Sr. (GEE) building** on the PLM campus.",
+      "a": "The BGL track sessions are held in the GEE Katipunan Lounge (room code KL), which is part of the Gusaling Emilio Ejercito Sr. (GEE) building on the PLM campus.",
       "keys": [
         "Which room is the BGL track in?"
       ],
@@ -2584,21 +2584,21 @@
     },
     {
       "q": "Which room is the EASS track in?",
-      "a": "The EASS track sessions are held in the **GA TOP** room (room code TOP) of the **Gusaling Don Pepe Atienza (Don Pepe Atienza Building)**. The full name of the TOP room has not been supplied in the congress material.",
+      "a": "The EASS track sessions are held in the GA TOP room (room code TOP) of the Gusaling Don Pepe Atienza (Don Pepe Atienza Building). The full name of the TOP room has not been supplied in the congress material.",
       "keys": [
         "Which room is the EASS track in?"
       ]
     },
     {
       "q": "What does BTB stand for?",
-      "a": "BTB is the room code for **GK Bukod Tanging Bulwagan** in the Gusaling Katipunan (GK) building.",
+      "a": "BTB is the room code for GK Bukod Tanging Bulwagan in the Gusaling Katipunan (GK) building.",
       "keys": [
         "What does BTB stand for?"
       ]
     },
     {
       "q": "What does KL stand for?",
-      "a": "KL is the abbreviation for the **Katipunan Lounge**, the room code “KL” in the GEE (Gusaling Emilio Ejercito Sr.) building.",
+      "a": "KL is the abbreviation for the Katipunan Lounge, the room code “KL” in the GEE (Gusaling Emilio Ejercito Sr.) building.",
       "keys": [
         "What does KL stand for?"
       ]
@@ -2612,7 +2612,7 @@
     },
     {
       "q": "Who are the plenary speakers?",
-      "a": "The plenary speakers for MIRC 2026 are:\n\n- Dr. Hsiao‑Yeh CHU (Kun Shan University, Taiwan) – “AI‑Enabled Smart Manufacturing Education…”\n- Ms. Daniella LAGMAN‑EUGENIO (CE‑Logic, Inc., Philippines) – “Shaping Resilient Institutions…”\n- Prof. Dr. Ricardo BAGARINAO (University of the Philippines Open University, Philippines) – “A Double‑Edged Transformation…”\n- Dr. Mohd Erfino JOHARI (Universiti PolyTech Malaysia) – “Human‑Centred AI in Higher Education…”",
+      "a": "The plenary speakers for MIRC 2026 are:\n- Dr. Hsiao‑Yeh CHU (Kun Shan University, Taiwan) – “AI‑Enabled Smart Manufacturing Education…”\n- Ms. Daniella LAGMAN‑EUGENIO (CE‑Logic, Inc., Philippines) – “Shaping Resilient Institutions…”\n- Prof. Dr. Ricardo BAGARINAO (University of the Philippines Open University, Philippines) – “A Double‑Edged Transformation…”\n- Dr. Mohd Erfino JOHARI (Universiti PolyTech Malaysia) – “Human‑Centred AI in Higher Education…”",
       "keys": [
         "Who are the plenary speakers?"
       ]
@@ -2633,7 +2633,7 @@
     },
     {
       "q": "When is lunch?",
-      "a": "Lunch Break is scheduled:\n\n- 29 September 2026 (Tuesday) 12:00 – 13:00  \n- 30 September 2026 (Wednesday) 12:00 – 13:00",
+      "a": "Lunch Break is scheduled:\n- 29 September 2026 (Tuesday) 12:00 – 13:00  \n- 30 September 2026 (Wednesday) 12:00 – 13:00",
       "keys": [
         "When is lunch?"
       ]
@@ -2675,28 +2675,28 @@
     },
     {
       "q": "Where can I eat near the venue?",
-      "a": "You have several convenient options within a short walk of the PLM venue:\n\n- Batala – Desserts & Snacks, budget — under ₱200 per person (price is an indicative estimate). Ice‑cream counter on San Jose Street, about 2 min walk (140 m) from the venue.  \n- Chamber Café – Cafés & Coffee, moderate — ₱200–₱500 per person (price is an indicative estimate). Coffee spot on western Intramuros near Muralla Street, about 11 min walk (860 m).  \n- Dexter Pizza – Sisay’s – Budget Eats & Carinderias, budget — under ₱200 per person (price is an indicative estimate). Pizza and Filipino fare on Cabildo Street, about 7 min walk (560 m).  \n- Flower Stories Café – Cafés & Coffee, moderate — ₱200–₱500 per person (price is an indicative estimate). Small café on Magallanes Street, about 7 min walk (540 m).  \n- J’s Cuisine – Restaurants & Heritage Dining, moderate — ₱200–₱500 per person (price is an indicative estimate). Filipino restaurant on Anda Street, about 9 min walk (700 m).  \n- Jollibee – Fast Food & Chains, budget — under ₱200 per person (price is an indicative estimate). Filipino fast‑food outlet near the Pasig River, about 10 min walk (820 m).",
+      "a": "You have several convenient options within a short walk of the PLM venue:\n- Batala – Desserts & Snacks, budget — under ₱200 per person (price is an indicative estimate). Ice‑cream counter on San Jose Street, about 2 min walk (140 m) from the venue.  \n- Chamber Café – Cafés & Coffee, moderate — ₱200–₱500 per person (price is an indicative estimate). Coffee spot on western Intramuros near Muralla Street, about 11 min walk (860 m).  \n- Dexter Pizza – Sisay’s – Budget Eats & Carinderias, budget — under ₱200 per person (price is an indicative estimate). Pizza and Filipino fare on Cabildo Street, about 7 min walk (560 m).  \n- Flower Stories Café – Cafés & Coffee, moderate — ₱200–₱500 per person (price is an indicative estimate). Small café on Magallanes Street, about 7 min walk (540 m).  \n- J’s Cuisine – Restaurants & Heritage Dining, moderate — ₱200–₱500 per person (price is an indicative estimate). Filipino restaurant on Anda Street, about 9 min walk (700 m).  \n- Jollibee – Fast Food & Chains, budget — under ₱200 per person (price is an indicative estimate). Filipino fast‑food outlet near the Pasig River, about 10 min walk (820 m).",
       "keys": [
         "Where can I eat near the venue?"
       ]
     },
     {
       "q": "Where can I get coffee near the venue?",
-      "a": "You can grab coffee within a short walk of the PLM venue:\n\n- Chamber Café – moderate ₱200‑₱500, coffee; 11 min walk (860 m) on western Intramuros near Muralla Street.  \n- Flower Stories Café – moderate ₱200‑₱500, coffee and desserts; 7 min walk (540 m) on Magallanes Street.  \n- Los Frailes Café – moderate ₱200‑₱500, coffee and Filipino fare; 4 min walk (330 m) on Real Street near San Agustin Church.  \n- Paper + Cup – moderate ₱200‑₱500, specialty coffee and brunch; 3 min walk (270 m) on Muralla Street.",
+      "a": "You can grab coffee within a short walk of the PLM venue:\n- Chamber Café – moderate ₱200‑₱500, coffee; 11 min walk (860 m) on western Intramuros near Muralla Street.  \n- Flower Stories Café – moderate ₱200‑₱500, coffee and desserts; 7 min walk (540 m) on Magallanes Street.  \n- Los Frailes Café – moderate ₱200‑₱500, coffee and Filipino fare; 4 min walk (330 m) on Real Street near San Agustin Church.  \n- Paper + Cup – moderate ₱200‑₱500, specialty coffee and brunch; 3 min walk (270 m) on Muralla Street.",
       "keys": [
         "Where can I get coffee near the venue?"
       ]
     },
     {
       "q": "Where can I eat cheaply near the venue?",
-      "a": "You have three budget‑friendly options within a short walk of the PLM venue:\n\n- Batala – Desserts & Snacks, under ₱200 per person, ice‑cream and sweets on San Jose Street, 2 min walk (140 m).  \n- Dexter Pizza – Sisay’s – Budget eats, under ₱200 per person, pizza and Filipino fast‑food on Cabildo Street, 7 min walk (560 m).  \n- Jollibee – Fast‑food chain, under ₱200 per person, Filipino burgers, fried chicken and spaghetti near the Pasig River (Muelle del Rio), 10 min walk (820 m).",
+      "a": "You have three budget‑friendly options within a short walk of the PLM venue:\n- Batala – Desserts & Snacks, under ₱200 per person, ice‑cream and sweets on San Jose Street, 2 min walk (140 m).  \n- Dexter Pizza – Sisay’s – Budget eats, under ₱200 per person, pizza and Filipino fast‑food on Cabildo Street, 7 min walk (560 m).  \n- Jollibee – Fast‑food chain, under ₱200 per person, Filipino burgers, fried chicken and spaghetti near the Pasig River (Muelle del Rio), 10 min walk (820 m).",
       "keys": [
         "Where can I eat cheaply near the venue?"
       ]
     },
     {
       "q": "What can I see in Intramuros?",
-      "a": "You can visit these Intramuros highlights, all within a short walk from the PLM venue:\n\n- Memorare — Manila 1945 (Anda Street · Plazuela de Santa Isabel, free, ~10 min visit, 6 min walk)\n- Museo de Intramuros (Arzobispo corner Anda Street · Reconstructed San Ignacio Church, ₱200 (₱160 students/seniors/PWD), ~1 hr, 6 min walk)\n- Plaza México (Aduana Street, free, ~15 min, 11 min walk)\n- Plazuela de Santa Isabel (Anda corner Real Street, free, ~10 min, 6 min walk)\n- San Agustin Church (General Luna Street · Opposite Plaza San Luis, free, ~30 min, 3 min walk)\n- Santa Lucia Barracks Ruins (Santa Lucia Street, free, ~15 min, 3 min walk)",
+      "a": "You can visit these Intramuros highlights, all within a short walk from the PLM venue:\n- Memorare — Manila 1945 (Anda Street · Plazuela de Santa Isabel, free, ~10 min visit, 6 min walk)\n- Museo de Intramuros (Arzobispo corner Anda Street · Reconstructed San Ignacio Church, ₱200 (₱160 students/seniors/PWD), ~1 hr, 6 min walk)\n- Plaza México (Aduana Street, free, ~15 min, 11 min walk)\n- Plazuela de Santa Isabel (Anda corner Real Street, free, ~10 min, 6 min walk)\n- San Agustin Church (General Luna Street · Opposite Plaza San Luis, free, ~30 min, 3 min walk)\n- Santa Lucia Barracks Ruins (Santa Lucia Street, free, ~15 min, 3 min walk)",
       "keys": [
         "What can I see in Intramuros?"
       ]

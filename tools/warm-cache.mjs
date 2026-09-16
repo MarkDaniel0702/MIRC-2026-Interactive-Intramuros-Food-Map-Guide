@@ -37,7 +37,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { buildSystemPrompt, looksOffTopic, replyEscapedScope } from '../worker/src/index.js';
 import { buildIndex, retrieve } from '../worker/src/retrieve.js';
-import { normalise } from '../worker/src/cache.js';
+import { normalise, plainText } from '../worker/src/cache.js';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = join(root, 'data', 'warm-answers.json');
@@ -184,10 +184,13 @@ for (const q of questions) {
       refused++;
       continue;
     }
-    merged.set(normalise(q), { q, a, keys: [q], at: corpus._generated });
+    /* Stored as plain text. The Worker strips markdown on the way out too, but the
+       file is read by people, and a reviewed answer should read as it will be seen.
+       The guards above ran on the raw reply — the code-fence check needs it. */
+    merged.set(normalise(q), { q, a: plainText(a), keys: [q], at: corpus._generated });
     asked++;
     console.log(`  OK   ${q}`);
-    console.log(`       ${a.replace(/\s+/g, ' ').slice(0, 110)}`);
+    console.log(`       ${plainText(a).replace(/\s+/g, ' ').slice(0, 110)}`);
   } catch (err) {
     console.log(`  FAIL ${q}\n       ${err.message}`);
     if (err.fatal) { console.log('\n  Stopping — every remaining question would fail the same way.'); break; }
