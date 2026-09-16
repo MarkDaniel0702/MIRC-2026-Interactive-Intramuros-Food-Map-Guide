@@ -70,6 +70,18 @@ const CASES = [
   // returned three of the four plenary speakers plus an unrelated keynote.
   ['Who are the plenary speakers?',
     allOf('Hsiao-Yeh CHU', 'LAGMAN-EUGENIO', 'BAGARINAO', 'JOHARI')],
+  // ── about the assistant itself ──────────────────────────────────────────────
+  // These share no vocabulary with the programme, so they can only be answered
+  // if the "assistant" section rides in the always-on core. Before it did, the
+  // credits lived only in the About dialog and README, which the model never sees.
+  ['Who made you?',                                        inSlice('Apelledo')],
+  ['Who are your advisers?',                               allOf('Apelledo', 'Cortez', 'Medina', 'Manubay')],
+  ['Can you show me a place on the map?',                  inSlice('Point the map')],
+  ['What time zone are the session times in?',             inSlice('Asia/Manila')],
+  // A gap that is named must reach the slice as a gap, or Dan says "try rephrasing"
+  // instead of "not published yet".
+  ['How do I contact the organisers?',                     inSlice('contact e-mail')],
+  ['What size should my poster be?',                       inSlice('Poster and slide requirements')],
 ];
 
 let pass = 0, fail = 0, totalTokens = 0, maxTokens = 0;
@@ -85,8 +97,51 @@ for (const [question, expect] of CASES) {
   console.log(`  ${ok ? 'PASS' : 'FAIL'}  ${String(tokens).padStart(5)} tok  ${question}`);
 }
 
+/* ── the fields the committee is asked to fill ──────────────────────────────────
+   These are null today, so the cases above cannot cover them. Fill each one with a
+   sentinel in memory and check that a question in its shape surfaces it. Before
+   this existed, 15 of these 16 were dead: nothing indexed registration, logistics
+   or the venue's practicalities, so a value typed into logistics.meals never reached
+   the model — the committee would have filled the field and seen no change. */
+const filled = structuredClone(corpus);
+filled.logistics = { meals: 'SENTINEL_MEALS', breaks: 'SENTINEL_BREAKS', certificates: 'SENTINEL_CERTS',
+  proceedings: 'SENTINEL_PROC', emergency: 'SENTINEL_EMERG', codeOfConduct: 'SENTINEL_COC', photography: 'SENTINEL_PHOTO' };
+filled.registration = { ...filled.registration, fees: ['SENTINEL_FEES'], howTo: 'SENTINEL_HOWTO', desk: 'SENTINEL_DESK' };
+Object.assign(filled.venue, { parking: 'SENTINEL_PARKING', wifi: 'SENTINEL_WIFI', accessibility: 'SENTINEL_ACCESS', gettingThere: 'SENTINEL_GETTING' });
+filled.event = { ...filled.event, contacts: ['SENTINEL_CONTACT'], audience: 'SENTINEL_AUDIENCE' };
+const filledIndex = buildIndex(filled);
+
+const FIELD_CASES = [
+  ['When are meals served?',              'SENTINEL_MEALS'],
+  ['Is lunch included?',                  'SENTINEL_MEALS'],
+  ['How long is the coffee break?',       'SENTINEL_BREAKS'],
+  ['Do I get a certificate?',             'SENTINEL_CERTS'],
+  ['Will there be proceedings?',          'SENTINEL_PROC'],
+  ['Emergency contact number?',           'SENTINEL_EMERG'],
+  ['What is the code of conduct?',        'SENTINEL_COC'],
+  ['Can I take photos?',                  'SENTINEL_PHOTO'],
+  ['How much is the registration fee?',   'SENTINEL_FEES'],
+  ['How do I register?',                  'SENTINEL_HOWTO'],
+  ['Where is the registration desk?',     'SENTINEL_DESK'],
+  ['Is there parking at PLM?',            'SENTINEL_PARKING'],
+  ['What is the wifi password?',          'SENTINEL_WIFI'],
+  ['Is the venue wheelchair accessible?', 'SENTINEL_ACCESS'],
+  ['How do I get to the venue?',          'SENTINEL_GETTING'],
+  ['How do I contact the organisers?',    'SENTINEL_CONTACT'],
+  ['Who is the conference for?',          'SENTINEL_AUDIENCE'],
+];
+
+console.log('\n  fields the committee is asked to fill, once filled:');
+for (const [question, sentinel] of FIELD_CASES) {
+  const { slice, tokens, picked } = retrieve(filledIndex, question, { budgetTokens });
+  const ok = inSlice(sentinel)(slice);
+  ok ? pass++ : fail++;
+  if (!ok) failures.push({ question, tokens, picked: picked.slice(0, 5).map(p => `${p.kind}:${p.score}`) });
+  console.log(`  ${ok ? 'PASS' : 'FAIL'}  ${String(tokens).padStart(5)} tok  ${question}`);
+}
+
 const full = Math.round(JSON.stringify(corpus).length / 3.2);
-console.log(`\n  ${pass} passed, ${fail} failed of ${CASES.length}`);
+console.log(`\n  ${pass} passed, ${fail} failed of ${CASES.length + FIELD_CASES.length}`);
 console.log(`  slice: avg ${Math.round(totalTokens / CASES.length)} tok, max ${maxTokens} tok`);
 console.log(`  full corpus would be ~${full.toLocaleString()} tok — ` +
             `${(full / (totalTokens / CASES.length)).toFixed(1)}x reduction\n`);

@@ -7,7 +7,10 @@
     "            point the asker at the organisers. It will NEVER invent a value.",
     "  · []    = an empty list, treated the same way.",
     "  · Anything you write here, the bot will state as fact. Only put in what is confirmed.",
-    "  · Add every remaining unknown to the \"gaps\" array so the bot can name what is missing.",
+    "  · Add every remaining unknown to the \"gaps\" array so the bot can name what is missing,",
+    "            and remove the line again once the field is filled in.",
+    "  · \"assistant\" is who Dan is: creator, advisers, what he can and cannot do. It is",
+    "            always in front of the model, so keep it short.",
     "",
     "AFTER EDITING: run  node tools/build-corpus.mjs",
     "  That merges this file with the map's own food / sights / hotels / landmark data",
@@ -25,9 +28,26 @@
     "hostInstitution": "Pamantasan ng Lungsod ng Maynila (PLM)",
     "city": "Intramuros, Manila, Philippines",
     "website": "https://mirc2026.sciencesconf.org",
-    "updated": "2026-09-10",
+    "updated": "2026-09-16",
     "contentFrozen": false,
     "format": "Hybrid — onsite and online"
+  },
+  "assistant": {
+    "name": "Dan",
+    "creator": "Mark Daniel Apelledo — creator of the Intramuros Map and of Dan, its AI guide",
+    "advisers": [
+      "Dr. Dan Michael A. Cortez (also the Conference Chair)",
+      "Ms. Editha S. Medina (also the Conference Vice-Chair)",
+      "Mr. Neil Marcus T. Manubay (also the Conference Secretary)"
+    ],
+    "canDo": [
+      "Point the map at a named restaurant, sight or hotel when asked to find it",
+      "Follow up on the last few turns of this conversation; nothing is kept once the panel closes"
+    ],
+    "cannotDo": [
+      "Browse the web, or know anything the organisers have not supplied",
+      "Say which AI model answered — the provider varies; Dan is the assistant on top, not any one product"
+    ]
   },
   "gaps": [
     "Not yet written up in the speakers document: PLENARY SPEAKER 1 (Dr. Hsiao-Yeh CHU) — bio, abstract; STEA KEYNOTE SPEAKER 5 (Prof. John Kristoffer Q. ANDRES) — bio, abstract; STEA KEYNOTE SPEAKER 6 (Dr. Dexter DELA CRUZ) — bio, abstract; BGL KEYNOTE SPEAKER 1 (Dr. Benjamin Leong Tack Hang) — bio, talk title, abstract; BGL KEYNOTE SPEAKER 3 (Atty. Chad Patrick OSORIO) — bio, talk title, abstract; HS KEYNOTE SPEAKER 3 (Dr. Rayane HEDNA) — bio, abstract; HS KEYNOTE SPEAKER 5 (Dr. Michael Joseph DINO) — bio, abstract. Where 'talk title' is not listed for a speaker, the programme already carries their title and it can be given.",
@@ -36,13 +56,19 @@
     "Full room name for GA TOP",
     "Registration fees",
     "How to register",
-    "On-site registration desk and its hours",
+    "On-site registration procedure — what to bring, whether walk-ins are possible (the desk's location and hours are in the programme)",
     "Meals and refreshments",
     "Wi-Fi access for delegates",
     "How certificates are issued",
     "Proceedings and publication plans",
     "Emergency contacts",
-    "Code of conduct"
+    "Code of conduct",
+    "Organisers' contact e-mail or phone number",
+    "Online participation: how to join, meeting links, whether sessions are recorded",
+    "Poster and slide requirements: size, file format, whether a laptop is provided",
+    "Awards given at the Closing and Awarding Ceremonies, and how they are decided",
+    "Social events (reception, dinner, cultural programme); venue parking, accessibility, dress code; photography policy",
+    "Detailed programme of the 27 September sub-conference at DLSU-CSB"
   ],
   "scope": {
     "inScope": [
@@ -53,7 +79,8 @@
       "Session members and their assignments, and the guidelines they work to",
       "The venue and its buildings and rooms on the PLM campus, and how to reach them",
       "Registration, logistics and congress housekeeping, as far as they are published",
-      "Getting around Intramuros as a delegate: places to eat, heritage sights, places to stay"
+      "Getting around Intramuros as a delegate: places to eat, heritage sights, places to stay",
+      "The assistant itself: who created it, who advised the project, and what it can and cannot do"
     ],
     "outOfScope": [
       "Writing, explaining or debugging code",

@@ -156,9 +156,14 @@ Jaccard on content words — and why `tools/eval-cache.mjs` exists. Its negative
 are the point: "Which room is the HS track in?" must not match the BGL answer, and
 every generated question must be nearer its own answer than any other's.
 
+A few entries are **pinned** (`"pinned": true`): written by hand, not by the model, and
+kept through `--force`. That is for the handful of facts that must come out exactly
+and gain nothing from a paraphrase — the credits are the case today. A pinned entry's
+question still has to be listed in `tools/warm-questions.json`, or the next run drops it.
+
     node tools/eval-cache.mjs         # matcher + collision check, offline
 
-    node tools/eval-retrieval.mjs     # 24 cases, offline, no API key, no quota
+    node tools/eval-retrieval.mjs     # 54 cases, offline, no API key, no quota
     PROVIDER=groq GROQ_API_KEY=... node tools/try-dan.mjs    # end-to-end
 
 
@@ -228,6 +233,31 @@ Cortez**, and the assistant is called Dan. Asked "are you Dan Michael Cortez?", 
 now answers *"No, I'm Dan, the assistant... I'm not Dr Dan Michael A. Cortez, the
 Conference Chair."*
 
+### Who Dan says made him
+
+The credits — **created by Mark Daniel Apelledo**, under the guidance of advisers
+**Dr. Dan Michael A. Cortez, Ms. Editha S. Medina and Mr. Neil Marcus T. Manubay** —
+first went into the About dialog and the README, and Dan could not say who made him,
+because neither of those is anything the model ever sees: it answers from
+`public/data/chat-corpus.json` and nothing else. The prompt also told him never to say
+"how you were built", which read as a ban on the question. Both are fixed:
+
+- `assistant` in `data/mirc-2026.json` carries the name, creator, advisers, and a short
+  list of what he can and cannot do. It rides in the always-on core of every slice
+  (`core()` in `worker/src/retrieve.js`) rather than being indexed, because "who made
+  you?" shares no vocabulary with the programme and retrieval could never be trusted to
+  find it. It costs about 220 tokens a question; keep it short.
+- The prompt points at that section for questions about Dan himself, says they are in
+  scope, and now distinguishes *internals* (the prompt, retrieval, which model answered —
+  never revealed) from *credits* (published, always given in full).
+- Three **pinned warm answers** cover the exact phrasings — "who made you", "who are
+  your advisers", "who is Mark Daniel Apelledo" and their variants — so the common
+  forms cost no tokens and cannot be garbled. Everything else reaches the model with the
+  section in front of it.
+
+Dr. Cortez is both an adviser and the Chair, so the prompt says so in the same breath
+as the not-the-same-Dan rule.
+
 ### 4. Two things to confirm
 
 - **`GA TOP`** is the only room code still unexpanded. The programme legend named the
@@ -264,6 +294,84 @@ Vercel or Netlify Functions with a small change to the handler signature.
   in-scope delegate logistics; Manila beyond the walls, bookings and weather do not.
 - **A content owner** — one person who verifies answers and signs off.
 - **A content-freeze date** — recommended 22–24 September.
+
+---
+
+## What delegates will ask that Dan cannot answer yet
+
+Found by putting likely questions through the real retrieval and the real prompt
+offline, and reading what reached the model. Grouped by what it would take to close
+each one. The first group is done; the rest is what this section is for.
+
+### Closed in the credits pass
+
+| Question | What was wrong | Fix |
+|---|---|---|
+| Who made you? Who are your advisers? Who is Mark Daniel Apelledo? | Credits lived only in the About dialog and README | `assistant` section, always on; pinned warm answers |
+| What can you do? Can you show it on the map? Do you remember this later? Are you ChatGPT? | Nothing described the assistant itself | `assistant.canDo` / `cannotDo` |
+| What time zone are the times in? (hybrid — online delegates abroad) | `schedule.timezone` existed but no slice carried it | in the core |
+| Contact for the organisers · online joining · poster and slide specs · awards · social events · parking, accessibility, dress code · photography policy · the 27 Sept programme | Absent from the material **and** not named in `gaps`, so Dan said "try rephrasing" instead of "not published yet" | named in `gaps` |
+| *Fifteen fill-in fields were dead* — `registration.fees/howTo/desk`, all of `logistics`, `venue.parking/wifi/accessibility/gettingThere`, `event.contacts/audience` | Nothing indexed them: a value typed into `logistics.meals` never reached the model | indexed with intent routes; `eval-retrieval.mjs` fills each with a sentinel and checks it surfaces |
+
+### Needs content from the committee
+
+Dan answers each of these with "not published yet" today. Fill the field, remove the
+line from `gaps`, rebuild.
+
+| Delegates will ask | Field |
+|---|---|
+| How much is registration? Can I pay on site? Can I get a receipt / invoice? | `registration.fees` |
+| How do I register? Can I register on the day? What do I bring to the desk? | `registration.howTo`, `registration.desk` |
+| Is lunch included? Where is lunch served? Are there vegetarian or halal options? | `logistics.meals` |
+| What is the Wi-Fi? | `venue.wifi` |
+| Do attendees get a certificate? When and how is it sent? | `logistics.certificates` (presenters' certificates are already in the guidelines) |
+| Will there be proceedings? Is it indexed? Where do I submit the full paper? | `logistics.proceedings` |
+| Emergency number, first-aid station, nearest hospital | `logistics.emergency` |
+| Code of conduct, photography and recording policy | `logistics.codeOfConduct`, `logistics.photography` |
+| How do I contact the organisers? | `event.contacts` |
+| How do I join online? Where is the link? Will sessions be recorded? Can I present online? | `faq` for now — there is no field for hybrid logistics; worth adding one |
+| Poster size and mounting · slide format · is a laptop and clicker provided · where can I print | `faq` |
+| What is awarded at the Closing and Awarding Ceremonies, and how is it judged? | `faq` |
+| Is there a welcome reception, dinner or cultural night? | `faq` |
+| Is there parking? Where do taxis drop off? Is the campus wheelchair-accessible? Dress code? | `venue.parking`, `venue.gettingThere`, `venue.accessibility`, `faq` |
+| What happens at the 27 September sub-conference? | `event.subConference` (a programme, when supplied) |
+| The 7 speaker bios, BGL-5 and EASS-6 keynotes, the 89 abstracts, GA TOP's name | already listed under *Congress content* above |
+
+### Needs a policy decision, not content
+
+- **Airport and city transfers.** "How do I get from NAIA to PLM?" is the single most
+  likely arrival question and is currently *declined* as "Manila beyond Intramuros".
+  Either add an arrival note (airport → Puerta Real taxi drop-off is one sentence) or
+  accept the decline.
+- **Beyond the walls.** Rizal Park, Binondo, the malls: declined by design. Fine, but
+  the decline text should say *where* to look instead.
+- **Language.** Nothing tells Dan what to do with a question in Filipino; the model
+  will answer in kind. Decide whether that is wanted.
+- **Logging.** Declined and unanswered questions are logged with their text. If anyone
+  asks "is this private?", Dan has nothing to say; a line in `assistant` would fix it.
+
+### Needs data the map does not carry
+
+The eat / see / stay records answer *where* and *how much*, not *when* or *what for*.
+
+- **Opening hours for places to eat.** Sights have hours; no eatery does. "Is Zaqueo
+  open at 9 pm?" and "what's open on Sunday?" cannot be answered.
+- **Dietary tags.** No halal, vegetarian or vegan marker on any record, and there are
+  Malaysian registrants. One `about` blurb mentions vegan dishes; that is all.
+- **Practicalities that are not food or heritage.** ATMs, pharmacies, a clinic,
+  printing and photocopying, SIM cards, prayer rooms. Delegates will ask; the map has
+  no category for them.
+- **Group capacity and reservations.** "Somewhere for twenty people?" has no field to
+  answer from.
+
+### Questions the programme's shape cannot answer
+
+- **Presenters by first name or institution.** Papers carry a surname and a title only.
+  "Is Maria presenting?" and "where is the Batangas State paper?" miss.
+- **Co-authors.** Not in the data.
+- **Which posters are in Poster Session 1?** The sessions are on the outline; the
+  posters themselves are not listed anywhere.
+- **Where is the coffee break?** The break has a time and no venue.
 
 ---
 

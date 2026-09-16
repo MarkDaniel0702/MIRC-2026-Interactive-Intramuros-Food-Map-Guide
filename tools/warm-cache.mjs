@@ -16,6 +16,12 @@
  *
  * REVIEW WHAT IT WRITES. These answers are served verbatim, and none of the runtime
  * guards can catch a bad one. Read data/warm-answers.json before committing it.
+ *
+ * PINNED ENTRIES. An entry with `"pinned": true` in data/warm-answers.json was written
+ * by hand, not by the model, and survives --force. Use it for the few facts that must
+ * come out exactly — the credits, for one — where a model paraphrase gains nothing
+ * and a garbled name cannot be caught. Its question must still be listed in
+ * tools/warm-questions.json, or the next write() drops it.
  */
 
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
@@ -41,10 +47,13 @@ const corpus = JSON.parse(readFileSync(join(root, 'public', 'data', 'chat-corpus
 const index = buildIndex(corpus);
 const { questions } = JSON.parse(readFileSync(join(root, 'tools', 'warm-questions.json'), 'utf8'));
 
-const existing = (!FORCE && existsSync(OUT))
+const existing = existsSync(OUT)
   ? JSON.parse(readFileSync(OUT, 'utf8'))
   : { generated: null, corpusVersion: null, answers: [] };
-const done = new Map((existing.answers ?? []).map(a => [normalise(a.q), a]));
+/* --force re-asks everything the model wrote; hand-written (pinned) answers stay. */
+const done = new Map((existing.answers ?? [])
+  .filter(a => !FORCE || a.pinned)
+  .map(a => [normalise(a.q), a]));
 
 async function ask(question) {
   const { slice } = retrieve(index, question, { budgetTokens: 2400 });

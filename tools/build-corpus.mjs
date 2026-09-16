@@ -165,6 +165,10 @@ const corpus = {
   _source: 'node tools/build-corpus.mjs — do not edit by hand; edit data/mirc-2026.json',
 
   meta: mirc.meta,
+  /* Who Dan is — creator, advisers, capabilities. The Worker keeps this in every
+     slice (core() in worker/src/retrieve.js); the keys copied here are an explicit
+     list, so a new section in mirc-2026.json is invisible until it is named. */
+  assistant: mirc.assistant ?? null,
   gaps: mirc.gaps ?? [],
   scope: mirc.scope,
   event: mirc.event,

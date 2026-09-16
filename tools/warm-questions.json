@@ -22,7 +22,12 @@
     "retrieval had shown it only three — and a truncated list reads as complete, so",
     "nobody would notice. Single-fact questions ('what does BTB stand for') are safe;",
     "enumerations should be checked against the programme by hand, or left to the",
-    "model where retrieval and the guards still apply."
+    "model where retrieval and the guards still apply.",
+    "",
+    "HAND-WRITTEN ANSWERS. The three questions about Dan himself at the end of the list",
+    "have pinned answers in data/warm-answers.json, written by hand rather than by the",
+    "model, so the creator's and advisers' names come out exactly and cost no tokens.",
+    "warm-cache.mjs keeps pinned entries even under --force. Edit them by hand."
   ],
   "questions": [
     "What is MIRC 2026?",
@@ -64,6 +69,9 @@
     "What is the wifi password?",
     "Do presenters get a certificate?",
     "Is the conference online or in person?",
-    "What is the conference theme?"
+    "What is the conference theme?",
+    "Who made you?",
+    "Who are your advisers?",
+    "Who is Mark Daniel Apelledo?"
   ]
 }

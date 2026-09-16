@@ -231,6 +231,37 @@ function flatten(corpus) {
         'charter students campus intramuros', corpus.venue.about, 1.1);
   }
 
+  /* The fields the committee is asked to fill in — registration, logistics, the
+     venue's practicalities, a contact address. Until these were indexed they were
+     dead: a value typed into logistics.meals never reached the model, because
+     core() carries only the venue's name, address and rooms, and nothing else
+     read these objects at all. Each field gets the words it is asked with, for the
+     same reason the guidelines do — a one-line answer cannot win on overlap. */
+  const field = (kind, key, value, hints, weight = 1.2) => {
+    if (value === null || value === undefined || (Array.isArray(value) && !value.length)) return;
+    const text = Array.isArray(value) ? value.join(' ') : String(value);
+    add(kind, `${key} ${text} ${hints}`, { [key]: value }, weight);
+  };
+  const reg = corpus.registration ?? {};
+  field('registration', 'fees', reg.fees, 'registration fee fees cost price how much pay payment rate');
+  field('registration', 'howTo', reg.howTo, 'how to register registration online form sign up walk in');
+  field('registration', 'desk', reg.desk, 'registration desk where counter check in badge id kit hours open');
+  const lgx = corpus.logistics ?? {};
+  field('logistics', 'meals', lgx.meals, 'meals food lunch dinner refreshments catering served included');
+  field('logistics', 'breaks', lgx.breaks, 'breaks coffee break tea break snacks');
+  field('logistics', 'certificates', lgx.certificates, 'certificate certificates attendance participation e-certificate issued');
+  field('logistics', 'proceedings', lgx.proceedings, 'proceedings publication published journal indexed isbn');
+  field('logistics', 'emergency', lgx.emergency, 'emergency contact hotline medical first aid clinic security');
+  field('logistics', 'codeOfConduct', lgx.codeOfConduct, 'code of conduct behaviour harassment policy rules');
+  field('logistics', 'photography', lgx.photography, 'photo photography recording pictures filming allowed');
+  const v = corpus.venue ?? {};
+  field('venueInfo', 'gettingThere', v.gettingThere, 'how to get there directions transport taxi grab drop off entrance gate');
+  field('venueInfo', 'accessibility', v.accessibility, 'accessible wheelchair pwd accessibility elevator lift ramp');
+  field('venueInfo', 'parking', v.parking, 'parking park car vehicle');
+  field('venueInfo', 'wifi', v.wifi, 'wifi wi-fi internet password network');
+  field('contact', 'contacts', ev.contacts, 'contact email e-mail phone reach organisers organizers secretariat get in touch');
+  field('about', 'audience', ev.audience, 'who is the conference for audience attend participants who should');
+
   for (const f of corpus.faq ?? []) add('faq', `${f.q} ${f.a}`, f, 1.2);
 
   return { docs, trackName, roomName };
@@ -272,7 +303,8 @@ export function buildIndex(corpus) {
 const KIND_LIMIT = {
   session: 6, paper: 8, speaker: 4, event: 6, member: 4, guideline: 6,
   eat: 6, see: 6, stay: 3, arrival: 6, regCountry: 12, regInstitution: 8, faq: 4,
-  about: 1, organiser: 4, partners: 1, subconference: 1, deadline: 6, venueAbout: 1
+  about: 2, organiser: 4, partners: 1, subconference: 1, deadline: 6, venueAbout: 1,
+  registration: 3, logistics: 3, venueInfo: 2, contact: 1
 };
 
 /**
@@ -318,6 +350,17 @@ const INTENTS = [
      label), so a roster question and a single-speaker question can score close
      enough that scoring alone should not be trusted to return all four. */
   [/\bplenary\b/i, ['event'], 4],
+  /* The committee's fill-in fields, once filled. Same shape as the guideline case:
+     a one-line answer to "is lunch included?" loses on overlap to every eat record
+     that says "lunch", so it needs a guaranteed slot. Cheap while a field is still
+     null — there is no record to take, and the fallback finds nothing either. */
+  [/\b(?:meals?|lunch|dinner|refreshments?|catering|coffee break|tea break|certificates?|proceedings|publication|emergency|first aid|code of conduct|photograph\w*|photos?|record(?:ed|ing)?)\b/i,
+    ['logistics'], 2],
+  [/\b(?:registration fees?|fees?|how much|payment|pay|how (?:do|can) i register|register(?:ing)? (?:online|on-?site)|registration desk|walk-?in|badge|conference kit)\b/i,
+    ['registration'], 3],
+  [/\b(?:parking|wheelchair|accessib\w*|pwd|elevator|ramp|wi-?fi|internet|password|directions to|how (?:do|can) i get (?:to|there)|drop-?off)\b/i,
+    ['venueInfo'], 2],
+  [/\b(?:contact|e-?mail|phone|reach|secretariat|get in touch)\b/i, ['contact'], 1],
 ];
 
 function intentKinds(question) {
@@ -377,8 +420,21 @@ function core(corpus) {
   const lg = corpus.localGuide ?? {};
   return {
     meta: corpus.meta,
-    scope: corpus.scope,
+    /* Who Dan is — creator, advisers, what he can and cannot do. Always on rather
+       than indexed: "who made you?" shares no vocabulary with anything else in the
+       corpus, so retrieval could never be relied on to surface it — and the credits
+       once lived only in the About dialog and README, which the model never sees. */
+    assistant: corpus.assistant,
+    /* Everything the prompt reads from scope. `suggestions` is left out: it only
+       feeds the chips in the chat panel, and was costing ~60 tokens a question. */
+    scope: corpus.scope && {
+      inScope: corpus.scope.inScope, outOfScope: corpus.scope.outOfScope,
+      decline: corpus.scope.decline, unknown: corpus.scope.unknown
+    },
     tracks: corpus.tracks,
+    /* "Asia/Manila" — the one line an online delegate abroad needs to read a start
+       time, and it sat in schedule.timezone where no slice ever included it. */
+    timezone: corpus.schedule?.timezone,
     venue: {
       name: corpus.venue?.name,
       address: corpus.venue?.address,
