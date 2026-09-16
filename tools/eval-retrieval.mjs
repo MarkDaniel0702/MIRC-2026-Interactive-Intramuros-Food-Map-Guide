@@ -27,6 +27,10 @@ const inSlice = needle => slice => JSON.stringify(slice).toLowerCase().includes(
 const all = (...fns) => slice => fns.every(f => f(slice));
 /** At least n records of a kind reached the slice. */
 const countIn = (kind, n) => slice => (slice.relevant?.[kind]?.length ?? 0) >= n;
+/** Every one of these strings appears somewhere — for a roster that must be
+ *  complete, not just plausible. A miss here is a delegate told about three
+ *  plenary speakers out of four and having no way to know one was dropped. */
+const allOf = (...needles) => slice => needles.every(n => inSlice(n)(slice));
 
 const CASES = [
   ['I am presenting paper 752010. When and where?',       all(inSlice('752010'), inSlice('Baliktanawin'), inSlice('EASS-1'))],
@@ -60,6 +64,12 @@ const CASES = [
   ['When was the registration deadline?',                  inSlice('20 August 2026')],
   ['Who are the partner institutions?',                    inSlice('Sejong')],
   ['Tell me about PLM the university',                     inSlice('4196')],
+  // A roster question, not a single-speaker one — every plenary speaker must
+  // appear, not just the ones that happen to rank highest against a bio that
+  // also contains the word "plenary". Caught a real bug: general ranking once
+  // returned three of the four plenary speakers plus an unrelated keynote.
+  ['Who are the plenary speakers?',
+    allOf('Hsiao-Yeh CHU', 'LAGMAN-EUGENIO', 'BAGARINAO', 'JOHARI')],
 ];
 
 let pass = 0, fail = 0, totalTokens = 0, maxTokens = 0;

@@ -111,8 +111,17 @@ function flatten(corpus) {
   for (const day of corpus.schedule?.days ?? []) {
     for (const item of day.items ?? []) {
       if (item.type !== 'parallel') {
+        /* item.type ('plenary', 'event') was never in this text, so "plenary" as a
+           query word matched none of these records — only the word "keynote" (which
+           lives on the *parallel*-session side) had this problem solved already. A
+           plenary speaker's own bio usually also says "plenary" via its label, so
+           this query silently fell back to ranking speaker bios against each other
+           instead, and five of them tied close enough that which four "won" came
+           down to incidental wording, not relevance: a real run returned three
+           genuine plenary speakers plus an unrelated keynote speaker, silently
+           dropping the fourth plenary speaker. */
         add('event',
-          `${day.date} ${day.weekday} ${item.time} ${item.title} ${item.venue ?? ''} ` +
+          `${item.type} ${day.date} ${day.weekday} ${item.time} ${item.title} ${item.venue ?? ''} ` +
           `${item.speaker ?? ''} ${item.affiliation ?? ''} ${roomName[item.venue] ?? ''}`,
           { date: day.date, weekday: day.weekday, ...item }, 1.1);
         continue;
@@ -303,6 +312,12 @@ const INTENTS = [
     ['venueAbout'], 1],
   [/\b(what is mirc|about the conference|theme|purpose|hybrid|online participation)\b/i,
     ['about'], 1],
+  /* There are exactly four plenaries. Even with "plenary" now indexed, leaving this
+     to open-ended ranking risks the same failure as the guideline case above: a
+     plenary speaker's own bio also contains the word "plenary" (via their own
+     label), so a roster question and a single-speaker question can score close
+     enough that scoring alone should not be trusted to return all four. */
+  [/\bplenary\b/i, ['event'], 4],
 ];
 
 function intentKinds(question) {

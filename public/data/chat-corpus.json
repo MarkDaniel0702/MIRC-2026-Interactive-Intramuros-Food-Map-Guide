@@ -1,5 +1,5 @@
 {
-  "_generated": "2026-09-15",
+  "_generated": "2026-09-16",
   "_source": "node tools/build-corpus.mjs — do not edit by hand; edit data/mirc-2026.json",
   "meta": {
     "id": "mirc-2026",
@@ -2572,10 +2572,136 @@
       ]
     },
     {
+      "q": "Who are the plenary speakers?",
+      "a": "The plenary speakers for MIRC 2026 are:\n\n- Dr. Hsiao‑Yeh CHU (Kun Shan University, Taiwan) – “AI‑Enabled Smart Manufacturing Education…”\n- Ms. Daniella LAGMAN‑EUGENIO (CE‑Logic, Inc., Philippines) – “Shaping Resilient Institutions…”\n- Prof. Dr. Ricardo BAGARINAO (University of the Philippines Open University, Philippines) – “A Double‑Edged Transformation…”\n- Dr. Mohd Erfino JOHARI (Universiti PolyTech Malaysia) – “Human‑Centred AI in Higher Education…”",
+      "keys": [
+        "Who are the plenary speakers?"
+      ]
+    },
+    {
       "q": "Who is the conference chair?",
       "a": "The Conference Chair is Dr. Dan Michael A. Cortez. (I’m Dan, the Intramuros Guide assistant—not the Chair.)",
       "keys": [
         "Who is the conference chair?"
+      ]
+    },
+    {
+      "q": "When is the opening ceremony?",
+      "a": "The opening ceremony is on 29 September 2026, from 8:00 to 8:30 am in the Justo Albert Auditorium (JAA).",
+      "keys": [
+        "When is the opening ceremony?"
+      ]
+    },
+    {
+      "q": "When is lunch?",
+      "a": "Lunch Break is scheduled:\n\n- 29 September 2026 (Tuesday) 12:00 – 13:00  \n- 30 September 2026 (Wednesday) 12:00 – 13:00",
+      "keys": [
+        "When is lunch?"
+      ]
+    },
+    {
+      "q": "When is the closing ceremony?",
+      "a": "The Closing and Awarding Ceremonies are on 30 September 2026 (Wednesday) from 17:00 to 18:00 in the Justo Albert Auditorium (JAA).",
+      "keys": [
+        "When is the closing ceremony?"
+      ]
+    },
+    {
+      "q": "When is the poster session?",
+      "a": "Poster Session 1 – 29 September 2026, 16:15 – 17:30, held on the GEE First Floor (GEE Open Area).  \nPoster Session 2 – 30 September 2026, 8:45 – 10:00, held on the GEE First Floor (GEE Open Area, with a coffee break).",
+      "keys": [
+        "When is the poster session?"
+      ]
+    },
+    {
+      "q": "Is anything happening on the 27th?",
+      "a": "Yes. On 27 September 2026 a Hospitality and Tourism sub‑conference will be held at De La Salle – College of Saint Benilde (DLSU‑CSB) in Manila. The detailed programme for that day isn’t included in the congress material; you may want to ask at the registration desk for more information.",
+      "keys": [
+        "Is anything happening on the 27th?"
+      ]
+    },
+    {
+      "q": "What is on first thing on day one?",
+      "a": "The first item on day one (29 September 2026) is registration, which runs from 7:00 to 17:00 in the GEE Lobby.",
+      "keys": [
+        "What is on first thing on day one?"
+      ]
+    },
+    {
+      "q": "What is on day two?",
+      "a": "— 30 September 2026 (Wednesday) —\n7:00 – 12:00  Registration – GEE Lobby  \n8:00 – 8:45  Human‑Centred AI in Higher Education: From Intelligent Technology to Ethical, Inclusive and Future‑Ready Universities — JAA — Dr. Mohd Erfino JOHARI  \n8:45 – 10:00  Poster Session 2 — GEE First Floor + Coffee Break  \n10:00 – 12:00  STEA‑4 in JAA (keynote Prof. John Kristoffer Q. ANDRES); BGL‑4 in GEE KL (keynote Dr. Leo D. Manansala); Special Workshop",
+      "keys": [
+        "What is on day two?"
+      ]
+    },
+    {
+      "q": "Where can I eat near the venue?",
+      "a": "You have several convenient options within a short walk of the PLM venue:\n\n- Batala – Desserts & Snacks, budget — under ₱200 per person (price is an indicative estimate). Ice‑cream counter on San Jose Street, about 2 min walk (140 m) from the venue.  \n- Chamber Café – Cafés & Coffee, moderate — ₱200–₱500 per person (price is an indicative estimate). Coffee spot on western Intramuros near Muralla Street, about 11 min walk (860 m).  \n- Dexter Pizza – Sisay’s – Budget Eats & Carinderias, budget — under ₱200 per person (price is an indicative estimate). Pizza and Filipino fare on Cabildo Street, about 7 min walk (560 m).  \n- Flower Stories Café – Cafés & Coffee, moderate — ₱200–₱500 per person (price is an indicative estimate). Small café on Magallanes Street, about 7 min walk (540 m).  \n- J’s Cuisine – Restaurants & Heritage Dining, moderate — ₱200–₱500 per person (price is an indicative estimate). Filipino restaurant on Anda Street, about 9 min walk (700 m).  \n- Jollibee – Fast Food & Chains, budget — under ₱200 per person (price is an indicative estimate). Filipino fast‑food outlet near the Pasig River, about 10 min walk (820 m).",
+      "keys": [
+        "Where can I eat near the venue?"
+      ]
+    },
+    {
+      "q": "Where can I get coffee near the venue?",
+      "a": "You can grab coffee within a short walk of the PLM venue:\n\n- Chamber Café – moderate ₱200‑₱500, coffee; 11 min walk (860 m) on western Intramuros near Muralla Street.  \n- Flower Stories Café – moderate ₱200‑₱500, coffee and desserts; 7 min walk (540 m) on Magallanes Street.  \n- Los Frailes Café – moderate ₱200‑₱500, coffee and Filipino fare; 4 min walk (330 m) on Real Street near San Agustin Church.  \n- Paper + Cup – moderate ₱200‑₱500, specialty coffee and brunch; 3 min walk (270 m) on Muralla Street.",
+      "keys": [
+        "Where can I get coffee near the venue?"
+      ]
+    },
+    {
+      "q": "Where can I eat cheaply near the venue?",
+      "a": "You have three budget‑friendly options within a short walk of the PLM venue:\n\n- Batala – Desserts & Snacks, under ₱200 per person, ice‑cream and sweets on San Jose Street, 2 min walk (140 m).  \n- Dexter Pizza – Sisay’s – Budget eats, under ₱200 per person, pizza and Filipino fast‑food on Cabildo Street, 7 min walk (560 m).  \n- Jollibee – Fast‑food chain, under ₱200 per person, Filipino burgers, fried chicken and spaghetti near the Pasig River (Muelle del Rio), 10 min walk (820 m).",
+      "keys": [
+        "Where can I eat cheaply near the venue?"
+      ]
+    },
+    {
+      "q": "What can I see in Intramuros?",
+      "a": "You can visit these Intramuros highlights, all within a short walk from the PLM venue:\n\n- Memorare — Manila 1945 (Anda Street · Plazuela de Santa Isabel, free, ~10 min visit, 6 min walk)\n- Museo de Intramuros (Arzobispo corner Anda Street · Reconstructed San Ignacio Church, ₱200 (₱160 students/seniors/PWD), ~1 hr, 6 min walk)\n- Plaza México (Aduana Street, free, ~15 min, 11 min walk)\n- Plazuela de Santa Isabel (Anda corner Real Street, free, ~10 min, 6 min walk)\n- San Agustin Church (General Luna Street · Opposite Plaza San Luis, free, ~30 min, 3 min walk)\n- Santa Lucia Barracks Ruins (Santa Lucia Street, free, ~15 min, 3 min walk)",
+      "keys": [
+        "What can I see in Intramuros?"
+      ]
+    },
+    {
+      "q": "Where can I stay inside the walls?",
+      "a": "You can stay at these boutique hotels inside Intramuros:\n\nThe Bayleaf Intramuros – ₱2,800 – ₱13,300 per night (≈₱2,765 for a Superior; suites up to ₱13,000). Located at Muralla corner Victoria Street, on the eastern wall beside Lyceum of the Philippines University, about a 5‑minute walk (430 m) from the PLM venue. It is the only full‑service boutique hotel inside the walls and also houses the Cioccolata café.\n\nWhite Knight Hotel Intramuros – ₱1,750 – ₱5,100 per night (≈₱2,000 typical). Situated in the Plaza San Luis Complex on General Luna Street, opposite San Agustin Church, about a 4‑minute walk (310 m) from the venue. Housed in a restored Spanish colonial mansion, it offers 29 rooms and an in‑house café.",
+      "keys": [
+        "Where can I stay inside the walls?"
+      ]
+    },
+    {
+      "q": "How much is the registration fee?",
+      "a": "That is not in the congress material I have. The organisers at the registration desk will be able to tell you.",
+      "keys": [
+        "How much is the registration fee?"
+      ]
+    },
+    {
+      "q": "What is the wifi password?",
+      "a": "That is not in the congress material I have. The organisers at the registration desk will be able to tell you.",
+      "keys": [
+        "What is the wifi password?"
+      ]
+    },
+    {
+      "q": "Do presenters get a certificate?",
+      "a": "Yes. After each paper presentation (including the brief Q&A) the presenter receives a Certificate of Presentation, and once all presentations are finished certificates are awarded to every presenter.",
+      "keys": [
+        "Do presenters get a certificate?"
+      ]
+    },
+    {
+      "q": "Is the conference online or in person?",
+      "a": "The conference is hybrid — both onsite at PLM in Intramuros and available online.",
+      "keys": [
+        "Is the conference online or in person?"
+      ]
+    },
+    {
+      "q": "What is the conference theme?",
+      "a": "The conference theme is “The role of Artificial Intelligence, sustainability and innovation in building resilient, inclusive and future‑ready communities.”",
+      "keys": [
+        "What is the conference theme?"
       ]
     }
   ],
