@@ -50,10 +50,11 @@ const { questions } = JSON.parse(readFileSync(join(root, 'tools', 'warm-question
 const existing = existsSync(OUT)
   ? JSON.parse(readFileSync(OUT, 'utf8'))
   : { generated: null, corpusVersion: null, answers: [] };
-/* --force re-asks everything the model wrote; hand-written (pinned) answers stay. */
-const done = new Map((existing.answers ?? [])
-  .filter(a => !FORCE || a.pinned)
-  .map(a => [normalise(a.q), a]));
+/* Every answer already on disk, pinned or not. Under --force the model-written
+   ones are re-asked below, but each stays in place until its replacement actually
+   arrives: a run that fails on the first question — a bad key, say — must not
+   truncate the file to the pinned entries, which is what dropping them here did. */
+const done = new Map((existing.answers ?? []).map(a => [normalise(a.q), a]));
 
 async function ask(question) {
   const { slice } = retrieve(index, question, { budgetTokens: 2400 });
@@ -85,6 +86,12 @@ async function ask(question) {
     await new Promise(r => setTimeout(r, (wait + 2) * 1000));
     return ask(question);
   }
+  if (res.status === 401 || res.status === 403) {
+    /* The key is wrong. No question will succeed, so do not try the other 39. */
+    const err = new Error(`HTTP ${res.status}: ${(await res.text()).slice(0, 140)}`);
+    err.fatal = true;
+    throw err;
+  }
   if (!res.ok) throw new Error(`HTTP ${res.status}: ${(await res.text()).slice(0, 140)}`);
 
   const json = await res.json();
@@ -103,9 +110,12 @@ console.log(`  ${questions.length} questions, ${done.size} already answered\n`);
    destructive: a run killed at position N truncated the file to the first N entries
    and discarded finished answers further down the list. */
 const merged = new Map(done);
+/* The stamps move only once something has actually been answered in this run.
+   Otherwise a run that failed outright would relabel the old answers as fresh
+   against the new corpus, and build-corpus would stop warning that they are not. */
 const write = () => writeFileSync(OUT, JSON.stringify({
-  generated: new Date().toISOString().slice(0, 10),
-  corpusVersion: corpus._generated,
+  generated: asked ? new Date().toISOString().slice(0, 10) : existing.generated,
+  corpusVersion: asked ? corpus._generated : existing.corpusVersion,
   answers: questions.map(q => merged.get(normalise(q))).filter(Boolean)
 }, null, 2) + '\n', 'utf8');
 
@@ -113,7 +123,7 @@ let asked = 0, skipped = 0, refused = 0;
 
 for (const q of questions) {
   const prior = merged.get(normalise(q));
-  if (prior) { skipped++; continue; }
+  if (prior && (!FORCE || prior.pinned)) { skipped++; continue; }
 
   /* A question that the guards would refuse must never become a warm answer — it
      would be served without the guards ever running. */
@@ -136,6 +146,7 @@ for (const q of questions) {
     console.log(`       ${a.replace(/\s+/g, ' ').slice(0, 110)}`);
   } catch (err) {
     console.log(`  FAIL ${q}\n       ${err.message}`);
+    if (err.fatal) { console.log('\n  Stopping — every remaining question would fail the same way.'); break; }
   }
 
   write();
