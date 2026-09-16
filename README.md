@@ -212,3 +212,10 @@ Map data, place information and the boundary polygon © [OpenStreetMap](https://
 contributors, licensed under the [ODbL](https://opendatacommons.org/licenses/odbl/).
 Walking routes by the [FOSSGIS OSRM service](https://routing.openstreetmap.de/).
 Categories, price tiers, visit durations and descriptions were written for this project.
+
+## Credits
+
+Created by **Mark Daniel Apelledo** — creator of the Intramuros Map and Dan, its AI guide.
+
+Built under the guidance of advisers **Dr. Dan Michael A. Cortez**, **Ms. Editha S. Medina**
+and **Mr. Neil Marcus T. Manubay**.

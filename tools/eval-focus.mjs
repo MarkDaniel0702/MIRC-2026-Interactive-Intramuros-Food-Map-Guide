@@ -43,15 +43,30 @@ const CASES = [
   ['What is MIRC 2026?', null],       // not about a place at all
   ['Which room is the HS track in?', null],
   ['What does BTB stand for?', null],
+
+  // ── same-brand, several branches: `name` alone can't tell them apart, so
+  //    these check `id` (see below) instead of `name` -- a street or landmark
+  //    qualifier must resolve to the one branch it names ──
+  ["find uncle john's on cabildo street", 'eat', "Uncle John's", 'uncle-johns-cabildo'],
+  ["find uncle john's near andres soriano", 'eat', "Uncle John's", 'uncle-johns-soriano'],
+  ["find uncle john's on arzobispo", 'eat', "Uncle John's", 'uncle-johns-arzobispo'],
+  ['find 7-eleven on muralla street', 'eat', '7-Eleven', 'seven-eleven-muralla'],
+  ['find the 7-eleven on general luna', 'eat', '7-Eleven', 'seven-eleven-general-luna'],
+
+  // ── same brand, no branch named: genuinely ambiguous, must stay silent ──
+  ['find 7-eleven', null],
+  ["find uncle john's", null],
 ];
 
 let pass = 0, fail = 0;
-for (const [question, expectKind, expectName] of CASES) {
+for (const [question, expectKind, expectName, expectId] of CASES) {
   const f = findFocus(corpus, question);
-  const ok = expectKind === null ? f === null : (f && f.kind === expectKind && f.name === expectName);
+  const ok = expectKind === null
+    ? f === null
+    : (f && f.kind === expectKind && f.name === expectName && (expectId === undefined || f.id === expectId));
   ok ? pass++ : fail++;
-  const got = f ? `${f.kind}:${f.name}` : 'null';
-  const want = expectKind === null ? 'null' : `${expectKind}:${expectName}`;
+  const got = f ? `${f.kind}:${f.id}` : 'null';
+  const want = expectKind === null ? 'null' : `${expectKind}:${expectId ?? expectName}`;
   console.log(`  ${ok ? 'PASS' : 'FAIL'}  got ${got.padEnd(28)} want ${want.padEnd(28)} ${question}`);
   if (!ok && f) console.log(`        (also has id=${f.id}, lat=${f.lat}, lng=${f.lng})`);
 }

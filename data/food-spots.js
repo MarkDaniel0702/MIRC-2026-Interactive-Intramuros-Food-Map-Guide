@@ -431,5 +431,47 @@ export const FOOD_SPOTS = [
     cuisine: ['Filipino', 'Canteen', 'Rice Meals'], street: 'General Luna Street', area: 'PLM campus',
     lat: 14.587149, lng: 120.976675, osm: null, locationSource: 'user', verified: true,
     blurb: 'Campus canteen at Pamantasan ng Lungsod ng Maynila, on General Luna Street. The visitor-supplied pin resolves to the PLM Multi-Purpose Building — confirm the exact spot and whether it is open to conference visitors.'
+  },
+  {
+    id: 'uncle-johns-arzobispo', name: "Uncle John's", category: 'fastfood', priceTier: 1,
+    cuisine: ['Convenience Store', 'Snacks'], street: 'Arzobispo Street', area: null,
+    lat: 14.5915609, lng: 120.9719574, osm: 'node/598904476',
+    blurb: '24-hour convenience store on Arzobispo Street — snacks, drinks and quick essentials.'
+  },
+  {
+    id: 'uncle-johns-cabildo', name: "Uncle John's", category: 'fastfood', priceTier: 1,
+    cuisine: ['Convenience Store', 'Snacks'], street: 'Cabildo Street', area: null,
+    lat: 14.5879059, lng: 120.9777001, osm: 'node/1037266964',
+    blurb: '24-hour convenience store on Cabildo Street — snacks, drinks and quick essentials.'
+  },
+  {
+    id: 'uncle-johns-soriano', name: "Uncle John's", category: 'fastfood', priceTier: 1,
+    cuisine: ['Convenience Store', 'Snacks'], street: 'Andres Soriano Avenue', area: null,
+    lat: 14.5934924, lng: 120.9737666, osm: 'node/1054550001',
+    blurb: '24-hour convenience store on Andres Soriano Avenue — snacks, drinks and quick essentials.'
+  },
+  {
+    id: 'seven-eleven-muralla', name: '7-Eleven', category: 'fastfood', priceTier: 1,
+    cuisine: ['Convenience Store', 'Snacks'], street: 'Muralla Street', area: null,
+    lat: 14.5932718, lng: 120.9774564, osm: 'node/1034880337',
+    blurb: '24-hour convenience store on Muralla Street — snacks, drinks, coffee and quick essentials.'
+  },
+  {
+    id: 'seven-eleven-solana-north', name: '7-Eleven', category: 'fastfood', priceTier: 1,
+    cuisine: ['Convenience Store', 'Snacks'], street: 'Solana Street', area: 'Near Fort Santiago',
+    lat: 14.5910892, lng: 120.9767363, osm: 'node/4427365592',
+    blurb: '24-hour convenience store on Solana Street, near Fort Santiago — snacks, drinks, coffee and quick essentials.'
+  },
+  {
+    id: 'seven-eleven-solana-south', name: '7-Eleven', category: 'fastfood', priceTier: 1,
+    cuisine: ['Convenience Store', 'Snacks'], street: 'Solana Street', area: 'Near San Agustin Church',
+    lat: 14.5893165, lng: 120.9781814, osm: 'node/1038225353',
+    blurb: '24-hour convenience store on Solana Street, near San Agustin Church — snacks, drinks, coffee and quick essentials.'
+  },
+  {
+    id: 'seven-eleven-general-luna', name: '7-Eleven', category: 'fastfood', priceTier: 1,
+    cuisine: ['Convenience Store', 'Snacks'], street: 'General Luna Street', area: null,
+    lat: 14.5897266, lng: 120.9746481, osm: 'node/13197462028',
+    blurb: '24-hour convenience store on General Luna Street — snacks, drinks, coffee and quick essentials.'
   }
 ];

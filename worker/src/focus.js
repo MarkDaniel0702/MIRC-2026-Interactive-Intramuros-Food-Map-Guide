@@ -74,10 +74,32 @@ export function findFocus(corpus, question) {
 
   if (!best || best.score < 0.6) return null;
 
-  /* Two different places both matched well and neither clearly wins — e.g. two
-     spots sharing a word like "Café" — better to say nothing than guess wrong. */
-  const rival = contenders.find(c => c.record.id !== best.record.id && c.score >= best.score - 0.15);
-  if (rival) return null;
+  const tied = contenders.filter(c => c.score >= best.score - 0.15);
+
+  if (tied.length > 1) {
+    /* Same brand, several branches (e.g. three "Uncle John's") all matched the
+       name equally well. Unlike a coincidental word collision between two
+       different places, this is worth trying to resolve: if the question also
+       names a street or landmark that only one branch's `where` contains, that
+       is real disambiguation, not a guess. Only attempted when every tied
+       record shares the exact same name -- for two genuinely different places
+       (e.g. both matching on "Café"), still say nothing rather than guess. */
+    const sameName = tied.every(c => c.record.name === best.record.name);
+    if (!sameName) return null;
+
+    /* Word-overlap COUNT, not just presence -- every branch's `where` ends in a
+       generic suffix like "Street", so a query that includes it ("cabildo
+       street") must not tie every branch on that shared word alone. The branch
+       whose street/landmark name is actually named wins by having strictly
+       more overlapping words than the rest. */
+    const qWords = new Set(words(question));
+    const scored = tied.map(c => ({ c, hits: words(c.record.where).filter(w => qWords.has(w)).length }));
+    const maxHits = Math.max(...scored.map(s => s.hits));
+    if (maxHits === 0) return null;
+    const winners = scored.filter(s => s.hits === maxHits);
+    if (winners.length !== 1) return null;
+    best = winners[0].c;
+  }
 
   return {
     kind: best.kind,

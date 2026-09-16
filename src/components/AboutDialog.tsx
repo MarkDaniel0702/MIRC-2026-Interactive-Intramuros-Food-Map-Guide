@@ -92,6 +92,16 @@ export function AboutDialog({ dialogRef }: { dialogRef: RefObject<HTMLDialogElem
         from the street address and still checked to fall inside the boundary, but is not
         independently confirmed.
       </p>
+
+      <h3>Credits</h3>
+      <p>
+        Created by <strong>Mark Daniel Apelledo</strong> — creator of the Intramuros Map and
+        Dan, its AI guide.
+      </p>
+      <p>
+        Built under the guidance of advisers <strong>Dr. Dan Michael A. Cortez</strong>,
+        {' '}<strong>Ms. Editha S. Medina</strong> and <strong>Mr. Neil Marcus T. Manubay</strong>.
+      </p>
     </dialog>
   );
 }

@@ -2738,6 +2738,54 @@
     },
     "eat": [
       {
+        "id": "seven-eleven-muralla",
+        "lat": 14.5932718,
+        "lng": 120.9774564,
+        "name": "7-Eleven",
+        "category": "Fast Food & Chains",
+        "price": "Budget — under ₱200 per person",
+        "cuisine": "Convenience Store, Snacks",
+        "where": "Muralla Street",
+        "fromVenue": "9 min walk (720 m)",
+        "about": "24-hour convenience store on Muralla Street — snacks, drinks, coffee and quick essentials."
+      },
+      {
+        "id": "seven-eleven-solana-north",
+        "lat": 14.5910892,
+        "lng": 120.9767363,
+        "name": "7-Eleven",
+        "category": "Fast Food & Chains",
+        "price": "Budget — under ₱200 per person",
+        "cuisine": "Convenience Store, Snacks",
+        "where": "Solana Street · Near Fort Santiago",
+        "fromVenue": "6 min walk (470 m)",
+        "about": "24-hour convenience store on Solana Street, near Fort Santiago — snacks, drinks, coffee and quick essentials."
+      },
+      {
+        "id": "seven-eleven-solana-south",
+        "lat": 14.5893165,
+        "lng": 120.9781814,
+        "name": "7-Eleven",
+        "category": "Fast Food & Chains",
+        "price": "Budget — under ₱200 per person",
+        "cuisine": "Convenience Store, Snacks",
+        "where": "Solana Street · Near San Agustin Church",
+        "fromVenue": "4 min walk (330 m)",
+        "about": "24-hour convenience store on Solana Street, near San Agustin Church — snacks, drinks, coffee and quick essentials."
+      },
+      {
+        "id": "seven-eleven-general-luna",
+        "lat": 14.5897266,
+        "lng": 120.9746481,
+        "name": "7-Eleven",
+        "category": "Fast Food & Chains",
+        "price": "Budget — under ₱200 per person",
+        "cuisine": "Convenience Store, Snacks",
+        "where": "General Luna Street",
+        "fromVenue": "5 min walk (370 m)",
+        "about": "24-hour convenience store on General Luna Street — snacks, drinks, coffee and quick essentials."
+      },
+      {
         "id": "nine-spoons",
         "lat": 14.590004,
         "lng": 120.978725,
@@ -3443,6 +3491,42 @@
         "where": "General Luna Street · Plaza San Luis Complex",
         "fromVenue": "4 min walk (340 m)",
         "about": "Café and dining room attached to the Tesoro's handicrafts store in Plaza San Luis."
+      },
+      {
+        "id": "uncle-johns-arzobispo",
+        "lat": 14.5915609,
+        "lng": 120.9719574,
+        "name": "Uncle John's",
+        "category": "Fast Food & Chains",
+        "price": "Budget — under ₱200 per person",
+        "cuisine": "Convenience Store, Snacks",
+        "where": "Arzobispo Street",
+        "fromVenue": "9 min walk (710 m)",
+        "about": "24-hour convenience store on Arzobispo Street — snacks, drinks and quick essentials."
+      },
+      {
+        "id": "uncle-johns-cabildo",
+        "lat": 14.5879059,
+        "lng": 120.9777001,
+        "name": "Uncle John's",
+        "category": "Fast Food & Chains",
+        "price": "Budget — under ₱200 per person",
+        "cuisine": "Convenience Store, Snacks",
+        "where": "Cabildo Street",
+        "fromVenue": "2 min walk (180 m)",
+        "about": "24-hour convenience store on Cabildo Street — snacks, drinks and quick essentials."
+      },
+      {
+        "id": "uncle-johns-soriano",
+        "lat": 14.5934924,
+        "lng": 120.9737666,
+        "name": "Uncle John's",
+        "category": "Fast Food & Chains",
+        "price": "Budget — under ₱200 per person",
+        "cuisine": "Convenience Store, Snacks",
+        "where": "Andres Soriano Avenue",
+        "fromVenue": "10 min walk (790 m)",
+        "about": "24-hour convenience store on Andres Soriano Avenue — snacks, drinks and quick essentials."
       },
       {
         "id": "vtans-eatery",
