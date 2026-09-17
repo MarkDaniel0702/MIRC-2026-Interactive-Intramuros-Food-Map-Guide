@@ -3,6 +3,7 @@ import type { Dispatch } from 'react';
 import { Masthead } from './Masthead';
 import { Tabs } from './Tabs';
 import { MapLayers } from './MapLayers';
+import { VenueBar } from './VenueBar';
 import { SearchBox } from './SearchBox';
 import { CategoryChips } from './CategoryChips';
 import { PriceChips } from './PriceChips';
@@ -79,6 +80,13 @@ export function Panel({ state, dispatch, mapApi, visible, sheetOpen, setSheet, o
   const { total, filtered, noun } = summarize(state.mode, state.byMode[state.mode], visible.length);
   const gripText = filtered ? `${visible.length} of ${total} ${noun}` : `${total} ${noun}`;
 
+  // Same as picking a list card on a phone (select() in useLeafletMap): the
+  // sheet drops so the map the tap is about is actually visible.
+  const pickLandmark = (id: string) => {
+    mapApi.focusById(id);
+    if (window.matchMedia('(max-width: 760px)').matches) setSheet(false);
+  };
+
   return (
     <aside className={`panel${sheetOpen ? ' is-open' : ''}${state.dirs.open ? ' is-directions' : ''}`} ref={panelRef} aria-label="Places browser">
       <button className="sheet-grip" ref={gripRef} aria-expanded={sheetOpen} aria-controls="panelBody">
@@ -90,6 +98,7 @@ export function Panel({ state, dispatch, mapApi, visible, sheetOpen, setSheet, o
         <Masthead mode={state.mode} />
         <Tabs mode={state.mode} mapApi={mapApi} />
         <MapLayers mode={state.mode} mapModes={state.mapModes} dispatch={dispatch} />
+        <VenueBar onPick={pickLandmark} />
 
         <div className="controls">
           <SearchBox key={`${state.mode}-${state.resetNonce}`} mode={state.mode}
@@ -102,7 +111,7 @@ export function Panel({ state, dispatch, mapApi, visible, sheetOpen, setSheet, o
 
         {visible.length > 0
           ? <SpotList visible={visible} mode={state.mode} activeId={state.activeId} activeFrom={state.activeFrom} mapApi={mapApi} />
-          : <EmptyState mode={state.mode} mapApi={mapApi} />}
+          : <EmptyState mode={state.mode} query={state.byMode[state.mode].query} mapApi={mapApi} onPickLandmark={pickLandmark} />}
 
         <DirectionsPanel dirs={state.dirs} mapApi={mapApi} />
         <PanelFooter mode={state.mode} />

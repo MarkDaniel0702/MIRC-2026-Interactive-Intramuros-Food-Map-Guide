@@ -1,6 +1,6 @@
 {
-  "generated": "2026-09-16",
-  "corpusVersion": "2026-09-16T14:08:02.092Z",
+  "generated": "2026-09-17",
+  "corpusVersion": "2026-09-16T14:25:17.961Z",
   "answers": [
     {
       "q": "What is MIRC 2026?",
@@ -108,17 +108,19 @@
     },
     {
       "q": "What does EASS stand for?",
-      "a": "EASS stands for Education, Arts, Social Science, Social Work.",
+      "a": "EASS stands for Education, Arts, Social Science, Social Work. It’s one of the four conference tracks.",
       "keys": [
         "What does EASS stand for?"
-      ]
+      ],
+      "at": "2026-09-16T14:25:17.961Z"
     },
     {
       "q": "Which room is the STEA track in?",
-      "a": "The STEA track sessions are held in the Justo Albert Auditorium (code JAA) on the PLM campus.",
+      "a": "The STEA track sessions are held in the Justo Albert Auditorium (building code JAA) on the PLM campus. JAA does not have a separate room code listed; the auditorium itself is the venue for all STEA sessions.",
       "keys": [
         "Which room is the STEA track in?"
-      ]
+      ],
+      "at": "2026-09-16T14:25:17.961Z"
     },
     {
       "q": "Which room is the BGL track in?",
@@ -138,129 +140,147 @@
     },
     {
       "q": "Which room is the EASS track in?",
-      "a": "The EASS track sessions are held in the GA TOP room (room code TOP) of the Gusaling Don Pepe Atienza (Don Pepe Atienza Building). The full name of the TOP room has not been supplied in the congress material.",
+      "a": "The EASS track’s sessions are held in the GA TOP room (the “TOP” space in the Don Pepe Atienza Building). One later session (EASS‑7) is scheduled in GEE KL (the Katipunan Lounge of the Emilio Ejercito Sr. Building).",
       "keys": [
         "Which room is the EASS track in?"
-      ]
+      ],
+      "at": "2026-09-16T14:25:17.961Z"
     },
     {
       "q": "What does BTB stand for?",
-      "a": "BTB is the room code for GK Bukod Tanging Bulwagan in the Gusaling Katipunan (GK) building.",
+      "a": "BTB is the room code for the GK Bukod Tanging Bulwagan in the Gusaling Katipunan (GK) building.",
       "keys": [
         "What does BTB stand for?"
-      ]
+      ],
+      "at": "2026-09-16T14:25:17.961Z"
     },
     {
       "q": "What does KL stand for?",
-      "a": "KL is the abbreviation for the Katipunan Lounge, the room code “KL” in the GEE (Gusaling Emilio Ejercito Sr.) building.",
+      "a": "KL is the room code for the GEE Katipunan Lounge, the lounge in the Gusaling Emilio Ejercito Sr. (GEE) building on the PLM campus.",
       "keys": [
         "What does KL stand for?"
-      ]
+      ],
+      "at": "2026-09-16T14:25:17.961Z"
     },
     {
       "q": "Where is the Justo Albert Auditorium?",
-      "a": "The Justo Albert Auditorium (building code JAA) is on the Pamantasan ng Lungsod ng Maynila (PLM) campus, at Gen. Luna Cor. Muralla Streets, Intramuros, Manila 1002, Philippines. It is one of the main lecture halls where the opening ceremony, plenary talks and many STEA sessions are held.",
+      "a": "The Justo Albert Auditorium (building code JAA) is one of the main buildings on the Pamantasan ng Lungsod ng Maynila (PLM) campus. Its address is:\n\nGen. Luna Cor. Muralla Streets, Intramuros, Manila 1002, Philippines.\n\nIt is located within the PLM grounds, near the main entrance on Gen. Luna Street. If you’re coming from the main gate, follow the signs to the “JAA” building; the auditorium is the central hall of that structure.",
       "keys": [
         "Where is the Justo Albert Auditorium?"
-      ]
+      ],
+      "at": "2026-09-16T14:25:17.961Z"
     },
     {
       "q": "Who are the plenary speakers?",
-      "a": "The plenary speakers for MIRC 2026 are:\n- Dr. Hsiao‑Yeh CHU (Kun Shan University, Taiwan) – “AI‑Enabled Smart Manufacturing Education…”\n- Ms. Daniella LAGMAN‑EUGENIO (CE‑Logic, Inc., Philippines) – “Shaping Resilient Institutions…”\n- Prof. Dr. Ricardo BAGARINAO (University of the Philippines Open University, Philippines) – “A Double‑Edged Transformation…”\n- Dr. Mohd Erfino JOHARI (Universiti PolyTech Malaysia) – “Human‑Centred AI in Higher Education…”",
+      "a": "The plenary speakers listed in the MIRC 2026 programme are:\n- Dr. Hsiao‑Yeh CHU  \n- Ms. Daniella Lagman‑Eugenio  \n- Prof. Dr. Ricardo BAGARINAO  \n- Dr. Mohd Erfino JOHARI",
       "keys": [
         "Who are the plenary speakers?"
-      ]
+      ],
+      "at": "2026-09-16T14:25:17.961Z"
     },
     {
       "q": "Who is the conference chair?",
-      "a": "The Conference Chair is Dr. Dan Michael A. Cortez. (I’m Dan, the Intramuros Guide assistant—not the Chair.)",
+      "a": "The Conference Chair is Dr. Dan Michael A. Cortez.",
       "keys": [
         "Who is the conference chair?"
-      ]
+      ],
+      "at": "2026-09-16T14:25:17.961Z"
     },
     {
       "q": "When is the opening ceremony?",
-      "a": "The opening ceremony is on 29 September 2026, from 8:00 to 8:30 am in the Justo Albert Auditorium (JAA).",
+      "a": "The Opening Ceremony is on 29 September 2026, from 8:00 to 8:30 AM in the Justo Albert Auditorium (JAA).",
       "keys": [
         "When is the opening ceremony?"
-      ]
+      ],
+      "at": "2026-09-16T14:25:17.961Z"
     },
     {
       "q": "When is lunch?",
-      "a": "Lunch Break is scheduled:\n- 29 September 2026 (Tuesday) 12:00 – 13:00  \n- 30 September 2026 (Wednesday) 12:00 – 13:00",
+      "a": "Lunch Break is scheduled:\n- 29 September 2026 (Tuesday) – 12:00 to 13:00  \n- 30 September 2026 (Wednesday) – 12:00 to 13:00.",
       "keys": [
         "When is lunch?"
-      ]
+      ],
+      "at": "2026-09-16T14:25:17.961Z"
     },
     {
       "q": "When is the closing ceremony?",
-      "a": "The Closing and Awarding Ceremonies are on 30 September 2026 (Wednesday) from 17:00 to 18:00 in the Justo Albert Auditorium (JAA).",
+      "a": "The Closing and Awarding Ceremonies are scheduled for 30 September 2026, from 17:00 to 18:00, in the Justo Albert Auditorium (JAA).",
       "keys": [
         "When is the closing ceremony?"
-      ]
+      ],
+      "at": "2026-09-16T14:25:17.961Z"
     },
     {
       "q": "When is the poster session?",
-      "a": "Poster Session 1 – 29 September 2026, 16:15 – 17:30, held on the GEE First Floor (GEE Open Area).  \nPoster Session 2 – 30 September 2026, 8:45 – 10:00, held on the GEE First Floor (GEE Open Area, with a coffee break).",
+      "a": "Poster Session 1 – 29 September 2026, 16:15 – 17:30, at GEE First Floor (GEE Open Area).  \nPoster Session 2 – 30 September 2026, 08:45 – 10:00, at GEE First Floor (GEE Open Area).",
       "keys": [
         "When is the poster session?"
-      ]
+      ],
+      "at": "2026-09-16T14:25:17.961Z"
     },
     {
       "q": "Is anything happening on the 27th?",
-      "a": "Yes. On 27 September 2026 a Hospitality and Tourism sub‑conference will be held at De La Salle – College of Saint Benilde (DLSU‑CSB) in Manila. The detailed programme for that day isn’t included in the congress material; you may want to ask at the registration desk for more information.",
+      "a": "Yes. On 27 September 2026 a Hospitality and Tourism sub‑conference will be held at De La Salle – College of Saint Benilde (DLSU‑CSB) in Manila. The detailed programme for that day isn’t included in the congress material; you may need to ask at the registration desk for more specifics.",
       "keys": [
         "Is anything happening on the 27th?"
-      ]
+      ],
+      "at": "2026-09-16T14:25:17.961Z"
     },
     {
       "q": "What is on first thing on day one?",
-      "a": "The first item on day one (29 September 2026) is registration, which runs from 7:00 to 17:00 in the GEE Lobby.",
+      "a": "The first item on Day 1 (29 September 2026) is Registration from 7:00 to 17:00 in the GEE Lobby.",
       "keys": [
         "What is on first thing on day one?"
-      ]
+      ],
+      "at": "2026-09-16T14:25:17.961Z"
     },
     {
       "q": "What is on day two?",
-      "a": "— 30 September 2026 (Wednesday) —\n7:00 – 12:00  Registration – GEE Lobby  \n8:00 – 8:45  Human‑Centred AI in Higher Education: From Intelligent Technology to Ethical, Inclusive and Future‑Ready Universities — JAA — Dr. Mohd Erfino JOHARI  \n8:45 – 10:00  Poster Session 2 — GEE First Floor + Coffee Break  \n10:00 – 12:00  STEA‑4 in JAA (keynote Prof. John Kristoffer Q. ANDRES); BGL‑4 in GEE KL (keynote Dr. Leo D. Manansala); Special Workshop",
+      "a": "— 30 September 2026 (Wednesday) —  \n7:00 – 12:00  Registration – GEE Lobby  \n8:00 – 8:45  Human‑Centred AI in Higher Education: From Intelligent Technology to Ethical, Inclusive and Future‑Ready Universities – JAA – Dr. Mohd Erfino JOHARI  \n8:45 – 10:00  Poster Session 2 – GEE First Floor (followed by coffee break)  \n10:00 – 12:00  STEA‑4 – JAA (keynote Prof. John Kristoffer Q. ANDRES); BGL‑4 – GEE KL",
       "keys": [
         "What is on day two?"
-      ]
+      ],
+      "at": "2026-09-16T14:25:17.961Z"
     },
     {
       "q": "Where can I eat near the venue?",
-      "a": "You have several convenient options within a short walk of the PLM venue:\n- Batala – Desserts & Snacks, budget — under ₱200 per person (price is an indicative estimate). Ice‑cream counter on San Jose Street, about 2 min walk (140 m) from the venue.  \n- Chamber Café – Cafés & Coffee, moderate — ₱200–₱500 per person (price is an indicative estimate). Coffee spot on western Intramuros near Muralla Street, about 11 min walk (860 m).  \n- Dexter Pizza – Sisay’s – Budget Eats & Carinderias, budget — under ₱200 per person (price is an indicative estimate). Pizza and Filipino fare on Cabildo Street, about 7 min walk (560 m).  \n- Flower Stories Café – Cafés & Coffee, moderate — ₱200–₱500 per person (price is an indicative estimate). Small café on Magallanes Street, about 7 min walk (540 m).  \n- J’s Cuisine – Restaurants & Heritage Dining, moderate — ₱200–₱500 per person (price is an indicative estimate). Filipino restaurant on Anda Street, about 9 min walk (700 m).  \n- Jollibee – Fast Food & Chains, budget — under ₱200 per person (price is an indicative estimate). Filipino fast‑food outlet near the Pasig River, about 10 min walk (820 m).",
+      "a": "Here are a few budget‑friendly spots within a short walk of the PLM venue:\n- Batala – ice‑cream and desserts, under ₱200 per person, on San Jose Street, 2 min walk (≈140 m).  \n- 7‑Eleven (Solana North) – convenience store with snacks and coffee, under ₱200 per person, near Fort Santiago, 6 min walk (≈470 m).  \n- Dexter Pizza – Sisay’s – pizza and Filipino fast food, under ₱200 per person, on Cabildo Street, 7 min walk (≈560 m).",
       "keys": [
         "Where can I eat near the venue?"
-      ]
+      ],
+      "at": "2026-09-16T14:25:17.961Z"
     },
     {
       "q": "Where can I get coffee near the venue?",
-      "a": "You can grab coffee within a short walk of the PLM venue:\n- Chamber Café – moderate ₱200‑₱500, coffee; 11 min walk (860 m) on western Intramuros near Muralla Street.  \n- Flower Stories Café – moderate ₱200‑₱500, coffee and desserts; 7 min walk (540 m) on Magallanes Street.  \n- Los Frailes Café – moderate ₱200‑₱500, coffee and Filipino fare; 4 min walk (330 m) on Real Street near San Agustin Church.  \n- Paper + Cup – moderate ₱200‑₱500, specialty coffee and brunch; 3 min walk (270 m) on Muralla Street.",
+      "a": "You can grab coffee within a short walk of the PLM venue:\n- 7‑Eleven (Solana Street · Near Fort Santiago) – 6 min walk (≈470 m)  \n- 7‑Eleven (Solana Street · Near San Agustin Church) – 4 min walk (≈330 m)  \n- Chamber Café (Western Intramuros, near Muralla Street) – 11 min walk (≈860 m)  \n- Flower Stories Café (Magallanes Street) – 7 min walk (≈540 m)  \n- Los Frailes Café (Real Street · Near San Agustin Church) – 4 min walk (≈330 m)",
       "keys": [
         "Where can I get coffee near the venue?"
-      ]
+      ],
+      "at": "2026-09-16T14:25:17.961Z"
     },
     {
       "q": "Where can I eat cheaply near the venue?",
-      "a": "You have three budget‑friendly options within a short walk of the PLM venue:\n- Batala – Desserts & Snacks, under ₱200 per person, ice‑cream and sweets on San Jose Street, 2 min walk (140 m).  \n- Dexter Pizza – Sisay’s – Budget eats, under ₱200 per person, pizza and Filipino fast‑food on Cabildo Street, 7 min walk (560 m).  \n- Jollibee – Fast‑food chain, under ₱200 per person, Filipino burgers, fried chicken and spaghetti near the Pasig River (Muelle del Rio), 10 min walk (820 m).",
+      "a": "You have a few budget‑friendly options within a short walk of the PLM venue:\n- Batala – Ice‑cream and desserts, under ₱200 per person. 2 min walk (≈140 m) on San Jose Street.  \n- 7‑Eleven (Solana North) – Convenience store with snacks, drinks and quick meals, under ₱200 per person. 6 min walk (≈470 m) on Solana Street near Fort Santiago.  \n- 7‑Eleven (Solana South) – Same budget fare, under ₱200 per person. 4 min walk (≈330 m) on Solana Street near San Agustin Church.  \n\nThese price ranges are indicative estimates for a typical meal per person.",
       "keys": [
         "Where can I eat cheaply near the venue?"
-      ]
+      ],
+      "at": "2026-09-16T14:25:17.961Z"
     },
     {
       "q": "What can I see in Intramuros?",
-      "a": "You can visit these Intramuros highlights, all within a short walk from the PLM venue:\n- Memorare — Manila 1945 (Anda Street · Plazuela de Santa Isabel, free, ~10 min visit, 6 min walk)\n- Museo de Intramuros (Arzobispo corner Anda Street · Reconstructed San Ignacio Church, ₱200 (₱160 students/seniors/PWD), ~1 hr, 6 min walk)\n- Plaza México (Aduana Street, free, ~15 min, 11 min walk)\n- Plazuela de Santa Isabel (Anda corner Real Street, free, ~10 min, 6 min walk)\n- San Agustin Church (General Luna Street · Opposite Plaza San Luis, free, ~30 min, 3 min walk)\n- Santa Lucia Barracks Ruins (Santa Lucia Street, free, ~15 min, 3 min walk)",
+      "a": "You can visit several heritage sights within walking distance of the PLM venue:\n- Memorare — Manila 1945 (Free, ~10 min walk, 6 min from venue) – a 1995 memorial sculpture honoring the civilians killed in the Battle of Manila.  \n- Museo de Intramuros (₱200, ₱160 for students/seniors/PWD, ~1 hr visit, 6 min walk) – the Intramuros Administration’s collection of colonial religious art inside the rebuilt San Ignacio Church.  \n- Plaza México (Free, ~15 min walk) – a square commemorating the historic Manila–Acapulco galleon trade.  \n- Plazuela de Santa Isabel (Free, ~10 min walk) – a small square that holds the Memorare monument, on the former site of one of Asia’s oldest girls’ schools.  \n- San Agustin Church (Free, ~30 min visit, 3 min walk) – the oldest stone church in the Philippines, a UNESCO World Heritage Site with a trompe‑l’œil ceiling.  \n- Santa Lucia Barracks Ruins (Free, ~15 min walk) – the remaining foundations of Spanish infantry barracks, left unreconstructed as a reminder of the 1945 destruction.",
       "keys": [
         "What can I see in Intramuros?"
-      ]
+      ],
+      "at": "2026-09-16T14:25:17.961Z"
     },
     {
       "q": "Where can I stay inside the walls?",
-      "a": "You can stay at these boutique hotels inside Intramuros:\n\nThe Bayleaf Intramuros – ₱2,800 – ₱13,300 per night (≈₱2,765 for a Superior; suites up to ₱13,000). Located at Muralla corner Victoria Street, on the eastern wall beside Lyceum of the Philippines University, about a 5‑minute walk (430 m) from the PLM venue. It is the only full‑service boutique hotel inside the walls and also houses the Cioccolata café.\n\nWhite Knight Hotel Intramuros – ₱1,750 – ₱5,100 per night (≈₱2,000 typical). Situated in the Plaza San Luis Complex on General Luna Street, opposite San Agustin Church, about a 4‑minute walk (310 m) from the venue. Housed in a restored Spanish colonial mansion, it offers 29 rooms and an in‑house café.",
+      "a": "You can stay at these two boutique hotels that are inside the Intramuros walls:\n- The Bayleaf Intramuros – ₱2,800 – ₱13,300 per night (≈ ₱2,765 for a Superior; suites around ₱13,000; standard rooms ₱4,000 – ₱9,100). 57 rooms. Located at Muralla corner Victoria Street, on the eastern wall beside the Lyceum of the Philippines University. About a 5‑minute walk (430 m) from the PLM venue.\n- White Knight Hotel Intramuros – ₱1,750 – ₱5,100 per night (typical around ₱2,000; standard rooms ₱1,900 – ₱2,500). 29 rooms. Situated in the Plaza San Luis Complex on General Luna Street, opposite San Agustin Church. About a 4‑minute walk (310 m) from the PLM venue.",
       "keys": [
         "Where can I stay inside the walls?"
-      ]
+      ],
+      "at": "2026-09-16T14:25:17.961Z"
     },
     {
       "q": "How much is the registration fee?",

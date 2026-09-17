@@ -29,7 +29,7 @@ import { LANDMARKS } from '../../data/landmarks.js';
 import type { Landmark } from '../../data/types';
 
 import { ALL_SPOTS, DERIVED_INDEX, MODES, findAnywhere } from '../data/modes';
-import { findDestination } from '../data/destinations';
+import { ALL_LANDMARKS, findDestination } from '../data/destinations';
 import type { Destination } from '../data/destinations';
 import { esc } from '../lib/format';
 import { PIN_SVG } from '../lib/icons';
@@ -206,7 +206,12 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
     const map = mapRef.current;
     const marker = landmarkMarkersRef.current.get(id);
     if (!map || !marker) return false;
-    map.flyTo(marker.getLatLng(), 18, flyOptions(0.8));
+    // The campus lands at 18, where all four buildings fit in view. A building
+    // lands a half-step closer: GEE and GA are 18 m apart, which is two 30px
+    // markers exactly touching at 18 and clearly separate at 18.5 -- and
+    // asking for one building means wanting to tell it from its neighbour.
+    const lm = ALL_LANDMARKS.find(l => l.id === id);
+    map.flyTo(marker.getLatLng(), lm?.campus ? 18.5 : 18, flyOptions(0.8));
     pendingLandmarkRef.current = id;
     let revealT: ReturnType<typeof setTimeout>;
     const reveal = () => {
@@ -216,7 +221,14 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
       pendingLandmarkRef.current = null;
       const popup = marker.getPopup();
       if (map.hasLayer(marker) || !popup) marker.openPopup();
-      else { popup.setLatLng(marker.getLatLng()); map.openPopup(popup); }
+      else {
+        popup.setLatLng(marker.getLatLng());
+        map.openPopup(popup);
+        // Opened mid-flight, so autoPan measured against a camera still
+        // moving; re-lay it out (update() re-runs the pan) once the flight
+        // actually ends. A no-op if the popup has been closed by then.
+        map.once('moveend', () => popup.update());
+      }
     };
     map.on('moveend', reveal);
     revealT = setTimeout(reveal, reduceMotionOnce ? 60 : 1200);
@@ -583,7 +595,10 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
       const marker = L.marker([lm.lat, lm.lng], {
         icon: L.divIcon({
           className: 'landmark-icon',
-          html: `<div class="landmark${small ? ' landmark--campus' : ''}"><span>${esc(lm.short || '★')}</span></div>`,
+          // A provisional position (a visitor's pin the organisers have not
+          // confirmed) draws dashed, the same tell the address-estimated food
+          // pins use, so the map is honest about it before the popup is.
+          html: `<div class="landmark${small ? ' landmark--campus' : ''}${lm.provisional ? ' landmark--provisional' : ''}"><span>${esc(lm.short || '★')}</span></div>`,
           iconSize: small ? [30, 30] : [40, 40],
           iconAnchor: small ? [15, 15] : [20, 20],
           popupAnchor: [0, small ? -15 : -20]

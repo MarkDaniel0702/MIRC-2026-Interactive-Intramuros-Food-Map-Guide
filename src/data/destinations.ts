@@ -13,7 +13,21 @@
 import { LANDMARKS } from '../../data/landmarks.js';
 import type { Landmark } from '../../data/types';
 import { findAnywhere } from './modes';
+import { norm } from '../lib/format';
 import type { AnySpot, ModeKey } from '../types';
+
+export const ALL_LANDMARKS = LANDMARKS as Landmark[];
+
+/** The landmark a search query is most likely after, if any -- the search box
+ *  only indexes the three tabs' records, so "GEE" or "katipunan" typed there
+ *  would otherwise dead-end at an empty list. A code must match whole ("ga" is
+ *  not "gate"); a name fragment needs three characters so "a" matches nothing. */
+export function findLandmarkByQuery(query: string): Landmark | null {
+  const q = norm(query).trim();
+  if (q.length < 2) return null;
+  return ALL_LANDMARKS.find(lm => norm(lm.short) === q)
+    ?? (q.length >= 3 ? ALL_LANDMARKS.find(lm => norm(lm.name).includes(q)) ?? null : null);
+}
 
 export type Destination =
   | { kind: 'spot'; id: string; name: string; lat: number; lng: number; spot: AnySpot; modeKey: ModeKey }

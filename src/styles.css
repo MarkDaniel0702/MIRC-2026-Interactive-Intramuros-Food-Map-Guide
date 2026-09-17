@@ -286,6 +286,19 @@ body {
   stroke-linecap: round; stroke-linejoin: round;
 }
 
+/* The venue strip sits right under "Show on map" with the same inset. Its chips
+   navigate rather than filter, so they take the landmark's gold rather than the
+   pressed/unpressed states of the filter chips around them. */
+#venueBar { margin: 12px 24px 0; }
+#venueBar .chip svg {
+  width: 13px; height: 13px; flex: none;
+  fill: none; stroke: currentColor; stroke-width: 1.4;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+.chip--venue { border-color: var(--gold-dk); color: var(--gold-br); }
+.chip--venue:hover { border-color: var(--gold); color: var(--white); }
+.chip__code { font: 700 11px/1.35 var(--mono); letter-spacing: .06em; }
+
 .filter__legend {
   padding: 0 0 8px;
   font: 500 9.5px/1 var(--mono);
@@ -531,6 +544,8 @@ body {
   color: var(--white);
 }
 .empty__text { margin: 0 0 16px; font: 400 12px/1.5 var(--mono); color: var(--slate); }
+.empty__hint { margin: -6px 0 16px; font: 400 12px/1.5 var(--mono); color: var(--gold-br); }
+.empty__hint b { color: var(--white); font-weight: 700; }
 
 /* ─────────────────────────────── panel foot ────────────────────────────── */
 
@@ -812,6 +827,7 @@ body {
 /* Directions take over the panel: the browse chrome steps aside rather than
    being juggled element by element in JS. */
 .panel.is-directions .tabs,
+.panel.is-directions #venueBar,
 .panel.is-directions .controls,
 .panel.is-directions .list,
 .panel.is-directions .empty,
@@ -982,6 +998,18 @@ body {
   color: var(--slate-dk);
 }
 .dirs__credit a { color: var(--gold); }
+
+/* A caveat that belongs to the itinerary (routes to the campus end at the
+   street), so it reads like a final step's footnote, not a status message. */
+.dirs__note {
+  margin: 14px 0 0;
+  padding: 8px 10px;
+  font: 400 10.5px/1.5 var(--mono);
+  color: var(--gold-br);
+  background: rgba(227, 178, 60, .1);
+  border: 1px solid var(--gold-dk);
+  border-radius: var(--r);
+}
 
 /* "Get directions" inside a popup */
 .pop__go {
@@ -1345,6 +1373,9 @@ body.is-picking .leaflet-container { cursor: crosshair !important; }
   border-color: var(--gold);
   box-shadow: 0 1px 6px rgba(0, 0, 0, .6), 0 0 12px -2px var(--gold-br);
 }
+/* Provisional position (data/landmarks.js `provisional`) — dashed, like the
+   address-estimated food pins, so the uncertainty shows before the popup does. */
+.landmark--provisional { border-style: dashed; }
 
 /* ─────────────────────────────── dialog ────────────────────────────────── */
 

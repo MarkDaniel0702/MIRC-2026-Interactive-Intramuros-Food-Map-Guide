@@ -447,11 +447,33 @@ opening directions to one leaves the current tab alone). Add more by appending t
 MIRC 2026 session rooms inside them (GEE AVR, GEE KL, GK BTB, GA TOP …) are named in each
 marker's blurb rather than given their own pins.
 
-> **Provisional.** The three `Gusaling` markers are `provisional: true` — room
-> abbreviations `AVR` (assumed "Audio-Visual Room"), `KL`, `BTB` and `TOP` are not yet
-> expanded, and it is unconfirmed whether any of those rooms sit far enough from the
-> building pin to need their own marker. `PLM Canteen` is on the **Eat** tab, not here —
-> its pin resolves to the PLM Multi-Purpose Building; see §2.
+> **Provisional.** The three `Gusaling` markers are `provisional: true`: their positions
+> are visitor-supplied pins the organisers have not confirmed (`confirmed: false` in
+> `data/mirc-2026.json`'s `venue.buildings`). The flag is visible on the map — a dashed
+> marker ring and a "Provisional position" note in the popup, the same tell the
+> address-estimated food pins use. Room names follow the knowledge base: `KL` is the
+> Katipunan Lounge and `BTB` the Bukod Tanging Bulwagan (both confirmed); `AVR` is assumed
+> "Audio-Visual Room"; `TOP` is still unexpanded. Whether any room sits far enough from
+> its building pin to need its own marker is unconfirmed. `PLM Canteen` is on the **Eat**
+> tab, not here — its pin resolves to the PLM Multi-Purpose Building; see §2.
+
+**Gates, and where a walking route ends.** OSRM can only end a route on a public way, so
+directions to a campus building stop at the nearest street — Santa Lucia Street for JAA,
+Muralla Street for GEE and GA, General Luna Street for the campus centre (snap distances
+16–80 m). OpenStreetMap (Overpass, 2026-09-17) maps four gates on the campus way: two
+private double gates with driveways on the east, General Luna Street side (nodes
+`9834302096`, `11521214083`), a private gate to the south-south-west (`9834302097`) and an
+untagged gate to the north-north-west (`13135788681`), plus three `entrance=yes` nodes on
+the west face of the Justo Albert Auditorium (`3388716915`, `3388716918`, `3388716920`).
+Which of these delegates should walk in by is **not** in the data. It is listed as a gap
+in the knowledge base, and the directions panel says so under any route to a campus
+destination, rather than letting "Arrive at GEE" read as the door.
+
+**Finding the buildings.** They are drawn only past zoom 17 and are in no list or search
+index, so the panel carries a **MIRC 2026 venue** strip — one chip per landmark that flies
+in and opens the popup (a building lands at 18.5, where GEE and GA, 18 m apart, are
+clearly separate; the campus at 18) — and a search that names one ("GEE", "katipunan")
+offers it from the empty-list state.
 
 > Note: PLM is *Pamantasan ng Lungsod ng Maynila*, not the Polytechnic University of the
 > Philippines (PUP), which is a different institution in Sta. Mesa.

@@ -34,8 +34,9 @@ export const LANDMARKS = [
      Visitor-supplied Google Maps pins, boundary-checked. `campus: true` keeps
      them hidden until the map is zoomed in. Each `Gusaling ...` marker is a whole
      building; individual session rooms inside it (GEE AVR / GEE KL, GK BTB,
-     GA TOP …) are named in the blurb, not given their own markers. Some room
-     abbreviations are still unexpanded — see DATA.md §8. */
+     GA TOP …) are named in the blurb, not given their own markers. Room names
+     follow the committee's knowledge base (data/mirc-2026.json, venue.buildings);
+     "TOP" is still unexpanded there — see DATA.md §8. */
   {
     id: 'plm-jaa',
     name: 'Justo Albert Auditorium (JAA)',
@@ -53,7 +54,7 @@ export const LANDMARKS = [
     lat: 14.587515, lng: 120.976390,
     campus: true,
     provisional: true,
-    blurb: 'Katipunan Building on the PLM campus (Filipino: Gusaling Katipunan). MIRC 2026 session rooms inside it — e.g. "BTB" — are not separately pinned. Coordinate from a visitor-supplied Google Maps pin ("Gusaling Katipunan" on Google).'
+    blurb: 'Katipunan Building on the PLM campus (Filipino: Gusaling Katipunan). MIRC 2026 sessions run in its BTB hall (Bukod Tanging Bulwagan), which is not separately pinned. Coordinate from a visitor-supplied Google Maps pin ("Gusaling Katipunan" on Google).'
   },
   {
     id: 'plm-gee',
@@ -63,7 +64,7 @@ export const LANDMARKS = [
     lat: 14.586407, lng: 120.976898,
     campus: true,
     provisional: true,
-    blurb: 'The Emilio Ejercito Sr. Building on the PLM campus — houses the AVR and KL rooms used for MIRC 2026 sessions; a visitor confirmed both are at this one location. "AVR" is taken to mean Audio-Visual Room; "KL" is not yet expanded.'
+    blurb: 'The Emilio Ejercito Sr. Building on the PLM campus — houses the KL (Katipunan Lounge) and the AVR used for MIRC 2026 sessions, plus the lobby and first floor the programme names; a visitor confirmed the rooms are at this one location. "AVR" is taken to mean Audio-Visual Room.'
   },
   {
     id: 'plm-ga',

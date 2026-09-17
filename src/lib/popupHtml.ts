@@ -23,6 +23,7 @@ export function landmarkPopupHTML(lm: Landmark): string {
     <div class="pop pop--landmark">
       <span class="pop__cat"><i></i>${esc(lm.kind || 'Landmark')}</span>
       <h2 class="pop__name">${esc(lm.name)}</h2>
+      ${lm.provisional ? `<p class="pop__estimate">${MARKER_SVG}<span>Provisional position — from a visitor-supplied pin, not yet confirmed by the organisers. Check the building name on arrival.</span></p>` : ''}
       <p class="pop__blurb">${esc(lm.blurb)}</p>
       <p class="pop__where">${MARKER_SVG}<span>${esc(lm.street || 'Intramuros')}<br>Intramuros, Manila</span></p>
       ${lm.url ? `<p class="pop__contact"><a href="${esc(lm.url)}" target="_blank" rel="noopener">Official site</a></p>` : ''}

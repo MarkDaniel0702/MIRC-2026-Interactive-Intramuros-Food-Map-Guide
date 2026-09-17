@@ -89,6 +89,16 @@ export function DirectionsPanel({ dirs, mapApi }: { dirs: FullDirsState; mapApi:
                 </li>
               ))}
             </ol>
+            {dest?.kind === 'landmark' && (
+              /* OSRM can only end a route on a public street; PLM is a walled
+                 campus with several gates (see DATA.md §8) and which one delegates
+                 should use is not published yet, so say so rather than let the
+                 last step read as "you have arrived". */
+              <p className="dirs__note">
+                The route ends at the nearest public street. PLM is a gated campus with more than one
+                gate — the organisers will confirm which entrance delegates should use.
+              </p>
+            )}
             <p className="dirs__credit">
               {dirs.result.fallback
                 ? <>Straight-line estimate at 80 m/min.{dirs.result.externalUrl && <> <a href={dirs.result.externalUrl} target="_blank" rel="noopener">Open in OpenStreetMap</a></>}</>

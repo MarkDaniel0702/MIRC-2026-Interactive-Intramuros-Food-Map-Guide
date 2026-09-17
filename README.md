@@ -23,9 +23,10 @@ directions to any of it.
 
 Plus a highlighted **PLM** (Pamantasan ng Lungsod ng Maynila) campus landmark — the
 MIRC 2026 venue — that zooms the map in when tapped and reveals its buildings and halls
-(JAA, GEE, GK, GA) once you're zoomed close; and **walking directions** to any
-listing *or to any of those campus buildings* — from your location, a tapped point, the
-venue itself, or one of six arrival presets.
+(JAA, GEE, GK, GA) once you're zoomed close, with a **venue strip** in the panel that
+jumps to any of them from every tab; and **walking directions** to any listing *or to
+any of those campus buildings* — from your location, a tapped point, the venue itself,
+or one of six arrival presets.
 
 - **Search** by name, dish, cuisine, street or period — press <kbd>/</kbd> to jump to it
 - **Filter** by category and by price / entrance fee, in any combination
@@ -141,7 +142,7 @@ src/styles.css                  design system, responsive layout, map + popup st
 src/state/store.ts              app state (useReducer) -- mode, filters, selection, directions
 src/hooks/useLeafletMap.ts      the imperative map core -- markers, popups, flyTo sequencing
 src/hooks/useVisibleSpots.ts    filtered + sorted spot list, derived from state
-src/components/                Panel, SpotList, DirectionsPanel, ChatPanel, etc.
+src/components/                Panel, SpotList, DirectionsPanel, VenueBar, ChatPanel, etc.
 src/lib/                        routing.ts (OSRM client), format/icons/filter/popupHtml helpers
 src/data/modes.ts               the Eat/See/Stay MODES config + one-time search index
 src/data/destinations.ts        resolves a "Get directions" target: any spot, or a landmark
