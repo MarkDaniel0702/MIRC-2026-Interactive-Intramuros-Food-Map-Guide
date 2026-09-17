@@ -29,6 +29,8 @@ import { LANDMARKS } from '../../data/landmarks.js';
 import type { Landmark } from '../../data/types';
 
 import { ALL_SPOTS, DERIVED_INDEX, MODES, findAnywhere } from '../data/modes';
+import { findDestination } from '../data/destinations';
+import type { Destination } from '../data/destinations';
 import { esc } from '../lib/format';
 import { PIN_SVG } from '../lib/icons';
 import { landmarkPopupHTML, popupHTML, previewHTML } from '../lib/popupHtml';
@@ -72,8 +74,9 @@ export interface MapApi {
   clearSelection: () => void;
   /** Chat-driven navigation: fly to and open the popup for any spot by id, across
    *  whichever mode it belongs to -- unlike `select`, not limited to the tab
-   *  currently open. Returns false immediately if the id names no real spot,
-   *  which the caller (ChatPanel) uses to say so rather than silently do nothing. */
+   *  currently open -- or for a landmark (the PLM campus and its buildings).
+   *  Returns false immediately if the id names neither, which the caller
+   *  (ChatPanel) uses to say so rather than silently do nothing. */
   focusById: (id: string) => boolean;
 }
 
@@ -106,6 +109,10 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
    *  the same deferred-until-ready shape pendingSelectRef already uses for the
    *  moveend race, just gated on cluster membership instead of camera movement. */
   const pendingFocusRef = useRef<string | null>(null);
+  /** Landmark markers by id -- kept apart from markersRef, whose entries are
+   *  clustered spot pins that select()/setActive expect. */
+  const landmarkMarkersRef = useRef<Map<string, L.Marker>>(new Map());
+  const pendingLandmarkRef = useRef<string | null>(null);
 
   // Live mirrors so the stable callbacks below always see fresh values -- the
   // same thing app.js gets for free by closing over one mutable `state` object.
@@ -144,22 +151,32 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
     dispatchRef.current({ type: 'SET_ACTIVE', id, from });
   }, []);
 
-  function showDestinationNow(spot: AnySpot) {
+  /** The destination pin's face. A spot gets its category glyph in the
+   *  category's colour; a landmark gets its short label (PLM, JAA, GK …) -- the
+   *  same mark its own marker shows, so the two read as one place -- on the
+   *  pin's default gold, since a landmark has no category. */
+  function destPinHTML(dest: Destination): string {
+    if (dest.kind === 'landmark') {
+      return `<div class="dest-pin dest-pin--landmark"><span class="dest-pin__disc">${esc(dest.landmark.short)}</span></div>`;
+    }
+    const cat = MODES[dest.modeKey].categories[dest.spot.category];
+    return `<div class="dest-pin" style="--c:${cat.color}"><span class="dest-pin__disc">${PIN_SVG(cat.icon)}</span></div>`;
+  }
+
+  function showDestinationNow(dest: Destination) {
     const map = mapRef.current;
     if (!map) return;
     if (destMarkerRef.current) map.removeLayer(destMarkerRef.current);
-    const modeKey = DERIVED_INDEX.get(spot.id)!.mode;
-    const cat = MODES[modeKey].categories[spot.category];
-    destMarkerRef.current = L.marker([spot.lat, spot.lng], {
+    destMarkerRef.current = L.marker([dest.lat, dest.lng], {
       icon: L.divIcon({
         className: 'dest-icon',
-        html: `<div class="dest-pin" style="--c:${cat.color}"><span class="dest-pin__disc">${PIN_SVG(cat.icon)}</span></div>`,
+        html: destPinHTML(dest),
         iconSize: [38, 38],
         iconAnchor: [19, 42]
       }),
       interactive: false,
       zIndexOffset: 1200,
-      title: spot.name
+      title: dest.name
     }).addTo(map);
   }
 
@@ -170,6 +187,41 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
       destMarkerRef.current = null;
     }
   }
+
+  /** Fly in on a landmark and open its popup once the camera settles -- the
+   *  landmark marker's own click behaviour, factored out so chat can trigger it
+   *  too (focusById). PHASE B FIX (plan B2): app.js:333-336 opened this popup
+   *  synchronously right after calling flyTo, the original version of the exact
+   *  bug select()'s moveend sequencing (below) exists to prevent -- it just never
+   *  showed up here because landmark popups are short. Sequenced the same way,
+   *  including the pending-id guard for a rapid click on a second landmark. The
+   *  sequencing matters doubly for a campus marker: it is not even on the map
+   *  until the zoom crosses CAMPUS_MIN_ZOOM (syncCampus, on zoomend), and
+   *  marker.openPopup() is a silent no-op for a marker that is off the map.
+   *  That is exactly the state the fallback timer can find if the flight was
+   *  interrupted or stalled (a background tab throttles the animation frames
+   *  but not the timer), so the fallback opens the popup on the map itself,
+   *  which does not need its marker present. */
+  const flyToLandmark = useCallback((id: string): boolean => {
+    const map = mapRef.current;
+    const marker = landmarkMarkersRef.current.get(id);
+    if (!map || !marker) return false;
+    map.flyTo(marker.getLatLng(), 18, flyOptions(0.8));
+    pendingLandmarkRef.current = id;
+    let revealT: ReturnType<typeof setTimeout>;
+    const reveal = () => {
+      map.off('moveend', reveal);
+      clearTimeout(revealT);
+      if (pendingLandmarkRef.current !== id) return;
+      pendingLandmarkRef.current = null;
+      const popup = marker.getPopup();
+      if (map.hasLayer(marker) || !popup) marker.openPopup();
+      else { popup.setLatLng(marker.getLatLng()); map.openPopup(popup); }
+    };
+    map.on('moveend', reveal);
+    revealT = setTimeout(reveal, reduceMotionOnce ? 60 : 1200);
+    return true;
+  }, []);
 
   /** Ported from app.js:608-663 select. */
   const select = useCallback((id: string, opts: { from: 'list' | 'map' }) => {
@@ -254,13 +306,13 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
     const destId = overrides?.destId ?? s.dirs.destId;
     const from = overrides?.start ?? s.dirs.start;
     if (!destId || !from || s.dirs.busy) return;
-    const dest = findAnywhere(destId);
+    const dest = findDestination(destId);
     if (!dest) return;
 
     dispatchRef.current({ type: 'DIRS_SET_BUSY', busy: true });
     dispatchRef.current({ type: 'DIRS_SET_MESSAGE', message: { text: 'Finding a walking route…', kind: 'busy' } });
 
-    const res = await routeRequest(from, { lat: dest.spot.lat, lng: dest.spot.lng }, dest.spot.name);
+    const res = await routeRequest(from, { lat: dest.lat, lng: dest.lng }, dest.name);
 
     dispatchRef.current({ type: 'DIRS_SET_BUSY', busy: false });
     dispatchRef.current({
@@ -283,16 +335,23 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
     runRoute({ start: point });
   }, [runRoute]);
 
-  /** Ported from app.js:819-845 openDirections. */
+  /** Ported from app.js:819-845 openDirections. Resolves through findDestination
+   *  rather than findAnywhere so a landmark -- the PLM campus, its buildings and
+   *  halls -- is as valid a destination as any listed spot. The one difference: a
+   *  landmark belongs to no tab, so DIRS_OPEN is told not to switch one (mode:
+   *  null) and the tab you were browsing is still there when you come back. */
   const openDirections = useCallback((id: string) => {
     const map = mapRef.current;
     if (!map) return;
-    const found = findAnywhere(id);
-    if (!found) return;
+    const dest = findDestination(id);
+    if (!dest) return;
 
-    dispatchRef.current({ type: 'DIRS_OPEN', destId: id, mode: found.modeKey });
+    dispatchRef.current({ type: 'DIRS_OPEN', destId: id, mode: dest.kind === 'spot' ? dest.modeKey : null });
+    // For a landmark there is no clustered pin to mark .is-active (pinEl finds
+    // nothing and setActive skips the class); the destination marker below is
+    // what shows where you are walking to.
     setActive(id);
-    showDestinationNow(found.spot);
+    showDestinationNow(dest);
     map.closePopup();
     if (isMobileRef.current()) onSetSheetRef.current(true);
 
@@ -300,7 +359,7 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
     if (currentStart) {
       runRoute({ destId: id, start: currentStart });
     } else {
-      map.flyTo([found.spot.lat, found.spot.lng], 17, flyOptions(0.7));
+      map.flyTo([dest.lat, dest.lng], 17, flyOptions(0.7));
     }
   }, [setActive, runRoute]);
 
@@ -520,7 +579,6 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
     clusterRef.current = cluster;
 
     // ── landmarks (never clustered; always on the map directly) ──
-    let pendingLandmark: string | null = null;
     function buildLandmarkMarker(lm: Landmark, small: boolean): L.Marker {
       const marker = L.marker([lm.lat, lm.lng], {
         icon: L.divIcon({
@@ -537,25 +595,8 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
         keyboard: true
       });
       marker.bindPopup(landmarkPopupHTML(lm), { maxWidth: 260, minWidth: 220, autoPanPadding: [26, 26] });
-      // PHASE B FIX (plan B2): app.js:333-336 opened this popup synchronously
-      // right after calling flyTo, the original version of the exact bug
-      // select()'s moveend sequencing (below) exists to prevent -- it just never
-      // showed up here because landmark popups are short. Sequenced the same way
-      // now, including the pending-id guard for a rapid click on a second landmark.
-      marker.on('click', () => {
-        map.flyTo([lm.lat, lm.lng], 18, flyOptions(0.8));
-        pendingLandmark = lm.id;
-        let revealT: ReturnType<typeof setTimeout>;
-        const reveal = () => {
-          map.off('moveend', reveal);
-          clearTimeout(revealT);
-          if (pendingLandmark !== lm.id) return;
-          pendingLandmark = null;
-          marker.openPopup();
-        };
-        map.on('moveend', reveal);
-        revealT = setTimeout(reveal, reduceMotionOnce ? 60 : 1200);
-      });
+      marker.on('click', () => flyToLandmark(lm.id));
+      landmarkMarkersRef.current.set(lm.id, marker);
       return marker;
     }
 
@@ -660,6 +701,8 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
       map.remove();
       mapRef.current = null;
       markersRef.current.clear();
+      landmarkMarkersRef.current.clear();
+      pendingLandmarkRef.current = null;
       clusterRef.current = null;
       routeLayerRef.current = null;
       startMarkerRef.current = null;
@@ -762,17 +805,21 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
      even when the mode already matches, because a category/tier/search filter
      alone can hide the target just as completely as the wrong tab can. Both
      dispatches land in the same batch and fold in order, so RESET_FILTERS
-     clears whichever mode SET_MODE just switched to, not the one being left. */
+     clears whichever mode SET_MODE just switched to, not the one being left.
+
+     A landmark id (the PLM campus or one of its buildings) takes the other path:
+     landmarks belong to no tab and no filter can hide them, so there is nothing
+     to switch or reset -- it is exactly a click on the landmark's own marker. */
   const focusById = useCallback((id: string): boolean => {
     const hit = findAnywhere(id);
-    if (!hit) return false;
+    if (!hit) return flyToLandmark(id);
     pendingFocusRef.current = id;
     if (stateRef.current.mode !== hit.modeKey) {
       dispatchRef.current({ type: 'SET_MODE', mode: hit.modeKey });
     }
     dispatchRef.current({ type: 'RESET_FILTERS' });
     return true;
-  }, []);
+  }, [flyToLandmark]);
 
   return {
     selectTab,

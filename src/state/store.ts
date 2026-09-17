@@ -81,7 +81,9 @@ export type Action =
   | { type: 'SET_ACTIVE'; id: string | null; from: 'list' | 'map' | null }
   | { type: 'TOGGLE_MAP_MODE'; mode: ModeKey }
   | { type: 'SET_USER_POS'; pos: LatLng }
-  | { type: 'DIRS_OPEN'; destId: string; mode: ModeKey }
+  /** `mode` is the destination's own tab, or null for a landmark (the PLM campus
+   *  and its buildings), which belongs to none -- the open tab then stays put. */
+  | { type: 'DIRS_OPEN'; destId: string; mode: ModeKey | null }
   | { type: 'DIRS_CLOSE' }
   | { type: 'DIRS_SET_START'; start: LatLng & { id: string; name: string } }
   | { type: 'DIRS_SET_PICKING'; picking: boolean }
@@ -134,13 +136,15 @@ export function reducer(state: FullAppState, action: Action): FullAppState {
     case 'SET_USER_POS':
       return { ...state, userPos: action.pos };
 
-    case 'DIRS_OPEN':
+    case 'DIRS_OPEN': {
+      const mode = action.mode ?? state.mode;
       return {
         ...state,
-        mode: action.mode,
-        byMode: action.mode === state.mode ? state.byMode : { ...state.byMode, [action.mode]: pruneTiers(state.byMode[action.mode], action.mode) },
+        mode,
+        byMode: mode === state.mode ? state.byMode : { ...state.byMode, [mode]: pruneTiers(state.byMode[mode], mode) },
         dirs: { ...state.dirs, open: true, destId: action.destId, picking: false, message: null, result: null }
       };
+    }
 
     case 'DIRS_CLOSE':
       return { ...state, dirs: { open: false, destId: null, start: state.dirs.start, picking: false, busy: false, message: null, result: null } };

@@ -1,5 +1,5 @@
 import { START_POINTS } from '../../data/start-points.js';
-import { findAnywhere } from '../data/modes';
+import { findDestination } from '../data/destinations';
 import { ARROWS } from '../lib/icons';
 import { fmtDistance, fmtMins } from '../lib/format';
 import type { MapApi } from '../hooks/useLeafletMap';
@@ -9,13 +9,19 @@ function ArrowSvg({ arrow }: { arrow: string }) {
   return <svg className="dirs__arrow" viewBox="0 0 16 16" aria-hidden="true"><path d={ARROWS[arrow] || ARROWS.straight} /></svg>;
 }
 
+/* The venue is somewhere to walk FROM, not an arrival point, so it sits with "My
+   location" as a primary option rather than under "Or arriving at…" -- see the
+   `venue` flag in data/start-points.js. */
+const VENUE_STARTS = START_POINTS.filter(p => p.venue);
+const ARRIVAL_STARTS = START_POINTS.filter(p => !p.venue);
+
 /**
  * Ported from index.html:114-150 (markup), app.js:810-817 (buildPresets),
  * app.js:863-867 (setDirsMessage) and app.js:894-922 (renderRoute's text half --
  * the map-drawing half lives in useLeafletMap's effect on state.dirs.result).
  */
 export function DirectionsPanel({ dirs, mapApi }: { dirs: FullDirsState; mapApi: MapApi }) {
-  const dest = dirs.destId ? findAnywhere(dirs.destId) : null;
+  const dest = dirs.destId ? findDestination(dirs.destId) : null;
 
   return (
     <section className="dirs" hidden={!dirs.open} aria-label="Walking directions">
@@ -25,7 +31,7 @@ export function DirectionsPanel({ dirs, mapApi }: { dirs: FullDirsState; mapApi:
       </button>
 
       <p className="dirs__to-label">Walking to</p>
-      <h2 className="dirs__to">{dest?.spot.name ?? ''}</h2>
+      <h2 className="dirs__to">{dest?.name ?? ''}</h2>
 
       <div className="dirs__from">
         <p className="dirs__from-label">Start from</p>
@@ -38,10 +44,18 @@ export function DirectionsPanel({ dirs, mapApi }: { dirs: FullDirsState; mapApi:
             <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 14.5S13 10 13 6.4a5 5 0 0 0-10 0C3 10 8 14.5 8 14.5z" /><circle cx="8" cy="6.3" r="1.7" /></svg>
             Tap a point on the map
           </button>
+          {VENUE_STARTS.map(p => (
+            <button key={p.id} type="button" className={`dirs__opt${dirs.start?.id === p.id ? ' is-on' : ''}`}
+              title={p.note}
+              onClick={() => mapApi.setStart({ lat: p.lat, lng: p.lng, name: p.name, id: p.id })}>
+              <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 13.5h12M3.4 13.5V7M6.5 13.5V7M9.5 13.5V7M12.6 13.5V7M2 6.4 8 2.6l6 3.8z" /></svg>
+              {p.name}
+            </button>
+          ))}
         </div>
         <p className="dirs__preset-label">Or arriving at&hellip;</p>
         <div className="chips">
-          {START_POINTS.map(p => (
+          {ARRIVAL_STARTS.map(p => (
             <button key={p.id} type="button" className={`chip chip--preset${dirs.start?.id === p.id ? ' is-on' : ''}`}
               title={p.note}
               onClick={() => mapApi.setStart({ lat: p.lat, lng: p.lng, name: p.name, id: p.id })}>

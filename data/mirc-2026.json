@@ -28,7 +28,7 @@
     "hostInstitution": "Pamantasan ng Lungsod ng Maynila (PLM)",
     "city": "Intramuros, Manila, Philippines",
     "website": "https://mirc2026.sciencesconf.org",
-    "updated": "2026-09-16",
+    "updated": "2026-09-17",
     "contentFrozen": false,
     "format": "Hybrid — onsite and online"
   },
@@ -41,7 +41,7 @@
       "Mr. Neil Marcus T. Manubay (also the Conference Secretary)"
     ],
     "canDo": [
-      "Point the map at a named restaurant, sight or hotel when asked to find it",
+      "Point the map at a named restaurant, sight or hotel when asked to find it — and at the PLM venue or one of its buildings (JAA, GK, GEE, GA) when asked where it is or how to get there",
       "Follow up on the last few turns of this conversation; nothing is kept once the panel closes"
     ],
     "cannotDo": [

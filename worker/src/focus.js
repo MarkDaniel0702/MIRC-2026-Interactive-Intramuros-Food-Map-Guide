@@ -14,6 +14,9 @@
  * tier (warm/cached/model) ends up serving the reply, on the same three arrays
  * retrieve.js already indexes (`corpus.localGuide.eat/see/stay`), so it stays
  * consistent with what Dan is actually grounded in without a second data source.
+ * A fourth array, `localGuide.landmarks` (the PLM campus and its buildings), is
+ * tried only when no spot matched -- see findLandmark at the bottom for why it
+ * is held to a stricter test.
  *
  * DELIBERATELY CONSERVATIVE. A browsing question ("where can I eat near the
  * venue?") must not fire this — there is no single place to fly to, and yanking
@@ -55,7 +58,11 @@ function matchScore(question, name) {
 
 export function findFocus(corpus, question) {
   if (!question || question.length > 300) return null; // not a "find X" shape
+  return findSpot(corpus, question) ?? findLandmark(corpus, question);
+}
 
+/** The three tabs' records -- a restaurant, sight or hotel named in the question. */
+function findSpot(corpus, question) {
   const lg = corpus.localGuide ?? {};
   const pools = [['eat', lg.eat], ['see', lg.see], ['stay', lg.stay]];
 
@@ -108,4 +115,73 @@ export function findFocus(corpus, question) {
     lat: best.record.lat,
     lng: best.record.lng
   };
+}
+
+/* ── landmarks: the PLM campus and its buildings ─────────────────────────────────
+   Pointed at through `corpus.localGuide.landmarks` (tools/build-corpus.mjs), which
+   carries each marker's id, name, building code and the room codes the committee
+   lists inside it. Two things make this deliberately stricter than findSpot:
+
+   · A LOCATION CUE is required. A restaurant is only ever named when someone means
+     that restaurant, but the venue and its buildings are named in half of all
+     questions ("which sessions are in GEE tomorrow?", "is registration at PLM
+     open?"), and yanking the map to the campus on each would be noise. So this
+     fires only when the question reads as "where is / how do I get to / show me".
+   · BROWSING questions are excluded. "Where can I eat near the venue?" names the
+     venue but asks for a list -- the map has nothing single to fly to, and the
+     PLM popup would only cover the very pins the answer is about.
+
+   Matching, in order of confidence: the name or one of the committee's aliases
+   for it (matchScore, as for spots -- "Katipunan Building" counts as well as
+   "Gusaling Katipunan (GK)"); the building code as a whole word, case-insensitive
+   ("gee", "jaa", "gk", "ga", "plm" -- none is an English word); a room code EXACTLY
+   as the programme prints it, in upper case ("AVR", "KL", "BTB", "TOP" -- lower-
+   case "top" is a plain word, so it never counts). "Where is the venue?" resolves
+   through `venue`, an alias of the one top-level (non-campus) landmark. */
+
+const LOCATION_CUE = /\b(?:where|find|show|locat(?:e|ed|ion)|directions?|way to|get to|reach|go(?:ing)? to|walk(?:ing)? to|how far|map|which (?:building|room|hall))\b/i;
+
+/* Checked against every word of the question, not `words()` -- which strips "eat",
+   "see", "stay" and "visit" as stop words, the very words this is looking for. */
+const BROWSE = new Set(('eat eating food restaurant restaurants cafe cafes coffee lunch dinner breakfast ' +
+  'snack snacks drink drinks bar bars hotel hotels stay sleep accommodation sight sights ' +
+  'museum museums church churches visit see things').split(' '));
+
+function landmarkScore(question, record) {
+  const byName = Math.max(matchScore(question, record.name),
+    ...(record.aliases ?? []).map(a => matchScore(question, a)));
+  if (byName >= 0.6) return byName;
+
+  const nq = new Set(norm(question).split(' '));
+  if (record.code && nq.has(norm(record.code))) return 1;
+  if (!record.campus && nq.has('venue')) return 1;
+
+  const raw = new Set(String(question).split(/[^A-Za-z0-9]+/));
+  for (const code of record.rooms ?? []) if (raw.has(code)) return 0.9;
+  return 0;
+}
+
+function findLandmark(corpus, question) {
+  const list = corpus.localGuide?.landmarks ?? [];
+  if (!list.length || !LOCATION_CUE.test(question)) return null;
+  if (norm(question).split(' ').some(w => BROWSE.has(w))) return null;
+
+  let hits = [];
+  for (const record of list) {
+    if (!record.id || typeof record.lat !== 'number') continue;
+    const score = landmarkScore(question, record);
+    if (score > 0) hits.push({ record, score });
+  }
+  if (!hits.length) return null;
+
+  const top = Math.max(...hits.map(h => h.score));
+  hits = hits.filter(h => h.score >= top - 0.15);
+  /* "Where is GEE at PLM?" names the campus AND a building in it. The building
+     is the more specific answer, so the parent gives way; two BUILDINGS named at
+     once ("is it in GEE or GK?") is real ambiguity, and stays a null. */
+  if (hits.length > 1 && hits.some(h => h.record.campus)) hits = hits.filter(h => h.record.campus);
+  if (hits.length !== 1) return null;
+
+  const { record } = hits[0];
+  return { kind: 'landmark', id: record.id, name: record.name, lat: record.lat, lng: record.lng };
 }

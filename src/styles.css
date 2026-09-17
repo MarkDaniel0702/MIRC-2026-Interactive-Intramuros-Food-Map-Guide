@@ -1046,6 +1046,15 @@ body.is-picking .leaflet-container { cursor: crosshair !important; }
   stroke-linecap: round; stroke-linejoin: round;
 }
 
+/* A landmark's destination pin carries its short label (PLM, JAA, GK …) in place
+   of a category glyph — the same mark its own marker shows. --c stays at its
+   gold default: landmarks have no category colour. */
+.dest-pin--landmark .dest-pin__disc {
+  font: 700 11px/1 var(--mono);
+  letter-spacing: .04em;
+  color: var(--navy-900);
+}
+
 .dest-pin::after {
   content: '';
   position: absolute;

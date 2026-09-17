@@ -39,9 +39,13 @@ directions to them would be misleading.
 
 ### Start points for directions
 
-`data/start-points.js` holds six arrival points offered when asking for directions. Three
-of them — Central Terminal (LRT-1), Park & Ride Lawton and Escolta Ferry Station — sit
-**outside** the boundary. That is the one sanctioned exception to the inside-only rule:
+`data/start-points.js` holds the starting points offered when asking for directions: six
+arrival points, plus **the venue itself** (`venue: true` — PLM's campus centre, the same
+point every "N min walk" is measured from), so a delegate can be walked *from* the campus
+to lunch or a sight. The venue is shown beside "My location" rather than among the
+"arriving at…" chips, and is left out of the chat corpus's arrival points. Three of the
+arrival points — Central Terminal (LRT-1), Park & Ride Lawton and Escolta Ferry Station —
+sit **outside** the boundary. That is the one sanctioned exception to the inside-only rule:
 they are navigation references for people arriving, never listed as destinations, and they
 are flagged `outside: true` so the interface labels them as such. Their coordinates come
 from Overpass (`railway=station`, `public_transport=station`), not from free-text
@@ -431,9 +435,13 @@ switch or the filters, and **zooms the map in to its location when clicked**
 | Gusaling Don Pepe Atienza | `GA` | campus · building | 14.586260, 120.976835 | visitor Google Maps pin on the Mass Communication Office (refined 2026-09-09 from an earlier "Gusaling Don Pepe Atienza" pin ~58 m west) |
 
 All five are gated by the same point-in-polygon check (`tools/verify-in-intramuros.mjs`,
-pass 5). Landmarks are navigation aids — no price, category or filter state. Add more by
-appending to `LANDMARKS` (`id`, `name`, `short`, `lat`, `lng`, `blurb` required; `kind`,
-`osm`, `url`, `campus`, `provisional` optional).
+pass 5). Landmarks are navigation aids — no price, category or filter state — but each one
+is a **Get directions** destination like any listed spot: its popup carries the same button,
+resolved by `src/data/destinations.ts` (landmarks sit outside the Eat / See / Stay tabs, so
+opening directions to one leaves the current tab alone). Add more by appending to
+`LANDMARKS` (`id`, `name`, `short`, `lat`, `lng`, `blurb` required; `kind`, `osm`, `url`,
+`campus`, `provisional` optional). A landmark id must not collide with any spot id —
+`findDestination` checks the three tabs first — and pass 5 of the verify script enforces that.
 
 **Structure.** `JAA` is a single venue. `GK`, `GEE` and `GA` are whole **buildings**; the
 MIRC 2026 session rooms inside them (GEE AVR, GEE KL, GK BTB, GA TOP …) are named in each

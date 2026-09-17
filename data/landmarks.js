@@ -3,7 +3,10 @@
  *
  * These are NOT part of the Eat / See / Stay datasets: each renders as a
  * highlighted marker that sits above the clustered pins and is never touched by
- * the tab switch or the filters. Clicking one flies the map in to that location.
+ * the tab switch or the filters. Clicking one flies the map in to that location,
+ * and its popup offers the same "Get directions" as any listed spot
+ * (src/data/destinations.ts resolves it), so a visitor can be walked to the
+ * exact building their session is in.
  *
  * Two kinds:
  *   · top-level landmark (no `campus` flag) — always visible (e.g. the PLM campus).

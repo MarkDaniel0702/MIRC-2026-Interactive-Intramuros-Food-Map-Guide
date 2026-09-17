@@ -11,9 +11,25 @@
  * outside the walls appears in the Eat, See or Stay tabs.
  *
  * `outside: true` drives the "outside the walls" note in the picker.
+ *
+ * `venue: true` marks the one point that is not an arrival point at all: the MIRC
+ * 2026 venue itself, offered so a delegate can be walked FROM the campus to lunch
+ * or a sight. The directions panel shows it beside "My location" rather than
+ * among the "arriving at…" chips, and the chat corpus leaves it out of its
+ * arrival-points list. Its coordinate is the campus centre, the same point every
+ * "N min walk" on the site is measured from (VENUE_ANCHOR in tourist-spots.js).
  */
 /** @type {import('./types').StartPoint[]} */
 export const START_POINTS = [
+  {
+    id: 'plm-venue-start',
+    name: 'PLM (the venue)',
+    note: 'Pamantasan ng Lungsod ng Maynila · walk from the campus',
+    lat: 14.5868604, lng: 120.9764378,
+    osm: 'way/27275574',
+    outside: false,
+    venue: true
+  },
   {
     id: 'lrt-central-terminal',
     name: 'Central Terminal (LRT-1)',

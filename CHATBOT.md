@@ -29,7 +29,8 @@ both are listed under [What I need from you](#what-i-need-from-you) below.
 data/mirc-2026.json                the congress knowledge base — you fill this in
         │
         │  node tools/build-corpus.mjs
-        │  (merges in the map's own food / sights / hotels / arrival points)
+        │  (merges in the map's own food / sights / hotels / arrival points,
+        │   and its landmarks — the PLM campus and buildings — for map focus)
         ▼
 public/data/chat-corpus.json       the single file Dan answers from
         │
@@ -176,6 +177,36 @@ question still has to be listed in `tools/warm-questions.json`, or the next run 
 published yet*: the prompt requires Dan to say so and point at the
 organisers rather than produce a plausible-looking time or room. That is deliberate —
 a confident wrong room sends someone to the wrong side of a campus.
+
+### Pointing the map
+
+When a question plainly names one place, the reply carries a **Show … on the map**
+button and the map flies there and opens its popup. Which place is decided by
+`worker/src/focus.js`, deterministically, from the corpus's own records — never by
+asking the model for an id it could misspell or invent — so it can only ever point at
+a marker that is really there. It runs on every request, whichever tier answers, so a
+warm answer to "Where is the venue?" gets the button too.
+
+Two pools, two standards:
+
+- **Eat / See / Stay** — a restaurant, sight or hotel is only ever named when someone
+  means it, so a strong name match is enough ("What time does Barbara's open?" flies to
+  Barbara's). Several branches of one chain resolve by street; two different places
+  matching at once resolve to nothing rather than a guess.
+- **The venue and its buildings** (`localGuide.landmarks`) — held to a stricter test,
+  because PLM and its buildings are named in half of all questions ("which sessions are
+  in GEE tomorrow?") and the map jumping to the campus on each would be noise. These
+  fire only on a **location cue** ("where is", "how do I get to", "which building",
+  "show me … on the map") and never on a **browsing** question ("where can I eat near
+  the venue?" has nothing single to fly to). They answer to the map's label, the
+  committee's name for the building (`venue.buildings` in the knowledge base, so
+  "Katipunan Building" works), the building code as a word (`GEE`, `JAA`, `GK`, `GA`,
+  `PLM`) and a room code exactly as the programme prints it (`AVR`, `KL`, `BTB`, `TOP`
+  — upper case only, since "top" is also just a word). "The venue" resolves to PLM.
+
+A listed spot always wins over the campus ("Where is the PLM Canteen?" goes to the
+canteen), and a building wins over its campus ("Where is GEE at PLM?" goes to GEE).
+`node tools/eval-focus.mjs` pins all of this, positives and negatives, offline.
 
 ---
 
@@ -423,6 +454,10 @@ provider renaming a model is a one-line fix.
 Edit `data/mirc-2026.json`, re-run `node tools/build-corpus.mjs`, push. The Worker
 re-reads the corpus within five minutes. No redeploy.
 
+A change to the Worker's own code (`worker/src/*.js`) is the exception: that needs
+`cd worker && npx wrangler deploy`. The map-focus matcher lives there, so a new kind
+of thing for the map to point at is a Worker deploy, not just a corpus rebuild.
+
 ---
 
 ## How the scope limit is enforced
@@ -502,10 +537,12 @@ tools/import-program.py     reads the committee's xlsx + speakers markdown
 tools/build-corpus.mjs      the merge step
 tools/eval-retrieval.mjs    retrieval recall, offline
 tools/eval-cache.mjs        warm-answer matcher + collisions, offline
+tools/eval-focus.mjs        "find X on the map" matcher, offline
 tools/warm-cache.mjs        pre-answers the common questions
 tools/warm-questions.json   the list it works from
 worker/src/cache.js         warm answers + edge cache
 tools/try-dan.mjs           end-to-end acceptance against Groq or Gemini
+worker/src/focus.js         which marker a question points the map at, if any
 worker/src/retrieve.js      the retrieval layer
 worker/src/index.js         the proxy, the grounded prompt, the scope layers
 worker/wrangler.toml        corpus URL, allowed origins, model ids

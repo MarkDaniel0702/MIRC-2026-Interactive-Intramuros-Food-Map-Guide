@@ -5,7 +5,9 @@
  * mount timing is exactly the autoPan/flyTo bug app.js's select() works around).
  *
  * Ported verbatim from app.js:306-315 (landmarkPopupHTML) and app.js:390-462
- * (popupHTML).
+ * (popupHTML). One addition since: the landmark popup carries the same "Get
+ * directions" button as a spot's, so the PLM campus and each of its buildings
+ * can be walked to (resolved by data/destinations.ts, not findAnywhere).
  */
 import { SIGHTS_REVIEWED } from '../../data/tourist-spots.js';
 import { STAY_REVIEWED } from '../../data/hotels.js';
@@ -24,6 +26,10 @@ export function landmarkPopupHTML(lm: Landmark): string {
       <p class="pop__blurb">${esc(lm.blurb)}</p>
       <p class="pop__where">${MARKER_SVG}<span>${esc(lm.street || 'Intramuros')}<br>Intramuros, Manila</span></p>
       ${lm.url ? `<p class="pop__contact"><a href="${esc(lm.url)}" target="_blank" rel="noopener">Official site</a></p>` : ''}
+
+      <button type="button" class="pop__go" data-go="${esc(lm.id)}">
+        ${ROUTE_SVG} Get directions
+      </button>
     </div>`;
 }
 

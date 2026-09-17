@@ -116,6 +116,10 @@ export interface StartPoint {
   lng: number;
   osm: string;
   outside: boolean;
+  /** The venue itself, offered as somewhere to walk FROM -- shown as a primary
+   *  option, not an "arriving at" chip, and omitted from the chat corpus's
+   *  arrival points. */
+  venue?: boolean;
 }
 
 export interface VenueAnchor {

@@ -24,7 +24,8 @@ directions to any of it.
 Plus a highlighted **PLM** (Pamantasan ng Lungsod ng Maynila) campus landmark — the
 MIRC 2026 venue — that zooms the map in when tapped and reveals its buildings and halls
 (JAA, GEE, GK, GA) once you're zoomed close; and **walking directions** to any
-listing — from your location, a tapped point, or one of six arrival presets.
+listing *or to any of those campus buildings* — from your location, a tapped point, the
+venue itself, or one of six arrival presets.
 
 - **Search** by name, dish, cuisine, street or period — press <kbd>/</kbd> to jump to it
 - **Filter** by category and by price / entrance fee, in any combination
@@ -83,7 +84,11 @@ so the constraint is something you can *see*, not just something you're told.
 ![Step-by-step walking directions](docs/screenshot-directions.jpg)
 
 Click any marker or list entry, then **Get directions**. Start from your current location,
-by tapping anywhere on the map, or from a preset arrival point.
+by tapping anywhere on the map, from **the venue** (for the walk from PLM to lunch), or from
+a preset arrival point. The PLM campus marker and each of its buildings (JAA, GK, GEE, GA)
+offer the same button, so a visitor can be walked to the specific building their session
+is in, not just to the campus gate — and asking Dan *"where is GEE?"* puts that building
+on the map with the button one tap away.
 
 Routing comes from the **FOSSGIS OSRM pedestrian service** — the same one
 openstreetmap.org uses for its own directions. No API key, nothing secret in the client.
@@ -139,6 +144,7 @@ src/hooks/useVisibleSpots.ts    filtered + sorted spot list, derived from state
 src/components/                Panel, SpotList, DirectionsPanel, ChatPanel, etc.
 src/lib/                        routing.ts (OSRM client), format/icons/filter/popupHtml helpers
 src/data/modes.ts               the Eat/See/Stay MODES config + one-time search index
+src/data/destinations.ts        resolves a "Get directions" target: any spot, or a landmark
 
 data/food-spots.js              61 food spots  · 52 OSM-verified + 9 user-pinned
 data/tourist-spots.js           21 sights      · FEE_TIERS, VENUE_ANCHOR, passport info

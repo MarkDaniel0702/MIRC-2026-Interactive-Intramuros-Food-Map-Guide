@@ -80,13 +80,14 @@ if (existsSync(data('warm-answers.json'))) {
 
 let FOOD_SPOTS, PRICE_TIERS, CATEGORIES, DATA_REVIEWED;
 let TOURIST_SPOTS, FEE_TIERS, SIGHT_CATEGORIES, VENUE_ANCHOR, WALK_METRES_PER_MIN, INTRAMUROS_PASSPORT;
-let HOTELS, START_POINTS;
+let HOTELS, START_POINTS, LANDMARKS;
 try {
   ({ FOOD_SPOTS, PRICE_TIERS, CATEGORIES, DATA_REVIEWED } = await importData('food-spots.js'));
   ({ TOURIST_SPOTS, FEE_TIERS, SIGHT_CATEGORIES, VENUE_ANCHOR, WALK_METRES_PER_MIN, INTRAMUROS_PASSPORT } =
     await importData('tourist-spots.js'));
   ({ HOTELS } = await importData('hotels.js'));
   ({ START_POINTS } = await importData('start-points.js'));
+  ({ LANDMARKS } = await importData('landmarks.js'));
 } catch (err) {
   die('could not load the map data files', err);
 }
@@ -155,12 +156,46 @@ const stay = HOTELS.filter(h => h.mapped).map(h => drop({
   about: h.blurb
 })).sort((a, b) => a.name.localeCompare(b.name));
 
-const arrivals = START_POINTS.map(p => drop({
+/* The venue is offered as a start point in the directions panel (data/start-points.js
+   `venue: true`), but it is not somewhere a delegate ARRIVES -- and "0 m to the
+   venue" would only confuse the model -- so it stays out of this list. */
+const arrivals = START_POINTS.filter(p => !p.venue).map(p => drop({
   name: p.name,
   note: p.note,
   outsideTheWalls: p.outside ? 'yes' : undefined,
   toVenue: fromVenue(p.lat, p.lng)
 }));
+
+/* The map's landmarks -- the PLM campus and its buildings -- keyed by the same ids the
+   React app gives their markers, so worker/src/focus.js can point the map at a
+   building ("where is GEE?") exactly as it does at a restaurant. Read ONLY by
+   focus.js: nothing here reaches the model, whose knowledge of the buildings and
+   rooms comes from `venue.buildings` in mirc-2026.json. That section is matched by
+   building code to give each marker two more things to answer to: `rooms`, the
+   room codes inside it (AVR, KL, BTB, TOP …), so "where is the AVR?" resolves to
+   the building that houses it; and `aliases`, the committee's own name for the
+   building and its English form in parentheses ("Katipunan Building"), so the
+   question need not use the map's exact label. */
+const venueBuildings = Object.fromEntries((mirc.venue?.buildings ?? []).map(b => [b.code, b]));
+const landmarks = LANDMARKS.map(lm => {
+  const b = venueBuildings[lm.short];
+  const aliases = [];
+  if (b?.name) {
+    aliases.push(b.name);
+    const paren = b.name.match(/\(([^)]+)\)/);
+    if (paren) aliases.push(paren[1]);
+  }
+  return drop({
+    id: lm.id, lat: lm.lat, lng: lm.lng,
+    name: lm.name,
+    code: lm.short,
+    campus: lm.campus ? 'yes' : undefined,
+    aliases: aliases.filter(a => a !== lm.name),
+    rooms: (b?.rooms ?? []).map(r => r.code).filter(Boolean)
+  });
+});
+const unmappedBuildings = (mirc.venue?.buildings ?? [])
+  .filter(b => !LANDMARKS.some(lm => lm.short === b.code)).map(b => b.code);
 
 /* ── assemble ────────────────────────────────────────────────────────────────── */
 
@@ -210,7 +245,8 @@ const corpus = {
     eat: food,
     see: sights,
     stay,
-    arrivalPoints: arrivals
+    arrivalPoints: arrivals,
+    landmarks
   }
 };
 
@@ -245,6 +281,10 @@ console.log(`  Members     ${mirc.sessionMembers?.length ?? 0} session assignmen
 console.log(`  Warm        ${warm.length ? `${warm.length} pre-answered questions (no model call)` : amber('none — run tools/warm-cache.mjs')}`);
 console.log(`  Venue       ${corpus.venue.name} · ${corpus.venue.buildings.length} buildings`);
 console.log(`  Local guide ${food.length} to eat · ${sights.length} to see · ${stay.length} to stay`);
+console.log(`  Landmarks   ${landmarks.length} on the map` +
+  (unmappedBuildings.length
+    ? ` · ${amber(`venue.buildings ${unmappedBuildings.join(', ')} have no marker`)} ${dim('— the map cannot point at them')}`
+    : ` · ${dim('every venue building has a marker')}`));
 console.log(`  Size        ${(bytes / 1024).toFixed(0)} KB · roughly ${approxTokens.toLocaleString()} tokens\n`);
 
 if (corpus.gaps.length) {

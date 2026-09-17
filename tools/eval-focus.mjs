@@ -56,6 +56,40 @@ const CASES = [
   // ── same brand, no branch named: genuinely ambiguous, must stay silent ──
   ['find 7-eleven', null],
   ["find uncle john's", null],
+
+  // ── the venue and its buildings (localGuide.landmarks) — a stricter test, see
+  //    findLandmark in focus.js: a location cue is required, and never on a
+  //    browsing question. Answers to the map's label, the committee's building
+  //    name, the building code, a room code as the programme prints it ──
+  ['Where is the venue?', 'landmark', 'Pamantasan ng Lungsod ng Maynila', 'plm'],
+  ['Where is PLM?', 'landmark', 'Pamantasan ng Lungsod ng Maynila', 'plm'],
+  ['How do I get to PLM from the LRT?', 'landmark', 'Pamantasan ng Lungsod ng Maynila', 'plm'],
+  ['Where is GEE?', 'landmark', 'Gusaling Emilio Ejercito Sr. (GEE)', 'plm-gee'],
+  ['Where is the GEE AVR?', 'landmark', 'Gusaling Emilio Ejercito Sr. (GEE)', 'plm-gee'],
+  ['Where is the AVR?', 'landmark', 'Gusaling Emilio Ejercito Sr. (GEE)', 'plm-gee'],
+  ['Which building is BTB in?', 'landmark', 'Gusaling Katipunan (GK)', 'plm-katipunan'],
+  ['How do I get to GA TOP?', 'landmark', 'Gusaling Don Pepe Atienza (GA)', 'plm-ga'],
+  ['Where is the Katipunan building?', 'landmark', 'Gusaling Katipunan (GK)', 'plm-katipunan'],
+  ['Where is the Emilio Ejercito building?', 'landmark', 'Gusaling Emilio Ejercito Sr. (GEE)', 'plm-gee'],
+  ['Where is Justo Albert Auditorium?', 'landmark', 'Justo Albert Auditorium (JAA)', 'plm-jaa'],
+  ['Show me the GEE Lobby on the map', 'landmark', 'Gusaling Emilio Ejercito Sr. (GEE)', 'plm-gee'],
+  ['Where is GEE at PLM?', 'landmark', 'Gusaling Emilio Ejercito Sr. (GEE)', 'plm-gee'], // building beats campus
+
+  // ── a listed spot named alongside the campus: the spot wins, as before ──
+  ['Where is the PLM Canteen?', 'eat', 'PLM Canteen'],
+  ['Where is the canteen at PLM?', 'eat', 'PLM Canteen'],
+
+  // ── must stay silent: named in passing, browsing, or ambiguous ──
+  ['where is the avr', null],                             // room codes only as printed (upper case)
+  ['Where is the top of the wall?', null],                // lower-case "top" is a word, not GA's room
+  ['Is the session in GEE or GK? Where are they?', null], // two buildings
+  ['Which sessions are in GEE tomorrow?', null],          // no location cue
+  ['Is registration at PLM open?', null],
+  ['What time does the JAA plenary start?', null],
+  ['Where can I get coffee near GEE?', null],             // browsing
+  ['What can I see near PLM?', null],
+  ['Where can I stay near the venue?', null],
+  ['Where do I register?', null],
 ];
 
 let pass = 0, fail = 0;

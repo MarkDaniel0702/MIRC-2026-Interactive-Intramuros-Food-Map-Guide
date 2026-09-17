@@ -48,9 +48,10 @@ const OFF_TOPIC = [
 ];
 
 /** What worker/src/focus.js returns for a question that plainly names one
- *  eat/see/stay spot -- matched against the corpus's own records server-side,
- *  never invented by the model, so `id` always names a real marker. */
-interface ChatFocus { kind: 'eat' | 'see' | 'stay'; id: string; name: string; lat: number; lng: number; }
+ *  eat/see/stay spot -- or asks where the PLM venue or one of its buildings is
+ *  ('landmark') -- matched against the corpus's own records server-side, never
+ *  invented by the model, so `id` always names a real marker. */
+interface ChatFocus { kind: 'eat' | 'see' | 'stay' | 'landmark'; id: string; name: string; lat: number; lng: number; }
 
 interface ChatMessage {
   id: number;
