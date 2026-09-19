@@ -1630,8 +1630,14 @@ body.is-picking .leaflet-container { cursor: crosshair !important; }
   opacity: 0;
   transform: translateY(-8px);
   transition: opacity .2s var(--ease), transform .2s var(--ease);
+  /* [hidden] and .chat{display:flex} are equal specificity, so without this the
+     attribute never actually hides the panel -- it just sits there at opacity 0,
+     a full-size invisible pane over the map that eats every drag/tap that lands
+     on it (most of the map on a phone; the whole top-right quadrant on desktop). */
+  pointer-events: none;
 }
-.chat.is-open { opacity: 1; transform: none; }
+.chat[hidden] { display: none; }
+.chat.is-open { opacity: 1; transform: none; pointer-events: auto; }
 
 .chat__head {
   display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
