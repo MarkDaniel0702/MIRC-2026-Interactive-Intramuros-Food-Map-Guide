@@ -77,6 +77,33 @@ export function DirectionsPanel({ dirs, mapApi }: { dirs: FullDirsState; mapApi:
               <span className="dirs__time">{fmtMins(dirs.result.duration)}</span>
             </div>
             <p className="dirs__from-name">From {dirs.start.name}</p>
+
+            <button type="button" className={`dirs__opt dirs__track${dirs.tracking ? ' is-on' : ''}`}
+              onClick={mapApi.toggleLiveTracking}>
+              <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5 13.5 14 8 11 2.5 14z" /></svg>
+              {dirs.tracking ? 'Stop tracking my location' : 'Track my location live'}
+            </button>
+
+            {dirs.tracking && dirs.live && (
+              <div className="dirs__live" role="status">
+                <span className={`dirs__live-dir dirs__live-dir--${dirs.live.direction}`}>
+                  {dirs.live.direction === 'closer' ? 'Getting closer'
+                    : dirs.live.direction === 'farther' ? 'Moving away from the destination'
+                    : 'Holding steady'}
+                </span>
+                <span className="dirs__live-figures">
+                  {fmtDistance(dirs.live.distanceRemaining)} left
+                  {' · '}
+                  {dirs.live.etaMins < 1 ? 'under a minute' : `${dirs.live.etaMins} min`}
+                </span>
+                {dirs.live.accuracy != null && dirs.live.accuracy > 30 && (
+                  <span className="dirs__live-note">
+                    GPS accuracy is low (±{Math.round(dirs.live.accuracy)} m) — figures are approximate.
+                  </span>
+                )}
+              </div>
+            )}
+
             <ol className="dirs__steps">
               {dirs.result.steps.map((s, i) => (
                 <li key={i} className={`dirs__step${s.last ? ' dirs__step--last' : ''}`}>

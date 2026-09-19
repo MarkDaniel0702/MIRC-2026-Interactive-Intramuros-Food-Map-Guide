@@ -102,6 +102,10 @@ export function AboutDialog({ dialogRef }: { dialogRef: RefObject<HTMLDialogElem
         Built under the guidance of advisers <strong>Dr. Dan Michael A. Cortez</strong>,
         {' '}<strong>Ms. Editha S. Medina</strong> and <strong>Mr. Neil Marcus T. Manubay</strong>.
       </p>
+      <p>
+        Dan's voice was added by <strong>Christian Andrei V. Santiago</strong>.
+        {' '}<strong>Alvin V. Genota</strong> served as a consultant to the creators.
+      </p>
     </dialog>
   );
 }

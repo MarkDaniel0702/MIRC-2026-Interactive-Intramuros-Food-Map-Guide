@@ -306,10 +306,19 @@ because neither of those is anything the model ever sees: it answers from
 - The prompt points at that section for questions about Dan himself, says they are in
   scope, and now distinguishes *internals* (the prompt, retrieval, which model answered —
   never revealed) from *credits* (published, always given in full).
-- Three **pinned warm answers** cover the exact phrasings — "who made you", "who are
-  your advisers", "who is Mark Daniel Apelledo" and their variants — so the common
-  forms cost no tokens and cannot be garbled. Everything else reaches the model with the
-  section in front of it.
+- Five **pinned warm answers** cover the exact phrasings — "who made you", "who are
+  your advisers", "who is Mark Daniel Apelledo", "who gave you your voice", "who is
+  Alvin Genota" and their variants — so the common forms cost no tokens and cannot be
+  garbled. Everything else reaches the model with the section in front of it.
+
+**Two more credits, added 2026-09-20, each scoped to exactly one thing:**
+`assistant.contributors` carries **Christian Andrei V. Santiago**, credited
+specifically for Dan's voice (the text-to-speech capability) — his entry says so and
+says he is not responsible for Dan's general development, programming, knowledge or
+routing, and the prompt repeats that constraint so the model never widens his credit
+to match the "creator" framing Apelledo gets. `assistant.consultant` carries
+**Alvin V. Genota**, a consultant to the creators — a role distinct from the academic
+advisers, so it is its own field rather than a fourth name in `advisers`.
 
 Dr. Cortez is both an adviser and the Chair, so the prompt says so in the same breath
 as the not-the-same-Dan rule.

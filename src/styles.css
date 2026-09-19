@@ -947,6 +947,31 @@ body {
   color: var(--slate);
 }
 
+.dirs__track { margin-top: 12px; }
+.dirs__track svg { fill: currentColor; stroke: none; }
+
+.dirs__live {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+  margin-top: 10px;
+  padding: 9px 12px;
+  background: var(--navy-700);
+  border: 1px solid var(--navy-500);
+  border-radius: var(--r);
+}
+.dirs__live-dir { font: 600 12px/1.4 var(--ui); }
+.dirs__live-dir--closer { color: var(--green-lt); }
+.dirs__live-dir--farther { color: var(--gold-br); }
+.dirs__live-dir--steady { color: var(--slate-lt); }
+.dirs__live-figures { font: 400 11px/1.4 var(--mono); color: var(--slate); }
+.dirs__live-note {
+  flex: 1 0 100%;
+  font: 400 10px/1.4 var(--mono);
+  color: var(--gold-br);
+}
+
 .dirs__steps {
   list-style: none;
   margin: 18px 0 0;

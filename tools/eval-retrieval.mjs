@@ -89,6 +89,11 @@ const CASES = [
   // credits lived only in the About dialog and README, which the model never sees.
   ['Who made you?',                                        inSlice('Apelledo')],
   ['Who are your advisers?',                               allOf('Apelledo', 'Cortez', 'Medina', 'Manubay')],
+  // Santiago's credit is scoped to voice specifically -- both the always-on
+  // "assistant" core and the "contributors" field it lives in must survive
+  // retrieval, or the model has nothing to answer this from at all.
+  ['Who gave you your voice?',                             all(inSlice('Santiago'), inSlice('voice'))],
+  ['Who is Alvin Genota?',                                 all(inSlice('Genota'), inSlice('consultant'))],
   ['Can you show me a place on the map?',                  inSlice('Point the map')],
   ['What time zone are the session times in?',             inSlice('Asia/Manila')],
   // A gap that is named must reach the slice as a gap, or Dan says "try rephrasing"

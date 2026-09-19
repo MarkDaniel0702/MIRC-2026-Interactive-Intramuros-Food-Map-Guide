@@ -26,6 +26,7 @@ import 'leaflet.markercluster';
 
 import { INTRAMUROS_BOUNDARY } from '../../data/intramuros-boundary.js';
 import { LANDMARKS } from '../../data/landmarks.js';
+import { WALK_METRES_PER_MIN } from '../../data/tourist-spots.js';
 import type { Landmark } from '../../data/types';
 
 import { ALL_SPOTS, DERIVED_INDEX, MODES, findAnywhere } from '../data/modes';
@@ -36,9 +37,9 @@ import { PIN_SVG } from '../lib/icons';
 import { landmarkPopupHTML, popupHTML, previewHTML } from '../lib/popupHtml';
 import { matches } from '../lib/filter';
 import { haversine, fmtDistance } from '../lib/format';
-import { route as routeRequest } from '../lib/routing';
+import { route as routeRequest, distanceToLine } from '../lib/routing';
 import { reduceMotionOnce } from '../lib/motion';
-import type { Action, FullAppState } from '../state/store';
+import type { Action, FullAppState, LiveProgress } from '../state/store';
 import type { AnySpot, LatLng, ModeKey } from '../types';
 
 const CAMPUS_MIN_ZOOM = 17;
@@ -64,6 +65,10 @@ export interface MapApi {
   setStart: (point: LatLng & { id: string; name: string }) => void;
   useMyLocationForDirections: () => void;
   togglePicking: () => void;
+  /** Starts or stops watchPosition-driven live tracking for the open route --
+   *  moves the "me" marker on every fix, updates distance/ETA/direction, and
+   *  recalculates the route if the fix strays far enough off it. */
+  toggleLiveTracking: () => void;
   locateMe: () => Promise<void>;
   resetAll: () => void;
   /** Ported from app.js:1092-1099 -- hovering a list card lifts its pin. */
@@ -99,6 +104,14 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
   const startMarkerRef = useRef<L.Marker | null>(null);
   const destMarkerRef = useRef<L.Marker | null>(null);
   const meMarkerRef = useRef<L.Marker | null>(null);
+  /** Live route tracking (new -- not a port of any app.js behavior). watchIdRef
+   *  is the browser's watchPosition handle; lastLiveDistanceRef remembers the
+   *  previous fix's distance-to-destination so each new fix can say "closer" or
+   *  "farther" without that living in render state; lastRecalcAtRef throttles
+   *  how often straying off-route is allowed to trigger a fresh OSRM call. */
+  const watchIdRef = useRef<number | null>(null);
+  const lastLiveDistanceRef = useRef<number | null>(null);
+  const lastRecalcAtRef = useRef<number>(0);
   const homeRef = useRef<{ bounds: L.LatLngBounds; options: L.FitBoundsOptions } | null>(null);
   const firstPaintRef = useRef(!reduceMotionOnce);
   const pendingSelectRef = useRef<string | null>(null);
@@ -399,10 +412,148 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
     }
   }, [startPicking, stopPicking]);
 
+  /* ── live route tracking -- new, not a port of any app.js behavior ─────────── */
+
+  /** How far off the plotted route a live fix has to land before it is worth a
+   *  fresh one, rather than noise from GPS drift between Intramuros' narrow
+   *  streets. */
+  const OFF_ROUTE_METRES = 35;
+  /** Floor between two automatic recalculations, so weaving near the threshold
+   *  cannot fire an OSRM request every few seconds. */
+  const RECALC_COOLDOWN_MS = 20000;
+  /** Close enough to the destination that "keep walking" stops being useful. */
+  const ARRIVED_METRES = 15;
+  /** Smaller than this, two consecutive fixes read as "steady" rather than
+   *  flipping the closer/farther indicator on ordinary GPS jitter. */
+  const PROGRESS_DEADBAND_METRES = 5;
+
+  const stopTracking = useCallback(() => {
+    if (watchIdRef.current !== null) {
+      navigator.geolocation?.clearWatch(watchIdRef.current);
+      watchIdRef.current = null;
+    }
+    lastLiveDistanceRef.current = null;
+    dispatchRef.current({ type: 'DIRS_SET_TRACKING', tracking: false });
+  }, []);
+
+  /** Runs on every fix while tracking is on: moves the "me" marker and
+   *  recomputes distance/ETA/direction locally (no network) on every one, but
+   *  only asks `runRoute` for a fresh route when the walker has actually
+   *  strayed off the plotted line -- not merely moved along it. */
+  const onTrackingFix = useCallback((pos: GeolocationPosition) => {
+    const map = mapRef.current;
+    const { latitude: lat, longitude: lng, accuracy } = pos.coords;
+    const s = stateRef.current;
+    const dest = s.dirs.destId ? findDestination(s.dirs.destId) : null;
+    if (!dest) return;
+
+    dispatchRef.current({ type: 'SET_USER_POS', pos: { lat, lng } });
+
+    if (map) {
+      if (meMarkerRef.current) {
+        meMarkerRef.current.setLatLng([lat, lng]);
+      } else {
+        meMarkerRef.current = L.marker([lat, lng], {
+          icon: L.divIcon({ className: 'me-icon', html: '<div class="me"></div>', iconSize: [16, 16] }),
+          interactive: false,
+          zIndexOffset: 1000
+        }).addTo(map);
+      }
+    }
+
+    const distanceRemaining = haversine(lat, lng, dest.lat, dest.lng);
+    const prev = lastLiveDistanceRef.current;
+    const direction: LiveProgress['direction'] =
+      prev == null || Math.abs(distanceRemaining - prev) < PROGRESS_DEADBAND_METRES ? 'steady'
+        : distanceRemaining < prev ? 'closer' : 'farther';
+    lastLiveDistanceRef.current = distanceRemaining;
+
+    dispatchRef.current({
+      type: 'DIRS_SET_LIVE',
+      live: {
+        distanceRemaining,
+        etaMins: Math.max(0, Math.round(distanceRemaining / WALK_METRES_PER_MIN)),
+        direction,
+        accuracy: Number.isFinite(accuracy) ? accuracy : null
+      }
+    });
+
+    if (distanceRemaining <= ARRIVED_METRES) {
+      stopTracking();
+      dispatchRef.current({ type: 'DIRS_SET_MESSAGE', message: { text: `You've arrived at ${dest.name}.`, kind: 'busy' } });
+      return;
+    }
+
+    // Only ever measured against a real OSRM line -- the straight-line fallback
+    // IS the direct line to the destination, so "off" it is meaningless, and a
+    // recalculation already in flight (busy) must not be asked for a second one.
+    const result = s.dirs.result;
+    if (!result || result.fallback || s.dirs.busy) return;
+    if (distanceToLine({ lat, lng }, result.line) <= OFF_ROUTE_METRES) return;
+    const now = Date.now();
+    if (now - lastRecalcAtRef.current < RECALC_COOLDOWN_MS) return;
+    lastRecalcAtRef.current = now;
+
+    const point = { lat, lng, name: 'your location', id: '__me' };
+    dispatchRef.current({ type: 'DIRS_SET_START', start: point });
+    runRoute({ start: point });
+  }, [runRoute, stopTracking]);
+
+  const startTracking = useCallback(() => {
+    if (!navigator.geolocation) {
+      dispatchRef.current({ type: 'DIRS_SET_MESSAGE', message: { text: 'This browser cannot share your location live. Pick a starting point below instead.', kind: 'warn' } });
+      return;
+    }
+    if (!stateRef.current.dirs.destId) return;
+
+    dispatchRef.current({ type: 'DIRS_SET_TRACKING', tracking: true });
+    dispatchRef.current({ type: 'DIRS_SET_MESSAGE', message: { text: 'Getting your live location…', kind: 'busy' } });
+    lastLiveDistanceRef.current = null;
+    lastRecalcAtRef.current = 0;
+
+    watchIdRef.current = navigator.geolocation.watchPosition(
+      pos => {
+        // A fix arrived, so "Getting your live location…" and any earlier GPS
+        // warning are both stale now; onTrackingFix sets its own (e.g. on
+        // arrival) after this, so clearing first cannot clobber it.
+        if (stateRef.current.dirs.message) {
+          dispatchRef.current({ type: 'DIRS_SET_MESSAGE', message: null });
+        }
+        onTrackingFix(pos);
+      },
+      err => {
+        if (err.code === err.PERMISSION_DENIED) {
+          stopTracking();
+          dispatchRef.current({ type: 'DIRS_SET_MESSAGE', message: { text: 'Location permission was denied, so live tracking has stopped.', kind: 'warn' } });
+          return;
+        }
+        // Transient (unavailable fix, timeout): keep the watch running: the
+        // next fix may simply arrive late, especially indoors or between tall
+        // buildings, and dropping tracking on every blip would be worse than
+        // a stale one going quiet for a few seconds.
+        dispatchRef.current({
+          type: 'DIRS_SET_MESSAGE',
+          message: {
+            text: err.code === err.TIMEOUT
+              ? 'Waiting for a GPS fix — this can take longer indoors or between tall buildings.'
+              : 'Could not get your location just now — still trying.',
+            kind: 'warn'
+          }
+        });
+      },
+      { enableHighAccuracy: true, maximumAge: 3000, timeout: 15000 }
+    );
+  }, [onTrackingFix, stopTracking]);
+
+  const toggleLiveTracking = useCallback(() => {
+    if (stateRef.current.dirs.tracking) stopTracking(); else startTracking();
+  }, [startTracking, stopTracking]);
+
   /** Ported from app.js:847-861 closeDirections. */
   const closeDirectionsInternal = useCallback(() => {
     const map = mapRef.current;
     if (!map || !homeRef.current) return;
+    stopTracking();
     dispatchRef.current({ type: 'DIRS_CLOSE' });
     stopPicking();
     routeLayerRef.current?.clearLayers();
@@ -410,7 +561,7 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
     hideDestinationNow();
     setActive(null);
     map.flyToBounds(homeRef.current.bounds, { ...homeRef.current.options, ...flyOptions(0.7) });
-  }, [setActive, stopPicking]);
+  }, [setActive, stopPicking, stopTracking]);
 
   /** Ported from app.js:947-968 useMyLocation (the directions-panel variant --
    *  distinct from locateMe/#nearMe below). */
@@ -713,6 +864,7 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
       ro.disconnect();
       clearTimeout(roT);
       clearTimeout(noteTimer);
+      if (watchIdRef.current !== null) navigator.geolocation?.clearWatch(watchIdRef.current);
       map.remove();
       mapRef.current = null;
       markersRef.current.clear();
@@ -844,6 +996,7 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
     setStart,
     useMyLocationForDirections,
     togglePicking,
+    toggleLiveTracking,
     locateMe,
     resetAll,
     setPinHover,

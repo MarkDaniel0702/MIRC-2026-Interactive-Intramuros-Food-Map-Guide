@@ -22,6 +22,7 @@
  * Ported unchanged from routing.js -- pure async logic, no DOM dependencies.
  */
 import type { LatLng } from '../types';
+import { haversine } from './format';
 
 const ENDPOINT = 'https://routing.openstreetmap.de/routed-foot/route/v1/foot/';
 const TIMEOUT_MS = 12000;
@@ -217,4 +218,21 @@ function straightLineFallback(from: LatLng, to: LatLng, destinationName: string,
     externalUrl: 'https://www.openstreetmap.org/directions?engine=fossgis_osrm_foot' +
       `&route=${from.lat}%2C${from.lng}%3B${to.lat}%2C${to.lng}`
   };
+}
+
+/**
+ * How far `point` sits from the route line, in metres -- nearest-VERTEX distance,
+ * not a true point-to-segment projection. `line` is dense (OSRM's own geometry,
+ * `overview=full`), so within an Intramuros-sized route the gap between a vertex
+ * and the segment it sits on is a couple of metres at most, well inside the
+ * threshold this is used against. Used to decide when a live walker has strayed
+ * far enough off the plotted route to be worth a fresh one, not to steer anyone.
+ */
+export function distanceToLine(point: LatLng, line: [number, number][]): number {
+  let min = Infinity;
+  for (const [lat, lng] of line) {
+    const d = haversine(point.lat, point.lng, lat, lng);
+    if (d < min) min = d;
+  }
+  return min;
 }

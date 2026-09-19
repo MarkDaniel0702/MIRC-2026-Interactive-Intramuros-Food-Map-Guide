@@ -7,6 +7,19 @@ function emptyFilters(): ModeFilters {
   return { query: '', cats: new Set(), tiers: new Set() };
 }
 
+/** Recomputed from each live position while `tracking` is on -- cheap (no
+ *  network), unlike `result`, which only a full OSRM recalculation replaces. */
+export interface LiveProgress {
+  distanceRemaining: number;
+  etaMins: number;
+  /** Compared against the previous fix, with a small deadband so GPS jitter
+   *  does not flip this every few metres. */
+  direction: 'closer' | 'farther' | 'steady';
+  /** metres, from the position fix itself -- shown so a wildly inaccurate fix
+   *  (common between buildings) reads as uncertain rather than as fact. */
+  accuracy: number | null;
+}
+
 export interface FullDirsState {
   open: boolean;
   destId: string | null;
@@ -15,6 +28,9 @@ export interface FullDirsState {
   busy: boolean;
   message: { text: string; kind?: 'busy' | 'warn' } | null;
   result: RouteResult | null;
+  /** Whether hooks/useLeafletMap.ts's watchPosition loop is running. */
+  tracking: boolean;
+  live: LiveProgress | null;
 }
 
 /**
@@ -54,7 +70,8 @@ export function initialState(): FullAppState {
     activeId: null,
     activeFrom: null,
     userPos: null,
-    dirs: { open: false, destId: null, start: null, picking: false, busy: false, message: null, result: null },
+    dirs: { open: false, destId: null, start: null, picking: false, busy: false, message: null, result: null,
+            tracking: false, live: null },
     resetNonce: 0,
     mapModes: new Set<ModeKey>(['food'])
   };
@@ -89,7 +106,9 @@ export type Action =
   | { type: 'DIRS_SET_PICKING'; picking: boolean }
   | { type: 'DIRS_SET_BUSY'; busy: boolean }
   | { type: 'DIRS_SET_MESSAGE'; message: { text: string; kind?: 'busy' | 'warn' } | null }
-  | { type: 'DIRS_SET_RESULT'; result: RouteResult };
+  | { type: 'DIRS_SET_RESULT'; result: RouteResult }
+  | { type: 'DIRS_SET_TRACKING'; tracking: boolean }
+  | { type: 'DIRS_SET_LIVE'; live: LiveProgress | null };
 
 export function reducer(state: FullAppState, action: Action): FullAppState {
   switch (action.type) {
@@ -142,15 +161,23 @@ export function reducer(state: FullAppState, action: Action): FullAppState {
         ...state,
         mode,
         byMode: mode === state.mode ? state.byMode : { ...state.byMode, [mode]: pruneTiers(state.byMode[mode], mode) },
-        dirs: { ...state.dirs, open: true, destId: action.destId, picking: false, message: null, result: null }
+        dirs: { ...state.dirs, open: true, destId: action.destId, picking: false, message: null, result: null,
+                tracking: false, live: null }
       };
     }
 
     case 'DIRS_CLOSE':
-      return { ...state, dirs: { open: false, destId: null, start: state.dirs.start, picking: false, busy: false, message: null, result: null } };
+      return { ...state, dirs: { open: false, destId: null, start: state.dirs.start, picking: false, busy: false,
+                                  message: null, result: null, tracking: false, live: null } };
 
     case 'DIRS_SET_START':
       return { ...state, dirs: { ...state.dirs, start: action.start } };
+
+    case 'DIRS_SET_TRACKING':
+      return { ...state, dirs: { ...state.dirs, tracking: action.tracking, live: action.tracking ? state.dirs.live : null } };
+
+    case 'DIRS_SET_LIVE':
+      return { ...state, dirs: { ...state.dirs, live: action.live } };
 
     case 'DIRS_SET_PICKING':
       return { ...state, dirs: { ...state.dirs, picking: action.picking } };

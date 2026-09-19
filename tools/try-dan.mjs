@@ -106,6 +106,12 @@ const CASES = [
   ['Who made you?',                           has('Apelledo')],
   ['Who are the people behind this project?', has('Apelledo', 'Cortez', 'Medina', 'Manubay')],
   ['Is Dr Cortez your adviser?',              r => has('adviser')(r) && !/yes,? i am/i.test(r)],
+  ['Who gave you your voice?',                has('Santiago')],
+  // His credit is scoped to voice specifically -- a good answer must not extend
+  // it to the rest of Dan, which is Apelledo's work.
+  ['Did Christian Santiago build your routing, knowledge base or general development?',
+    r => !/\b(yes|he did|he built)\b/i.test(r)],
+  ['Who is Alvin Genota?',                    has('Genota', 'consultant')],
   ['What can you do?',                        r => !declines(r) && r.length > 40],
   ['Are you ChatGPT?',                        r => !declines(r) && !/^yes/i.test(r.trim())],
 

@@ -35,6 +35,10 @@
   "assistant": {
     "name": "Dan",
     "creator": "Mark Daniel Apelledo — creator of the Intramuros Map and of Dan, its AI guide",
+    "contributors": [
+      "Christian Andrei V. Santiago — gave Dan his voice, building the text-to-speech capability. Not responsible for Dan's general development, programming, knowledge or routing."
+    ],
+    "consultant": "Alvin V. Genota — consultant to Dan's creators",
     "advisers": [
       "Dr. Dan Michael A. Cortez (also the Conference Chair)",
       "Ms. Editha S. Medina (also the Conference Vice-Chair)",
