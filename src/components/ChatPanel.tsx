@@ -15,6 +15,7 @@
 import { Fragment, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { reduceMotionOnce } from '../lib/motion';
+import { LuVolume2, LuVolumeX } from 'react-icons/lu';
 
 const WORKER_URL = 'https://mirc-2026-chat.plm-mirc2026.workers.dev';
 const CHAT_URL = import.meta.env.DEV ? '/chat' : `${WORKER_URL}/chat`;
@@ -90,7 +91,9 @@ export function ChatPanel({ onFocus }: ChatPanelProps) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [suggestions, setSuggestions] = useState<string[]>(FALLBACK_SUGGESTIONS);
   const [inputValue, setInputValue] = useState('');
+  const [voiceEnabled, setVoiceEnabled] = useState(true);
 
+  const voiceEnabledRef = useRef(true);
   const openRef = useRef(false);
   const busyRef = useRef(false);
   const builtRef = useRef(false);
@@ -109,6 +112,41 @@ export function ChatPanel({ onFocus }: ChatPanelProps) {
   useEffect(() => {
     logRef.current && (logRef.current.scrollTop = logRef.current.scrollHeight);
   }, [messages]);
+
+  useEffect(() => {
+    if (window.speechSynthesis && window.speechSynthesis.onvoiceschanged !== undefined) {
+      window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+    }
+  }, []);
+
+  function speak(text: string) {
+    if (!voiceEnabledRef.current || !window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    const voices = window.speechSynthesis.getVoices();
+    const naturalMaleVoice = voices.find(v => v.lang.startsWith('en') && v.name.includes('Natural') && /(guy|christopher|eric|andrew|brian|tony|male)/i.test(v.name));
+    const naturalAnyVoice = voices.find(v => v.lang.startsWith('en') && v.name.includes('Natural'));
+    const markVoice = voices.find(v => v.name.includes('Mark'));
+    
+    if (naturalMaleVoice) {
+      utterance.voice = naturalMaleVoice;
+    } else if (naturalAnyVoice) {
+      utterance.voice = naturalAnyVoice;
+    } else if (markVoice) {
+      utterance.voice = markVoice;
+    } else {
+      const fallback = voices.find(v => v.lang.startsWith('en') && (v.name.toLowerCase().includes('male') || v.name.toLowerCase().includes('guy'))) || voices.find(v => v.lang.startsWith('en'));
+      if (fallback) utterance.voice = fallback;
+    }
+    window.speechSynthesis.speak(utterance);
+  }
+
+  const toggleVoice = () => {
+    const next = !voiceEnabled;
+    setVoiceEnabled(next);
+    voiceEnabledRef.current = next;
+    if (!next && window.speechSynthesis) window.speechSynthesis.cancel();
+  };
 
   function appendMessage(msg: Omit<ChatMessage, 'id'>): number {
     const id = ++nextId.current;
@@ -159,23 +197,27 @@ export function ChatPanel({ onFocus }: ChatPanelProps) {
     if (inputRef.current) inputRef.current.style.height = 'auto';
 
     if (rateLimited()) {
-      appendMessage({ role: 'bot', text: 'Give me a moment to catch up — try again in a few seconds.', muted: true });
+      const msg = 'Give me a moment to catch up — try again in a few seconds.';
+      appendMessage({ role: 'bot', text: msg, muted: true });
+      speak(msg);
       return;
     }
 
     // Layer 0: the obviously off-topic never reaches the network.
     if (OFF_TOPIC.some(re => re.test(message))) {
       appendMessage({ role: 'bot', text: declineRef.current });
+      speak(declineRef.current);
       return;
     }
 
     if (!WORKER_URL) {
+      const msg = "I'm not switched on yet. The organisers still need to publish the MIRC 2026 programme and connect me — until then this panel is here, but I cannot answer.";
       appendMessage({
         role: 'bot',
-        text: "I'm not switched on yet. The organisers still need to publish the MIRC 2026 " +
-          'programme and connect me — until then this panel is here, but I cannot answer.',
+        text: msg,
         muted: true
       });
+      speak(msg);
       return;
     }
 
@@ -194,6 +236,7 @@ export function ChatPanel({ onFocus }: ChatPanelProps) {
       const reply = data.reply || 'I could not answer that one. Try asking it another way.';
       const focus: ChatFocus | undefined = data.focus?.id ? data.focus : undefined;
       appendMessage({ role: 'bot', text: reply, focus });
+      speak(reply);
 
       // The map follows the answer, not the other way round: fly to it once the
       // reply naming it has actually landed, never speculatively while waiting.
@@ -209,12 +252,13 @@ export function ChatPanel({ onFocus }: ChatPanelProps) {
       }
     } catch {
       removeMessage(thinkingId);
+      const msg = 'I could not reach the assistant. Check your connection and try again — or ask at the registration desk.';
       appendMessage({
         role: 'bot',
-        text: 'I could not reach the assistant. Check your connection and try again — or ask ' +
-          'at the registration desk.',
+        text: msg,
         muted: true
       });
+      speak(msg);
     } finally {
       setBusyBoth(false);
       inputRef.current?.focus();
@@ -237,17 +281,19 @@ export function ChatPanel({ onFocus }: ChatPanelProps) {
 
     if (!builtRef.current) {
       builtRef.current = true;
+      const msg = "I'm Dan. I can help with MIRC 2026 — the programme, sessions, the venue at PLM, registration — and with finding your way around Intramuros. What do you need?";
       appendMessage({
         role: 'bot',
-        text: "I'm Dan. I can help with MIRC 2026 — the programme, sessions, the venue at PLM, " +
-          'registration — and with finding your way around Intramuros. What do you need?'
+        text: msg
       });
+      speak(msg);
       loadCorpus();
     }
     inputRef.current?.focus();
   }
 
   function closePanel() {
+    if (window.speechSynthesis) window.speechSynthesis.cancel();
     panelRef.current?.classList.remove('is-open');
     openRef.current = false;
     setOpen(false);
@@ -303,7 +349,12 @@ export function ChatPanel({ onFocus }: ChatPanelProps) {
               <h2 className="chat__title">Dan</h2>
             </div>
           </div>
-          <button type="button" className="chat__close" aria-label="Close Dan" onClick={closePanel}>&times;</button>
+          <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+            <button type="button" aria-label={voiceEnabled ? "Mute Voice" : "Unmute Voice"} onClick={toggleVoice} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.2rem', padding: '0 8px', display: 'flex', alignItems: 'center', color: 'inherit' }}>
+              {voiceEnabled ? <LuVolume2 /> : <LuVolumeX />}
+            </button>
+            <button type="button" className="chat__close" aria-label="Close Dan" onClick={closePanel}>&times;</button>
+          </div>
         </header>
 
         <div className="chat__log" ref={logRef} role="log" aria-live="polite" aria-atomic="false">

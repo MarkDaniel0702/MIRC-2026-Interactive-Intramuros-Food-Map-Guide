@@ -1681,6 +1681,21 @@ body.is-picking .leaflet-container { cursor: crosshair !important; }
   flex-direction: column;
   gap: 10px;
   padding: 16px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--navy-400) transparent;
+}
+.chat__log::-webkit-scrollbar {
+  width: 6px;
+}
+.chat__log::-webkit-scrollbar-track {
+  background: transparent;
+}
+.chat__log::-webkit-scrollbar-thumb {
+  background-color: var(--navy-400);
+  border-radius: 4px;
+}
+.chat__log::-webkit-scrollbar-thumb:hover {
+  background-color: var(--slate);
 }
 
 .chat__msg {
