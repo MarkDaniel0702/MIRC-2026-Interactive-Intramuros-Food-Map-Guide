@@ -120,10 +120,26 @@ function flatten(corpus) {
            down to incidental wording, not relevance: a real run returned three
            genuine plenary speakers plus an unrelated keynote speaker, silently
            dropping the fourth plenary speaker. */
+        /* A plenary's bio/abstract and a poster session's papers are both left out
+           of this payload on purpose. "plenary" alone guarantees all 4 of these
+           records a slot regardless of budget (see the INTENTS comment below), so
+           a bio+abstract riding along here would be paid for on every plenary
+           question whether or not it was the one asked about; each speaker's own
+           'speaker'-kind record carries the same bio/abstract for whichever one
+           the question actually names, and each poster's abstract is indexed as
+           its own 'paper'-kind record just below. */
         add('event',
           `${item.type} ${day.date} ${day.weekday} ${item.time} ${item.title} ${item.venue ?? ''} ` +
           `${item.speaker ?? ''} ${item.affiliation ?? ''} ${roomName[item.venue] ?? ''}`,
-          { date: day.date, weekday: day.weekday, ...item }, 1.1);
+          { date: day.date, weekday: day.weekday, ...item, bio: undefined,
+            abstract: undefined, keywords: undefined, source: undefined, papers: undefined }, 1.1);
+
+        for (const p of item.papers ?? []) {
+          add('paper',
+            `${p.id ?? ''} ${p.presenter ?? ''} ${p.title ?? ''} ${p.abstract ?? ''} ` +
+            `${(p.keywords ?? []).join(' ')} ${item.title} ${item.venue ?? ''} ${item.time} ${day.date}`,
+            { ...p, date: day.date, weekday: day.weekday, session: item.title, venue: item.venue, time: item.time });
+        }
         continue;
       }
       for (const s of item.sessions ?? []) {
@@ -132,15 +148,24 @@ function flatten(corpus) {
                       venue: s.venue, venueName: roomName[s.venue] };
         const papersText = (s.papers ?? []).map(p => `${p.id ?? ''} ${p.presenter ?? ''} ${p.title ?? ''}`).join(' ');
 
+        /* A session hit lists its papers by id/presenter/title only, even though
+           the papers themselves now carry a full abstract, authors and keywords --
+           spreading the enriched objects here would pull every paper's full text
+           into the budget the moment anyone asks a session-shaped question ("what's
+           on in STEA-4?"), the same record kind used for that. The full paper is
+           still one 'paper'-kind hit away, indexed below. */
+        const papersLight = (s.papers ?? []).map(p => ({ id: p.id, presenter: p.presenter, title: p.title }));
+
         add('session',
           `${s.session} ${s.track ?? ''} ${trackName[s.track] ?? ''} ${s.venue ?? ''} ` +
           `${roomName[s.venue] ?? ''} ${item.time} ${day.date} ${day.weekday} ` +
           `${s.keynote?.speaker ?? ''} ${s.keynote?.title ?? ''} ${papersText}`,
-          { ...ctx, keynote: s.keynote, papers: s.papers }, 1.2);
+          { ...ctx, keynote: s.keynote, papers: papersLight }, 1.2);
 
         for (const p of s.papers ?? []) {
           add('paper',
-            `${p.id ?? ''} ${p.presenter ?? ''} ${p.title ?? ''} ${s.session} ${s.track ?? ''} ` +
+            `${p.id ?? ''} ${p.presenter ?? ''} ${p.title ?? ''} ${p.abstract ?? ''} ` +
+            `${(p.keywords ?? []).join(' ')} ${s.session} ${s.track ?? ''} ` +
             `${trackName[s.track] ?? ''} ${s.venue ?? ''} ${roomName[s.venue] ?? ''} ${item.time} ${day.date}`,
             { ...p, ...ctx, sessionKeynote: s.keynote?.speaker ?? null });
         }
@@ -219,9 +244,20 @@ function flatten(corpus) {
         drop2({ partners: ev.partners, sponsor: ev.sponsor }), 1.15);
   }
   if (ev.subConference) {
-    add('subconference', `${Object.values(ev.subConference).join(' ')} ` +
+    const { contributedPapers, ...subConferenceInfo } = ev.subConference;
+    add('subconference', `${Object.values(subConferenceInfo).join(' ')} ` +
         'sub conference 27 september hospitality tourism saint benilde csb sejong third day',
-        ev.subConference, 1.25);
+        subConferenceInfo, 1.25);
+    /* Indexed like any other paper, not folded into the record above -- otherwise
+       one accepted abstract for the 27th would ride along on every question about
+       the sub-conference's existence, and a dozen would make that record too big
+       to fit any budget at all. */
+    for (const p of contributedPapers ?? []) {
+      add('paper',
+        `${p.id ?? ''} ${p.presenter ?? ''} ${p.title ?? ''} ${p.abstract ?? ''} ` +
+        `${(p.keywords ?? []).join(' ')} hospitality tourism 27 september sub conference`,
+        { ...p, event: '27 September Hospitality and Tourism sub-conference, DLSU-CSB' });
+    }
   }
   for (const d of corpus.registration?.deadlines ?? []) {
     add('deadline', `${d} deadline dates cut off closed when submission registration abstract`, d, 1.15);

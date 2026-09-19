@@ -28,6 +28,10 @@ both are listed under [What I need from you](#what-i-need-from-you) below.
 ```
 data/mirc-2026.json                the congress knowledge base — you fill this in
         │
+        │  python tools/import-abstracts.py <presenter doc> <submissions workbook>
+        │  (attaches abstracts, keywords and authors to papers and posters, and
+        │   bios to keynote/plenary speakers who were still bare stubs)
+        │
         │  node tools/build-corpus.mjs
         │  (merges in the map's own food / sights / hotels / arrival points,
         │   and its landmarks — the PLM campus and buildings — for map focus)
@@ -54,8 +58,10 @@ Worker is the only server-side piece, and it exists mostly for that reason.
 
 ### Why there is a retrieval step
 
-The corpus is about **43,000 tokens**. Sending all of it with every question is what
-the free tiers cannot afford, and the two fail in opposite ways:
+The corpus is about **207,000 tokens** — up sharply from the 43,000 it was before every
+contributed paper and poster carried its own abstract, keywords and author list.
+Sending all of it with every question is what the free tiers cannot afford, and the two
+fail in opposite ways:
 
 | Free tier | Ceiling | With the full corpus |
 |---|---|---|
@@ -63,10 +69,15 @@ the free tiers cannot afford, and the two fail in opposite ways:
 | **Gemini** | large prompt, but **20 requests/day per model** | works ~4 times, then `429` |
 | Gemini context caching | `limit=0` | not offered on the free tier at all |
 
-So `worker/src/retrieve.js` cuts a question-shaped slice first — about **4,900
-tokens, an 8.6x reduction** — which fits inside Groq's per-minute ceiling and makes
-the free path viable. Groq leads the provider chain for that reason; Gemini's 20/day
-is enough to test with, not to run a congress on. On a paid Gemini key, set
+So `worker/src/retrieve.js` cuts a question-shaped slice first — about **5,100
+tokens on average, a 40x reduction** — which fits inside Groq's per-minute ceiling and
+makes the free path viable. That average held steady across the corpus's growth
+because a paper's abstract only rides along in the slice when that specific paper is
+what a question is actually about (`tools/eval-retrieval.mjs` measures this on every
+run); the risk was a *session*-level hit dragging in every one of its papers' abstracts
+at once, which `worker/src/retrieve.js` deliberately keeps light for exactly this
+reason. Groq leads the provider chain for that reason; Gemini's 20/day is enough to
+test with, not to run a congress on. On a paid Gemini key, set
 `PROVIDER_ORDER = "gemini,groq,anthropic"` and raise `RETRIEVAL_BUDGET`.
 
 It is a scored inverted index over the corpus records, not embeddings: no second API
@@ -112,7 +123,7 @@ Measured, not quoted from documentation:
 | Per day | **200,000 tokens** | **20 requests per model** |
 | Requests/day | 1,000 | — |
 
-At ~4,900 tokens a question that is **about 40 model-answered questions a day** on
+At ~5,100 tokens a question that is **about 39 model-answered questions a day** on
 Groq. For 231 delegates over two days that is not enough on its own — which is
 exactly why the caching below is load-bearing rather than an optimisation. Warm
 answers and cache hits cost **zero** tokens, so only genuinely novel questions draw
@@ -214,18 +225,27 @@ canteen), and a building wins over its campus ("Where is GEE at PLM?" goes to GE
 
 ### 1. Congress content
 
-**Most of this is now in.** The committee's programme workbook and speakers document
-have been imported — see *Training data* below. What remains:
+**Most of this is now in.** The committee's programme workbook, speakers document,
+presenter document and submissions workbook have all been imported — see *Setting it
+up* below for the commands. What remains:
 
 | # | Still needed | Where it goes |
 |---|---|---|
-| 1 | **Bios and abstracts** for the 7 placeholder speakers — Plenary 1 (Chu), STEA 5 (Andres), STEA 6 (Dela Cruz), BGL 1 (Leong), BGL 3 (Osorio), HS 3 (Hedna), HS 5 (Dino). Most already have a *talk title*, which the programme supplies; only Leong and Osorio lack one too. | speakers markdown, then re-import |
-| 2 | Keynote speakers for **BGL-5** and **EASS-6**, both blank in the programme | programme workbook |
-| 3 | **Abstracts for the 89 contributed papers** — the programme gives number, surname and title only | a new sheet or export |
+| 1 | **Bio and abstract** for HS Keynote 5 (Dr. Michael Joseph Dino) — the presenter document itself marks his abstract "Not available," so this is a genuine gap in the source, not an import miss. The other 6 speakers once flagged here (Chu, Andres, Dela Cruz, Leong, Osorio, Hedna) are done; Leong's abstract is also still "Not available" at source even though his bio and title are now in. | presenter document, then re-import |
+| 2 | Keynote speakers for **BGL-5** and **EASS-6** — checked against the presenter document too; neither session has an invited talk in it at all, just contributed papers, so this is confirmed still blank rather than an import miss | programme workbook |
 | 4 | **Registration**: fees, deadlines, how to register, desk location and hours | `registration` |
 | 5 | **Logistics**: meals, Wi-Fi, certificates, proceedings, emergency contacts, code of conduct | `logistics` |
 | 6 | A **contact address** for the organisers (the committee names are in, from the website) | `event` |
-| 8 | Full given names for paper presenters, if delegates should be able to search by them | programme workbook |
+
+Done since the last pass: abstracts, keywords and full author/co-author lists for all
+168 contributed oral papers and posters (`tools/import-abstracts.py`, reading the
+presenter document and the submissions workbook); Poster Session 1 and 2 now list their
+posters individually, where before they were a single time slot with nothing under it;
+and presenters can be found by their full given name, not just the surname the
+programme workbook prints. The 12 Hospitality and Tourism sub-conference abstracts in
+the submissions workbook are **not** included — all 12 are still `Initial` (pending),
+not `Accepted`, so nothing about the 27 September sub-conference has changed; that gap
+stays open below.
 
 ### 2. One thing already decided for you — the delegate list
 
@@ -300,9 +320,19 @@ as the not-the-same-Dan rule.
   others — `GK BTB` is *Bukod Tanging Bulwagan* and `GEE KL` is *Katipunan Lounge*, both
   now marked confirmed. `GEE AVR` does not appear in the programme at all; if no session
   uses it, say so and it can be dropped.
-- **The numbering in the speakers document**: two entries are both labelled *BGL Keynote
-  Speaker 3* (Osorio and Manansala), and *EASS Keynote Speaker 4* is missing — it jumps 3
-  to 5. Worth a look before the content freeze.
+- **The numbering in the speakers document.** Now checked against the actual programme
+  (which session each keynote is scheduled into), rather than left as an open question:
+  *BGL Keynote Speaker 3* is labelled twice (Osorio, Manansala) because the programme
+  schedules them into different sessions the label doesn't reflect — Osorio keynotes
+  BGL-3, Manansala keynotes BGL-4. The same thing was found for STEA: *STEA Keynote
+  Speaker 4* (Padilla) and *5* (Andres) are swapped the same way — Andres keynotes
+  STEA-4, Padilla keynotes STEA-5. And *EASS Keynote Speaker 4* was missing outright
+  (Dr. Io Mones Jularbal, who keynotes EASS-4) — he now has an entry, added as
+  `EASS-4 KEYNOTE` rather than continuing the "Speaker N" numbering, since that numbering
+  has now been wrong twice. Bios and abstracts are matched by name, not by label, so all
+  four speakers answer correctly regardless of which label they carry. Whether to
+  renumber the labels to match the programme is a committee call, not one made here —
+  the printed materials may already use one numbering or the other.
 
 ### 5. A model key
 
@@ -370,8 +400,8 @@ line from `gaps`, rebuild.
 | What is awarded at the Closing and Awarding Ceremonies, and how is it judged? | `faq` |
 | Is there a welcome reception, dinner or cultural night? | `faq` |
 | Is there parking? Where do taxis drop off? Is the campus wheelchair-accessible? Dress code? | `venue.parking`, `venue.gettingThere`, `venue.accessibility`, `faq` |
-| What happens at the 27 September sub-conference? | `event.subConference` (a programme, when supplied) |
-| The 7 speaker bios, BGL-5 and EASS-6 keynotes, the 89 abstracts, GA TOP's name | already listed under *Congress content* above |
+| What happens at the 27 September sub-conference? | `event.subConference` (a programme, when supplied — its 12 submitted abstracts are still `Initial`, not `Accepted`, so nothing can be shown from them yet either) |
+| Dino's bio and abstract, BGL-5 and EASS-6 keynotes, GA TOP's name | already listed under *Congress content* above |
 
 ### Needs a policy decision, not content
 
@@ -400,13 +430,26 @@ The eat / see / stay records answer *where* and *how much*, not *when* or *what 
 - **Group capacity and reservations.** "Somewhere for twenty people?" has no field to
   answer from.
 
+### Closed by the presenter document and submissions workbook
+
+These four used to live under "the programme's shape cannot answer" — the programme
+workbook alone genuinely cannot, but the presenter document and submissions workbook
+(`tools/import-abstracts.py`) carry the missing piece for all four:
+
+- **Presenters by first name or institution.** The workbook's own paper records still
+  carry a surname only (`presenter`), left as-is for anything already depending on it,
+  but every paper and poster now also has `authors`, full given name and institution,
+  for every co-author, not just the presenting one.
+- **Co-authors.** In `authors` on the same records — a co-author's name and institution,
+  never an e-mail address.
+- **Which posters are in Poster Session 1 (or 2)?** Both poster sessions now list every
+  poster individually — title, presenter, abstract, keywords — where before they were a
+  single time slot with nothing under it.
+- **What is paper/poster N actually about?** Every contributed paper and poster now
+  carries its submitted abstract and keywords, not just a title.
+
 ### Questions the programme's shape cannot answer
 
-- **Presenters by first name or institution.** Papers carry a surname and a title only.
-  "Is Maria presenting?" and "where is the Batangas State paper?" miss.
-- **Co-authors.** Not in the data.
-- **Which posters are in Poster Session 1?** The sessions are on the outline; the
-  posters themselves are not listed anywhere.
 - **Where is the coffee break?** The break has a time and no venue.
 
 ---
@@ -421,7 +464,13 @@ python tools/import-program.py \
     "PLENARY and Keynote SPEAKERS MIRC 2026.md" \
     "Corrected_MIRC_2026_Registration_Tabulation_Report.xlsx"
 
-# 1b. Anything the sources do not cover — registration, logistics, committee —
+# 1b. Import per-paper abstracts, keywords, authors and keynote/plenary bios
+#     (needs the same python + openpyxl). Order-agnostic, like step 1a.
+python tools/import-abstracts.py \
+    "MIRC 2026 Presenter Attendance and Information Document.md" \
+    "submissions for ID.xlsx"
+
+# 1c. Anything the sources do not cover — registration, logistics, committee —
 #     is typed straight into data/mirc-2026.json
 
 # 2. Build the corpus Dan reads
@@ -453,6 +502,13 @@ provider renaming a model is a one-line fix.
 
 Edit `data/mirc-2026.json`, re-run `node tools/build-corpus.mjs`, push. The Worker
 re-reads the corpus within five minutes. No redeploy.
+
+**If the committee re-exports the programme workbook**, re-run `tools/import-program.py`
+against it first — it rebuilds `schedule` from scratch, which discards any abstract,
+keywords or bio that `tools/import-abstracts.py` had attached to it. Run
+`tools/import-abstracts.py` again straight after (same source files, unless the
+committee also re-exported those) to reattach them, then `build-corpus.mjs`. Running
+`import-abstracts.py` on its own, with no workbook change, is always safe to repeat.
 
 A change to the Worker's own code (`worker/src/*.js`) is the exception: that needs
 `cd worker && npx wrangler deploy`. The map-focus matcher lives there, so a new kind
@@ -534,6 +590,7 @@ src/styles.css                  the .chat-launch / .chat and Dan's mark blocks a
 data/mirc-2026.json             the knowledge base — the file you edit
 public/data/chat-corpus.json    generated; do not edit by hand
 tools/import-program.py     reads the committee's xlsx + speakers markdown
+tools/import-abstracts.py   reads the presenter document + submissions xlsx
 tools/build-corpus.mjs      the merge step
 tools/eval-retrieval.mjs    retrieval recall, offline
 tools/eval-cache.mjs        warm-answer matcher + collisions, offline

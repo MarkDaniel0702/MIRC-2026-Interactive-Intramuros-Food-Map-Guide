@@ -35,6 +35,19 @@ const allOf = (...needles) => slice => needles.every(n => inSlice(n)(slice));
 const CASES = [
   ['I am presenting paper 752010. When and where?',       all(inSlice('752010'), inSlice('Baliktanawin'), inSlice('EASS-1'))],
   ['What is paper 747458 about?',                          all(inSlice('747458'), inSlice('Merencilla'))],
+  // ── contributed-paper abstracts (tools/import-abstracts.py) ─────────────────
+  // Found by topic, not by number — the point of indexing the abstract text
+  // itself rather than just id/presenter/title.
+  ['Which paper predicts dengue outbreaks using mosquito traps?',
+    all(inSlice('747458'), inSlice('Dengue'))],
+  // A poster, not an oral paper — Poster Session 1/2 had no papers list at all
+  // before the presenter document was imported.
+  ['Tell me about the CALM ChatGPT reading intervention poster',
+    all(inSlice('743399'), inSlice('Phil-IRI'))],
+  // A keynote that was a bare stub (bio, talk title and abstract all null) until
+  // tools/import-abstracts.py filled it in from the presenter document.
+  ['What is Chad Patrick Osorio\'s keynote about?',
+    all(inSlice('Wageningen'), inSlice('Transregional'))],
   ['Which room is the HS track in on day one?',            all(inSlice('HS-1'), inSlice('GK BTB'))],
   ['Where are the health sciences sessions?',              inSlice('HS-1')],
   ['Tell me about Dr Bagarinao',                           all(inSlice('Bagarinao'), inSlice('Double-Edged'))],
