@@ -100,6 +100,12 @@ const CASES = [
   // instead of "not published yet".
   ['How do I contact the organisers?',                     inSlice('contact e-mail')],
   ['What size should my poster be?',                       inSlice('Poster and slide requirements')],
+  // ── expanded PLM knowledge, added 2026-09-20 ────────────────────────────────
+  ['What colleges does PLM have?',                         all(inSlice('College of Law'), inSlice('College of Medicine'))],
+  ['Does PLM have a college of nursing?',                  inSlice('College of Nursing')],
+  ['What other buildings are on the PLM campus?',          all(inSlice('Rajah Sulayman Gymnasium'), inSlice('PLM Chapel'))],
+  ['Does PLM have a library or a clinic?',                 all(inSlice('library'), inSlice('physical therapy clinic'))],
+  ['Who is the current PLM president?',                    inSlice('Domingo Reyes')],
 ];
 
 let pass = 0, fail = 0, totalTokens = 0, maxTokens = 0;

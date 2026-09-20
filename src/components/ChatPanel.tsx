@@ -48,6 +48,104 @@ const OFF_TOPIC = [
   /\b(?:system prompt|your instructions|jailbreak|developer mode)\b/i
 ];
 
+// Pronunciation dictionary for text-to-speech only -- never touches what is
+// rendered on screen (speak() runs this over a copy of the reply text right
+// before handing it to SpeechSynthesisUtterance). Web Speech engines differ by
+// device, and neither IPA nor SSML is reliably supported across them, so this
+// is respelling with ordinary letters -- the same trick screen-reader users'
+// dictionaries use -- not phonetic notation.
+//
+// Two kinds of entries, in this order (longer phrases before the single words
+// they contain, so "Gusaling Katipunan" is respelled as a whole before the
+// bare "Katipunan" rule can fire inside what it already replaced):
+//   1. Track and building CODES are spelled out letter by letter -- that is
+//      how a code like "STEA" or "BTB" is meant to be read, not guessed at as
+//      a made-up word. Matched case-sensitively (no /i) so this only fires on
+//      the corpus's own upper-case codes and never touches an ordinary word.
+//   2. Filipino institutional and place names are respelled to guide the
+//      engine's letter-to-sound rules toward the standard stress pattern.
+//
+// Deliberately NOT included: the people credited in "who made you" (Apelledo,
+// Santiago, Genota, Cortez, Medina, Manubay) and conference speakers' names.
+// Guessing at how someone's own name is pronounced risks being wrong in a way
+// that leaving the engine's default never is. If the committee or a named
+// person wants Dan to say a name a specific way, add it here following the
+// same [pattern, respelling] shape.
+const PRONOUNCE: [RegExp, string][] = [
+  // -- phrases (before the single-word rules below) --
+  [/\bPamantasan ng Lungsod ng Maynila\b/gi, 'Pah-mahn-TAH-sahn nahng LOONG-sod nahng my-NEE-lah'],
+  [/\bBukod Tanging Bulwagan\b/gi, 'Boo-KOD Tahn-GHEENG Bool-WAH-gahn'],
+  [/\bGusaling Emilio Ejercito(?: Sr\.?)?\b/gi, 'Goo-SAH-ling Eh-MEEL-yo Eh-HER-see-to'],
+  [/\bGusaling Don Pepe Atienza\b/gi, 'Goo-SAH-ling Don PEH-peh Ah-tee-EN-sah'],
+  [/\bGusaling Arsenio Lacson\b/gi, 'Goo-SAH-ling Ar-SEN-yo LAHK-son'],
+  [/\bGusaling Katipunan\b/gi, 'Goo-SAH-ling Kah-tee-POO-nahn'],
+  [/\bGusaling Intramuros\b/gi, 'Goo-SAH-ling In-trah-MOO-ros'],
+  [/\bJusto Albert Auditorium\b/gi, 'HOOS-to Al-BERT Auditorium'],
+  [/\bKatipunan Lounge\b/gi, 'Kah-tee-POO-nahn Lounge'],
+  [/\bRajah Sulayman Gymnasium\b/gi, 'RAH-hah Soo-LIGH-mahn Gymnasium'],
+  [/\bBahay Maynila\b/gi, 'BAH-high my-NEE-lah'],
+  // -- single Filipino words (fallback for any other occurrence) --
+  [/\bIntramuros\b/gi, 'In-trah-MOO-ros'],
+  [/\bKatipunan\b/gi, 'Kah-tee-POO-nahn'],
+  [/\bMaynila\b/gi, 'my-NEE-lah'],
+  [/\bLungsod\b/gi, 'LOONG-sod'],
+  [/\bGusaling\b/gi, 'Goo-SAH-ling'],
+  [/\bPamantasan\b/gi, 'Pah-mahn-TAH-sahn'],
+  // -- codes, spelled out letter by letter (case-sensitive on purpose) --
+  [/\bPLM\b/g, 'P. L. M.'],
+  [/\bSTEA\b/g, 'S. T. E. A.'],
+  [/\bBGL\b/g, 'B. G. L.'],
+  [/\bEASS\b/g, 'E. A. S. S.'],
+  [/\bHS\b/g, 'H. S.'],
+  [/\bJAA\b/g, 'J. A. A.'],
+  [/\bGK\b/g, 'G. K.'],
+  [/\bGEE\b/g, 'G. E. E.'],
+  [/\bGA\b/g, 'G. A.'],
+  [/\bBTB\b/g, 'B. T. B.'],
+  [/\bKL\b/g, 'K. L.'],
+  [/\bAVR\b/g, 'A. V. R.']
+];
+
+function toSpeech(text: string): string {
+  let out = text;
+  for (const [pattern, respelling] of PRONOUNCE) out = out.replace(pattern, respelling);
+  return out;
+}
+
+// Voice selection for window.speechSynthesis.
+//
+// THE LIMIT THIS WORKS WITHIN: the browser only ever offers whichever voices
+// the OS shipped or downloaded -- Windows/Edge expose Microsoft's "... Natural"
+// neural voices, Android's Chrome exposes Google's voices, iOS/macOS Safari
+// expose Apple's ("Daniel", "Samantha", ...). There is no voice name or id
+// that exists on all three, so no ranking here can make two different devices
+// play back the literal same voice -- only the closest match each one has.
+// Getting byte-identical audio everywhere would need a server-side TTS call
+// (see CHATBOT.md); this stays inside the free, client-only design and picks
+// the best-sounding, most consistent-*sounding* option each device actually
+// has, in the same priority order everywhere so the *behaviour* is consistent
+// even when the *voice* cannot be.
+//
+// Priority: a neural/"Natural" voice (Edge) > a named male voice this device
+// happens to expose (Edge, Safari/macOS's "Daniel", occasional Chrome/Android
+// voices) > any other English voice. `\b...\b` word-boundaries matter here --
+// a bare substring check for "male" also matches inside "Female", which
+// silently picked a female voice half the time this ran without them.
+const MALE_VOICE_RE = /\b(?:male|guy|christopher|eric|andrew|brian|tony|daniel|david|mark|fred|james|ryan|alex)\b/i;
+
+function pickVoice(voices: SpeechSynthesisVoice[]): SpeechSynthesisVoice | undefined {
+  const english = voices.filter(v => v.lang.toLowerCase().startsWith('en'));
+  const natural = english.filter(v => v.name.includes('Natural'));
+  return (
+    natural.find(v => MALE_VOICE_RE.test(v.name)) ??
+    natural[0] ??
+    english.find(v => v.name.includes('Mark')) ??
+    english.find(v => MALE_VOICE_RE.test(v.name)) ??
+    english[0] ??
+    voices[0]
+  );
+}
+
 /** What worker/src/focus.js returns for a question that plainly names one
  *  eat/see/stay spot -- or asks where the PLM venue or one of its buildings is
  *  ('landmark') -- matched against the corpus's own records server-side, never
@@ -122,22 +220,15 @@ export function ChatPanel({ onFocus }: ChatPanelProps) {
   function speak(text: string) {
     if (!voiceEnabledRef.current || !window.speechSynthesis) return;
     window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    const voices = window.speechSynthesis.getVoices();
-    const naturalMaleVoice = voices.find(v => v.lang.startsWith('en') && v.name.includes('Natural') && /(guy|christopher|eric|andrew|brian|tony|male)/i.test(v.name));
-    const naturalAnyVoice = voices.find(v => v.lang.startsWith('en') && v.name.includes('Natural'));
-    const markVoice = voices.find(v => v.name.includes('Mark'));
-    
-    if (naturalMaleVoice) {
-      utterance.voice = naturalMaleVoice;
-    } else if (naturalAnyVoice) {
-      utterance.voice = naturalAnyVoice;
-    } else if (markVoice) {
-      utterance.voice = markVoice;
-    } else {
-      const fallback = voices.find(v => v.lang.startsWith('en') && (v.name.toLowerCase().includes('male') || v.name.toLowerCase().includes('guy'))) || voices.find(v => v.lang.startsWith('en'));
-      if (fallback) utterance.voice = fallback;
-    }
+    const utterance = new SpeechSynthesisUtterance(toSpeech(text));
+    // Fixed regardless of the engine's own default, so speed/pitch/volume read
+    // the same on every device even though the voice itself cannot (see the
+    // note above pickVoice).
+    utterance.rate = 1;
+    utterance.pitch = 1;
+    utterance.volume = 1;
+    const voice = pickVoice(window.speechSynthesis.getVoices());
+    if (voice) utterance.voice = voice;
     window.speechSynthesis.speak(utterance);
   }
 

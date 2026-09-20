@@ -298,6 +298,21 @@ function flatten(corpus) {
   field('contact', 'contacts', ev.contacts, 'contact email e-mail phone reach organisers organizers secretariat get in touch');
   field('about', 'audience', ev.audience, 'who is the conference for audience attend participants who should');
 
+  /* General knowledge about PLM itself, as the host institution — history is
+     already covered by venueAbout above; these are the newer knowledge areas
+     (colleges, campus, services, leadership). Kept as their own light-payload
+     fields, not folded into venueAbout, so a question about the gymnasium does
+     not also drag in the full college list. See the guaranteed-slot budget note
+     on KIND_LIMIT/INTENTS below before adding a heavy field to this kind. */
+  field('plm', 'colleges', v.colleges,
+    'college colleges school schools department departments academic program programs degree courses course majors major offer offers offered study');
+  field('plm', 'campusBuildings', v.campusBuildings,
+    'campus building buildings hall chapel gymnasium gym landmark landmarks structures around the campus other buildings');
+  field('plm', 'servicesFacilities', v.servicesFacilities,
+    'library clinic health service services facility facilities wifi internet gym fitness laboratory laboratories printing press hospital amenities');
+  field('plm', 'president', v.president,
+    'plm president university president current president head of plm who leads plm who heads plm');
+
   for (const f of corpus.faq ?? []) add('faq', `${f.q} ${f.a}`, f, 1.2);
 
   return { docs, trackName, roomName };
@@ -340,7 +355,7 @@ const KIND_LIMIT = {
   session: 6, paper: 8, speaker: 4, event: 6, member: 4, guideline: 6,
   eat: 6, see: 6, stay: 3, arrival: 6, regCountry: 12, regInstitution: 8, faq: 4,
   about: 2, organiser: 4, partners: 1, subconference: 1, deadline: 6, venueAbout: 1,
-  registration: 3, logistics: 3, venueInfo: 2, contact: 1
+  registration: 3, logistics: 3, venueInfo: 2, contact: 1, plm: 4
 };
 
 /**
@@ -378,6 +393,18 @@ const INTENTS = [
     ['deadline'], 6],
   [/\b(about (?:plm|the university)|history|founded|established|charter\w*|how old)\b/i,
     ['venueAbout'], 1],
+  /* PLM's own colleges/campus/services/leadership — a light single-string field
+     each (see the "plm" kind above), so guaranteeing a slot here stays cheap
+     regardless of budget. Kept specific ("plm president", not bare "president")
+     so this never collides with the organiser-committee intent just below. */
+  [/\b(colleges?|schools? (?:of|at|in) plm|departments?|academic programs?|degree programs?|majors?|what (?:can|could) i study|what programs?)\b/i,
+    ['plm'], 2],
+  [/\b(campus buildings?|other (?:plm )?buildings?|gymnasium|plm chapel|arsenio lacson|bahay maynila|landmarks? at plm|around (?:the )?plm campus)\b/i,
+    ['plm'], 1],
+  [/\b(plm library|plm clinic|health service|plm wifi|plm internet|fitness center|laborator(?:y|ies) at plm|plm facilities|plm services|plm amenities|ospital ng maynila)\b/i,
+    ['plm'], 1],
+  [/\b(plm president|university president|president of plm|president of the university|who (?:is|leads|heads) plm|current (?:university )?president)\b/i,
+    ['plm'], 1],
   [/\b(what is mirc|about the conference|theme|purpose|hybrid|online participation)\b/i,
     ['about'], 1],
   /* There are exactly four plenaries. Even with "plenary" now indexed, leaving this

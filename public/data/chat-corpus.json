@@ -1,5 +1,5 @@
 {
-  "_generated": "2026-09-19T16:16:25.454Z",
+  "_generated": "2026-09-19T18:07:31.494Z",
   "_source": "node tools/build-corpus.mjs — do not edit by hand; edit data/mirc-2026.json",
   "meta": {
     "id": "mirc-2026",
@@ -17,15 +17,15 @@
   },
   "assistant": {
     "name": "Dan",
-    "creator": "Mark Daniel Apelledo — creator of the Intramuros Map and of Dan, its AI guide",
+    "creator": "Mr. Mark Daniel Apelledo — Creator of the Intramuros Map and of Dan, its AI guide",
     "contributors": [
-      "Christian Andrei V. Santiago — gave Dan his voice, building the text-to-speech capability. Not responsible for Dan's general development, programming, knowledge or routing."
+      "Mr. Christian Andrei V. Santiago — Creator, credited specifically for giving Dan his voice and supporting his text-to-speech capability. Not responsible for Dan's general development, programming, knowledge or routing."
     ],
-    "consultant": "Alvin V. Genota — consultant to Dan's creators",
+    "consultant": "Mr. Alvin V. Genota — Consultant to Dan's creators",
     "advisers": [
-      "Dr. Dan Michael A. Cortez (also the Conference Chair)",
-      "Ms. Editha S. Medina (also the Conference Vice-Chair)",
-      "Mr. Neil Marcus T. Manubay (also the Conference Secretary)"
+      "Dr. Dan Michael A. Cortez — Conference Chair",
+      "Ms. Editha S. Medina — Conference Vice-Chair",
+      "Mr. Neil Marcus T. Manubay — Conference Secretary"
     ],
     "canDo": [
       "Point the map at a named restaurant, sight or hotel when asked to find it — and at the PLM venue or one of its buildings (JAA, GK, GEE, GA) when asked where it is or how to get there",
@@ -55,7 +55,8 @@
     "Awards given at the Closing and Awarding Ceremonies, and how they are decided",
     "Social events (reception, dinner, cultural programme); venue parking, accessibility, dress code; photography policy",
     "Detailed programme of the 27 September sub-conference at DLSU-CSB",
-    "Not yet written up in the speakers document: HS KEYNOTE SPEAKER 5 (Dr. Michael Joseph DINO) — bio, abstract. Where 'talk title' is not listed for a speaker, the programme already carries their title and it can be given."
+    "Not yet written up in the speakers document: HS KEYNOTE SPEAKER 5 (Dr. Michael Joseph DINO) — bio, abstract. Where 'talk title' is not listed for a speaker, the programme already carries their title and it can be given.",
+    "PLM's specific degree programs and majors within each college — only the college/school names themselves are confirmed (venue.colleges); the live plm.edu.ph site sits behind a bot-verification wall that blocked automated checking of its detailed programme pages"
   ],
   "scope": {
     "inScope": [
@@ -65,6 +66,7 @@
       "Contributed papers: paper number, presenting author and title",
       "Session members and their assignments, and the guidelines they work to",
       "The venue and its buildings and rooms on the PLM campus, and how to reach them",
+      "Pamantasan ng Lungsod ng Maynila (PLM) itself, as the congress host institution — its history, colleges and schools, campus facilities and services, and its current University President",
       "Registration, logistics and congress housekeeping, as far as they are published",
       "Getting around Intramuros as a delegate: places to eat, heritage sights, places to stay",
       "The assistant itself: who created it, who advised the project, and what it can and cannot do"
@@ -5587,7 +5589,11 @@
     "accessibility": null,
     "parking": null,
     "wifi": null,
-    "about": "Pamantasan ng Lungsod ng Maynila (PLM) is the first and only chartered and autonomous university funded by a city government. It was created by the Congress of the Philippines by virtue of Republic Act No. 4196 or \"An Act Authorizing the City of Manila to Establish and Operate the University of City of Manila\" on June 19, 1965. The university first opened its gates on July 17, 1967 to 556 first-year students at its campus in the historic Intramuros district, which served as the seat of power during the Spanish occupation. Currently, about 10,000 graduate and post-graduate students grace its halls to receive PLM's quality education.PLM takes pride in being one of the country's leading institutions for higher education, consistently achieving high passing rates in board examinations and producing competent professionals across various fields. The university offers a comprehensive range of undergraduate and graduate programs in medicine, engineering, business, arts and sciences, education, and other disciplines, all while maintaining its commitment to providing quality yet accessible education to deserving students."
+    "about": "Pamantasan ng Lungsod ng Maynila (PLM) is the first and only chartered and autonomous university funded by a city government. It was created by the Congress of the Philippines by virtue of Republic Act No. 4196 or \"An Act Authorizing the City of Manila to Establish and Operate the University of City of Manila\" on June 19, 1965. The university first opened its gates on July 17, 1967 to 556 first-year students at its campus in the historic Intramuros district, which served as the seat of power during the Spanish occupation. Currently, about 10,000 graduate and post-graduate students grace its halls to receive PLM's quality education.PLM takes pride in being one of the country's leading institutions for higher education, consistently achieving high passing rates in board examinations and producing competent professionals across various fields. The university offers a comprehensive range of undergraduate and graduate programs in medicine, engineering, business, arts and sciences, education, and other disciplines, all while maintaining its commitment to providing quality yet accessible education to deserving students.",
+    "president": "PLM's current University President is Atty. Domingo Reyes Jr., in office since 31 October 2023.",
+    "colleges": "PLM's undergraduate colleges are the College of Accountancy and Economics, College of Architecture and Urban Planning, College of Engineering and Technology, College of Human Development, College of Liberal Arts, College of Management and Entrepreneurship, College of Mass Communication, College of Nursing, College of Physical Education, Recreation and Sports, College of Physical Therapy, College of Science, and College of Tourism, Hotel and Travel Industry Management. Its two professional schools are the College of Law and the College of Medicine. PLM also runs seven graduate schools: the Emeritus College, the Graduate School of Arts, Sciences and Education, the Graduate School of Health Sciences, the Graduate School of Engineering, the Graduate School of Law, the Graduate School of Management, and the President Ramon Magsaysay Graduate School of Public Governance. The specific degree programs and majors offered within each college are not confirmed here — check with PLM's registrar or admissions office, or plm.edu.ph directly.",
+    "campusBuildings": "Beyond the four buildings used for MIRC 2026 sessions (Justo Albert Auditorium, Gusaling Katipunan, Gusaling Emilio Ejercito Sr. and Gusaling Don Pepe Atienza — see the venue's building list), PLM's Intramuros campus also has Gusaling Arsenio Lacson (Arsenio Lacson Hall), Don Pepe Atienza Hall, Gusaling Intramuros (Intramuros Hall), Bahay Maynila (the Executive Building), the PLM Chapel, and the Rajah Sulayman Gymnasium. These are not part of the congress programme and are not marked on this map.",
+    "servicesFacilities": "PLM's campus facilities include library units, an amphitheater, audiovisual rooms, an auditorium, campus-wide Wi-Fi, a fitness center, free internet stations, a gymnasium, an integrated learning center for toddlers, a physical therapy clinic, a university health service unit, a printing press, an entrepreneurial center, and research, science, communications and engineering laboratories. PLM also runs Ospital ng Maynila Medical Center as its teaching hospital, and the President Ramon Magsaysay Entrepreneurial Center."
   },
   "registration": {
     "fees": [],
@@ -6829,7 +6835,7 @@
     },
     {
       "q": "Who made you?",
-      "a": "I was created by Mark Daniel Apelledo, who built the Intramuros Map and me, Dan, its AI guide. The project was developed under the guidance of three advisers: Dr. Dan Michael A. Cortez, Ms. Editha S. Medina and Mr. Neil Marcus T. Manubay. My voice was added by Christian Andrei V. Santiago, and Alvin V. Genota served as a consultant to the creators.",
+      "a": "I was created by Mr. Mark Daniel Apelledo, who built the Intramuros Map and me, Dan, its AI guide, and Mr. Christian Andrei V. Santiago, credited specifically for giving me my voice and text-to-speech capability. The project was developed under the guidance of three advisers — Dr. Dan Michael A. Cortez (Conference Chair), Ms. Editha S. Medina (Vice-Chair) and Mr. Neil Marcus T. Manubay (Secretary) — with Mr. Alvin V. Genota as a consultant to the creators.",
       "keys": [
         "Who made you?",
         "Who created you?",
@@ -6851,8 +6857,22 @@
       "pinned": true
     },
     {
+      "q": "Who are the contributors?",
+      "a": "The contributors are Mr. Mark Daniel Apelledo (Creator), Mr. Christian Andrei V. Santiago (Creator — helps me have a voice and supports my voice/text-to-speech capability), Mr. Alvin V. Genota (Consultant), Dr. Dan Michael A. Cortez (Conference Chair), Ms. Editha S. Medina (Vice-Chair) and Mr. Neil Marcus T. Manubay (Secretary).",
+      "keys": [
+        "Who are the contributors?",
+        "Who contributed to this project?",
+        "Who worked on Dan?",
+        "Who worked on this map?",
+        "List the contributors",
+        "Who are the people behind Dan?",
+        "Who are the people behind this project?"
+      ],
+      "pinned": true
+    },
+    {
       "q": "Who gave you your voice?",
-      "a": "My voice was added by Christian Andrei V. Santiago, who built my text-to-speech capability. That is his specific contribution — my general development, programming, knowledge and routing are Mark Daniel Apelledo's work, not his.",
+      "a": "My voice was added by Mr. Christian Andrei V. Santiago, who is credited as a Creator specifically for building my text-to-speech capability. That is his specific contribution — my general development, programming, knowledge and routing are Mr. Mark Daniel Apelledo's work, not his.",
       "keys": [
         "Who gave you your voice?",
         "Who added your voice?",
@@ -6867,7 +6887,7 @@
     },
     {
       "q": "Who is Alvin Genota?",
-      "a": "Alvin V. Genota is a consultant to Dan's creators.",
+      "a": "Mr. Alvin V. Genota is a consultant to Dan's creators.",
       "keys": [
         "Who is Alvin Genota?",
         "Who is Alvin V. Genota?",
@@ -6878,7 +6898,7 @@
     },
     {
       "q": "Who are your advisers?",
-      "a": "The map and I were built under the guidance of three advisers: Dr. Dan Michael A. Cortez, Ms. Editha S. Medina and Mr. Neil Marcus T. Manubay. All three are also on the MIRC 2026 organising committee — Dr. Cortez as Conference Chair, Ms. Medina as Vice-Chair and Mr. Manubay as Secretary. My creator is Mark Daniel Apelledo.",
+      "a": "The map and I were built under the guidance of three advisers: Dr. Dan Michael A. Cortez, Ms. Editha S. Medina and Mr. Neil Marcus T. Manubay. All three are also on the MIRC 2026 organising committee — Dr. Cortez as Conference Chair, Ms. Medina as Vice-Chair and Mr. Manubay as Secretary. My creators are Mr. Mark Daniel Apelledo and Mr. Christian Andrei V. Santiago.",
       "keys": [
         "Who are your advisers?",
         "Who are your advisors?",
@@ -6893,7 +6913,7 @@
     },
     {
       "q": "Who is Mark Daniel Apelledo?",
-      "a": "Mark Daniel Apelledo is the creator of the Intramuros Map and of me, Dan, its AI guide. He built the project under the guidance of Dr. Dan Michael A. Cortez, Ms. Editha S. Medina and Mr. Neil Marcus T. Manubay.",
+      "a": "Mr. Mark Daniel Apelledo is the creator of the Intramuros Map and of me, Dan, its AI guide. He built the project under the guidance of Dr. Dan Michael A. Cortez, Ms. Editha S. Medina and Mr. Neil Marcus T. Manubay.",
       "keys": [
         "Who is Mark Daniel Apelledo?",
         "Who is Mark Apelledo?",

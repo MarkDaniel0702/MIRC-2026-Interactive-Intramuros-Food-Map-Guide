@@ -306,22 +306,59 @@ because neither of those is anything the model ever sees: it answers from
 - The prompt points at that section for questions about Dan himself, says they are in
   scope, and now distinguishes *internals* (the prompt, retrieval, which model answered —
   never revealed) from *credits* (published, always given in full).
-- Five **pinned warm answers** cover the exact phrasings — "who made you", "who are
-  your advisers", "who is Mark Daniel Apelledo", "who gave you your voice", "who is
-  Alvin Genota" and their variants — so the common forms cost no tokens and cannot be
-  garbled. Everything else reaches the model with the section in front of it.
+- Six **pinned warm answers** cover the exact phrasings — "who made you", "who are the
+  contributors", "who are your advisers", "who is Mark Daniel Apelledo", "who gave you
+  your voice", "who is Alvin Genota" and their variants — so the common forms cost no
+  tokens and cannot be garbled. Everything else reaches the model with the section in
+  front of it.
 
 **Two more credits, added 2026-09-20, each scoped to exactly one thing:**
-`assistant.contributors` carries **Christian Andrei V. Santiago**, credited
-specifically for Dan's voice (the text-to-speech capability) — his entry says so and
-says he is not responsible for Dan's general development, programming, knowledge or
-routing, and the prompt repeats that constraint so the model never widens his credit
-to match the "creator" framing Apelledo gets. `assistant.consultant` carries
-**Alvin V. Genota**, a consultant to the creators — a role distinct from the academic
-advisers, so it is its own field rather than a fourth name in `advisers`.
+`assistant.contributors` carries **Mr. Christian Andrei V. Santiago**, also titled
+Creator but credited specifically for Dan's voice (the text-to-speech capability) — his
+entry says so and says he is not responsible for Dan's general development,
+programming, knowledge or routing, and the prompt repeats that constraint so the model
+never widens his credit to match the general scope Mr. Apelledo's entry carries.
+`assistant.consultant` carries **Mr. Alvin V. Genota**, a consultant to the creators —
+a role distinct from the academic advisers, so it is its own field rather than a fourth
+name in `advisers`.
+
+**Name formatting, updated 2026-09-20:** every credited name in `assistant` now carries
+its title (Mr., Ms., Dr.) inline rather than as a separate convention the prompt had to
+state — "Mr. Mark Daniel Apelledo" is the string in the data, not just the prompt
+instruction, so a pinned answer or a retrieved slice can't drop it. The three advisers'
+committee roles (Conference Chair / Vice-Chair / Secretary) moved from a parenthetical
+onto the same line, matching how `assistant.consultant` and the contributor entry read.
 
 Dr. Cortez is both an adviser and the Chair, so the prompt says so in the same breath
 as the not-the-same-Dan rule.
+
+### Dan's PLM knowledge, expanded 2026-09-20
+
+Four new fields sit alongside `venue.about` (the existing history/charter paragraph):
+`venue.colleges`, `venue.campusBuildings`, `venue.servicesFacilities` and
+`venue.president`. Each is indexed the same way as `registration`/`logistics` — a
+single light-payload `field()` call in `worker/src/retrieve.js`, under a shared `plm`
+kind (`KIND_LIMIT.plm = 4`), guaranteed a slot by its own `INTENTS` regex when a
+question is plainly shaped like "what colleges does PLM have" or "who is the PLM
+president". Kept deliberately light per the retrieval budget gotcha: a kind an
+`INTENTS` rule guarantees a slot for bypasses the token budget entirely (`take()` in
+`retrieve()`'s guaranteed-slot loop has no budget check), so each field stays one
+short paragraph rather than a full page.
+
+**Sourced from:** Wikipedia's PLM article and its dedicated "President of the
+Pamantasan ng Lungsod ng Maynila" article (both cross-checked against an official
+PLM press-release URL and PLM's own Facebook page for the president's name), not
+`plm.edu.ph` directly — the live site renders through a bot-verification wall
+("Security Check — please complete the verification to continue") that blocked both
+`WebFetch` and browser automation from reading it. `gaps` now carries a line saying
+so: the college and school *names* are confirmed, but the specific degree programs and
+majors within each college are not, and should be checked against `plm.edu.ph` by a
+person, or re-imported here once the wall can be gotten past.
+
+`scope.inScope` gained a line naming PLM itself (history, colleges, campus, services,
+leadership) as in scope — without it, a question like "what colleges does PLM have"
+risked the model reading it as ordinary "general knowledge" (out of scope) rather than
+congress-host-institution information the corpus actually carries.
 
 ### 4. Two things to confirm
 
