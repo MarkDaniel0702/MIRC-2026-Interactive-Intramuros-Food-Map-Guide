@@ -1,0 +1,14 @@
+{
+  "name": "Intramuros Guide",
+  "short_name": "Intramuros",
+  "description": "An interactive map of Intramuros, Manila -- where to eat, what to see, where to stay, and walking directions, all verified inside the official boundary.",
+  "start_url": "/MIRC-2026-Interactive-Intramuros-Food-Map-Guide/",
+  "scope": "/MIRC-2026-Interactive-Intramuros-Food-Map-Guide/",
+  "display": "standalone",
+  "background_color": "#060D18",
+  "theme_color": "#060D18",
+  "icons": [
+    { "src": "/MIRC-2026-Interactive-Intramuros-Food-Map-Guide/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/MIRC-2026-Interactive-Intramuros-Food-Map-Guide/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

@@ -93,6 +93,18 @@ export function AboutDialog({ dialogRef }: { dialogRef: RefObject<HTMLDialogElem
         independently confirmed.
       </p>
 
+      <h3>Privacy</h3>
+      <p>
+        Your location is only used if you tap <strong>My location</strong> or <strong>Near
+        me</strong>. It stays in your browser to sort the list by distance, and is sent
+        as coordinates to the FOSSGIS OSRM routing service only when you ask for
+        directions — it is never stored on any server here. Questions you send to Dan are
+        passed through a Cloudflare Worker to Groq or Google's Gemini to generate an
+        answer, and may be logged server-side to improve future answers; they are not tied
+        to your name or any account, because this site has none. This site sets no
+        cookies and runs no analytics or ad tracking.
+      </p>
+
       <h3>Credits</h3>
       <p>
         Created by <strong>Mark Daniel Apelledo</strong> — creator of the Intramuros Map and

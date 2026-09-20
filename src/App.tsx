@@ -1,5 +1,6 @@
 import { useEffect, useReducer, useRef, useState } from 'react';
 import { reducer, initialState } from './state/store';
+import { MODES } from './data/modes';
 import { useLeafletMap } from './hooks/useLeafletMap';
 import { useVisibleSpots } from './hooks/useVisibleSpots';
 import { useMapVisibleIds } from './hooks/useMapVisibleIds';
@@ -24,6 +25,12 @@ export function App() {
 
   const [sheetOpen, setSheetOpen] = useState(false);
   const { toasts, showToast } = useToasts();
+
+  // Reflects the active tab in the browser tab title -- useful with several
+  // tabs open at once, and a cheap per-view signal for anyone skimming history.
+  useEffect(() => {
+    document.title = `${MODES[state.mode].label} — Intramuros Guide`;
+  }, [state.mode]);
 
   const mapApi = useLeafletMap({
     containerRef: mapContainerRef,

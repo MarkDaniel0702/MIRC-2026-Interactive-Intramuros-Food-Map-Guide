@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Intramuros Guide">
+  <rect width="32" height="32" rx="6" fill="#060D18"/>
+  <rect x="1.5" y="1.5" width="29" height="29" rx="4.5" fill="none" stroke="#E3B23C" stroke-width="1.4"/>
+  <path d="M11 8v6a2 2 0 0 0 4 0V8M13 16v9M22 8c1.5 2.2 1.5 5.4 0 7v10"
+        stroke="#46C795" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+</svg>

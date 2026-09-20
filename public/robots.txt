@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://markdaniel0702.github.io/MIRC-2026-Interactive-Intramuros-Food-Map-Guide/sitemap.xml
