@@ -315,12 +315,13 @@ because neither of those is anything the model ever sees: it answers from
 **Two more credits, added 2026-09-20, each scoped to exactly one thing:**
 `assistant.contributors` carries **Mr. Christian Andrei V. Santiago**, also titled
 Creator but credited specifically for Dan's voice (the text-to-speech capability) — his
-entry says so and says he is not responsible for Dan's general development,
-programming, knowledge or routing, and the prompt repeats that constraint so the model
-never widens his credit to match the general scope Mr. Apelledo's entry carries.
+entry and the pinned "who gave you your voice" answer say so and stop there, without
+comparing his scope against Mr. Apelledo's.
 `assistant.consultant` carries **Mr. Alvin V. Genota**, a consultant to the creators —
 a role distinct from the academic advisers, so it is its own field rather than a fourth
-name in `advisers`.
+name in `advisers`. His entry also notes his relationship to the two creators: he was
+Mr. Santiago's professor last year and is currently Mr. Apelledo's Intelligent Systems
+professor (updated 2026-09-20).
 
 **Name formatting, updated 2026-09-20:** every credited name in `assistant` now carries
 its title (Mr., Ms., Dr.) inline rather than as a separate convention the prompt had to
