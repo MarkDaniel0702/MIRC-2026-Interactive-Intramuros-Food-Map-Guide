@@ -103,8 +103,11 @@ export function AboutDialog({ dialogRef }: { dialogRef: RefObject<HTMLDialogElem
         {' '}<strong>Ms. Editha S. Medina</strong> and <strong>Mr. Neil Marcus T. Manubay</strong>.
       </p>
       <p>
-        Dan's voice was added by <strong>Christian Andrei V. Santiago</strong>.
-        {' '}<strong>Alvin V. Genota</strong> served as a consultant to the creators.
+        Dan's voice was added by <strong>Christian Andrei V. Santiago</strong>, credited
+        specifically for building the text-to-speech capability.
+        {' '}<strong>Alvin V. Genota</strong> is a consultant to the creators — he was
+        Mr. Santiago's professor last year and is currently Mr. Apelledo's Intelligent
+        Systems professor.
       </p>
     </dialog>
   );

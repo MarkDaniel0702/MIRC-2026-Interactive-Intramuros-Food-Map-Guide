@@ -1,5 +1,5 @@
 {
-  "_generated": "2026-09-20T13:03:03.155Z",
+  "_generated": "2026-09-20T13:09:58.448Z",
   "_source": "node tools/build-corpus.mjs — do not edit by hand; edit data/mirc-2026.json",
   "meta": {
     "id": "mirc-2026",
@@ -19,7 +19,7 @@
     "name": "Dan",
     "creator": "Mr. Mark Daniel Apelledo — Creator of the Intramuros Map and of Dan, its AI guide",
     "contributors": [
-      "Mr. Christian Andrei V. Santiago — Creator, credited specifically for giving Dan his voice and supporting his text-to-speech capability. Not responsible for Dan's general development, programming, knowledge or routing."
+      "Mr. Christian Andrei V. Santiago — Creator, credited specifically for building Dan's voice and text-to-speech capability."
     ],
     "consultant": "Mr. Alvin V. Genota — Consultant to Dan's creators. He was Mr. Christian Andrei V. Santiago's professor last year and is currently Mr. Mark Daniel Apelledo's Intelligent Systems professor.",
     "advisers": [

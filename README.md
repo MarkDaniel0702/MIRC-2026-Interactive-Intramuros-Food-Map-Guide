@@ -227,5 +227,7 @@ Created by **Mark Daniel Apelledo** — creator of the Intramuros Map and Dan, i
 Built under the guidance of advisers **Dr. Dan Michael A. Cortez**, **Ms. Editha S. Medina**
 and **Mr. Neil Marcus T. Manubay**.
 
-Dan's voice was added by **Christian Andrei V. Santiago**. **Alvin V. Genota** served as a
-consultant to the creators.
+Dan's voice was added by **Christian Andrei V. Santiago**, credited specifically for
+building the text-to-speech capability. **Alvin V. Genota** is a consultant to the
+creators — he was Mr. Santiago's professor last year and is currently Mr. Apelledo's
+Intelligent Systems professor.
