@@ -27,7 +27,7 @@
  * degrades to the next rather than to an error. Configure whichever keys you have.
  *
  * Deploy:  cd worker && npx wrangler deploy
- * Secrets: npx wrangler secret put GEMINI_API_KEY      (and/or GROQ_/ANTHROPIC_)
+ * Secrets: npx wrangler secret put GEMINI_API_KEY      (and/or GROQ_/OPENAI_/ANTHROPIC_)
  */
 
 import { buildIndex, retrieve } from './retrieve.js';
@@ -39,6 +39,18 @@ const MAX_HISTORY_TURNS = 8;
 const MAX_REPLY_TOKENS = 700;
 const CORPUS_TTL_MS = 5 * 60 * 1000;
 const RATE_LIMIT = { windowMs: 60_000, max: 12 };
+
+/* Same per-call budget src/lib/routing.ts already uses for the OSRM client, so a
+   hung provider cannot hold a request open indefinitely. A provider that has not
+   answered inside this is treated exactly like any other failure -- the chain
+   moves on to the next one, never retried. */
+const PROVIDER_TIMEOUT_MS = 12000;
+
+function timeoutSignal(ms) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(new Error('provider timeout')), ms);
+  return { signal: controller.signal, cancel: () => clearTimeout(timer) };
+}
 
 /* How much retrieved material to put in front of the model. The rest of the slice
    (scope, venue, gaps, the programme outline) is fixed at about 2,400 tokens, and
@@ -171,6 +183,29 @@ If you cannot find an identifier in the material, say so instead of approximatin
 you are asked about a specific paper number, repeat back the exact number you matched,
 and if no record carries that number say plainly that you cannot find it.
 
+LANGUAGE
+Delegates come from several countries, including the Philippines, Malaysia, Taiwan,
+Australia, the United Kingdom, the United States, France and Portugal. Detect the
+language the person is writing in — English (in its Philippine, Australian, British or
+American form), Filipino, Malay, Mandarin Chinese, French or Portuguese — and answer in
+that same language and register, unless they ask you to switch to a different one.
+
+Proper names are never translated or transliterated, whatever language you are
+answering in: landmark, street, building and room names (Fort Santiago, Baluarte de San
+Diego, General Luna Street), people's names, and organisation names (Intramuros
+Administration, Pamantasan ng Lungsod ng Maynila) are copied exactly as they appear in
+the material, the way a fluent bilingual speaker would leave a proper noun alone.
+
+If someone asks what a specific Intramuros or MIRC term or name means or is called in
+another language, answer directly — that is answering a question about the congress or
+the walled city, not the general translation task the scope list above declines. That
+decline still applies to being handed a longer, unrelated passage of text to translate,
+summarise or rewrite.
+
+If a question is written in a language or script you cannot read with confidence, say so
+plainly, in English, and ask the person to rephrase — do not guess at what it says and
+answer something they did not ask.
+
 HOW TO WRITE
   · Short and direct. Two or three sentences is usually right; use a short list when
     the answer is genuinely a list.
@@ -245,7 +280,7 @@ function rateLimited(ip) {
    model disappears between now and the congress. */
 const geminiModels = env => [env.GEMINI_MODEL || 'gemini-3.8-flash', 'gemini-flash-latest'];
 
-async function callGemini(env, system, messages) {
+async function callGemini(env, system, messages, { signal } = {}) {
   let lastErr;
   for (const model of geminiModels(env)) {
     const res = await fetch(
@@ -267,7 +302,8 @@ async function callGemini(env, system, messages) {
                deliberation eats the whole budget and the reply comes back empty. */
             thinkingConfig: { thinkingBudget: 0 }
           }
-        })
+        }),
+        signal
       }
     );
     if (!res.ok) {
@@ -283,41 +319,51 @@ async function callGemini(env, system, messages) {
   throw lastErr ?? new Error('gemini: no model answered');
 }
 
-/* Groq's free tier caps tokens-per-minute at 8,000. The grounded prompt is ~40,000,
-   so on the free tier this provider returns 413 for every request no matter how
-   quiet it is — it cannot serve as a fallback until the prompt is small enough to
-   fit. A 413 is therefore treated as "this provider is unusable", not as a blip. */
-async function callGroq(env, system, messages) {
-  const model = env.GROQ_MODEL || 'openai/gpt-oss-120b';
-  const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+/* Groq and OpenAI both speak the same OpenAI-shaped chat-completions API — Groq's
+   endpoint is a drop-in implementation of it — so one function serves both rather
+   than duplicating the request/response handling per provider. A 413 gets its own
+   message because it means the *tier*, not just this request, cannot carry the
+   current prompt size: Groq's free 8,000-tokens-per-minute ceiling is well under the
+   grounded prompt, so on that tier this is "provider unusable", not a blip. */
+async function callOpenAIShaped(providerName, endpoint, apiKey, model, system, messages, { signal } = {}) {
+  const res = await fetch(endpoint, {
     method: 'POST',
     headers: {
       'content-type': 'application/json',
-      authorization: `Bearer ${env.GROQ_API_KEY}`
+      authorization: `Bearer ${apiKey}`
     },
     body: JSON.stringify({
       model,
       temperature: 0.2,
       max_tokens: MAX_REPLY_TOKENS,
       messages: [{ role: 'system', content: system }, ...messages]
-    })
+    }),
+    signal
   });
   if (!res.ok) {
     const body = (await res.text()).slice(0, 200);
     if (res.status === 413) {
       const tpm = res.headers.get('x-ratelimit-limit-tokens') ?? 'unknown';
-      throw new Error(`groq ${model}: prompt exceeds this tier's ${tpm} tokens/minute — ` +
+      throw new Error(`${providerName} ${model}: prompt exceeds this tier's ${tpm} tokens/minute — ` +
                       `provider unusable at the current corpus size`);
     }
-    throw new Error(`groq ${res.status}: ${body}`);
+    throw new Error(`${providerName} ${res.status}: ${body}`);
   }
   const json = await res.json();
   const text = json.choices?.[0]?.message?.content ?? '';
-  if (!text.trim()) throw new Error('groq returned no text');
+  if (!text.trim()) throw new Error(`${providerName} returned no text`);
   return text;
 }
 
-async function callAnthropic(env, system, messages) {
+const callGroq = (env, system, messages, opts) =>
+  callOpenAIShaped('groq', 'https://api.groq.com/openai/v1/chat/completions',
+    env.GROQ_API_KEY, env.GROQ_MODEL || 'openai/gpt-oss-120b', system, messages, opts);
+
+const callOpenAI = (env, system, messages, opts) =>
+  callOpenAIShaped('openai', 'https://api.openai.com/v1/chat/completions',
+    env.OPENAI_API_KEY, env.OPENAI_MODEL || 'gpt-4o-mini', system, messages, opts);
+
+async function callAnthropic(env, system, messages, { signal } = {}) {
   const model = env.ANTHROPIC_MODEL || 'claude-sonnet-5';
   const res = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
@@ -332,7 +378,8 @@ async function callAnthropic(env, system, messages) {
       temperature: 0.2,
       system: [{ type: 'text', text: system, cache_control: { type: 'ephemeral' } }],
       messages
-    })
+    }),
+    signal
   });
   if (!res.ok) throw new Error(`anthropic ${res.status}: ${(await res.text()).slice(0, 200)}`);
   const json = await res.json();
@@ -344,21 +391,55 @@ async function callAnthropic(env, system, messages) {
 /* Order matters, and the obvious order is wrong for a free deployment. Gemini's free
    tier allows only 20 requests per day per model — fine for testing, useless for a
    congress — while Groq's allows 1,000 a day, capped instead at 8,000 tokens per
-   minute, which the retrieved slice fits inside. So Groq leads by default and Gemini
-   becomes the overflow. On a paid Gemini key, set PROVIDER_ORDER=gemini,groq,anthropic
+   minute, which the retrieved slice fits inside. So Groq leads by default, Gemini is
+   the first overflow, and OpenAI and Anthropic (both paid, no free-tier ceiling to
+   hit) sit behind it as the deeper fallback for the rare day all the free capacity is
+   gone at once. On a paid Gemini key, set PROVIDER_ORDER=gemini,groq,openai,anthropic
    to put the larger context first. */
 const AVAILABLE = {
   groq: { key: 'GROQ_API_KEY', call: callGroq },
   gemini: { key: 'GEMINI_API_KEY', call: callGemini },
+  openai: { key: 'OPENAI_API_KEY', call: callOpenAI },
   anthropic: { key: 'ANTHROPIC_API_KEY', call: callAnthropic }
 };
 
 function providerChain(env) {
-  const order = (env.PROVIDER_ORDER ?? 'groq,gemini,anthropic')
+  const order = (env.PROVIDER_ORDER ?? 'groq,gemini,openai,anthropic')
     .split(',').map(s => s.trim()).filter(Boolean);
   return order
     .filter(name => AVAILABLE[name] && env[AVAILABLE[name].key])
     .map(name => ({ name, call: AVAILABLE[name].call }));
+}
+
+/**
+ * Try each configured provider in order, once each, until one answers.
+ *
+ * One attempt per provider, no retry within a provider, so a bad run through the
+ * whole chain is bounded at chain.length * PROVIDER_TIMEOUT_MS — never unbounded,
+ * and never loops back to a provider that already failed this request. A fresh
+ * timeout is started per attempt rather than shared across the chain, so a slow
+ * provider cannot eat into the next one's budget.
+ *
+ * The same `system` and `messages` — the full prompt and conversation history — are
+ * handed unchanged to whichever provider is tried next, so a switch never drops or
+ * truncates context; only which provider answers changes.
+ *
+ * Returns { reply: null, used: null } if every configured provider failed or none
+ * were configured — never throws, so the caller always has a value to check.
+ */
+async function runProviderChain(chain, env, system, messages) {
+  for (const provider of chain) {
+    const { signal, cancel } = timeoutSignal(PROVIDER_TIMEOUT_MS);
+    try {
+      const reply = await provider.call(env, system, messages, { signal });
+      return { reply, used: provider.name };
+    } catch (err) {
+      console.error(`provider ${provider.name}:`, err.name === 'AbortError' ? 'timed out' : err.message);
+    } finally {
+      cancel();
+    }
+  }
+  return { reply: null, used: null };
 }
 
 /* ── CORS ────────────────────────────────────────────────────────────────────── */
@@ -367,9 +448,14 @@ function corsHeaders(request, env) {
   const allowed = (env.ALLOWED_ORIGINS ?? '')
     .split(',').map(s => s.trim()).filter(Boolean);
   const origin = request.headers.get('origin') ?? '';
-  const ok = allowed.length === 0 || allowed.includes(origin);
+  /* Fail closed, not open: if ALLOWED_ORIGINS is ever unset — a misconfigured
+     deploy, a dashboard override that drops the [vars] this file normally ships
+     with — no browser origin is allowed, rather than every origin being allowed.
+     wrangler.toml always sets this for the real deployment, so this only changes
+     behaviour in the misconfigured case, and changes it from wide-open to closed. */
+  const ok = allowed.length > 0 && allowed.includes(origin);
   return {
-    'access-control-allow-origin': ok ? (origin || '*') : allowed[0] ?? '',
+    'access-control-allow-origin': ok ? origin : allowed[0] ?? '',
     'access-control-allow-methods': 'POST, OPTIONS',
     'access-control-allow-headers': 'content-type',
     'access-control-max-age': '86400',
@@ -387,7 +473,26 @@ const json = (body, status, headers) => new Response(JSON.stringify(body), {
 export default {
   async fetch(request, env, ctx) {
     const cors = corsHeaders(request, env);
+    /* A catch-all safety net, not a substitute for the specific try/catches below.
+       Those handle the failures that are expected to happen (a down corpus host, a
+       down provider) with a purpose-written reply. This only catches a genuine bug
+       elsewhere in the request path — so it never returns Cloudflare's own default
+       error page (no stack trace, no internal detail, and critically, WITH the CORS
+       headers the platform's own error response would otherwise skip, which browsers
+       would otherwise report to the panel as an opaque network failure rather than
+       a message it can show). */
+    try {
+      return await handleChat(request, env, ctx, cors);
+    } catch (err) {
+      console.error('unhandled:', err?.message ?? String(err));
+      return json({
+        reply: 'Something went wrong on my end. Try again in a moment — or ask at the registration desk.'
+      }, 200, cors);
+    }
+  }
+};
 
+async function handleChat(request, env, ctx, cors) {
     if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: cors });
 
     const url = new URL(request.url);
@@ -406,6 +511,7 @@ export default {
       const keys = {
         GROQ_API_KEY: Boolean(env.GROQ_API_KEY),
         GEMINI_API_KEY: Boolean(env.GEMINI_API_KEY),
+        OPENAI_API_KEY: Boolean(env.OPENAI_API_KEY),
         ANTHROPIC_API_KEY: Boolean(env.ANTHROPIC_API_KEY)
       };
       return json({ ok: true, ready, gaps, keys, order: env.PROVIDER_ORDER ?? null,
@@ -504,16 +610,7 @@ export default {
     const system = buildSystemPrompt(slice);
     const messages = [...history, { role: 'user', content: message }];
 
-    let reply = null, used = null;
-    for (const provider of chain) {
-      try {
-        reply = await provider.call(env, system, messages);
-        used = provider.name;
-        break;
-      } catch (err) {
-        console.error(`provider ${provider.name}:`, err.message);
-      }
-    }
+    const { reply, used } = await runProviderChain(chain, env, system, messages);
 
     if (reply === null) {
       return json({
@@ -550,10 +647,14 @@ export default {
     if (!isUnknown) await storeAnswer(ctx, corpus, message, answer);
 
     return json(answer, 200, cors);
-  }
-};
+}
 
-/* Named exports so tools/try-dan.mjs can exercise the real prompt and the real
-   guards rather than a copy of them that could drift. Not used by the Worker
-   runtime, which goes through the default export above. */
-export { buildSystemPrompt, looksOffTopic, replyEscapedScope };
+/* Named exports so tools/try-dan.mjs and tools/eval-fallback.mjs can exercise the
+   real prompt, guards and provider chain rather than a copy of them that could
+   drift. Not used by the Worker runtime, which goes through the default export
+   above. */
+export {
+  buildSystemPrompt, looksOffTopic, replyEscapedScope,
+  providerChain, runProviderChain, timeoutSignal, PROVIDER_TIMEOUT_MS,
+  callGroq, callGemini, callOpenAI, callAnthropic
+};

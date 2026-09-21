@@ -23,18 +23,31 @@ import { buildSystemPrompt, looksOffTopic, replyEscapedScope } from '../worker/s
 import { buildIndex, retrieve } from '../worker/src/retrieve.js';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-/* Two providers, because their free tiers fail in opposite ways: Gemini allows only
-   20 requests a day but a large prompt; Groq allows 1,000 a day but caps the prompt
-   at 8,000 tokens a minute. Which one can serve the congress is an empirical
-   question, so the harness can ask either. */
-const PROVIDER = process.env.PROVIDER || (process.env.GROQ_API_KEY ? 'groq' : 'gemini');
-const KEY = PROVIDER === 'groq' ? process.env.GROQ_API_KEY : process.env.GEMINI_API_KEY;
-const MODEL = process.argv[2] ||
-  (PROVIDER === 'groq' ? 'openai/gpt-oss-120b' : 'gemini-3.8-flash');
+/* Four providers, matching worker/src/index.js's fallback chain (groq -> gemini ->
+   openai -> anthropic), because each fails in a different way: Gemini's free tier
+   allows only 20 requests a day but a large prompt; Groq allows 1,000 a day but caps
+   the prompt at 8,000 tokens a minute; OpenAI and Anthropic are paid, with no daily
+   ceiling to hit. Which one can serve the congress on a given day is an empirical
+   question, so the harness can ask any of them. */
+const DEFAULT_MODEL = {
+  groq: 'openai/gpt-oss-120b', gemini: 'gemini-3.8-flash',
+  openai: 'gpt-4o-mini', anthropic: 'claude-sonnet-5'
+};
+const KEY_ENV = {
+  groq: 'GROQ_API_KEY', gemini: 'GEMINI_API_KEY',
+  openai: 'OPENAI_API_KEY', anthropic: 'ANTHROPIC_API_KEY'
+};
+const PROVIDER = process.env.PROVIDER ||
+  Object.keys(KEY_ENV).find(p => process.env[KEY_ENV[p]]) || 'gemini';
+const KEY = process.env[KEY_ENV[PROVIDER]];
+const MODEL = process.argv[2] || DEFAULT_MODEL[PROVIDER];
 
+if (!DEFAULT_MODEL[PROVIDER]) {
+  console.error(`Unknown PROVIDER "${PROVIDER}" — one of ${Object.keys(DEFAULT_MODEL).join(', ')}.`);
+  process.exit(1);
+}
 if (!KEY) {
-  console.error(`Set ${PROVIDER === 'groq' ? 'GROQ_API_KEY' : 'GEMINI_API_KEY'} in the ` +
-                'environment. Keys are never read from a file.');
+  console.error(`Set ${KEY_ENV[PROVIDER]} in the environment. Keys are never read from a file.`);
   process.exit(1);
 }
 
@@ -128,26 +141,50 @@ async function ask(question, isRetry = false) {
   const { slice, tokens } = retrieve(index, question, { budgetTokens: RETRIEVAL_BUDGET });
   const system = buildSystemPrompt(slice);
   lastTokens = tokens;
-  const res = PROVIDER === 'groq'
-    ? await fetch('https://api.groq.com/openai/v1/chat/completions', {
-        method: 'POST',
-        headers: { 'content-type': 'application/json', authorization: `Bearer ${KEY}` },
-        body: JSON.stringify({
-          model: MODEL, temperature: 0.2, max_tokens: 700,
-          messages: [{ role: 'system', content: system }, { role: 'user', content: question }]
-        })
-      })
-    : await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`, {
-        method: 'POST',
-        headers: { 'content-type': 'application/json', 'x-goog-api-key': KEY },
-        body: JSON.stringify({
-          system_instruction: { parts: [{ text: system }] },
-          contents: [{ role: 'user', parts: [{ text: question }] }],
-          generationConfig: { temperature: 0.2, maxOutputTokens: 700,
-                              thinkingConfig: { thinkingBudget: 0 } }
-        })
-      });
+  /* Request shape by provider. Groq and OpenAI share the same chat-completions
+     shape (Groq's endpoint implements it directly); Anthropic and Gemini each have
+     their own. Kept as one switch rather than four near-duplicate fetch calls. */
+  const res = await (() => {
+    switch (PROVIDER) {
+      case 'groq':
+      case 'openai':
+        return fetch(
+          PROVIDER === 'groq'
+            ? 'https://api.groq.com/openai/v1/chat/completions'
+            : 'https://api.openai.com/v1/chat/completions', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json', authorization: `Bearer ${KEY}` },
+          body: JSON.stringify({
+            model: MODEL, temperature: 0.2, max_tokens: 700,
+            messages: [{ role: 'system', content: system }, { role: 'user', content: question }]
+          })
+        });
+      case 'anthropic':
+        return fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json', 'x-api-key': KEY, 'anthropic-version': '2023-06-01'
+          },
+          body: JSON.stringify({
+            model: MODEL, max_tokens: 700, temperature: 0.2,
+            system: [{ type: 'text', text: system }],
+            messages: [{ role: 'user', content: question }]
+          })
+        });
+      default:
+        return fetch(
+          `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`, {
+          method: 'POST',
+          headers: { 'content-type': 'application/json', 'x-goog-api-key': KEY },
+          body: JSON.stringify({
+            system_instruction: { parts: [{ text: system }] },
+            contents: [{ role: 'user', parts: [{ text: question }] }],
+            generationConfig: { temperature: 0.2, maxOutputTokens: 700,
+                                thinkingConfig: { thinkingBudget: 0 } }
+          })
+        });
+    }
+  })();
   if (res.status === 429) {
     /* The free tier caps tokens per minute, and this prompt is ~43k tokens, so a
        handful of questions exhausts it. Back off and try once more rather than
@@ -161,8 +198,10 @@ async function ask(question, isRetry = false) {
   }
   if (!res.ok) return { reply: `HTTP ${res.status}: ${(await res.text()).slice(0, 160)}`, via: 'error' };
   const json = await res.json();
-  const text = PROVIDER === 'groq'
+  const text = PROVIDER === 'groq' || PROVIDER === 'openai'
     ? (json.choices?.[0]?.message?.content ?? '')
+    : PROVIDER === 'anthropic'
+    ? (json.content?.map(b => b.text ?? '').join('') ?? '')
     : (json.candidates?.[0]?.content?.parts?.map(p => p.text).join('') ?? '');
   if (!text.trim()) return { reply: '(empty response)', via: 'error' };
   /* Layer 4 — the output check. */

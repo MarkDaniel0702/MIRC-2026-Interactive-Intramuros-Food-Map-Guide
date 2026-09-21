@@ -180,8 +180,9 @@ question still has to be listed in `tools/warm-questions.json`, or the next run 
 
     node tools/eval-cache.mjs         # matcher + collision check, offline
 
-    node tools/eval-retrieval.mjs     # 54 cases, offline, no API key, no quota
-    PROVIDER=groq GROQ_API_KEY=... node tools/try-dan.mjs    # end-to-end
+    node tools/eval-retrieval.mjs     # offline, no API key, no quota
+    node tools/eval-fallback.mjs      # provider chain + timeouts, offline, no API key
+    PROVIDER=groq GROQ_API_KEY=... node tools/try-dan.mjs    # end-to-end (also gemini/openai/anthropic)
 
 
 **Nothing is invented.** A field left `null` in the knowledge base means *not
@@ -361,6 +362,76 @@ leadership) as in scope — without it, a question like "what colleges does PLM 
 risked the model reading it as ordinary "general knowledge" (out of scope) rather than
 congress-host-institution information the corpus actually carries.
 
+### Dan's Intramuros knowledge, and language support, added 2026-09-21
+
+A new top-level `intramuros` section carries general knowledge about the walled city
+itself, not tied to any one place on the map — `overview` (founding, name, 1571),
+`wallsAndGates` (dimensions, surviving gates, bastions), `history` (the 1945 Battle of
+Manila, the Intramuros Administration's 1979 founding, restoration, heritage status)
+and `gettingAround` (LRT/jeepney/ferry access, plus the e-tranvía, calesas, pedicabs and
+bike rental once inside). Indexed the same way as `venue.*`'s PLM fields — one
+`field()` call each in `worker/src/retrieve.js`, under a shared `intramuros` kind
+(`KIND_LIMIT.intramuros = 4`), each guaranteed a slot by its own `INTENTS` entry.
+`scope.inScope` gained a line naming Intramuros itself in scope, for the same reason
+the PLM line did: without it, "what's the history of Intramuros" risked being read as
+ordinary declined "general knowledge" rather than something the corpus actually covers.
+
+**Sourced from:** Wikipedia's Intramuros article, cross-checked against Britannica for
+the founding narrative, `intramuros.gov.ph` directly (unlike `plm.edu.ph`, it is not
+behind a bot wall) for the calesa contact, and a dated (April 2026) report on the new
+e-tranvía service for its current schedule and stops. Reviewed 2026-09-21. Nothing here
+gives a fixed calesa, pedicab or bike-rental rate, or promises the e-tranvía's schedule
+holds — none of those is centrally published or fixed, so `gaps` now says to confirm on
+the day rather than quote a figure as current, and the field's own text repeats that
+caveat inline for whichever guaranteed slot happens to be the one retrieved.
+
+**A budget lesson, caught before it shipped.** The first draft split this into 6 fields
+(`overview`, `wallsAndGates`, `warAndRestoration`, `heritageStatus`, `gettingThere`,
+`gettingAround`), mirroring PLM's shape. But unlike PLM's sub-topics — library, colleges,
+president, campus buildings are all genuinely separate facts a question asks about one
+at a time — "tell me about the history of Intramuros" is one continuous story a visitor
+plausibly wants all at once, so several of the 6 fields' own `INTENTS` entries fired
+together on that single realistic question. Measured worst case: up to 5 of 6
+guaranteed slots at once, ~1,470 tokens of guaranteed-slot payload alone — roughly
+double the 4-field PLM kind's own worst case (~675 tokens), because each guaranteed
+slot bypasses `RETRIEVAL_BUDGET` entirely (`take()` in `retrieve()`'s guaranteed-slot
+loop has no budget check — the same gotcha the PLM fields were kept short to avoid).
+Fixed by merging along natural topic lines instead — the war, the restoration and the
+heritage status are one field (`history`), and getting to Intramuros and getting around
+inside it are one field (`gettingAround`) — down to 4 fields with less overlapping
+trigger vocabulary, so a broad question guarantees at most all 4, matching PLM's own
+worst case rather than doubling it. `tools/eval-retrieval.mjs` now asserts this
+directly: a deliberately broad "tell me about the history of Intramuros, its walls, and
+what happened during the war" must not guarantee more than 3 of the 4 fields at once.
+
+**Language support.** The system prompt gained a LANGUAGE section: Dan detects the
+language a question is asked in — English (Philippine, Australian, British or American),
+Filipino, Malay, Mandarin Chinese, French or Portuguese — and answers in kind, unless
+asked to switch. Proper names (landmarks, streets, people, organisations) are never
+translated or transliterated, whichever language the reply is in. Translating one
+Intramuros or MIRC term or name is answering a question about the congress or the
+walled city, not the general-purpose translation task `scope.outOfScope` already
+declines — that decline still applies to a longer, unrelated passage of text someone
+hands over to translate, summarise or rewrite; the LANGUAGE section draws that line
+explicitly so the model does not conflate the two. If a question arrives in a language
+or script Dan cannot read with confidence, the prompt tells it to say so in English and
+ask for a rephrase rather than guess. This resolves the "Language" item under *Needs a
+policy decision, not content* below: nothing about the client-side pre-filters changed
+(`OFF_TOPIC` in `worker/src/index.js` and `src/components/ChatPanel.tsx` are still
+English-only regexes, deliberately narrow "obviously off-topic" catches — anything a
+non-English message doesn't trip still reaches the grounded prompt, which already
+declines code/essays "in any language, for any stated reason"). `assistant.canDo`
+gained two lines — Intramuros's own history and the language list — so "what can you
+do?" surfaces both without a corpus rebuild finding them by accident.
+
+**Known limitation, not fixed here:** the decline and "not in the material" lines
+(`scope.decline`, `scope.unknown`) are returned verbatim in English regardless of the
+question's language, because the model is instructed to reply with that exact string
+and the Worker detects a decline by matching a substring of it
+(`reply.includes(declineLine.slice(0, 30))` in `worker/src/index.js`) — translating the
+line would break that detection and let a decline slip through as a real, cacheable
+answer. Localising it properly needs a decline string per language, not attempted here.
+
 ### 4. Two things to confirm
 
 - **`GA TOP`** is the only room code still unexpanded. The programme legend named the
@@ -383,16 +454,82 @@ congress-host-institution information the corpus actually carries.
 
 ### 5. A model key
 
-At least one. Two is better — the Worker falls through to the second when the first
-rate-limits, which is what keeps it steady during a coffee break.
+At least one. More is better — the Worker falls through to the next configured
+provider, in order, when one rate-limits, errors, times out, or was never given a
+key, which is what keeps it steady during a coffee break. Default order:
+`groq,gemini,openai,anthropic` (`PROVIDER_ORDER` in `worker/wrangler.toml`); a
+provider with no key set is skipped, not attempted and failed.
 
 - **Groq** (`GROQ_API_KEY`) — **the primary for a free deployment**: 1,000 requests/day,
   8,000 tokens/minute, which the retrieved slice fits inside. Model `openai/gpt-oss-120b`.
 - **Google Gemini** (`GEMINI_API_KEY`) — big context, but the free tier is **20 requests
-  per day per model**. Useful for testing and as overflow; not enough to run a congress
-  unless billing is enabled.
-- **Anthropic** (`ANTHROPIC_API_KEY`) — paid, and the one to use if abstracts are
-  confidential; some free tiers train on submitted prompts.
+  per day per model**. Useful for testing and as the first overflow; not enough to run
+  a congress on its own unless billing is enabled.
+- **OpenAI** (`OPENAI_API_KEY`) — paid, no daily request ceiling to hit. Model
+  `gpt-4o-mini` by default (`OPENAI_MODEL`). Third in the chain: the deeper fallback
+  for the rare moment both free tiers are exhausted or down at once.
+- **Anthropic** (`ANTHROPIC_API_KEY`) — paid, no daily ceiling either, and the one to
+  use if abstracts are confidential; some free tiers train on submitted prompts. Last
+  in the chain, on the theory that if it has come to this, availability matters more
+  than which of the two paid providers answers.
+
+**How a request moves through the chain, added 2026-09-22:** `worker/src/index.js`
+tries each configured provider once, in order (`runProviderChain`), with its own
+12-second timeout per attempt (`PROVIDER_TIMEOUT_MS`, the same convention
+`src/lib/routing.ts` already uses for the OSRM client) — a provider that never
+answers is cut off and counted as a failure, exactly like a bad status code, rather
+than holding the request open. No provider is retried within one request, so a full
+run through a 4-provider chain is bounded at `4 × 12s`, never unbounded. The same
+system prompt and conversation history are handed to whichever provider is tried
+next unchanged — a fallback never drops or truncates context, only which provider
+answers changes. If every configured provider fails, the caller gets a plain
+`{ reply: null, used: null }` rather than a thrown error, which is what lets the
+Worker return "I could not get an answer just now… try again, or ask at the desk"
+instead of a 500. Provider failures are logged (`console.error`, readable with
+`wrangler tail`) with the provider's own short error text — enough to tell which one
+failed and why — and never with the key it was called with.
+
+Groq and OpenAI share the same request/response shape (Groq's endpoint is a drop-in
+implementation of OpenAI's chat-completions API), so one function
+(`callOpenAIShaped`) serves both rather than duplicating the fetch/error handling
+per provider — Gemini and Anthropic each keep their own, since their request and
+response shapes genuinely differ.
+
+`node tools/eval-fallback.mjs` checks all of this offline — no key, no network, no
+real provider ever called. It runs the actual exported chain code
+(`providerChain`, `runProviderChain`, the four `call*` functions) against a stubbed
+`global.fetch`, not a re-implementation that could drift from what ships: provider
+order and key-based filtering, a failure falling through to the next provider,
+every-provider-fails returning a clean null, a hung provider being cut off by its
+own timeout rather than blocking the request, a provider never being retried within
+one request, and the exact same prompt and message history reaching whichever
+provider ends up answering.
+
+**Two things a 2026-09-22 security pass found while this code was open, fixed
+alongside it, not filed as follow-ups:**
+
+- **CORS failed open.** `corsHeaders()` treated an unset or empty `ALLOWED_ORIGINS`
+  as "allow every origin," which is the wrong default for a misconfiguration to fall
+  into — `worker/wrangler.toml` always sets it for the real deployment, so this only
+  ever mattered if that got dropped (a dashboard override, a stripped `[vars]`
+  block), but a fail-open default is a footgun worth removing on principle,
+  especially now that two always-available paid providers sit behind the request:
+  an unauthenticated endpoint anyone can script against is more expensive to leave
+  wide open than it used to be. It now fails closed — an unset `ALLOWED_ORIGINS`
+  allows no browser origin rather than every one. The Worker still answers any
+  direct (non-browser) caller regardless, same as before; CORS was never an access
+  control for those, only a browser-side reading restriction, which is why the real
+  backstop against abuse is the per-IP rate limiter above, not this header.
+- **An uncaught exception anywhere in the request path returned Cloudflare's own
+  generic error page** — not a leak (Cloudflare does not forward a stack trace to
+  the client in production), but it skipped the Worker's own CORS headers, which
+  the browser then reports to the panel as an opaque network failure rather than a
+  message it can show. `export default { fetch }` is now a thin wrapper: it computes
+  `cors` first, then runs the real handler (`handleChat`) inside a `try`, so any
+  bug anywhere in the request path — not just the specific failures each inner
+  `try/catch` already expected — still comes back as the panel's normal "something
+  went wrong, try again" message, with the right headers, logged server-side and
+  never with any detail beyond the error's own short message.
 
 ### 6. A Cloudflare account
 
@@ -458,8 +595,9 @@ line from `gaps`, rebuild.
   accept the decline.
 - **Beyond the walls.** Rizal Park, Binondo, the malls: declined by design. Fine, but
   the decline text should say *where* to look instead.
-- **Language.** Nothing tells Dan what to do with a question in Filipino; the model
-  will answer in kind. Decide whether that is wanted.
+- ~~**Language.**~~ Resolved 2026-09-21 — see *Dan's Intramuros knowledge, and language
+  support* above. Dan now detects and answers in Philippine/Australian/British/American
+  English, Filipino, Malay, Mandarin Chinese, French or Portuguese.
 - **Logging.** Declined and unanswered questions are logged with their text. If anyone
   asks "is this private?", Dan has nothing to say; a line in `assistant` would fix it.
 
@@ -624,7 +762,8 @@ With the free Gemini and Groq tiers: **nothing**. Cloudflare Workers' free tier 
 
 Free tiers cap requests per minute and per day, and can change terms without notice.
 The provider fallback is the mitigation; if the committee wants a guarantee at peak, a
-small paid Anthropic key removes the ceiling for roughly the price of lunch.
+small paid OpenAI or Anthropic key — either one, or both for a deeper fallback — removes
+the ceiling for roughly the price of lunch.
 
 ---
 
@@ -642,10 +781,11 @@ tools/build-corpus.mjs      the merge step
 tools/eval-retrieval.mjs    retrieval recall, offline
 tools/eval-cache.mjs        warm-answer matcher + collisions, offline
 tools/eval-focus.mjs        "find X on the map" matcher, offline
+tools/eval-fallback.mjs     provider chain, timeouts and fallback, offline
 tools/warm-cache.mjs        pre-answers the common questions
 tools/warm-questions.json   the list it works from
 worker/src/cache.js         warm answers + edge cache
-tools/try-dan.mjs           end-to-end acceptance against Groq or Gemini
+tools/try-dan.mjs           end-to-end acceptance against any one of the four providers
 worker/src/focus.js         which marker a question points the map at, if any
 worker/src/retrieve.js      the retrieval layer
 worker/src/index.js         the proxy, the grounded prompt, the scope layers

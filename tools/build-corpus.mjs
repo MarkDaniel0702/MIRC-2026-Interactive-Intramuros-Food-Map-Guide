@@ -219,6 +219,7 @@ const corpus = {
   speakers: mirc.speakers,
   papers: mirc.papers,
   venue: mirc.venue,
+  intramuros: mirc.intramuros ?? null,
   registration: mirc.registration,
   registrationStats: mirc.registrationStats ?? null,
   logistics: mirc.logistics,

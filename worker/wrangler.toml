@@ -6,10 +6,12 @@
 # Then set at least one model key as a secret (never put keys in this file):
 #   npx wrangler secret put GEMINI_API_KEY
 #   npx wrangler secret put GROQ_API_KEY
+#   npx wrangler secret put OPENAI_API_KEY
 #   npx wrangler secret put ANTHROPIC_API_KEY
 #
-# Providers are tried in the order gemini -> groq -> anthropic, so configuring two
-# free tiers gives the congress a fallback when one hits its rate ceiling.
+# Providers are tried in the order set by PROVIDER_ORDER below (default
+# groq -> gemini -> openai -> anthropic), so configuring more than one gives the
+# congress a fallback when one hits its rate ceiling or goes down.
 
 name = "mirc-2026-chat"
 main = "src/index.js"
@@ -35,9 +37,13 @@ ALLOWED_ORIGINS = "https://markdaniel0702.github.io,http://localhost:8000"
 # one-line change. Check the provider's current model list before the congress.
 GEMINI_MODEL = "gemini-3.8-flash"
 GROQ_MODEL = "openai/gpt-oss-120b"   # 131k context; free tier is 8k tokens/min
+OPENAI_MODEL = "gpt-4o-mini"
 ANTHROPIC_MODEL = "claude-sonnet-5"
 
 # Provider order. Groq leads because its free tier allows 1,000 requests a day,
 # whereas Gemini's allows 20 per model per day — enough to test, not to run a
-# congress. On a paid Gemini key, flip this to "gemini,groq,anthropic".
-PROVIDER_ORDER = "groq,gemini,anthropic"
+# congress. OpenAI and Anthropic are both paid (no free-tier ceiling to hit) and sit
+# behind the two free tiers as the deeper fallback for the rare day both are
+# exhausted or down at once. On a paid Gemini key, flip this to
+# "gemini,groq,openai,anthropic" to put the larger context first.
+PROVIDER_ORDER = "groq,gemini,openai,anthropic"

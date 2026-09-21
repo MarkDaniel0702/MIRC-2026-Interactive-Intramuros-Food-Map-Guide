@@ -313,6 +313,30 @@ function flatten(corpus) {
   field('plm', 'president', v.president,
     'plm president university president current president head of plm who leads plm who heads plm');
 
+  /* General knowledge about Intramuros itself, not tied to one place on the map --
+     founding, walls, wartime history and how to get to and around the district. The
+     specific restaurants/sights/hotels already ride the eat/see/stay kinds above; this
+     is the connective history and orientation those per-place records do not carry.
+     Kept to 4 fields, not 6, and merged along natural topic lines (the war, its
+     restoration and its heritage status are one continuous story, not three) -- an
+     earlier 6-field draft measured roughly double the worst-case guaranteed-slot cost
+     of the 4-field "plm" kind below, because unlike PLM's sub-topics (library vs.
+     president vs. colleges), Intramuros's history is one thing a visitor plausibly
+     asks for all at once, so more of the fields' own INTENTS entries fired together
+     on the same realistic question. See the guaranteed-slot note on KIND_LIMIT/INTENTS
+     before adding a 5th field here. */
+  const im = corpus.intramuros ?? {};
+  field('intramuros', 'overview', im.overview,
+    'intramuros founded founding legazpi 1571 name mean capital spanish colonial seat of government');
+  field('intramuros', 'wallsAndGates', im.wallsAndGates,
+    'walls gates gate bastion bastions fort santiago how thick how high how long muralla murallas puerta');
+  field('intramuros', 'history', im.history,
+    'world war 2 wwii battle of manila 1945 destroyed destruction restoration rebuilt intramuros administration ' +
+    'unesco world heritage national historical landmark national cultural treasure heritage status baroque churches');
+  field('intramuros', 'gettingAround', im.gettingAround,
+    'how do i get to intramuros lrt jeepney ferry pasig river from the airport e-tranvia tranvia calesa kalesa ' +
+    'pedicab bike bicycle bambike getting around walking tour rent rental');
+
   for (const f of corpus.faq ?? []) add('faq', `${f.q} ${f.a}`, f, 1.2);
 
   return { docs, trackName, roomName };
@@ -355,7 +379,7 @@ const KIND_LIMIT = {
   session: 6, paper: 8, speaker: 4, event: 6, member: 4, guideline: 6,
   eat: 6, see: 6, stay: 3, arrival: 6, regCountry: 12, regInstitution: 8, faq: 4,
   about: 2, organiser: 4, partners: 1, subconference: 1, deadline: 6, venueAbout: 1,
-  registration: 3, logistics: 3, venueInfo: 2, contact: 1, plm: 4
+  registration: 3, logistics: 3, venueInfo: 2, contact: 1, plm: 4, intramuros: 4
 };
 
 /**
@@ -405,6 +429,20 @@ const INTENTS = [
     ['plm'], 1],
   [/\b(plm president|university president|president of plm|president of the university|who (?:is|leads|heads) plm|current (?:university )?president)\b/i,
     ['plm'], 1],
+  /* Intramuros itself, not one place on the map -- founding, walls, wartime history
+     and transport. Kept as its own set of guaranteed slots for the same reason the
+     guideline/plm intents are: a short history paragraph loses on word overlap to
+     the dozens of eat/see records that also mention "Intramuros". One regex per
+     field (see the 4-field note above field()) so a single question fires at most
+     one of these, not several at once. */
+  [/\b(founded|founding|founder|legazpi|when was intramuros|what does intramuros mean|walled city mean)\b/i,
+    ['intramuros'], 1],
+  [/\b(walls?|gates?|bastions?|puerta|muralla|how (?:thick|high|long|big) (?:is|are) (?:the )?walls?)\b/i,
+    ['intramuros'], 1],
+  [/\b(world war|wwii|ww2|battle of manila|1945|bombed|destroyed|destruction|rebuilt|restoration|intramuros administration|unesco|world heritage|national historical landmark|national cultural treasure|heritage (?:site|status))\b/i,
+    ['intramuros'], 1],
+  [/\b(how do i get to intramuros|getting to intramuros|from (?:the )?airport|from naia|nearest lrt|pasig river ferry|e-?tranv[íi]a|tranvia|calesa|kalesa|pedicab|bambike|bike rental|bicycle rental|getting around intramuros|around the walled city)\b/i,
+    ['intramuros'], 1],
   [/\b(what is mirc|about the conference|theme|purpose|hybrid|online participation)\b/i,
     ['about'], 1],
   /* There are exactly four plenaries. Even with "plenary" now indexed, leaving this

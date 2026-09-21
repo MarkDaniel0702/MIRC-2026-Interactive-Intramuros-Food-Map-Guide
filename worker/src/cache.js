@@ -113,8 +113,12 @@ const TTL_SECONDS = 60 * 60 * 6;
 /* Bump this to throw away every cached answer at the next deploy. The corpus build
    stamp in the key handles a content update, but not a prompt change — the same
    question under a new prompt still lands on yesterday's answer. Bumped to 2 when
-   model-written declines stopped being cached, to drop the ones already stored. */
-const CACHE_VERSION = 2;
+   model-written declines stopped being cached, to drop the ones already stored.
+   Bumped to 3 for the Intramuros-knowledge and LANGUAGE additions to the system
+   prompt (buildSystemPrompt in worker/src/index.js) — an answer cached before those
+   existed was never told to answer in the asker's own language or draw on the new
+   Intramuros history/transport fields, so it must not be served after this ships. */
+const CACHE_VERSION = 3;
 
 const cacheKey = (corpus, question) => new Request(
   `https://dan.cache/v${CACHE_VERSION}/${corpus?._generated ?? 'v0'}/${hash(normalise(question))}`,

@@ -42,9 +42,11 @@ or one of six arrival presets.
 
 **Ask Dan** (top-right, or the phoenix mark) opens a chat panel that answers questions
 about the MIRC 2026 programme — sessions, speakers, rooms, registration — and about
-getting around Intramuros, then **declines everything else**. It's grounded only in the
-congress's own material, not general knowledge, so it won't improvise an answer it
-doesn't have.
+Intramuros itself: getting around it, and its history, walls and heritage, then
+**declines everything else**. It's grounded only in its own material, not general
+knowledge, so it won't improvise an answer it doesn't have. It also answers in whichever
+of English (Philippine, Australian, British or American), Filipino, Malay, Mandarin
+Chinese, French or Portuguese a question is asked in.
 
 Under the hood: the corpus (`public/data/chat-corpus.json`) is retrieved down to a
 question-shaped slice before it ever reaches a model, which is what makes a free-tier

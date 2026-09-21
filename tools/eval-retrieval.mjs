@@ -106,6 +106,17 @@ const CASES = [
   ['What other buildings are on the PLM campus?',          all(inSlice('Rajah Sulayman Gymnasium'), inSlice('PLM Chapel'))],
   ['Does PLM have a library or a clinic?',                 all(inSlice('library'), inSlice('physical therapy clinic'))],
   ['Who is the current PLM president?',                    inSlice('Domingo Reyes')],
+  // ── general Intramuros knowledge, added 2026-09-21 ──────────────────────────
+  ['When was Intramuros founded?',                          all(inSlice('Legazpi'), inSlice('1571'))],
+  ['How thick are the walls of Intramuros?',                inSlice('Dasmariñas')],
+  ['What happened to Intramuros in World War 2?',           all(inSlice('Battle of Manila'), inSlice('1945'))],
+  ['Is Intramuros a UNESCO World Heritage site?',           inSlice('Baroque Churches')],
+  ['How do I get to Intramuros from the LRT?',              inSlice('Central Terminal')],
+  ['Is there a calesa or tranvia I can ride around Intramuros?', all(inSlice('tranv'), inSlice('Calesa'))],
+  // A broad, realistic ask -- must not blow the retrieval budget by guaranteeing
+  // every intramuros field at once (see the 4-field note in retrieve.js).
+  ['Tell me about the history of Intramuros, its walls, and what happened during the war',
+    slice => (slice.relevant?.intramuros?.length ?? 0) <= 3],
 ];
 
 let pass = 0, fail = 0, totalTokens = 0, maxTokens = 0;
