@@ -40,6 +40,3 @@ export const ARROWS: Record<string, string> = {
   start: 'M8 13.6a5.6 5.6 0 1 1 0-11.2 5.6 5.6 0 0 1 0 11.2zM8 9.7a1.7 1.7 0 1 1 0-3.4 1.7 1.7 0 0 1 0 3.4z',
   flag: 'M4 14.2V2.2M4 3.1h8.6l-1.9 2.9 1.9 2.9H4'
 };
-
-export const ARROW_SVG = (k: string) =>
-  `<svg class="dirs__arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="${ARROWS[k] || ARROWS.straight}"/></svg>`;

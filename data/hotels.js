@@ -44,9 +44,6 @@ export const ACCESS_TYPES = {
   longstay:   { label: 'Student / long-stay', note: 'Dormitory or boarding house, not nightly tourist accommodation.' }
 };
 
-/** FX used for any USD-sourced figure below. */
-export const FX_USD_PHP = { rate: 62.5, asOf: '2026-09-02' };
-
 export const STAY_REVIEWED = '2026-09-03';
 
 /** @type {import('./types').Hotel[]} */

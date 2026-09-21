@@ -194,11 +194,7 @@ export async function route(from: LatLng, to: LatLng, destinationName: string): 
  * A straight line and an honest estimate beat an error message.
  */
 function straightLineFallback(from: LatLng, to: LatLng, destinationName: string, err: unknown): RouteResult {
-  const R = 6371000, rad = Math.PI / 180;
-  const dLat = (to.lat - from.lat) * rad, dLng = (to.lng - from.lng) * rad;
-  const a = Math.sin(dLat / 2) ** 2 +
-    Math.cos(from.lat * rad) * Math.cos(to.lat * rad) * Math.sin(dLng / 2) ** 2;
-  const metres = 2 * R * Math.asin(Math.sqrt(a));
+  const metres = haversine(from.lat, from.lng, to.lat, to.lng);
 
   return {
     ok: false,
