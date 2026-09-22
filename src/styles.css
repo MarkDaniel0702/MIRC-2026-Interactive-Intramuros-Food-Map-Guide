@@ -49,6 +49,11 @@
   --grip-h: 74px;
   --r: 2px;
 
+  /* the clean neutral backdrop behind the collapsed PLM Map card -- a true
+     gray, not navy-tinted, so the framed map still reads as the one thing on
+     the page rather than blending into the site's blue-black ground. */
+  --gray-bg: #26282B;
+
   --shadow-s: 0 1px 2px rgba(0, 0, 0, .35);
   --shadow-m: 0 2px 8px rgba(0, 0, 0, .40), 0 10px 28px -12px rgba(0, 0, 0, .6);
   --shadow-l: 0 6px 18px rgba(0, 0, 0, .45), 0 28px 60px -20px rgba(0, 0, 0, .75);
@@ -613,9 +618,38 @@ body {
 
 /* ─────────────────────────────── map ───────────────────────────────────── */
 
-.mapwrap { position: relative; min-width: 0; background: var(--navy-900); }
+/* PLM Map is the default primary view: #map starts framed as a small card on
+   a clean gray backdrop. The wall-icon button (.map-wall-toggle) toggles
+   `.is-expanded` on .mapwrap, which this block and the one below it transition
+   back to the original full-bleed Intramuros map. useLeafletMap's
+   toggleIntramurosView flies the camera to match on the same click; the
+   mount effect's ResizeObserver calls map.invalidateSize() once the container
+   itself finishes resizing, so nothing here has to. */
+.mapwrap {
+  position: relative;
+  min-width: 0;
+  background: var(--gray-bg);
+  transition: background .7s var(--ease);
+}
+.mapwrap.is-expanded { background: var(--navy-900); }
 
-#map { position: absolute; inset: 0; background: var(--navy-900); }
+#map {
+  position: absolute;
+  inset: 10% 12%;
+  background: var(--navy-900);
+  border-radius: 16px;
+  box-shadow: var(--shadow-l), 0 0 0 1px var(--navy-500);
+  overflow: hidden;
+  transition: inset .7s var(--ease), border-radius .7s var(--ease), box-shadow .7s var(--ease);
+}
+.mapwrap.is-expanded #map { inset: 0; border-radius: 0; box-shadow: none; }
+
+/* The Intramuros-boundary compass and note are chrome for the full map; the
+   collapsed PLM card stays clean without them. */
+.mapwrap:not(.is-expanded) .map-cartouche,
+.mapwrap:not(.is-expanded) .map-note {
+  display: none;
+}
 
 /* Turn the light OSM raster into a navy night plate.
    Order matters: grayscale FIRST strips OSM's park greens and road pinks, which
@@ -707,6 +741,47 @@ body {
   font-size: 10px;
 }
 .map-note.is-hidden { opacity: 0; transform: translateY(6px); pointer-events: none; }
+
+/* wall-icon toggle: PLM Map <-> Intramuros Map. Always on top of the gray
+   backdrop, at the opposite corner from the compass/note so it never collides
+   with either regardless of which state is showing. */
+.map-wall-toggle {
+  position: absolute;
+  right: 14px; bottom: 14px;
+  /* Above Leaflet's own control rails (.leaflet-top/.leaflet-bottom, z-index
+     1000 -- see the mobile sheet comment above) so the attribution control
+     sharing this corner never steals the tap, on mobile especially where both
+     sit just above the sheet grip. */
+  z-index: 1010;
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 9px 14px 9px 11px;
+  font: 500 11px/1 var(--mono);
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: var(--slate-lt);
+  background: rgba(10, 21, 38, .92);
+  border: 1px solid var(--navy-400);
+  border-radius: var(--r);
+  box-shadow: var(--shadow-m);
+  backdrop-filter: blur(4px);
+  cursor: pointer;
+  transition: background .15s var(--ease), color .15s var(--ease),
+              border-color .15s var(--ease), transform .12s var(--ease);
+}
+.map-wall-toggle svg {
+  width: 15px; height: 15px; flex: none;
+  fill: none; stroke: currentColor; stroke-width: 1.4;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+.map-wall-toggle:hover { background: var(--navy-700); border-color: var(--gold-dk); color: var(--white); }
+.map-wall-toggle:active { transform: scale(.96); }
+.map-wall-toggle[aria-pressed="true"] {
+  color: var(--navy-900);
+  background: var(--gold);
+  border-color: var(--gold-br);
+  font-weight: 600;
+}
+.map-wall-toggle[aria-pressed="true"]:hover { background: var(--gold-br); color: var(--navy-900); }
 
 /* ─────────────────────────────── markers ───────────────────────────────── */
 
@@ -1572,6 +1647,16 @@ body.is-picking .leaflet-container { cursor: crosshair !important; }
     font-size: 10.5px;
   }
   .map-cartouche { width: 40px; height: 40px; right: 10px; top: 10px; }
+
+  /* Leave clear room above the bottom-sheet grip so the collapsed PLM card
+     and the toggle button both stay reachable when the sheet is closed. */
+  #map { inset: 8% 6% calc(var(--grip-h) + 10%) 6%; border-radius: 12px; }
+  .map-wall-toggle {
+    right: 10px; bottom: calc(var(--grip-h) + 10px);
+    padding: 10px 14px 10px 12px;
+    font-size: 10.5px;
+  }
+  .map-wall-toggle svg { width: 16px; height: 16px; }
 
   .leaflet-control-attribution { max-width: 62vw; }
   .leaflet-bottom.leaflet-right { bottom: var(--grip-h); }
