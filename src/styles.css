@@ -708,6 +708,46 @@ body {
 }
 .map-note.is-hidden { opacity: 0; transform: translateY(6px); pointer-events: none; }
 
+/* wall-icon toggle: PLM Map <-> Intramuros Map. Bottom-right, opposite the
+   compass/note, so it never collides with either regardless of which state
+   is showing. */
+.map-wall-toggle {
+  position: absolute;
+  right: 14px; bottom: 14px;
+  /* Above Leaflet's own control rails (.leaflet-top/.leaflet-bottom, z-index
+     1000 -- see the mobile sheet comment above) so the attribution control
+     sharing this corner never steals the tap, on mobile especially. */
+  z-index: 1010;
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 9px 14px 9px 11px;
+  font: 500 11px/1 var(--mono);
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: var(--slate-lt);
+  background: rgba(10, 21, 38, .92);
+  border: 1px solid var(--navy-400);
+  border-radius: var(--r);
+  box-shadow: var(--shadow-m);
+  backdrop-filter: blur(4px);
+  cursor: pointer;
+  transition: background .15s var(--ease), color .15s var(--ease),
+              border-color .15s var(--ease), transform .12s var(--ease);
+}
+.map-wall-toggle svg {
+  width: 15px; height: 15px; flex: none;
+  fill: none; stroke: currentColor; stroke-width: 1.4;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+.map-wall-toggle:hover { background: var(--navy-700); border-color: var(--gold-dk); color: var(--white); }
+.map-wall-toggle:active { transform: scale(.96); }
+.map-wall-toggle[aria-pressed="true"] {
+  color: var(--navy-900);
+  background: var(--gold);
+  border-color: var(--gold-br);
+  font-weight: 600;
+}
+.map-wall-toggle[aria-pressed="true"]:hover { background: var(--gold-br); color: var(--navy-900); }
+
 /* ─────────────────────────────── markers ───────────────────────────────── */
 
 .pin-icon { background: none !important; border: 0 !important; }
@@ -1572,6 +1612,15 @@ body.is-picking .leaflet-container { cursor: crosshair !important; }
     font-size: 10.5px;
   }
   .map-cartouche { width: 40px; height: 40px; right: 10px; top: 10px; }
+
+  /* .map-note takes the full width of this band above the grip, so the
+     toggle moves up to stack with the compass/chat-launch column instead of
+     sharing the bottom-right corner with it. */
+  .map-wall-toggle {
+    top: 110px; right: 10px; bottom: auto;
+    padding: 8px 10px;
+  }
+  .map-wall-toggle span { display: none; }
 
   .leaflet-control-attribution { max-width: 62vw; }
   .leaflet-bottom.leaflet-right { bottom: var(--grip-h); }
