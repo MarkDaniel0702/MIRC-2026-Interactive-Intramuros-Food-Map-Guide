@@ -61,6 +61,21 @@ function flyOptions(duration: number): L.ZoomPanOptions {
   return reduceMotionOnce ? { animate: false } : { duration };
 }
 
+/** Standard ray-casting point-in-polygon, mirroring
+ *  tools/verify-in-intramuros.mjs's own build-time check -- `ring` here is
+ *  this file's own [lat, lng] pair convention rather than GeoJSON's
+ *  [lng, lat], so x/y below are lng/lat respectively, swapped to match. */
+function pointInRing(lat: number, lng: number, ring: [number, number][]): boolean {
+  let inside = false;
+  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+    const yi = ring[i][0], xi = ring[i][1];
+    const yj = ring[j][0], xj = ring[j][1];
+    const straddles = (yi > lat) !== (yj > lat);
+    if (straddles && lng < ((xj - xi) * (lat - yi)) / (yj - yi) + xi) inside = !inside;
+  }
+  return inside;
+}
+
 export interface MapApi {
   selectTab: (mode: ModeKey) => void;
   select: (id: string, opts: { from: 'list' | 'map' }) => void;
@@ -138,6 +153,11 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
    *  visibility toggle, since it's real Leaflet polygons sharing the map's
    *  own coordinate space). */
   const campusMaskRef = useRef<L.LayerGroup | null>(null);
+  /** The PLM boundary ring itself ([lat, lng] pairs), kept apart from the
+   *  drawn campusMask so the cluster-sync effect below can point-in-polygon
+   *  test every spot against it -- hiding pins outside the PLM area while
+   *  its map is primary, the same way the drawn boundary already implies. */
+  const plmRingRef = useRef<[number, number][] | null>(null);
   /** true once the wall-icon toggle has expanded to the full Intramuros view;
    *  false (the default) means the PLM campus view is primary. Read by
    *  refitHome/resetAll/closeDirections so "go home" always means "go back to
@@ -169,6 +189,11 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
   onSetSheetRef.current = params.onSetSheet;
   const isMobileRef = useRef(params.isMobile);
   isMobileRef.current = params.isMobile;
+  /** So toggleIntramurosView (a stable, deps-free callback) can re-run the
+   *  cluster's PLM-boundary filter immediately on click, without waiting for
+   *  the visibleIds effect below to fire on some unrelated change. */
+  const visibleIdsRef = useRef(params.visibleIds);
+  visibleIdsRef.current = params.visibleIds;
 
   const hideMapNoteNow = useCallback(() => {
     params.mapNoteRef.current?.classList.add('is-hidden');
@@ -182,6 +207,27 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
   function pinEl(id: string): HTMLElement | null {
     const el = markersRef.current.get(id)?.getElement();
     return el ? (el.querySelector('.pin') as HTMLElement | null) : null;
+  }
+
+  /** The spot markers the cluster should actually show right now: every id in
+   *  `ids` that has a marker, minus (while the PLM Map is primary) whichever
+   *  of those sit outside the PLM boundary -- "hide outside PLM, keep the
+   *  system's own data untouched" is exactly a display filter here, nothing
+   *  is removed from markersRef. Expanded to Intramuros, every id in `ids`
+   *  passes through unfiltered, same as before this existed. */
+  function computeClusterLayers(ids: string[]): L.Marker[] {
+    const ring = plmRingRef.current;
+    const inPlmView = !expandedRef.current && ring;
+    return ids
+      .filter(id => {
+        if (!inPlmView) return true;
+        const marker = markersRef.current.get(id);
+        if (!marker) return false;
+        const { lat, lng } = marker.getLatLng();
+        return pointInRing(lat, lng, ring);
+      })
+      .map(id => markersRef.current.get(id))
+      .filter((l): l is L.Marker => Boolean(l));
   }
 
   /** Ported from app.js:591-601 setActive -- the single place a pin's .is-active
@@ -772,6 +818,7 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
     const plmLandmark = (LANDMARKS as Landmark[]).find(lm => lm.id === 'plm');
     const plmOuterRing = PLM_BOUNDARY.geometry.coordinates[0] as [number, number][];
     const plmRing = plmOuterRing.map(([lng, lat]) => [lat, lng] as [number, number]);
+    plmRingRef.current = plmRing;
     const plmBounds = L.latLngBounds(plmRing);
     const campusMask = L.layerGroup([
       L.polygon(
@@ -972,6 +1019,7 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
       campusMaxBoundsRef.current = null;
       intramurosMaxBoundsRef.current = null;
       campusMaskRef.current = null;
+      plmRingRef.current = null;
       expandedRef.current = false;
       activePinIdRef.current = null;
       pendingSelectRef.current = null;
@@ -988,10 +1036,7 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
     const cluster = clusterRef.current;
     if (!cluster) return;
     cluster.clearLayers();
-    const layers = params.visibleIds
-      .map(id => markersRef.current.get(id))
-      .filter((l): l is L.Marker => Boolean(l));
-    cluster.addLayers(layers);
+    cluster.addLayers(computeClusterLayers(params.visibleIds));
 
     // A chat-driven focus on a spot outside the previous mode/filters is
     // completed here, once that spot's marker has actually rejoined the
@@ -1089,6 +1134,17 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
       if (campusMaskRef.current && !map.hasLayer(campusMaskRef.current)) campusMaskRef.current.addTo(map);
       if (campusHomeRef.current) map.flyTo(campusHomeRef.current.center, campusHomeRef.current.zoom, flyOptions(0.8));
     }
+
+    // Re-apply the PLM-boundary pin filter immediately -- the effect that
+    // normally keeps the cluster in sync only re-runs on a visibleIds change,
+    // which a mode toggle isn't, so without this the pin set would only catch
+    // up the next time filters or the tab changed.
+    const cluster = clusterRef.current;
+    if (cluster) {
+      cluster.clearLayers();
+      cluster.addLayers(computeClusterLayers(visibleIdsRef.current));
+    }
+
     return next;
   }, []);
 
