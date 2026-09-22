@@ -43,22 +43,6 @@ import type { Action, FullAppState, LiveProgress } from '../state/store';
 import type { AnySpot, LatLng, ModeKey } from '../types';
 
 const CAMPUS_MIN_ZOOM = 17;
-/** The map's own minZoom (map creation option, also restored on expand). */
-const INTRAMUROS_MIN_ZOOM = 14;
-
-/** Grows a bounds by a fixed real-world margin (not a percentage of its own
- *  size, which would swing wildly with how spread out the source points
- *  happen to be) -- used to turn the five PLM-campus landmark points into a
- *  panning boundary with a consistent amount of breathing room around them,
- *  the same way INTRAMUROS_BOUNDARY's own walls define the Intramuros one. */
-function padBoundsByMetres(b: L.LatLngBounds, metres: number): L.LatLngBounds {
-  const dLat = metres / 111_320;
-  const dLng = metres / (111_320 * Math.cos(b.getCenter().lat * Math.PI / 180));
-  return L.latLngBounds(
-    [b.getSouth() - dLat, b.getWest() - dLng],
-    [b.getNorth() + dLat, b.getEast() + dLng]
-  );
-}
 
 /**
  * PHASE B FIX (plan B1): app.js used `{ duration: reduceMotion ? 0 : N }`
@@ -99,9 +83,6 @@ export interface MapApi {
    *  Returns false immediately if the id names neither, which the caller
    *  (ChatPanel) uses to say so rather than silently do nothing. */
   focusById: (id: string) => boolean;
-  /** Wall-icon toggle between the default PLM Map (collapsed) and the full
-   *  Intramuros Map (expanded). Returns the new expanded state. */
-  toggleIntramurosView: () => boolean;
 }
 
 interface UseLeafletMapParams {
@@ -132,24 +113,6 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
   const lastLiveDistanceRef = useRef<number | null>(null);
   const lastRecalcAtRef = useRef<number>(0);
   const homeRef = useRef<{ bounds: L.LatLngBounds; options: L.FitBoundsOptions } | null>(null);
-  /** The PLM-campus camera target -- the default primary view (plan: PLM Map
-   *  primary, Intramuros Map expandable). Same centre/zoom flyToLandmark already
-   *  uses for the 'plm' landmark itself, so toggling in and clicking the PLM
-   *  marker land on the same framing. */
-  const campusHomeRef = useRef<{ center: L.LatLngExpression; zoom: number } | null>(null);
-  /** The two panning enclosures the wall-icon toggle swaps between via
-   *  map.setMaxBounds -- each is a real geographic restriction (drag/swipe
-   *  clamps at its edge, same maxBoundsViscosity rubber-band both maps
-   *  already share), not just a difference in how far the camera happens to
-   *  be zoomed. intramurosMaxBoundsRef mirrors the map's own creation-time
-   *  maxBounds so toggling back to it is exact. */
-  const campusMaxBoundsRef = useRef<L.LatLngBounds | null>(null);
-  const intramurosMaxBoundsRef = useRef<L.LatLngBounds | null>(null);
-  /** true once the wall-icon toggle has expanded to the full Intramuros view;
-   *  false (the default) means the PLM campus view is primary. Read by
-   *  refitHome/resetAll/closeDirections so "go home" always means "go back to
-   *  whichever of the two views is currently primary", not always Intramuros. */
-  const expandedRef = useRef(false);
   const firstPaintRef = useRef(!reduceMotionOnce);
   const pendingSelectRef = useRef<string | null>(null);
   const activePinIdRef = useRef<string | null>(null);
@@ -586,21 +549,6 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
     if (stateRef.current.dirs.tracking) stopTracking(); else startTracking();
   }, [startTracking, stopTracking]);
 
-  /** Flies to whichever of the two primary views (PLM campus, collapsed; full
-   *  Intramuros, expanded) is currently showing -- shared by resetAll and
-   *  closeDirections so neither one fights the wall-icon toggle by forcing the
-   *  camera to Intramuros regardless of what the visitor last chose. */
-  const flyToPrimaryHome = useCallback((duration: number) => {
-    const map = mapRef.current;
-    if (!map) return;
-    if (expandedRef.current) {
-      if (!homeRef.current) return;
-      map.flyToBounds(homeRef.current.bounds, { ...homeRef.current.options, ...flyOptions(duration) });
-    } else if (campusHomeRef.current) {
-      map.flyTo(campusHomeRef.current.center, campusHomeRef.current.zoom, flyOptions(duration));
-    }
-  }, []);
-
   /** Ported from app.js:847-861 closeDirections. */
   const closeDirectionsInternal = useCallback(() => {
     const map = mapRef.current;
@@ -612,8 +560,8 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
     if (startMarkerRef.current) { map.removeLayer(startMarkerRef.current); startMarkerRef.current = null; }
     hideDestinationNow();
     setActive(null);
-    flyToPrimaryHome(0.7);
-  }, [flyToPrimaryHome, setActive, stopPicking, stopTracking]);
+    map.flyToBounds(homeRef.current.bounds, { ...homeRef.current.options, ...flyOptions(0.7) });
+  }, [setActive, stopPicking, stopTracking]);
 
   /** Ported from app.js:947-968 useMyLocation (the directions-panel variant --
    *  distinct from locateMe/#nearMe below). */
@@ -703,13 +651,13 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
   /** Ported from app.js:761-774 resetAll. */
   const resetAll = useCallback(() => {
     const map = mapRef.current;
-    if (!map) return;
+    if (!map || !homeRef.current) return;
     setActive(null);
     map.closePopup();
     dispatchRef.current({ type: 'RESET_FILTERS' });
-    flyToPrimaryHome(0.8);
+    map.flyToBounds(homeRef.current.bounds, { ...homeRef.current.options, ...flyOptions(0.8) });
     showMapNoteNow();
-  }, [flyToPrimaryHome, setActive, showMapNoteNow]);
+  }, [setActive, showMapNoteNow]);
 
   /* ────────────────────────── mount: build the map once ────────────────────── */
 
@@ -722,15 +670,12 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
     const ring = outerRing.map(([lng, lat]) => [lat, lng] as [number, number]);
     const bounds = L.latLngBounds(ring);
 
-    const intramurosMaxBounds = bounds.pad(0.6);
-    intramurosMaxBoundsRef.current = intramurosMaxBounds;
-
     const map = L.map(container, {
       zoomControl: false,
-      minZoom: INTRAMUROS_MIN_ZOOM,
+      minZoom: 14,
       maxZoom: 19,
       zoomSnap: 0.5,
-      maxBounds: intramurosMaxBounds,
+      maxBounds: bounds.pad(0.6),
       // PHASE B (plan B3): app.js used every one of these at Leaflet's default,
       // which is what made panning feel heavy and the edges feel sticky --
       // nothing here was ever explicitly tuned. Lower viscosity gives less
@@ -760,43 +705,12 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
 
     const home = { bounds, options: { padding: [34, 34] as [number, number] } };
     homeRef.current = home;
-
-    // PLM Map is the default primary view: the 'plm' landmark's own centre and
-    // zoom, same framing flyToLandmark uses for a click on that marker. The
-    // container/backdrop start in the matching collapsed CSS state (styles.css
-    // -- .mapwrap defaults to it, no class needed), so this just points the
-    // camera at what is already on screen; no flyTo, this is the initial paint.
-    //
-    // Its own panning enclosure is a fixed-metre pad around the five campus
-    // landmark points (the parent 'plm' pin plus its four buildings) -- the
-    // same kind of hard drag/swipe limit INTRAMUROS_BOUNDARY gives the full
-    // map, just drawn around the campus instead of the walls. minZoom is
-    // raised to CAMPUS_MIN_ZOOM so a visitor can't zoom out past the point
-    // where that pad would show mostly empty space beyond it -- as a bonus,
-    // that's exactly the zoom the campus building markers need anyway
-    // (syncCampus below), so they're always visible in this view.
-    const plmLandmark = (LANDMARKS as Landmark[]).find(lm => lm.id === 'plm');
-    if (plmLandmark) {
-      campusHomeRef.current = { center: [plmLandmark.lat, plmLandmark.lng], zoom: 18 };
-      const campusPoints = (LANDMARKS as Landmark[])
-        .filter(lm => lm.id === 'plm' || lm.campus)
-        .map(lm => [lm.lat, lm.lng] as [number, number]);
-      campusMaxBoundsRef.current = padBoundsByMetres(L.latLngBounds(campusPoints), 90);
-      map.setMaxBounds(campusMaxBoundsRef.current);
-      map.setMinZoom(CAMPUS_MIN_ZOOM);
-      map.setView(campusHomeRef.current.center, campusHomeRef.current.zoom, { animate: false });
-    } else {
-      map.fitBounds(home.bounds, home.options);
-    }
+    map.fitBounds(home.bounds, home.options);
 
     function refitHome() {
       map.invalidateSize({ animate: false });
       if (!stateRef.current.dirs.open && !stateRef.current.activeId) {
-        if (expandedRef.current) {
-          map.fitBounds(home.bounds, { ...home.options, animate: false });
-        } else if (campusHomeRef.current) {
-          map.setView(campusHomeRef.current.center, campusHomeRef.current.zoom, { animate: false });
-        }
+        map.fitBounds(home.bounds, { ...home.options, animate: false });
       }
     }
     if (document.readyState === 'complete') refitHome();
@@ -962,10 +876,6 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
       destMarkerRef.current = null;
       meMarkerRef.current = null;
       homeRef.current = null;
-      campusHomeRef.current = null;
-      campusMaxBoundsRef.current = null;
-      intramurosMaxBoundsRef.current = null;
-      expandedRef.current = false;
       activePinIdRef.current = null;
       pendingSelectRef.current = null;
     };
@@ -1055,58 +965,6 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
     mapRef.current?.closePopup();
   }, [setActive]);
 
-  /** The wall-icon toggle: PLM Map (collapsed, primary by default) <-> the full
-   *  Intramuros Map (expanded). Flips the camera to the other view's target and
-   *  toggles the CSS class that resizes the map container between a small
-   *  framed card and the original full-bleed map -- styles.css transitions
-   *  both, and the mount effect's ResizeObserver already calls invalidateSize
-   *  once the container's own resize settles, so this doesn't need to. Returns
-   *  the new expanded state so the caller (the button) can mirror it into its
-   *  own aria-pressed/label without a second source of truth. */
-  const toggleIntramurosView = useCallback((): boolean => {
-    const map = mapRef.current;
-    const container = params.containerRef.current;
-    if (!map || !container) return expandedRef.current;
-    const next = !expandedRef.current;
-    expandedRef.current = next;
-    container.parentElement?.classList.toggle('is-expanded', next);
-    // Swap the panning enclosure itself, not just the camera -- setMaxBounds
-    // is what actually stops a drag/swipe from leaving the intended area; the
-    // flyTo/flyToBounds below only ever moved the *starting* view, which is
-    // why toggling used to still let a visitor wander the whole Intramuros
-    // extent while "in" the PLM Map. Set before the fly so the fly's own
-    // target (already inside the new bounds by construction) is never
-    // fighting a stale, looser constraint.
-    if (next) {
-      if (intramurosMaxBoundsRef.current) map.setMaxBounds(intramurosMaxBoundsRef.current);
-      map.setMinZoom(INTRAMUROS_MIN_ZOOM);
-      if (homeRef.current) map.flyToBounds(homeRef.current.bounds, { ...homeRef.current.options, ...flyOptions(0.8) });
-    } else {
-      if (campusMaxBoundsRef.current) map.setMaxBounds(campusMaxBoundsRef.current);
-      map.setMinZoom(CAMPUS_MIN_ZOOM);
-      if (campusHomeRef.current) map.flyTo(campusHomeRef.current.center, campusHomeRef.current.zoom, flyOptions(0.8));
-    }
-    // The CSS transition on #map above changes both its size AND its position
-    // within .mapwrap (a corner inset vs. a centred card) at once. Leaflet's own
-    // resize handling -- invalidateSize's "pan by half the size delta" heuristic,
-    // which the mount effect's ResizeObserver already calls once the box settles
-    // -- only ever accounts for a size change, so a moved container drifts off
-    // target. Re-asserting the same centre/zoom once the box is done animating
-    // snaps it back exactly; nothing is visibly jumping since it's the same target
-    // the fly above was already headed to.
-    setTimeout(() => {
-      if (mapRef.current !== map) return;
-      map.invalidateSize({ animate: false, pan: false });
-      if (next && homeRef.current) {
-        map.fitBounds(homeRef.current.bounds, { ...homeRef.current.options, animate: false });
-      } else if (!next && campusHomeRef.current) {
-        map.setView(campusHomeRef.current.center, campusHomeRef.current.zoom, { animate: false });
-      }
-    }, reduceMotionOnce ? 0 : 760);
-    return next;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   /* `select` is scoped to the currently open tab (`MODES[state.mode].items`) --
      fine for a click, since a list card can only ever show the active mode's own
      items, but chat can name a hotel while Eat is open. So this always switches
@@ -1143,7 +1001,6 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
     resetAll,
     setPinHover,
     clearSelection,
-    focusById,
-    toggleIntramurosView
+    focusById
   };
 }

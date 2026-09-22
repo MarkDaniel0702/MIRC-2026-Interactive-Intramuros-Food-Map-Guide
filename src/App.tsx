@@ -24,11 +24,6 @@ export function App() {
   const aboutDialogRef = useRef<HTMLDialogElement>(null);
 
   const [sheetOpen, setSheetOpen] = useState(false);
-  // Mirrors mapApi's own expandedRef purely for the wall-icon button's
-  // aria-pressed/label -- the map hook owns the actual camera/CSS toggle
-  // imperatively and hands back the new state on each call, so this never
-  // drifts out of sync with it.
-  const [intramurosExpanded, setIntramurosExpanded] = useState(false);
   const { toasts, showToast } = useToasts();
 
   // Reflects the active tab in the browser tab title -- useful with several
@@ -71,9 +66,7 @@ export function App() {
       <Panel state={state} dispatch={dispatch} mapApi={mapApi} visible={visible}
         sheetOpen={sheetOpen} setSheet={setSheetOpen}
         onAbout={() => aboutDialogRef.current?.showModal()} />
-      <MapView containerRef={mapContainerRef} mapNoteRef={mapNoteRef} toasts={toasts}
-        intramurosExpanded={intramurosExpanded}
-        onToggleIntramurosView={() => setIntramurosExpanded(mapApi.toggleIntramurosView())} />
+      <MapView containerRef={mapContainerRef} mapNoteRef={mapNoteRef} toasts={toasts} />
       <ChatPanel onFocus={mapApi.focusById} />
       <AboutDialog dialogRef={aboutDialogRef} />
     </div>
