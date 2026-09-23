@@ -76,6 +76,48 @@ function pointInRing(lat: number, lng: number, ring: [number, number][]): boolea
   return inside;
 }
 
+/**
+ * Caps a popup's height to the map's own visible size, so content taller than
+ * the viewport scrolls internally instead of overflowing off-screen, then
+ * clamps the popup element's own on-screen position to stay fully within the
+ * map's viewport. Deliberately not Leaflet's own `autoPan` (every popup in
+ * this file binds `autoPan: false`): autoPan pans the *camera*, animated over
+ * several frames, and this app already has its own camera movement competing
+ * for the same frames (`select`/`flyToLandmark`'s own flyTo, or the PLM Map's
+ * maxBounds simply refusing a pan that would leave its campus enclosure).
+ * Measuring mid-pan and correcting for that instant, only for the pan to keep
+ * going afterward, over- or under-shot the popup on every version of this fix
+ * that tried to run after or alongside autoPan. Moving the popup element
+ * itself is immediate, synchronous, and never competes with anything, as long
+ * as it runs against a camera that has already settled -- which is why this
+ * is a function called explicitly wherever that is true, not just logic
+ * inlined into the map's 'popupopen' listener: `flyToLandmark`'s own reveal
+ * re-opens a popup that is already open (from the marker's native click,
+ * before its flyTo even started), and Leaflet's own openOn is a no-op for a
+ * popup already on the map, so 'popupopen' never fires a second time once
+ * that flyTo actually lands -- this needs calling again there explicitly.
+ */
+function fitPopup(map: L.Map, popup: L.Popup) {
+  popup.options.maxHeight = Math.max(160, map.getSize().y - 64);
+  popup.update();
+  const container = popup.getElement();
+  if (!container) return;
+  const rect = container.getBoundingClientRect();
+  const mapRect = map.getContainer().getBoundingClientRect();
+  const margin = 10;
+  let dx = 0;
+  if (rect.left < mapRect.left + margin) dx = (mapRect.left + margin) - rect.left;
+  else if (rect.right > mapRect.right - margin) dx = (mapRect.right - margin) - rect.right;
+  let dy = 0;
+  if (rect.top < mapRect.top + margin) dy = (mapRect.top + margin) - rect.top;
+  else if (rect.bottom > mapRect.bottom - margin) dy = (mapRect.bottom - margin) - rect.bottom;
+  if (!dx && !dy) return;
+  // Leaflet's own setPosition wrote a translate3d(...) base onto this same
+  // property for the popup's real anchor point; append to it rather than
+  // replace it, so this stays anchored to that real point.
+  container.style.transform = `${container.style.transform} translate(${dx}px, ${dy}px)`;
+}
+
 export interface MapApi {
   selectTab: (mode: ModeKey) => void;
   select: (id: string, opts: { from: 'list' | 'map' }) => void;
@@ -313,11 +355,14 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
       else {
         popup.setLatLng(marker.getLatLng());
         map.openPopup(popup);
-        // Opened mid-flight, so autoPan measured against a camera still
-        // moving; re-lay it out (update() re-runs the pan) once the flight
-        // actually ends. A no-op if the popup has been closed by then.
-        map.once('moveend', () => popup.update());
       }
+      // Re-opening an already-open popup (the common case: the marker's own
+      // native click already opened it, before this flyTo even started) does
+      // not refire the map's 'popupopen' -- Leaflet's openOn only adds a
+      // layer that is not already on the map -- so fitPopup (see its own doc
+      // comment) needs calling explicitly here, now that the camera has
+      // actually settled, in both branches above.
+      if (popup) fitPopup(map, popup);
     };
     map.on('moveend', reveal);
     revealT = setTimeout(reveal, reduceMotionOnce ? 60 : 1200);
@@ -899,7 +944,9 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
         riseOnHover: true,
         keyboard: true
       });
-      marker.bindPopup(landmarkPopupHTML(lm), { maxWidth: 260, minWidth: 220, autoPanPadding: [26, 26] });
+      // autoPan: false -- see the map-level popupopen handler below, which
+      // replaces it with a synchronous clamp of the popup's own position.
+      marker.bindPopup(landmarkPopupHTML(lm), { maxWidth: 260, minWidth: 220, autoPan: false });
       marker.on('click', () => flyToLandmark(lm.id));
       landmarkMarkersRef.current.set(lm.id, marker);
       return marker;
@@ -947,7 +994,9 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
         alt: spot.name,
         riseOnHover: true
       });
-      marker.bindPopup(popupHTML(spot, m, derived), { maxWidth: 280, minWidth: 280, autoPanPadding: [26, 26] });
+      // autoPan: false -- see the map-level popupopen handler below, which
+      // replaces it with a synchronous clamp of the popup's own position.
+      marker.bindPopup(popupHTML(spot, m, derived), { maxWidth: 280, minWidth: 280, autoPan: false });
       // PHASE B (plan B5): a hover-only preview, completely decoupled from the
       // fly-and-commit popup above -- opens on mouseover with no camera move
       // and no state change, so scanning several pins costs nothing. Leaflet
@@ -982,6 +1031,20 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
       if (!stateRef.current.dirs.open) setActive(null);
     });
     map.on('movestart', () => hideMapNoteNow());
+
+    // Every popup this app opens -- a spot's, a landmark's, reached by a marker
+    // click, a list click, or chat's focusById -- passes through here on open
+    // (fitPopup handles the one exception, flyToLandmark's own re-open, by
+    // calling it again explicitly -- see that function's own comment). Also
+    // closes the mobile bottom sheet: it can cover up to 88% of the screen
+    // (styles.css), so a marker tapped on the sliver of map still showing
+    // would otherwise open a popup hidden behind it. Covers every path that
+    // opens a popup, not just the from:'list' one `select` already handles by
+    // closing it before the fly starts.
+    map.on('popupopen', (e: L.PopupEvent) => {
+      fitPopup(map, e.popup);
+      if (isMobileRef.current()) onSetSheetRef.current(false);
+    });
 
     // The intro note fades out on its own if the user has not touched the map.
     // Ported from app.js:1189.

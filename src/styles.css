@@ -1200,6 +1200,18 @@ body.is-picking .leaflet-container { cursor: crosshair !important; }
 
 /* ─────────────────────────────── popups ────────────────────────────────── */
 
+/* Leaflet's own pane order tops out at 700 (leaflet.css) -- below the
+   zoom/attribution control rails (1000), .map-wall-toggle (1010) and, on
+   mobile, the bottom-sheet .panel (1200): a popup opened near any of those
+   could paint underneath them and read as "covered". A popup is transient,
+   explicitly-requested content, so it belongs above all of that chrome; kept
+   below .chat (1300), the one real modal-ish panel that can share the screen
+   with it. useLeafletMap.ts's fitPopup is the other half of this fix -- it
+   both caps popup height to the viewport (so tall content scrolls instead of
+   overflowing) and clamps the popup's own on-screen position, in place of
+   Leaflet's own autoPan (bindPopup sets autoPan: false everywhere). */
+.leaflet-popup-pane { z-index: 1250; }
+
 .leaflet-popup-content-wrapper {
   padding: 0;
   color: var(--paper);
@@ -1209,6 +1221,18 @@ body.is-picking .leaflet-container { cursor: crosshair !important; }
   box-shadow: var(--shadow-l), inset 0 1px 0 rgba(255, 255, 255, .05);
 }
 .leaflet-popup-content { margin: 0; width: 280px !important; line-height: inherit; }
+/* Set only when useLeafletMap.ts's popupopen handler caps maxHeight against a
+   short viewport -- scrolls the popup's own content instead of letting it
+   overflow past the screen edge, matching .panel__body's scrollbar. */
+.leaflet-popup-scrolled {
+  scrollbar-width: thin;
+  scrollbar-color: var(--navy-400) transparent;
+}
+.leaflet-popup-scrolled::-webkit-scrollbar { width: 9px; }
+.leaflet-popup-scrolled::-webkit-scrollbar-thumb {
+  background: var(--navy-400); border-radius: 0;
+  border: 3px solid var(--navy-800);
+}
 .leaflet-popup-tip { background: var(--navy-800); border: 1px solid var(--navy-400); box-shadow: none; }
 .leaflet-popup-close-button {
   width: 26px !important; height: 26px !important;
