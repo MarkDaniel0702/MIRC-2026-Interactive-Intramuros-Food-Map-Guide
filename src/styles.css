@@ -1572,7 +1572,10 @@ body.is-picking .leaflet-container { cursor: crosshair !important; }
 @media (max-width: 900px) {
   :root { --panel-w: 344px; }
   .masthead__title { font-size: 30px; }
-  .map-note { max-width: 250px; }
+  /* The map is too narrow here for the note (bottom-left) and the one-line
+     attribution (bottom-right, ~22px tall) to share the bottom edge -- lift
+     the note clear of it. */
+  .map-note { max-width: 250px; bottom: 32px; }
 }
 
 @media (max-width: 760px) {
@@ -1653,8 +1656,10 @@ body.is-picking .leaflet-container { cursor: crosshair !important; }
   .list { padding: 4px 12px 8px; }
   .panel__foot { padding: 14px 18px 26px; }
 
+  /* Full width, so it stacks above the attribution rather than beside it:
+     grip + the attribution's one line (~22px, see nowrap below) + a gap. */
   .map-note {
-    left: 10px; right: 10px; bottom: calc(var(--grip-h) + 10px);
+    left: 10px; right: 10px; bottom: calc(var(--grip-h) + 30px);
     max-width: none;
     font-size: 10.5px;
   }
@@ -1663,7 +1668,9 @@ body.is-picking .leaflet-container { cursor: crosshair !important; }
   .map-wall-toggle { padding: 8px 10px; }
   .map-wall-toggle span { display: none; }
 
-  .leaflet-control-attribution { max-width: 62vw; }
+  /* One line, not a 62vw-capped wrap: the wrapped two-line box was taller
+     than the gap under .map-note and overlapped it. Fits a 320px screen. */
+  .leaflet-control-attribution { white-space: nowrap; }
   .leaflet-bottom.leaflet-right { bottom: var(--grip-h); }
 
   .dialog { padding: 24px 20px 28px; max-height: 86dvh; }
