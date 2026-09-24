@@ -1,4 +1,5 @@
 import type { RefObject } from 'react';
+import { LuLayers } from 'react-icons/lu';
 import { Toasts } from './Toasts';
 import type { ToastItem } from '../hooks/useToasts';
 
@@ -10,8 +11,10 @@ import type { ToastItem } from '../hooks/useToasts';
  *  toggleIntramurosView, which swaps the map's real maxBounds/minZoom and
  *  which drawn boundary is showing, then flies the camera; the map container
  *  itself never changes size. */
-export function MapView({ containerRef, mapNoteRef, toasts, intramurosExpanded, onToggleIntramurosView }: {
+export function MapView({ containerRef, mapNoteRef, toggleRef, toasts, intramurosExpanded, onToggleIntramurosView }: {
   containerRef: RefObject<HTMLDivElement>;
+  /** The toggle button itself, so Dan can point at it (App's highlightViewToggle). */
+  toggleRef: RefObject<HTMLButtonElement>;
   mapNoteRef: RefObject<HTMLDivElement>;
   toasts: ToastItem[];
   intramurosExpanded: boolean;
@@ -21,12 +24,12 @@ export function MapView({ containerRef, mapNoteRef, toasts, intramurosExpanded, 
     <main className="mapwrap">
       <div id="map" ref={containerRef} role="application" aria-label="Interactive map of food spots and heritage sights inside Intramuros"></div>
 
-      <button type="button" className="map-wall-toggle" aria-pressed={intramurosExpanded}
+      {/* Layers glyph: the same stacked-sheets icon Google/Apple Maps use for
+          "switch map view", so it reads as a view switch, not a place. */}
+      <button type="button" className="map-wall-toggle" ref={toggleRef} aria-pressed={intramurosExpanded}
         title={intramurosExpanded ? 'Collapse to the PLM Map' : 'Expand to the full Intramuros Map'}
         onClick={onToggleIntramurosView}>
-        <svg viewBox="0 0 16 16" aria-hidden="true">
-          <path d="M1.5 14.2V6.6h13v7.6M1.5 14.2h13M1.5 6.6V4.3h2.3v2.3M6.1 6.6V4.3h2.3v2.3M10.7 6.6V4.3h2.3v2.3" />
-        </svg>
+        <LuLayers aria-hidden="true" />
         <span>{intramurosExpanded ? 'PLM Map' : 'Intramuros Map'}</span>
       </button>
 

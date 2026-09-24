@@ -719,12 +719,14 @@ body {
 /* wall-icon toggle: PLM Map <-> Intramuros Map. Bottom-right, opposite the
    compass/note, so it never collides with either regardless of which state
    is showing. */
+/* Top-left, under Leaflet's zoom control (10px margin + two 32px buttons):
+   clear of the attribution (bottom-right), the map note (bottom-left) and
+   Dan's panel, which covers the right-hand rail on desktop when open. */
 .map-wall-toggle {
   position: absolute;
-  right: 14px; bottom: 14px;
+  left: 10px; top: 84px;
   /* Above Leaflet's own control rails (.leaflet-top/.leaflet-bottom, z-index
-     1000 -- see the mobile sheet comment above) so the attribution control
-     sharing this corner never steals the tap, on mobile especially. */
+     1000 -- see the mobile sheet comment above) so they never steal the tap. */
   z-index: 1010;
   display: inline-flex; align-items: center; gap: 7px;
   padding: 9px 14px 9px 11px;
@@ -741,20 +743,33 @@ body {
   transition: background .15s var(--ease), color .15s var(--ease),
               border-color .15s var(--ease), transform .12s var(--ease);
 }
-.map-wall-toggle svg {
-  width: 15px; height: 15px; flex: none;
-  fill: none; stroke: currentColor; stroke-width: 1.4;
-  stroke-linecap: round; stroke-linejoin: round;
-}
+.map-wall-toggle svg { width: 15px; height: 15px; flex: none; }
 .map-wall-toggle:hover { background: var(--navy-700); border-color: var(--gold-dk); color: var(--white); }
 .map-wall-toggle:active { transform: scale(.96); }
-.map-wall-toggle[aria-pressed="true"] {
-  color: var(--navy-900);
-  background: var(--gold);
-  border-color: var(--gold-br);
-  font-weight: 600;
+/* Pointed at by Dan: a gold outline for the whole 6s (App clears the class),
+   plus a pulsing ring and a bobbing arrow where motion is allowed. */
+.map-wall-toggle.is-beacon { color: var(--gold-br); border-color: var(--gold); outline: 2px solid var(--gold); outline-offset: 3px; }
+.map-wall-toggle.is-beacon::after {
+  content: '\25C0';
+  position: absolute; left: calc(100% + 10px); top: 50%;
+  font-size: 16px; line-height: 1;
+  color: var(--gold-br);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, .6);
+  transform: translateY(-50%);
+  pointer-events: none;
 }
-.map-wall-toggle[aria-pressed="true"]:hover { background: var(--gold-br); color: var(--navy-900); }
+@media (prefers-reduced-motion: no-preference) {
+  .map-wall-toggle.is-beacon { animation: beaconRing 1.2s ease-out 4; }
+  .map-wall-toggle.is-beacon::after { animation: beaconArrow .6s ease-in-out 8 alternate; }
+}
+@keyframes beaconRing {
+  from { box-shadow: var(--shadow-m), 0 0 0 0 rgba(227, 178, 60, .7); }
+  to   { box-shadow: var(--shadow-m), 0 0 0 14px rgba(227, 178, 60, 0); }
+}
+@keyframes beaconArrow {
+  from { transform: translate(0, -50%); }
+  to   { transform: translate(8px, -50%); }
+}
 
 /* ─────────────────────────────── markers ───────────────────────────────── */
 
@@ -1645,13 +1660,7 @@ body.is-picking .leaflet-container { cursor: crosshair !important; }
   }
   .map-cartouche { width: 40px; height: 40px; right: 10px; top: 10px; }
 
-  /* .map-note takes the full width of this band above the grip, so the
-     toggle moves up to stack with the compass/chat-launch column instead of
-     sharing the bottom-right corner with it. */
-  .map-wall-toggle {
-    top: 110px; right: 10px; bottom: auto;
-    padding: 8px 10px;
-  }
+  .map-wall-toggle { padding: 8px 10px; }
   .map-wall-toggle span { display: none; }
 
   .leaflet-control-attribution { max-width: 62vw; }

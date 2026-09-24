@@ -22,6 +22,8 @@ export function App() {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapNoteRef = useRef<HTMLDivElement>(null);
   const aboutDialogRef = useRef<HTMLDialogElement>(null);
+  const viewToggleRef = useRef<HTMLButtonElement>(null);
+  const beaconTimerRef = useRef<number>();
 
   const [sheetOpen, setSheetOpen] = useState(false);
   // Mirrors mapApi's own expandedRef for the wall-icon button's aria-pressed/
@@ -48,6 +50,21 @@ export function App() {
     isMobile
   });
 
+  // Dan's "where is the change-view button?" answer: a temporary pulse + arrow
+  // on the toggle. Removing the class and forcing a reflow restarts the CSS
+  // animation if Dan is asked twice in a row; the timer (not animationend)
+  // clears it so reduced-motion users, whose animation is flattened, still get
+  // the static outline for the same few seconds.
+  const highlightViewToggle = () => {
+    const el = viewToggleRef.current;
+    if (!el) return;
+    el.classList.remove('is-beacon');
+    void el.offsetWidth;
+    el.classList.add('is-beacon');
+    window.clearTimeout(beaconTimerRef.current);
+    beaconTimerRef.current = window.setTimeout(() => el.classList.remove('is-beacon'), 6000);
+  };
+
   // Ported from app.js:1147-1158 -- Escape cascade (picking -> directions ->
   // selection) and "/" to focus search, as long as the user isn't already typing.
   useEffect(() => {
@@ -71,10 +88,10 @@ export function App() {
       <Panel state={state} dispatch={dispatch} mapApi={mapApi} visible={visible}
         sheetOpen={sheetOpen} setSheet={setSheetOpen} intramurosExpanded={intramurosExpanded}
         onAbout={() => aboutDialogRef.current?.showModal()} />
-      <MapView containerRef={mapContainerRef} mapNoteRef={mapNoteRef} toasts={toasts}
+      <MapView containerRef={mapContainerRef} mapNoteRef={mapNoteRef} toggleRef={viewToggleRef} toasts={toasts}
         intramurosExpanded={intramurosExpanded}
         onToggleIntramurosView={() => setIntramurosExpanded(mapApi.toggleIntramurosView())} />
-      <ChatPanel onFocus={mapApi.focusById} />
+      <ChatPanel onFocus={mapApi.focusById} onHighlightViewToggle={highlightViewToggle} />
       <AboutDialog dialogRef={aboutDialogRef} />
     </div>
   );

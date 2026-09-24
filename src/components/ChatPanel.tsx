@@ -48,6 +48,20 @@ const OFF_TOPIC = [
   /\b(?:system prompt|your instructions|jailbreak|developer mode)\b/i
 ];
 
+// "Where is the change-view / Intramuros map button?" -- a question about this
+// app's own UI, which the Worker's corpus knows nothing about, so it is answered
+// here, deterministically, and the button itself is highlighted. Needs a
+// view/switch/button word next to "map" so venue questions ("where is PLM?")
+// still go to the server.
+const VIEW_TOGGLE_Q = [
+  /\b(?:change|switch|toggle|swap)\w*\s+(?:the\s+|map\s+)?(?:views?|maps?)\b/i,
+  /\b(?:intramuros|plm|campus|full|whole)\s+map\s+(?:button|toggle|switch)\b/i,
+  /\b(?:view|map)\s+(?:button|toggle|switch(?:er)?)\b/i
+];
+const VIEW_TOGGLE_REPLY =
+  "It's the small button with the layers icon at the top-left of the map, just under the + and − zoom buttons. " +
+  "I've made it glow for you. Tap it to switch between the PLM campus map and the full Intramuros map.";
+
 // Pronunciation dictionary for text-to-speech only -- never touches what is
 // rendered on screen (speak() runs this over a copy of the reply text right
 // before handing it to SpeechSynthesisUtterance). Web Speech engines differ by
@@ -159,6 +173,8 @@ interface ChatMessage {
   muted?: boolean;
   thinking?: boolean;
   focus?: ChatFocus;
+  /** Answer to "where is the change-view button?" -- renders a "Show me" action. */
+  pointsAtToggle?: boolean;
 }
 
 interface HistoryTurn { role: 'user' | 'assistant'; content: string; }
@@ -167,6 +183,8 @@ export interface ChatPanelProps {
   /** Fly the map to a spot by id and open its popup; false if the id is not a
    *  real spot. Wired to useLeafletMap's focusById via App.tsx. */
   onFocus?: (id: string) => boolean;
+  /** Pulse the map's PLM/Intramuros view toggle (App's highlightViewToggle). */
+  onHighlightViewToggle?: () => void;
 }
 
 function MessageBody({ text }: { text: string }) {
@@ -183,7 +201,7 @@ function MessageBody({ text }: { text: string }) {
   );
 }
 
-export function ChatPanel({ onFocus }: ChatPanelProps) {
+export function ChatPanel({ onFocus, onHighlightViewToggle }: ChatPanelProps) {
   const [open, setOpen] = useState(false);
   const [busy, setBusy] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -298,6 +316,13 @@ export function ChatPanel({ onFocus }: ChatPanelProps) {
     if (OFF_TOPIC.some(re => re.test(message))) {
       appendMessage({ role: 'bot', text: declineRef.current });
       speak(declineRef.current);
+      return;
+    }
+
+    if (VIEW_TOGGLE_Q.some(re => re.test(message))) {
+      appendMessage({ role: 'bot', text: VIEW_TOGGLE_REPLY, pointsAtToggle: true });
+      speak(VIEW_TOGGLE_REPLY);
+      onHighlightViewToggle?.();
       return;
     }
 
@@ -463,6 +488,17 @@ export function ChatPanel({ onFocus }: ChatPanelProps) {
                         <circle cx="8" cy="6.3" r="1.7" />
                       </svg>
                       Show {m.focus.name} on the map
+                    </button>
+                  )}
+                  {/* On a phone the open panel covers the map, so the pulse is
+                      only seen once the panel is out of the way. */}
+                  {m.pointsAtToggle && (
+                    <button type="button" className="chat__locate" onClick={() => { closePanel(); onHighlightViewToggle?.(); }}>
+                      <svg viewBox="0 0 16 16" aria-hidden="true">
+                        <path d="M8 14.5S13 10 13 6.4a5 5 0 0 0-10 0C3 10 8 14.5 8 14.5z" />
+                        <circle cx="8" cy="6.3" r="1.7" />
+                      </svg>
+                      Show me the button
                     </button>
                   )}
                 </div>
