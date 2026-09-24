@@ -15,6 +15,7 @@ import { DirectionsPanel } from './DirectionsPanel';
 import { PanelFooter } from './PanelFooter';
 import { SpotCard } from './SpotCard';
 import { ALL_SPOTS } from '../data/modes';
+import { ALL_LANDMARKS } from '../data/destinations';
 import { PLM_BOUNDARY } from '../../data/plm-boundary.js';
 import { pointInRing } from '../hooks/useLeafletMap';
 import type { MapApi } from '../hooks/useLeafletMap';
@@ -26,6 +27,9 @@ import type { Action, FullAppState } from '../state/store';
  *  the PLM view's list and its pins always agree. Fixed data, computed once. */
 const PLM_RING = (PLM_BOUNDARY.geometry.coordinates[0] as [number, number][]).map(([lng, lat]) => [lat, lng] as [number, number]);
 const PLM_SPOTS = ALL_SPOTS.filter(({ spot }) => pointInRing(spot.lat, spot.lng, PLM_RING));
+/** The campus's other buildings -- landmarks, so a click flies to them exactly
+ *  as their map marker does (focusById falls through to flyToLandmark). */
+const PLM_BUILDINGS = ALL_LANDMARKS.filter(lm => lm.campus && !lm.short);
 
 /**
  * Ported from index.html:25-168. Owns the mobile bottom-sheet drag gesture,
@@ -132,7 +136,10 @@ export function Panel({ state, dispatch, mapApi, visible, sheetOpen, setSheet, i
               : <EmptyState mode={state.mode} query={state.byMode[state.mode].query} mapApi={mapApi} onPickLandmark={pickLandmark} />}
           </> : <>
             <VenueBar onPick={pickLandmark} />
-            <div className="controls"><Toolbar mapApi={mapApi} onAbout={onAbout} /></div>
+            <div className="controls">
+              <Toolbar mapApi={mapApi} onAbout={onAbout} />
+              <p className="count"><b>{PLM_SPOTS.length + PLM_BUILDINGS.length}</b> places on campus</p>
+            </div>
             {/* Cards span tabs here, so a click goes through focusById (which
                 switches to the spot's own tab) rather than SpotList's
                 select(), which only knows the active tab's items. */}
@@ -143,6 +150,14 @@ export function Panel({ state, dispatch, mapApi, visible, sheetOpen, setSheet, i
                   onPointerOver={() => mapApi.setPinHover(spot.id, true)}
                   onPointerOut={() => mapApi.setPinHover(spot.id, false)}
                   onClick={() => pickLandmark(spot.id)} />
+              ))}
+              {PLM_BUILDINGS.map((lm, i) => (
+                <li key={lm.id} className="card-item" style={{ animationDelay: `${(PLM_SPOTS.length + i) * 14}ms` }}>
+                  <button type="button" className="card card--building" onClick={() => pickLandmark(lm.id)}>
+                    <span className="card__top"><span className="card__name">{lm.name}</span></span>
+                    <span className="card__meta"><b>{lm.kind.replace('PLM campus · ', '')}</b></span>
+                  </button>
+                </li>
               ))}
             </ol>
           </>}

@@ -25,7 +25,7 @@ export const ALL_LANDMARKS = LANDMARKS as Landmark[];
 export function findLandmarkByQuery(query: string): Landmark | null {
   const q = norm(query).trim();
   if (q.length < 2) return null;
-  return ALL_LANDMARKS.find(lm => norm(lm.short) === q)
+  return ALL_LANDMARKS.find(lm => lm.short && norm(lm.short) === q)
     ?? (q.length >= 3 ? ALL_LANDMARKS.find(lm => norm(lm.name).includes(q)) ?? null : null);
 }
 

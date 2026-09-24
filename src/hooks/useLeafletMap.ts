@@ -288,7 +288,7 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
    *  pin's default gold, since a landmark has no category. */
   function destPinHTML(dest: Destination): string {
     if (dest.kind === 'landmark') {
-      return `<div class="dest-pin dest-pin--landmark"><span class="dest-pin__disc">${esc(dest.landmark.short)}</span></div>`;
+      return `<div class="dest-pin dest-pin--landmark"><span class="dest-pin__disc">${dest.landmark.glyph ? PIN_SVG(dest.landmark.glyph) : esc(dest.landmark.short ?? '★')}</span></div>`;
     }
     const cat = MODES[dest.modeKey].categories[dest.spot.category];
     return `<div class="dest-pin" style="--c:${cat.color}"><span class="dest-pin__disc">${PIN_SVG(cat.icon)}</span></div>`;
@@ -933,7 +933,7 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
           // A provisional position (a visitor's pin the organisers have not
           // confirmed) draws dashed, the same tell the address-estimated food
           // pins use, so the map is honest about it before the popup is.
-          html: `<div class="landmark${small ? ' landmark--campus' : ''}${lm.provisional ? ' landmark--provisional' : ''}"><span>${esc(lm.short || '★')}</span></div>`,
+          html: `<div class="landmark${small ? ' landmark--campus' : ''}${lm.provisional ? ' landmark--provisional' : ''}"><span>${lm.glyph ? PIN_SVG(lm.glyph) : esc(lm.short || '★')}</span></div>`,
           iconSize: small ? [30, 30] : [40, 40],
           iconAnchor: small ? [15, 15] : [20, 20],
           popupAnchor: [0, small ? -15 : -20]

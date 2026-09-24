@@ -1488,6 +1488,15 @@ body.is-picking .leaflet-container { cursor: crosshair !important; }
 /* Provisional position (data/landmarks.js `provisional`) — dashed, like the
    address-estimated food pins, so the uncertainty shows before the popup does. */
 .landmark--provisional { border-style: dashed; }
+/* A campus building with no programme code (data/landmarks.js `glyph`): its
+   glyph instead of a code, in slate rather than gold -- it is not a venue. */
+.landmark svg, .dest-pin__disc svg {
+  width: 14px; height: 14px;
+  fill: none; stroke: currentColor; stroke-width: 1.4;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+.landmark--campus:has(svg) { color: var(--slate-lt); border-color: var(--navy-400); box-shadow: 0 1px 6px rgba(0, 0, 0, .55); }
+.card--building { --c: var(--slate); }
 
 /* ─────────────────────────────── dialog ────────────────────────────────── */
 

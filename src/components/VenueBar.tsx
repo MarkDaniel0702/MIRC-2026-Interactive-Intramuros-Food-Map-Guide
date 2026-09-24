@@ -4,7 +4,9 @@ import { ALL_LANDMARKS } from '../data/destinations';
 const BUILDING_ICON = 'M2 13.5h12M3.4 13.5V7M6.5 13.5V7M9.5 13.5V7M12.6 13.5V7M2 6.4 8 2.6l6 3.8z';
 
 const CAMPUS = ALL_LANDMARKS.find(lm => !lm.campus);
-const BUILDINGS = ALL_LANDMARKS.filter(lm => lm.campus);
+// Only the buildings with a programme code are MIRC venues; the rest of the
+// campus is listed by Panel's PLM view instead.
+const BUILDINGS = ALL_LANDMARKS.filter(lm => lm.campus && lm.short);
 
 /**
  * The MIRC 2026 venue, one tap away from every tab. The campus buildings are

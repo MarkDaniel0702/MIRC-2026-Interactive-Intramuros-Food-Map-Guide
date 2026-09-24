@@ -278,9 +278,11 @@ if (LANDMARKS) {
     if (!ok) lmOutside.push(lm);
     console.log(`     ${ok ? green('PASS') : red('FAIL')}  ${String(lm.name).padEnd(38)} ${dim(`${lm.lat}, ${lm.lng}`)}`);
 
-    for (const f of ['id', 'name', 'short', 'lat', 'lng', 'blurb']) {
+    for (const f of ['id', 'name', 'lat', 'lng', 'blurb']) {
       if (lm[f] === undefined || lm[f] === null || lm[f] === '') lmProblems.push(`${lm.id || lm.name}: missing "${f}"`);
     }
+    // A MIRC venue carries its programme code; any other building a glyph instead.
+    if (!lm.short && !lm.glyph) lmProblems.push(`${lm.id || lm.name}: needs a "short" code or a "glyph"`);
     if (!(lm.lat > 14.58 && lm.lat < 14.60 && lm.lng > 120.96 && lm.lng < 120.99)) {
       lmProblems.push(`${lm.id || lm.name}: coordinates are outside the Intramuros bounding box`);
     }

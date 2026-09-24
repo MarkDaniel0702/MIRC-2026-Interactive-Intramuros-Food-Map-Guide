@@ -75,5 +75,102 @@ export const LANDMARKS = [
     campus: true,
     provisional: true,
     blurb: 'Don Pepe Atienza Building on the PLM campus, Muralla Street side — home of the College / Mass Communication Office, where MIRC 2026 sessions are held. Rooms inside it (e.g. "TOP") are not separately pinned. Coordinate refined 2026-09-09 to a visitor Google Maps pin on the Mass Communication Office.'
+  },
+
+  /* ── PLM campus — other buildings (not MIRC 2026 session venues) ─────────────
+     Named buildings inside the PLM boundary, each from its own OpenStreetMap
+     feature (way/node centre via Overpass, 2026-09-24). No `short`: those codes
+     are the programme's own (JAA, GK …) and these have none, so the marker shows
+     `glyph` (an icons.ts GLYPHS key) instead, and they are listed in the PLM
+     panel rather than as VenueBar chips. */
+  {
+    id: 'plm-medical',
+    name: 'Medical Building',
+    kind: 'PLM campus · building',
+    lat: 14.587296, lng: 120.975939,
+    osm: 'way/88328810',
+    glyph: 'museum',
+    campus: true,
+    blurb: 'A building on the PLM campus. Not one of the four MIRC 2026 session buildings. Position from OpenStreetMap.'
+  },
+  {
+    id: 'plm-gym',
+    name: 'Rajah Sulayman Gymnasium',
+    kind: 'PLM campus · gymnasium',
+    lat: 14.586958, lng: 120.975596,
+    osm: 'way/331770763',
+    glyph: 'museum',
+    campus: true,
+    blurb: 'The campus gymnasium. Not one of the four MIRC 2026 session buildings. Position from OpenStreetMap.'
+  },
+  {
+    id: 'plm-lacson',
+    name: 'Arsenio Lacson Building',
+    kind: 'PLM campus · building',
+    lat: 14.586620, lng: 120.975834,
+    osm: 'way/331770762',
+    glyph: 'museum',
+    campus: true,
+    blurb: 'Also called Gusaling Arsenio Lacson (Arsenio Lacson Hall). Not one of the four MIRC 2026 session buildings. Position from OpenStreetMap.'
+  },
+  {
+    id: 'plm-magsaysay',
+    name: 'Ramon Magsaysay Entrepreneurial Center',
+    kind: 'PLM campus · building',
+    lat: 14.586260, lng: 120.975978,
+    osm: 'way/331770759',
+    glyph: 'museum',
+    campus: true,
+    blurb: 'A building on the PLM campus. Not one of the four MIRC 2026 session buildings. Position from OpenStreetMap.'
+  },
+  {
+    id: 'plm-chapel',
+    name: 'PLM Chapel',
+    kind: 'PLM campus · chapel',
+    lat: 14.586077, lng: 120.976295,
+    osm: 'way/331770758',
+    glyph: 'church',
+    campus: true,
+    blurb: 'The campus chapel. Not one of the four MIRC 2026 session buildings. Position from OpenStreetMap.'
+  },
+  {
+    id: 'plm-pride-hall',
+    name: 'Pride Hall',
+    kind: 'PLM campus · building',
+    lat: 14.586777, lng: 120.976588,
+    osm: 'way/267200103',
+    glyph: 'museum',
+    campus: true,
+    blurb: 'A building on the PLM campus. Not one of the four MIRC 2026 session buildings. Position from OpenStreetMap.'
+  },
+  {
+    id: 'plm-villegas',
+    name: 'Antonio de Jesus Villegas Building',
+    kind: 'PLM campus · building',
+    lat: 14.586907, lng: 120.976892,
+    osm: 'way/88328809',
+    glyph: 'museum',
+    campus: true,
+    blurb: 'Also called Gusaling Villegas. Not one of the four MIRC 2026 session buildings. Position from OpenStreetMap.'
+  },
+  {
+    id: 'plm-uac',
+    name: 'University Activity Center',
+    kind: 'PLM campus · building',
+    lat: 14.586751, lng: 120.976896,
+    osm: 'way/267200093',
+    glyph: 'museum',
+    campus: true,
+    blurb: 'A building on the PLM campus. Not one of the four MIRC 2026 session buildings. Position from OpenStreetMap.'
+  },
+  {
+    id: 'plm-rizal',
+    name: 'Jose Rizal Monument',
+    kind: 'PLM campus · monument',
+    lat: 14.586617, lng: 120.977406,
+    osm: 'node/3388716896',
+    glyph: 'obelisk',
+    campus: true,
+    blurb: 'A memorial to José Rizal on the campus grounds. Not one of the four MIRC 2026 session buildings. Position from OpenStreetMap.'
   }
 ];

@@ -95,7 +95,10 @@ export interface AccessType {
 export interface Landmark {
   id: string;
   name: string;
-  short: string;
+  /** The programme's building code (JAA, GK …); only MIRC 2026 venues have one. */
+  short?: string;
+  /** icons.ts GLYPHS key drawn on the marker in place of a code. */
+  glyph?: string;
   kind: string;
   lat: number;
   lng: number;

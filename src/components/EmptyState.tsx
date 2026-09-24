@@ -26,12 +26,12 @@ export function EmptyState({ mode, query, mapApi, onPickLandmark }: {
       <p className="empty__text">{MODES[mode].emptyText}</p>
       {lm && (
         <p className="empty__hint">
-          Looking for <b>{lm.short}</b>? {lm.campus ? 'It is a building on the PLM campus' : 'It is the MIRC 2026 venue'} —
+          Looking for <b>{lm.short ?? lm.name}</b>? {lm.campus ? 'It is a building on the PLM campus' : 'It is the MIRC 2026 venue'} —
           on the map, not in this list.
         </p>
       )}
       {lm
-        ? <button type="button" className="btn btn--solid" onClick={() => onPickLandmark(lm.id)}>Show {lm.short} on the map</button>
+        ? <button type="button" className="btn btn--solid" onClick={() => onPickLandmark(lm.id)}>Show {lm.short ?? lm.name} on the map</button>
         : <button type="button" className="btn btn--solid" onClick={mapApi.resetAll}>Clear all filters</button>}
     </div>
   );
