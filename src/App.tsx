@@ -24,8 +24,8 @@ export function App() {
   const aboutDialogRef = useRef<HTMLDialogElement>(null);
 
   const [sheetOpen, setSheetOpen] = useState(false);
-  // Mirrors mapApi's own expandedRef purely for the wall-icon button's
-  // aria-pressed/label -- the map hook owns the actual bounds/camera toggle
+  // Mirrors mapApi's own expandedRef for the wall-icon button's aria-pressed/
+  // label and for which view the side panel shows (PLM vs Intramuros) -- the map hook owns the actual bounds/camera toggle
   // imperatively and hands back the new state on each call, so this never
   // drifts out of sync with it.
   const [intramurosExpanded, setIntramurosExpanded] = useState(false);
@@ -69,7 +69,7 @@ export function App() {
   return (
     <div className="app">
       <Panel state={state} dispatch={dispatch} mapApi={mapApi} visible={visible}
-        sheetOpen={sheetOpen} setSheet={setSheetOpen}
+        sheetOpen={sheetOpen} setSheet={setSheetOpen} intramurosExpanded={intramurosExpanded}
         onAbout={() => aboutDialogRef.current?.showModal()} />
       <MapView containerRef={mapContainerRef} mapNoteRef={mapNoteRef} toasts={toasts}
         intramurosExpanded={intramurosExpanded}

@@ -13,9 +13,19 @@ import { SpotList } from './SpotList';
 import { EmptyState } from './EmptyState';
 import { DirectionsPanel } from './DirectionsPanel';
 import { PanelFooter } from './PanelFooter';
+import { SpotCard } from './SpotCard';
+import { ALL_SPOTS } from '../data/modes';
+import { PLM_BOUNDARY } from '../../data/plm-boundary.js';
+import { pointInRing } from '../hooks/useLeafletMap';
 import type { MapApi } from '../hooks/useLeafletMap';
 import type { VisibleSpot } from '../hooks/useVisibleSpots';
 import type { Action, FullAppState } from '../state/store';
+
+/** Every listed spot, from any tab, inside the PLM campus boundary -- the same
+ *  point-in-polygon test the map uses to hide pins while the PLM Map is up, so
+ *  the PLM view's list and its pins always agree. Fixed data, computed once. */
+const PLM_RING = (PLM_BOUNDARY.geometry.coordinates[0] as [number, number][]).map(([lng, lat]) => [lat, lng] as [number, number]);
+const PLM_SPOTS = ALL_SPOTS.filter(({ spot }) => pointInRing(spot.lat, spot.lng, PLM_RING));
 
 /**
  * Ported from index.html:25-168. Owns the mobile bottom-sheet drag gesture,
@@ -23,13 +33,16 @@ import type { Action, FullAppState } from '../state/store';
  * directly during the drag rather than through React state, per plan A6, so a
  * pointermove does not re-render the whole list on every frame.
  */
-export function Panel({ state, dispatch, mapApi, visible, sheetOpen, setSheet, onAbout }: {
+export function Panel({ state, dispatch, mapApi, visible, sheetOpen, setSheet, intramurosExpanded, onAbout }: {
   state: FullAppState;
   dispatch: Dispatch<Action>;
   mapApi: MapApi;
   visible: VisibleSpot[];
   sheetOpen: boolean;
   setSheet: (open: boolean) => void;
+  /** Which map the wall-icon toggle has up: false = PLM Map (venue + on-campus
+   *  spots only), true = Intramuros Map (the full tabbed browser). */
+  intramurosExpanded: boolean;
   onAbout: () => void;
 }) {
   const panelRef = useRef<HTMLElement>(null);
@@ -78,7 +91,8 @@ export function Panel({ state, dispatch, mapApi, visible, sheetOpen, setSheet, o
   }, [setSheet]);
 
   const { total, filtered, noun } = summarize(state.mode, state.byMode[state.mode], visible.length);
-  const gripText = filtered ? `${visible.length} of ${total} ${noun}` : `${total} ${noun}`;
+  const gripText = !intramurosExpanded ? 'PLM Map'
+    : filtered ? `${visible.length} of ${total} ${noun}` : `${total} ${noun}`;
 
   // Same as picking a list card on a phone (select() in useLeafletMap): the
   // sheet drops so the map the tap is about is actually visible.
@@ -95,26 +109,47 @@ export function Panel({ state, dispatch, mapApi, visible, sheetOpen, setSheet, o
       </button>
 
       <div className="panel__body" id="panelBody">
-        <Masthead mode={state.mode} />
-        <Tabs mode={state.mode} mapApi={mapApi} />
-        <MapLayers mode={state.mode} mapModes={state.mapModes} dispatch={dispatch} />
-        <VenueBar onPick={pickLandmark} />
+        {/* Keyed on the view so a map toggle remounts the contents and replays
+            .panel__view's fade-in -- SearchBox and friends re-read everything
+            from `state`, so nothing is lost by the remount. */}
+        <div className="panel__view" key={intramurosExpanded ? 'intramuros' : 'plm'}>
+          <Masthead mode={state.mode} plm={!intramurosExpanded} />
+          {intramurosExpanded ? <>
+            <Tabs mode={state.mode} mapApi={mapApi} />
+            <MapLayers mode={state.mode} mapModes={state.mapModes} dispatch={dispatch} />
 
-        <div className="controls">
-          <SearchBox key={`${state.mode}-${state.resetNonce}`} mode={state.mode}
-            initialQuery={state.byMode[state.mode].query} dispatch={dispatch} />
-          <CategoryChips mode={state.mode} cats={state.byMode[state.mode].cats} dispatch={dispatch} />
-          <PriceChips mode={state.mode} tiers={state.byMode[state.mode].tiers} dispatch={dispatch} />
-          <Toolbar mapApi={mapApi} onAbout={onAbout} />
-          <Count mode={state.mode} filters={state.byMode[state.mode]} visibleCount={visible.length} />
+            <div className="controls">
+              <SearchBox key={`${state.mode}-${state.resetNonce}`} mode={state.mode}
+                initialQuery={state.byMode[state.mode].query} dispatch={dispatch} />
+              <CategoryChips mode={state.mode} cats={state.byMode[state.mode].cats} dispatch={dispatch} />
+              <PriceChips mode={state.mode} tiers={state.byMode[state.mode].tiers} dispatch={dispatch} />
+              <Toolbar mapApi={mapApi} onAbout={onAbout} />
+              <Count mode={state.mode} filters={state.byMode[state.mode]} visibleCount={visible.length} />
+            </div>
+
+            {visible.length > 0
+              ? <SpotList visible={visible} mode={state.mode} activeId={state.activeId} activeFrom={state.activeFrom} mapApi={mapApi} />
+              : <EmptyState mode={state.mode} query={state.byMode[state.mode].query} mapApi={mapApi} onPickLandmark={pickLandmark} />}
+          </> : <>
+            <VenueBar onPick={pickLandmark} />
+            <div className="controls"><Toolbar mapApi={mapApi} onAbout={onAbout} /></div>
+            {/* Cards span tabs here, so a click goes through focusById (which
+                switches to the spot's own tab) rather than SpotList's
+                select(), which only knows the active tab's items. */}
+            <ol className="list">
+              {PLM_SPOTS.map(({ spot, mode }, i) => (
+                <SpotCard key={spot.id} spot={spot} index={i} mode={mode} dist={null}
+                  active={state.activeId === spot.id}
+                  onPointerOver={() => mapApi.setPinHover(spot.id, true)}
+                  onPointerOut={() => mapApi.setPinHover(spot.id, false)}
+                  onClick={() => pickLandmark(spot.id)} />
+              ))}
+            </ol>
+          </>}
+
+          <DirectionsPanel dirs={state.dirs} mapApi={mapApi} />
+          <PanelFooter mode={state.mode} />
         </div>
-
-        {visible.length > 0
-          ? <SpotList visible={visible} mode={state.mode} activeId={state.activeId} activeFrom={state.activeFrom} mapApi={mapApi} />
-          : <EmptyState mode={state.mode} query={state.byMode[state.mode].query} mapApi={mapApi} onPickLandmark={pickLandmark} />}
-
-        <DirectionsPanel dirs={state.dirs} mapApi={mapApi} />
-        <PanelFooter mode={state.mode} />
       </div>
     </aside>
   );

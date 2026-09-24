@@ -65,7 +65,7 @@ function flyOptions(duration: number): L.ZoomPanOptions {
  *  tools/verify-in-intramuros.mjs's own build-time check -- `ring` here is
  *  this file's own [lat, lng] pair convention rather than GeoJSON's
  *  [lng, lat], so x/y below are lng/lat respectively, swapped to match. */
-function pointInRing(lat: number, lng: number, ring: [number, number][]): boolean {
+export function pointInRing(lat: number, lng: number, ring: [number, number][]): boolean {
   let inside = false;
   for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
     const yi = ring[i][0], xi = ring[i][1];
@@ -1226,13 +1226,21 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
   const focusById = useCallback((id: string): boolean => {
     const hit = findAnywhere(id);
     if (!hit) return flyToLandmark(id);
+    // Already on its tab and already on the map: nothing will change the id
+    // list (useMapVisibleIds returns the same array for the same contents),
+    // so the cluster-sync effect below would never fire to finish a pending
+    // focus -- select now instead.
+    if (stateRef.current.mode === hit.modeKey && visibleIdsRef.current.includes(id)) {
+      select(id, { from: 'list' });
+      return true;
+    }
     pendingFocusRef.current = id;
     if (stateRef.current.mode !== hit.modeKey) {
       dispatchRef.current({ type: 'SET_MODE', mode: hit.modeKey });
     }
     dispatchRef.current({ type: 'RESET_FILTERS' });
     return true;
-  }, [flyToLandmark]);
+  }, [flyToLandmark, select]);
 
   return {
     selectTab,

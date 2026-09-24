@@ -520,6 +520,14 @@ body {
 }
 .list .card-item { animation: cardIn .4s var(--ease) both; }
 
+/* PLM Map <-> Intramuros Map: Panel re-keys .panel__view on each toggle, so
+   this replays on every switch (the global reduced-motion rule flattens it). */
+@keyframes viewIn {
+  from { opacity: 0; transform: translateX(-12px); }
+  to   { opacity: 1; transform: none; }
+}
+.panel__view { animation: viewIn .35s var(--ease) both; }
+
 /* ─────────────────────────────── empty state ───────────────────────────── */
 
 .empty {
