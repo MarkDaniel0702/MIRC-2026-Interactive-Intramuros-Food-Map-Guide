@@ -1,5 +1,5 @@
 {
-  "_generated": "2026-09-24T14:43:57.711Z",
+  "_generated": "2026-09-26T17:53:31.306Z",
   "_source": "node tools/build-corpus.mjs — do not edit by hand; edit data/mirc-2026.json",
   "meta": {
     "id": "mirc-2026",
@@ -8245,8 +8245,8 @@
       },
       {
         "id": "plm-villegas",
-        "lat": 14.586907,
-        "lng": 120.976892,
+        "lat": 14.587059,
+        "lng": 120.976995,
         "name": "Antonio de Jesus Villegas Building",
         "campus": "yes"
       },

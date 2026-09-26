@@ -147,7 +147,9 @@ export const LANDMARKS = [
     id: 'plm-villegas',
     name: 'Antonio de Jesus Villegas Building',
     kind: 'PLM campus · building',
-    lat: 14.586907, lng: 120.976892,
+    // Where OSM labels it, on the General Luna Street wing. The footprint is an
+    // L wrapped around the Activity Center, so its bbox centre lands on that.
+    lat: 14.587059, lng: 120.976995,
     osm: 'way/88328809',
     glyph: 'museum',
     campus: true,
