@@ -208,6 +208,9 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
    *  refitHome/resetAll/closeDirections so "go home" always means "go back to
    *  whichever of the two views is currently primary", not always Intramuros. */
   const expandedRef = useRef(false);
+  /** Directions were opened from the PLM Map -- so closing them goes back
+   *  there, even if an off-campus route switched to the Intramuros Map. */
+  const dirsFromPlmRef = useRef(false);
   const firstPaintRef = useRef(!reduceMotionOnce);
   const pendingSelectRef = useRef<string | null>(null);
   const activePinIdRef = useRef<string | null>(null);
@@ -497,6 +500,8 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
     const dest = findDestination(id);
     if (!dest) return;
 
+    // Only on a fresh open: re-targeting open directions keeps the original view.
+    if (!stateRef.current.dirs.open) dirsFromPlmRef.current = !expandedRef.current;
     dispatchRef.current({ type: 'DIRS_OPEN', destId: id, mode: dest.kind === 'spot' ? dest.modeKey : null });
     // For a landmark there is no clustered pin to mark .is-active (pinEl finds
     // nothing and setActive skips the class); the destination marker below is
@@ -701,7 +706,11 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
     if (startMarkerRef.current) { map.removeLayer(startMarkerRef.current); startMarkerRef.current = null; }
     hideDestinationNow();
     setActive(null);
-    flyToPrimaryHome(0.7);
+    // setView is declared further down, so it stays out of the deps -- it is
+    // stable ([] deps), so the closure's copy never goes stale.
+    if (dirsFromPlmRef.current && expandedRef.current) setView(false, true);
+    else flyToPrimaryHome(0.7);
+    dirsFromPlmRef.current = false;
   }, [flyToPrimaryHome, setActive, stopPicking, stopTracking]);
 
   /** Ported from app.js:947-968 useMyLocation (the directions-panel variant --
