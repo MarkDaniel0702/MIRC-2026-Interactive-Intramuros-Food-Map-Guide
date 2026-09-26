@@ -24,13 +24,15 @@ export function MapView({ containerRef, mapNoteRef, toggleRef, toasts, intramuro
     <main className="mapwrap">
       <div id="map" ref={containerRef} role="application" aria-label="Interactive map of food spots and heritage sights inside Intramuros"></div>
 
-      {/* Layers glyph: the same stacked-sheets icon Google/Apple Maps use for
-          "switch map view", so it reads as a view switch, not a place. */}
+      {/* Icon only. Layers glyph: the same stacked-sheets icon Google/Apple Maps
+          use for "switch map view", so it reads as a view switch, not a place.
+          A toggle keeps one fixed name and lets aria-pressed carry the state;
+          the tooltip says where a tap goes. */}
       <button type="button" className="map-wall-toggle" ref={toggleRef} aria-pressed={intramurosExpanded}
-        title={intramurosExpanded ? 'Collapse to the PLM Map' : 'Expand to the full Intramuros Map'}
+        aria-label="Full Intramuros Map"
+        title={intramurosExpanded ? 'Back to the PLM Map' : 'Show the full Intramuros Map'}
         onClick={onToggleIntramurosView}>
         <LuLayers aria-hidden="true" />
-        <span>{intramurosExpanded ? 'PLM Map' : 'Intramuros Map'}</span>
       </button>
 
       <div className="map-cartouche" aria-hidden="true">

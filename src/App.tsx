@@ -26,10 +26,11 @@ export function App() {
   const beaconTimerRef = useRef<number>();
 
   const [sheetOpen, setSheetOpen] = useState(false);
-  // Mirrors mapApi's own expandedRef for the wall-icon button's aria-pressed/
-  // label and for which view the side panel shows (PLM vs Intramuros) -- the map hook owns the actual bounds/camera toggle
-  // imperatively and hands back the new state on each call, so this never
-  // drifts out of sync with it.
+  // Mirrors mapApi's own expandedRef for the wall-icon button's aria-pressed
+  // and for which view the side panel shows (PLM vs Intramuros) -- the map hook
+  // owns the actual bounds/camera toggle imperatively and reports every flip
+  // through onViewChange (including the ones it makes on its own), so this
+  // never drifts out of sync with it.
   const [intramurosExpanded, setIntramurosExpanded] = useState(false);
   const { toasts, showToast } = useToasts();
 
@@ -47,7 +48,8 @@ export function App() {
     visibleIds: mapVisibleIds,
     onToast: showToast,
     onSetSheet: setSheetOpen,
-    isMobile
+    isMobile,
+    onViewChange: setIntramurosExpanded
   });
 
   // Dan's "where is the change-view button?" answer: a temporary pulse + arrow
@@ -90,7 +92,7 @@ export function App() {
         onAbout={() => aboutDialogRef.current?.showModal()} />
       <MapView containerRef={mapContainerRef} mapNoteRef={mapNoteRef} toggleRef={viewToggleRef} toasts={toasts}
         intramurosExpanded={intramurosExpanded}
-        onToggleIntramurosView={() => setIntramurosExpanded(mapApi.toggleIntramurosView())} />
+        onToggleIntramurosView={mapApi.toggleIntramurosView} />
       <ChatPanel onFocus={mapApi.focusById} onHighlightViewToggle={highlightViewToggle} />
       <AboutDialog dialogRef={aboutDialogRef} />
     </div>

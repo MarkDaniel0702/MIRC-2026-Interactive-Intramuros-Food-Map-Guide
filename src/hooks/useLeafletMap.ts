@@ -146,8 +146,8 @@ export interface MapApi {
   focusById: (id: string) => boolean;
   /** Wall-icon toggle: PLM Map (the default, its own restricted campus
    *  enclosure) <-> the full Intramuros Map (its existing restricted
-   *  enclosure, unchanged). Returns the new expanded state. */
-  toggleIntramurosView: () => boolean;
+   *  enclosure, unchanged). The new state arrives via onViewChange. */
+  toggleIntramurosView: () => void;
 }
 
 interface UseLeafletMapParams {
@@ -159,6 +159,9 @@ interface UseLeafletMapParams {
   onToast: (text: string) => void;
   onSetSheet: (open: boolean) => void;
   isMobile: () => boolean;
+  /** Fires whenever the view flips -- from the toggle, or on its own when
+   *  something outside the campus has to be shown (see setView). */
+  onViewChange: (intramurosExpanded: boolean) => void;
 }
 
 export function useLeafletMap(params: UseLeafletMapParams): MapApi {
@@ -231,6 +234,8 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
   onSetSheetRef.current = params.onSetSheet;
   const isMobileRef = useRef(params.isMobile);
   isMobileRef.current = params.isMobile;
+  const onViewChangeRef = useRef(params.onViewChange);
+  onViewChangeRef.current = params.onViewChange;
   /** So toggleIntramurosView (a stable, deps-free callback) can re-run the
    *  cluster's PLM-boundary filter immediately on click, without waiting for
    *  the visibleIds effect below to fire on some unrelated change. */
@@ -768,6 +773,7 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
           : 'Location found, but no spots match your filters.');
 
         if (homeRef.current?.bounds.contains([lat, lng])) {
+          showOffCampus(L.latLng(lat, lng));
           map?.flyTo([lat, lng], 17, flyOptions(0.9));
         } else {
           onToastRef.current('You are outside Intramuros — the list is sorted by distance from you.');
@@ -1153,7 +1159,9 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
       zIndexOffset: 900
     }).addTo(map);
 
-    map.flyToBounds(L.latLngBounds(res.line as L.LatLngExpression[]).pad(0.18), {
+    const routeBounds = L.latLngBounds(res.line as L.LatLngExpression[]);
+    showOffCampus(routeBounds);
+    map.flyToBounds(routeBounds.pad(0.18), {
       paddingTopLeft: [isMobileRef.current() ? 20 : 40, 40],
       paddingBottomRight: [40, isMobileRef.current() ? 40 : 40],
       ...flyOptions(0.8)
@@ -1170,32 +1178,30 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
     mapRef.current?.closePopup();
   }, [setActive]);
 
-  /** The wall-icon toggle: PLM Map (collapsed, primary by default) <-> the
-   *  full Intramuros Map (expanded). Swaps the panning enclosure itself --
-   *  setMaxBounds/setMinZoom is what actually stops a drag/swipe from
-   *  leaving the intended area, not the camera move -- and which drawn
-   *  boundary (campusMask vs. the always-present Intramuros polygons) is the
-   *  one currently relevant, then flies to the other view's target. Bounds
-   *  are set before the fly so the fly's own target (already inside the new
-   *  bounds by construction) is never fighting a stale, looser constraint.
-   *  Returns the new expanded state so the caller (the button) can mirror it
-   *  into its own aria-pressed/label without a second source of truth. */
-  const toggleIntramurosView = useCallback((): boolean => {
+  /** PLM Map (collapsed, primary by default) <-> the full Intramuros Map
+   *  (expanded). Swaps the panning enclosure itself -- setMaxBounds/setMinZoom
+   *  is what actually stops a drag/swipe from leaving the intended area, not
+   *  the camera move -- and which drawn boundary (campusMask vs. the
+   *  always-present Intramuros polygons) is the one currently relevant, then,
+   *  if `fly`, flies to the new view's home. Bounds are set before the fly so
+   *  the fly's own target (already inside the new bounds by construction) is
+   *  never fighting a stale, looser constraint. `fly` is false when a caller
+   *  expands only to make room for its own camera move (showOffCampus). */
+  const setView = useCallback((expanded: boolean, fly: boolean) => {
     const map = mapRef.current;
-    if (!map) return expandedRef.current;
-    const next = !expandedRef.current;
-    expandedRef.current = next;
+    if (!map || expanded === expandedRef.current) return;
+    expandedRef.current = expanded;
 
-    if (next) {
+    if (expanded) {
       if (intramurosMaxBoundsRef.current) map.setMaxBounds(intramurosMaxBoundsRef.current);
       map.setMinZoom(INTRAMUROS_MIN_ZOOM);
       if (campusMaskRef.current && map.hasLayer(campusMaskRef.current)) map.removeLayer(campusMaskRef.current);
-      if (homeRef.current) map.flyToBounds(homeRef.current.bounds, { ...homeRef.current.options, ...flyOptions(0.8) });
+      if (fly && homeRef.current) map.flyToBounds(homeRef.current.bounds, { ...homeRef.current.options, ...flyOptions(0.8) });
     } else {
       if (campusMaxBoundsRef.current) map.setMaxBounds(campusMaxBoundsRef.current);
       map.setMinZoom(CAMPUS_MIN_ZOOM);
       if (campusMaskRef.current && !map.hasLayer(campusMaskRef.current)) campusMaskRef.current.addTo(map);
-      if (campusHomeRef.current) map.flyTo(campusHomeRef.current.center, campusHomeRef.current.zoom, flyOptions(0.8));
+      if (fly && campusHomeRef.current) map.flyTo(campusHomeRef.current.center, campusHomeRef.current.zoom, flyOptions(0.8));
     }
 
     // Re-apply the PLM-boundary pin filter immediately -- the effect that
@@ -1208,8 +1214,20 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
       cluster.addLayers(computeClusterLayers(visibleIdsRef.current));
     }
 
-    return next;
+    onViewChangeRef.current(expanded);
   }, []);
+
+  const toggleIntramurosView = useCallback(() => setView(!expandedRef.current, true), [setView]);
+
+  /** The PLM Map's campus enclosure (maxBounds + minZoom) silently keeps
+   *  anything outside it off-screen: a chat focus on an off-campus restaurant
+   *  opened its popup out of view, and a route from a station was clamped to
+   *  the campus. Whatever has to be shown and does not fit switches to the
+   *  Intramuros Map first -- exactly what tapping the toggle would do. */
+  const showOffCampus = useCallback((target: L.LatLng | L.LatLngBounds) => {
+    const campus = campusMaxBoundsRef.current;
+    if (!expandedRef.current && campus && !campus.contains(target)) setView(true, false);
+  }, [setView]);
 
   /* `select` is scoped to the currently open tab (`MODES[state.mode].items`) --
      fine for a click, since a list card can only ever show the active mode's own
@@ -1226,6 +1244,11 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
   const focusById = useCallback((id: string): boolean => {
     const hit = findAnywhere(id);
     if (!hit) return flyToLandmark(id);
+    // Tested against the ring, not showOffCampus's bounds: the PLM Map hides
+    // every pin outside the ring (computeClusterLayers), even one the camera
+    // could still reach.
+    const ring = plmRingRef.current;
+    if (!expandedRef.current && ring && !pointInRing(hit.spot.lat, hit.spot.lng, ring)) setView(true, false);
     // Already on its tab and already on the map: nothing will change the id
     // list (useMapVisibleIds returns the same array for the same contents),
     // so the cluster-sync effect below would never fire to finish a pending
@@ -1240,7 +1263,7 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
     }
     dispatchRef.current({ type: 'RESET_FILTERS' });
     return true;
-  }, [flyToLandmark, select]);
+  }, [flyToLandmark, select, setView]);
 
   return {
     selectTab,
