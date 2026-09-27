@@ -62,6 +62,15 @@ function flyOptions(duration: number): L.ZoomPanOptions {
   return reduceMotionOnce ? { animate: false } : { duration };
 }
 
+/** A flyTo target pulled inside maxBounds up front, as setView/panTo already
+ *  do with theirs. flyTo does not, so Leaflet's own moveend panInsideBounds
+ *  nudged the camera again right after fitPopup had placed the popup -- on a
+ *  tall phone screen that pushed the popup's top off the screen. */
+function inBounds(map: L.Map, latlng: L.LatLngExpression, zoom: number): L.LatLng {
+  // ponytail: _limitCenter is Leaflet-private (1.x); recheck on a Leaflet 2 upgrade.
+  return (map as any)._limitCenter(L.latLng(latlng), zoom, map.options.maxBounds);
+}
+
 /** Standard ray-casting point-in-polygon, mirroring
  *  tools/verify-in-intramuros.mjs's own build-time check -- `ring` here is
  *  this file's own [lat, lng] pair convention rather than GeoJSON's
@@ -352,7 +361,8 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
     // asking for one building means wanting to tell it from its neighbour.
     const lm = ALL_LANDMARKS.find(l => l.id === id);
     showOffCampus(marker.getLatLng()); // the street food area, from the PLM Map
-    map.flyTo(marker.getLatLng(), lm?.campus ? 18.5 : 18, flyOptions(0.8));
+    const zoom = lm?.campus ? 18.5 : 18;
+    map.flyTo(inBounds(map, marker.getLatLng(), zoom), zoom, flyOptions(0.8));
     pendingLandmarkRef.current = id;
     let revealT: ReturnType<typeof setTimeout>;
     const reveal = () => {
@@ -406,7 +416,7 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
       // PHASE B (plan B3/B4): shortened from 0.7s -- this fires on every list-card
       // click, so it is the flight users feel most often; snappier reads as more
       // responsive without being abrupt.
-      map.flyTo([spot.lat, spot.lng], 18, flyOptions(0.55));
+      map.flyTo(inBounds(map, [spot.lat, spot.lng], 18), 18, flyOptions(0.55));
 
       pendingSelectRef.current = id;
       let revealT: ReturnType<typeof setTimeout>;

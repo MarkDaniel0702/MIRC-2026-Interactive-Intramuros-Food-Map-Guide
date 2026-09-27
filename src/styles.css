@@ -58,6 +58,10 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 
+/* Form controls don't inherit the page font by default -- a card's meta line
+   fell back to the system face (serif in some WebKit builds). */
+button, input, textarea { font-family: inherit; }
+
 html, body { height: 100%; }
 
 body {
@@ -97,10 +101,14 @@ body {
 
 /* ─────────────────────────────── layout ─────────────────────────────────── */
 
+/* The env() insets are 0 everywhere but under an iPhone's notch and home
+   indicator (index.html sets viewport-fit=cover): a landscape iPhone gets this
+   side-panel layout, with the notch over one edge. */
 .app {
   display: grid;
-  grid-template-columns: var(--panel-w) 1fr;
+  grid-template-columns: calc(var(--panel-w) + env(safe-area-inset-left, 0px)) 1fr;
   height: 100dvh;
+  padding-right: env(safe-area-inset-right, 0px);
 }
 
 .panel {
@@ -109,6 +117,7 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 0;
+  padding-left: env(safe-area-inset-left, 0px);
   background-color: var(--navy-800);
   border-right: 1px solid var(--navy-500);
   box-shadow: 8px 0 32px -20px #000;
@@ -129,6 +138,7 @@ body {
   flex-direction: column;
   min-height: 0;
   flex: 1;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
   overflow-y: auto;
   overscroll-behavior: contain;
   scrollbar-width: thin;
@@ -1621,11 +1631,17 @@ body.is-picking .leaflet-container { cursor: crosshair !important; }
 }
 
 @media (max-width: 760px) {
+  /* The collapsed sheet shows its grip and nothing else -- 74px used to let
+     half the masthead title peek out under it -- plus the home-indicator strip
+     on a notched iPhone. */
+  :root { --grip-h: calc(48px + env(safe-area-inset-bottom, 0px)); }
+
   body { overflow: hidden; }
 
   .app { display: block; height: 100dvh; }
 
-  .mapwrap { position: absolute; inset: 0; }
+  /* Below the status bar when launched from the home screen (standalone). */
+  .mapwrap { position: absolute; inset: env(safe-area-inset-top, 0px) 0 0; }
 
   /* The panel becomes a draggable bottom sheet. Leaflet's .leaflet-top/.leaflet-bottom
      control rails are z-index 1000 and come later in the DOM, so the sheet has to
@@ -1667,7 +1683,12 @@ body.is-picking .leaflet-container { cursor: crosshair !important; }
     cursor: grab;
     touch-action: none;
     flex: none;
+    /* Fills the whole collapsed strip, so Panel's drag math (panel height minus
+       grip height) matches the closed transform exactly. */
+    min-height: var(--grip-h);
+    align-content: start;
   }
+  .panel.is-open .sheet-grip { min-height: 0; }
   .sheet-grip:active { cursor: grabbing; }
   .sheet-grip__bar {
     width: 38px; height: 3px;
@@ -1714,6 +1735,14 @@ body.is-picking .leaflet-container { cursor: crosshair !important; }
 
   .dialog { padding: 24px 20px 28px; max-height: 86dvh; }
   .dialog__title { font-size: 19px; }
+}
+
+/* The side-panel layout on a phone on its side: a tighter masthead, so the
+   list starts on the first screen. */
+@media (max-height: 500px) and (min-width: 761px) {
+  .masthead { padding-top: 14px; }
+  .masthead__title { font-size: 26px; }
+  .rule { margin-top: 12px; }
 }
 
 @media (max-width: 400px) {
@@ -1778,7 +1807,7 @@ body.is-picking .leaflet-container { cursor: crosshair !important; }
 
 .chat {
   position: fixed;
-  right: 14px; top: 122px; bottom: 14px;
+  right: calc(14px + env(safe-area-inset-right, 0px)); top: 122px; bottom: 14px;
   z-index: 1300;
   display: flex;
   flex-direction: column;
@@ -1973,6 +2002,9 @@ body.is-picking .leaflet-container { cursor: crosshair !important; }
   transition: border-color .15s var(--ease);
 }
 .chat__input::placeholder { color: var(--slate-dk); }
+/* A textarea wraps its placeholder, and on a narrow phone the second line was
+   clipped mid-word -- one line, cut with an ellipsis, instead. */
+.chat__input::placeholder { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .chat__input:focus { outline: none; border-color: var(--green); }
 .chat__input:focus-visible { outline: 2px solid var(--gold-br); outline-offset: 1px; }
 .chat__input:disabled { opacity: .5; }
@@ -2012,9 +2044,18 @@ body.is-picking .leaflet-container { cursor: crosshair !important; }
 
   .chat {
     left: 10px; right: 10px;
-    top: 10px;
+    top: calc(10px + env(safe-area-inset-top, 0px));
     bottom: calc(var(--grip-h) + 10px);
     width: auto;
+  }
+}
+
+/* A phone on its side: under the launcher (desktop) or above the sheet's grip
+   (phone), too little height was left and the form ran off the bottom. */
+@media (max-height: 500px) {
+  .chat {
+    top: calc(10px + env(safe-area-inset-top, 0px));
+    bottom: calc(10px + env(safe-area-inset-bottom, 0px));
   }
 }
 
@@ -2060,4 +2101,24 @@ body.is-picking .leaflet-container { cursor: crosshair !important; }
 
 @media (prefers-reduced-motion: reduce) {
   .phx { animation: none; }
+}
+
+/* ═══════════════════════════════ touch screens ═════════════════════════════
+   Last in the file so it wins over the per-component sizes above. iOS zooms
+   the whole page into any text field set under 16px the moment it's tapped,
+   and the desktop-dense controls (26-32px) are small for a fingertip. */
+@media (pointer: coarse) {
+  .search__input, .chat__input { font-size: 16px; }
+  .search__input { padding-right: 40px; }
+
+  .chip, .btn, .tab, .dirs__back, .chat__chip { min-height: 36px; }
+  .search__clear { width: 36px; height: 36px; right: 2px; }
+  .chat__close { width: 36px; height: 36px; }
+
+  .leaflet-control-zoom a {
+    width: 40px !important; height: 40px !important;
+    line-height: 38px !important;
+  }
+  /* Still one rail with the (now 40px) zoom pair: 10px margin + 2 x 40 + 10. */
+  .map-wall-toggle { width: 40px; height: 40px; top: 100px; }
 }
