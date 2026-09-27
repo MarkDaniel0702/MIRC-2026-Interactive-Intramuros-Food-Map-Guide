@@ -4,11 +4,13 @@ The site is a React + Vite build with no server code, no database, and no API ke
 client. `.github/workflows/deploy.yml` builds it and publishes `dist/` to GitHub Pages on
 every push to `main` — there is nothing to build by hand.
 
-**Live URL once enabled:**
+**Live URL:**
 
 ```
-https://markdaniel0702.github.io/MIRC-2026-Interactive-Intramuros-Food-Map-Guide/
+https://mirc2026interactivemap.me/
 ```
+
+(The old `markdaniel0702.github.io/MIRC-2026-Interactive-Intramuros-Food-Map-Guide/` link forwards here — see §6.)
 
 ---
 
@@ -41,18 +43,18 @@ Watch the **Actions** tab for the build to finish (a minute or two), then hard-r
 
 ---
 
-## 3. Why the build works at a project subpath
+## 3. Why the build works at the domain root
 
-- **`vite.config.ts` sets `base` to `/MIRC-2026-Interactive-Intramuros-Food-Map-Guide/`.**
-  Every bundled asset URL is generated against that base, so the built `dist/` works at
-  this project's subpath, not just at a domain root. If the repo is ever renamed, or the
-  site moves to a custom domain (root path `/`), update `base` to match — a mismatch here
-  is the classic Vite-on-Pages failure mode: a blank page with every asset 404ing.
+- **`vite.config.ts` sets `base` to `/`**, because the site is served from the root of its
+  custom domain (§6). Every bundled asset URL is generated against that base. If the custom
+  domain is ever removed, the site falls back to the `/MIRC-2026-Interactive-Intramuros-Food-Map-Guide/` project
+  subpath and `base` must go back to that — a mismatch here is the classic Vite-on-Pages
+  failure mode: a blank page with every asset 404ing.
 - **`.nojekyll` lives in `public/`**, so Vite copies it into `dist/` on every build. Without
   it, Pages would run Jekyll over the build output and could silently drop files.
-- **`public/data/chat-corpus.json`** is served as a static asset at the same absolute URL
-  the Cloudflare Worker fetches (`worker/wrangler.toml`'s `CORPUS_URL`) — see `CHATBOT.md`.
-  If `base` or the repo name ever changes, that URL needs updating on both sides.
+- **`public/data/chat-corpus.json`** is what the Cloudflare Worker reads
+  (`worker/wrangler.toml`'s `CORPUS_URL`) — see `CHATBOT.md`. It reads the committed file
+  from `raw.githubusercontent.com`, not the site, so only a repo rename changes that URL.
 
 ### Geolocation gets *better* after deploying
 
@@ -107,21 +109,25 @@ Open the live URL and confirm:
 
 ---
 
-## 6. Optional: a custom domain
+## 6. The custom domain
 
-Add a file named `CNAME` at the repo root containing just the domain, e.g.
-`intramuros.example.org`, then point a `CNAME` DNS record at
-`markdaniel0702.github.io`. Tick **Enforce HTTPS** in Settings → Pages once the
-certificate is issued. Not required — the `github.io` URL is free and already HTTPS.
+The site is served at **`mirc2026interactivemap.me`**, a free `.me` domain from the GitHub
+Student Developer Pack (Namecheap, registered 2026-09-27, free until 2027-09-27 — renewal
+is paid, so check auto-renew in Namecheap).
 
-**Three things to update together if you do this** — a custom domain serves from the
-root path (`/`), not the `/MIRC-2026-Interactive-Intramuros-Food-Map-Guide/` subpath:
-1. `vite.config.ts`'s `base` → `'/'`
-2. `worker/wrangler.toml`'s `CORPUS_URL` → the new domain's corpus URL
-3. `worker/wrangler.toml`'s `ALLOWED_ORIGINS` → the new domain
+- **DNS (Namecheap → Advanced DNS):** four `A` records on `@` to `185.199.108.153`,
+  `185.199.109.153`, `185.199.110.153`, `185.199.111.153`, and a `CNAME` on `www` to
+  `markdaniel0702.github.io`.
+- **GitHub:** Settings → Pages → Custom domain holds the domain, with **Enforce HTTPS**
+  ticked once the certificate is issued. No `CNAME` file is needed: the Actions deploy
+  ignores it.
+- **Old links:** GitHub forwards `markdaniel0702.github.io/MIRC-2026-Interactive-Intramuros-Food-Map-Guide/…` to the same
+  path on the domain; `public/404.html` strips the old prefix so those links still land.
 
-Missing any one of these breaks assets, the chat corpus fetch, or the chat panel's CORS
-respectively — each fails silently rather than with an obvious error.
+**If the domain ever changes, update together:** `vite.config.ts`'s `base`, the absolute
+URLs in `index.html`, `public/robots.txt`, `public/sitemap.xml` and `public/404.html`, and
+`worker/wrangler.toml`'s `ALLOWED_ORIGINS` (then `npx wrangler deploy` in `worker/`). The
+Worker's `CORPUS_URL` reads from the repo, not the site, so it does not change.
 
 ---
 

@@ -27,11 +27,15 @@ keep_vars = true
 
 [vars]
 # Where the built corpus lives. Regenerate it with `node tools/build-corpus.mjs`
-# and push, and the Worker picks it up within five minutes.
-CORPUS_URL = "https://markdaniel0702.github.io/MIRC-2026-Interactive-Intramuros-Food-Map-Guide/data/chat-corpus.json"
+# and push, and the Worker picks it up within five minutes. Read straight from the
+# repo rather than the site, so a domain or certificate change on the site can
+# never cut Dan off from it.
+CORPUS_URL = "https://raw.githubusercontent.com/MarkDaniel0702/MIRC-2026-Interactive-Intramuros-Food-Map-Guide/main/public/data/chat-corpus.json"
 
 # Origins allowed to call this Worker. Leave the localhost entry for development.
-ALLOWED_ORIGINS = "https://markdaniel0702.github.io,http://localhost:8000"
+# The http:// custom-domain entry only covers the window before GitHub Pages issues
+# its certificate; drop it once Settings -> Pages -> Enforce HTTPS is ticked.
+ALLOWED_ORIGINS = "https://mirc2026interactivemap.me,http://mirc2026interactivemap.me,https://markdaniel0702.github.io,http://localhost:8000"
 
 # Model ids are pinned here rather than in code so a provider renaming a model is a
 # one-line change. Check the provider's current model list before the congress.

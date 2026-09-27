@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react';
 /*
  * base MUST match the GitHub Pages project sub-path -- the Worker's
  * ALLOWED_ORIGINS / CORPUS_URL (worker/wrangler.toml) are pinned to
- * https://markdaniel0702.github.io/MIRC-2026-Interactive-Intramuros-Food-Map-Guide/,
+ * https://mirc2026interactivemap.me/,
  * so a wrong base here silently breaks asset URLs and the chat corpus fetch.
  *
  * The /chat proxy exists only so `npm run dev` can talk to the deployed Worker:
@@ -13,7 +13,7 @@ import react from '@vitejs/plugin-react';
  * Proxying keeps the browser's Origin same-origin and needs no Worker change.
  */
 export default defineConfig({
-  base: '/MIRC-2026-Interactive-Intramuros-Food-Map-Guide/',
+  base: '/',
   plugins: [react()],
   server: {
     proxy: {

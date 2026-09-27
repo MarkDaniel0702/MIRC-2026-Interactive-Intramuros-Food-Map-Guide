@@ -10,7 +10,7 @@ export const options = {
 };
 
 export default function () {
-  const url = 'https://markdaniel0702.github.io/MIRC-2026-Interactive-Intramuros-Food-Map-Guide/';
+  const url = 'https://mirc2026interactivemap.me/';
   const res = http.get(url);
   check(res, {
     'is status 200': (r) => r.status === 200,

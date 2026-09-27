@@ -4,7 +4,7 @@ An interactive map of the walled city of Manila, built for visiting researchers 
 **MIRC 2026** — where to eat, what to see, where to stay, step-by-step walking
 directions to any of it, and an AI assistant who knows the congress programme.
 
-### 🗺️ [markdaniel0702.github.io/MIRC-2026-Interactive-Intramuros-Food-Map-Guide](https://markdaniel0702.github.io/MIRC-2026-Interactive-Intramuros-Food-Map-Guide/)
+### 🗺️ [mirc2026interactivemap.me](https://mirc2026interactivemap.me/)
 
 ![The Intramuros Guide map, showing the Eat tab's filters and list on the left and the walled city on the right, with colour-coded pins for every food spot and the PLM venue highlighted in gold](docs/screenshot-map.jpg)
 
