@@ -116,14 +116,20 @@ export function DirectionsPanel({ dirs, mapApi }: { dirs: FullDirsState; mapApi:
                 </li>
               ))}
             </ol>
-            {dest?.kind === 'landmark' && (
-              /* OSRM can only end a route on a public street; PLM is a walled
-                 campus with several gates (see DATA.md §8) and which one delegates
-                 should use is not published yet, so say so rather than let the
-                 last step read as "you have arrived". */
+            {/* OSRM cannot enter the walled campus, so a route into PLM is joined to
+                the traced gate walk (routing.ts PLM_GATE), which stops where the campus
+                footpath starts -- say so rather than let the last step read as the door.
+                Campus to campus has no gate walk and runs along the public streets. */}
+            {dirs.result.gate === 'enter' && (
               <p className="dirs__note">
-                The route ends at the nearest public street. PLM is a gated campus with more than one
-                gate — the organisers will confirm which entrance delegates should use.
+                The route goes in through PLM's gate on General Luna Street and ends where the campus
+                footpath starts — follow the campus paths from there.
+              </p>
+            )}
+            {!dirs.result.gate && !dirs.result.fallback && dest?.kind === 'landmark' && (
+              <p className="dirs__note">
+                Both ends are on the PLM campus, which the routing service cannot enter, so this route
+                runs along the nearest public streets.
               </p>
             )}
             <p className="dirs__credit">

@@ -457,17 +457,22 @@ marker's blurb rather than given their own pins.
 > its building pin to need its own marker is unconfirmed. `PLM Canteen` is on the **Eat**
 > tab, not here — its pin resolves to the PLM Multi-Purpose Building; see §2.
 
-**Gates, and where a walking route ends.** OSRM can only end a route on a public way, so
-directions to a campus building stop at the nearest street — Santa Lucia Street for JAA,
-Muralla Street for GEE and GA, General Luna Street for the campus centre (snap distances
-16–80 m). OpenStreetMap (Overpass, 2026-09-17) maps four gates on the campus way: two
+**Gates, and where a walking route ends.** OSRM can only route on public ways, and the
+campus is walled. OpenStreetMap (Overpass, 2026-09-17) maps four gates on the campus way: two
 private double gates with driveways on the east, General Luna Street side (nodes
 `9834302096`, `11521214083`), a private gate to the south-south-west (`9834302097`) and an
 untagged gate to the north-north-west (`13135788681`), plus three `entrance=yes` nodes on
 the west face of the Justo Albert Auditorium (`3388716915`, `3388716918`, `3388716920`).
-Which of these delegates should walk in by is **not** in the data. It is listed as a gap
-in the knowledge base, and the directions panel says so under any route to a campus
-destination, rather than letting "Arrive at GEE" read as the door.
+
+Since 2026-09-27 every route with exactly one end on campus (inside `data/plm-boundary.js`)
+goes through the **northern General Luna Street gate** (`11521214083`): OSRM routes the
+street leg to the gate's street end, and a fixed 37 m walk — `PLM_GATE` in
+`src/lib/routing.ts`, traced from the route the site owner drew on the map and running
+0.4 m from that gate node — carries it through the gate to where the campus footpath
+starts (reversed for routes leaving campus). The route stops there: the paths on to
+each building are not drawn, and the directions panel says so. Campus-to-campus routes
+still run along the nearest public streets. The official delegate entrance is still a gap
+in the knowledge base; this gate is the site's routing choice, not a published one.
 
 **Finding the buildings.** They are drawn only past zoom 17 and are in no list or search
 index, so the panel carries a **MIRC 2026 venue** strip — one chip per landmark that flies
