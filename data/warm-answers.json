@@ -244,7 +244,7 @@
     },
     {
       "q": "Where can I eat near the venue?",
-      "a": "Here are a few budget‑friendly spots within a short walk of the PLM venue:\n- Batala – ice‑cream and desserts, under ₱200 per person, on San Jose Street, 2 min walk (≈140 m).  \n- 7‑Eleven (Solana North) – convenience store with snacks and coffee, under ₱200 per person, near Fort Santiago, 6 min walk (≈470 m).  \n- Dexter Pizza – Sisay’s – pizza and Filipino fast food, under ₱200 per person, on Cabildo Street, 7 min walk (≈560 m).",
+      "a": "Here are a few budget‑friendly spots within a short walk of the PLM venue:\n- 7‑Eleven (Solana North) – convenience store with snacks and coffee, under ₱200 per person, near Fort Santiago, 6 min walk (≈470 m).  \n- Dexter Pizza – Sisay’s – pizza and Filipino fast food, under ₱200 per person, on Cabildo Street, 7 min walk (≈560 m).",
       "keys": [
         "Where can I eat near the venue?"
       ],
@@ -260,7 +260,7 @@
     },
     {
       "q": "Where can I eat cheaply near the venue?",
-      "a": "You have a few budget‑friendly options within a short walk of the PLM venue:\n- Batala – Ice‑cream and desserts, under ₱200 per person. 2 min walk (≈140 m) on San Jose Street.  \n- 7‑Eleven (Solana North) – Convenience store with snacks, drinks and quick meals, under ₱200 per person. 6 min walk (≈470 m) on Solana Street near Fort Santiago.  \n- 7‑Eleven (Solana South) – Same budget fare, under ₱200 per person. 4 min walk (≈330 m) on Solana Street near San Agustin Church.  \n\nThese price ranges are indicative estimates for a typical meal per person.",
+      "a": "You have a few budget‑friendly options within a short walk of the PLM venue:\n- 7‑Eleven (Solana North) – Convenience store with snacks, drinks and quick meals, under ₱200 per person. 6 min walk (≈470 m) on Solana Street near Fort Santiago.  \n- 7‑Eleven (Solana South) – Same budget fare, under ₱200 per person. 4 min walk (≈330 m) on Solana Street near San Agustin Church.  \n\nThese price ranges are indicative estimates for a typical meal per person.",
       "keys": [
         "Where can I eat cheaply near the venue?"
       ],

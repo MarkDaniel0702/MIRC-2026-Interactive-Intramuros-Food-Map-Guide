@@ -1,12 +1,17 @@
 # Data & method
 
-How the **61 food spots** and **21 heritage sights** on this map were chosen, where the
+How the **67 food spots** and **21 heritage sights** on this map were chosen, where the
 numbers come from, and what you should and shouldn't trust.
 
-Of the 61 food spots, **52 are OSM-derived and verified** and **9 are user-pinned** — an
+Of the 67 food spots, **58 are OSM-derived and verified** and **9 are user-pinned** — an
 exact coordinate supplied directly by a visitor (a Google Maps pin), with no OpenStreetMap
 node (see §2, "Entries with no OpenStreetMap node"). No entries are currently
 address-estimated. The map also carries a small **landmark layer** (§8) and a **street food area** (§9).
+
+> **2026-09-27.** `Batala` — the ice cream counter on San Jose Street (OSM
+> `node/12928095701`) — removed after the site owner reported it is no longer there;
+> `Batala Bar` on General Luna Street is a different venue and stays. `Pastil Sa Tabi (PST)`
+> and `Vtan's Eatery` re-pinned from the site owner's marks on the map (see §2).
 
 > **2026-09-09.** Several changes:
 > · `Cafe Sofia` (General Luna Street, OSM `node/11521200457`) removed after a first-hand
@@ -147,11 +152,15 @@ PLM Canteen. All were pinned from Google Maps coordinates supplied by a visitor 
 **2026-09-09** (the first eight were address-estimated before that). Caveats:
 
 - `Pastil-an Sayo` is confirmed at **729A Victoria Street** (address, Plus Code and pin
-  all agree). The other six carrying a `street` — `Pastil Sa Tabi (PST)`, `Vtan's Eatery`,
-  `Lacanilao's Tapsilogan`, `Bacolodnon Eatery`, `Zaqueo Sisigan`, `Cheftain Eatery` —
-  have pins that cluster in the south-central quarter near General Luna / Real / Sta.
-  Potenciana, ~100 m from the street label still on the record; those labels may need
-  correcting. `Cioden's Diner` has no street on record (coordinate only).
+  all agree). `Pastil Sa Tabi (PST)` and `Vtan's Eatery` were **re-pinned on 2026-09-27**
+  from crosses the site owner marked on the map: on the south-east side of Victoria
+  Street between Cabildo and Magallanes, 5 m apart, moving them 55 m and 39 m. The marks
+  were read off a screenshot registered against 10 of the map's own pins, all within
+  0.7 px (about 0.15 m). The other four carrying a `street` — `Lacanilao's Tapsilogan`,
+  `Bacolodnon Eatery`, `Zaqueo Sisigan`, `Cheftain Eatery` — have pins that cluster in the
+  south-central quarter near General Luna / Real / Sta. Potenciana, ~100 m from the
+  street label still on the record; those labels may need correcting. `Cioden's Diner`
+  has no street on record (coordinate only).
 - `PLM Canteen`'s pin resolves to the PLM **Multi-Purpose Building** (General Luna Street),
   not a place named "Canteen" — the label and the exact spot are unconfirmed.
 - Two earlier pins offered for `Pastil-an Sayo` were superseded — one landed ~2 km outside
@@ -254,9 +263,9 @@ Applying that rule to each of the five, independently verified rather than assum
 Four of five came back. The one that didn't is excluded on the same evidence standard as
 everything else on this map — verified, not assumed — rather than by category.
 
-One knock-on note: "Batala" (ice cream) and "Batala Bar" are two different venues roughly
-250 m apart, distinguished only by that one word. Both are back on the map — see the name
-carefully.
+One knock-on note: "Batala" (ice cream) and "Batala Bar" were two different venues roughly
+250 m apart, distinguished only by that one word. The ice cream counter was removed on
+2026-09-27 as no longer there; only Batala Bar remains.
 
 ### The Bayleaf's other restaurants
 

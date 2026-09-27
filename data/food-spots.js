@@ -98,12 +98,6 @@ export const FOOD_SPOTS = [
     blurb: 'One of the dining spots inside the Plaza San Luis heritage complex, a few steps from Casa Manila, serving Filipino plates alongside its drinks list.'
   },
   {
-    id: 'batala-ice-cream', name: 'Batala', category: 'dessert', priceTier: 1,
-    cuisine: ['Ice Cream', 'Desserts'], street: 'San Jose Street', area: null,
-    lat: 14.587318, lng: 120.977635, osm: 'node/12928095701',
-    blurb: 'Ice cream counter in the southern quarter of the walled city — a separate venue from Batala Bar below, despite the near-identical name.'
-  },
-  {
     id: 'batala-bar', name: 'Batala Bar', category: 'heritage', priceTier: 2,
     cuisine: ['Filipino', 'Craft Beer', 'Ice Cream'], street: 'General Luna Street', area: 'Plaza San Luis Complex',
     lat: 14.589570, lng: 120.975060, osm: 'node/11710850483',
@@ -380,8 +374,8 @@ export const FOOD_SPOTS = [
   {
     id: 'pastil-sa-tabi', name: 'Pastil Sa Tabi (PST)', category: 'budget', priceTier: 1,
     cuisine: ['Filipino', 'Pastil', 'Rice Meals'], street: 'Victoria Street', area: null,
-    lat: 14.588567, lng: 120.976931, osm: null, locationSource: 'user', verified: true,
-    blurb: 'Small pastil counter on Victoria Street serving cheap banana-leaf parcels of rice with shredded chicken or beef, to go. Not in OpenStreetMap — the coordinate was supplied directly by a visitor.'
+    lat: 14.588473, lng: 120.977436, osm: null, locationSource: 'user', verified: true,
+    blurb: 'Small pastil counter on Victoria Street serving cheap banana-leaf parcels of rice with shredded chicken or beef, to go. Not in OpenStreetMap — the position was marked on the map by the site owner.'
   },
   {
     id: 'pastil-an-sayo', name: 'Pastil-an Sayo', category: 'budget', priceTier: 1,
@@ -392,8 +386,8 @@ export const FOOD_SPOTS = [
   {
     id: 'vtans-eatery', name: "Vtan's Eatery", category: 'budget', priceTier: 1,
     cuisine: ['Filipino', 'Carinderia'], street: 'Victoria Street', area: null,
-    lat: 14.588612, lng: 120.977135, osm: null, locationSource: 'user', verified: true,
-    blurb: 'Carinderia on Victoria Street with a short daily menu of Filipino home dishes over rice. Not in OpenStreetMap — the coordinate was supplied directly by a visitor.'
+    lat: 14.588496, lng: 120.977480, osm: null, locationSource: 'user', verified: true,
+    blurb: 'Carinderia on Victoria Street with a short daily menu of Filipino home dishes over rice. Not in OpenStreetMap — the position was marked on the map by the site owner.'
   },
   {
     id: 'lacanilaos-tapsilogan', name: "Lacanilao's Tapsilogan", category: 'budget', priceTier: 1,

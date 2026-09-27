@@ -14,7 +14,7 @@ directions to any of it, and an AI assistant who knows the congress programme.
 
 | Tab | Contents |
 |---|---|
-| **Eat** | **68** restaurants, cafés, carinderias, fast-food branches and hotel dining rooms, with price ranges (59 OSM-verified + 9 user-pinned — see `DATA.md`) |
+| **Eat** | **67** restaurants, cafés, carinderias, fast-food branches and hotel dining rooms, with price ranges (58 OSM-verified + 9 user-pinned — see `DATA.md`) |
 | **See** | **21** heritage sights, with entrance fees, opening hours and realistic visit times |
 | **Stay** | **2** hotels — the properties inside the walls with both a public booking path and a real price. (A third, Residencia 729, is bookable but has no published rate — see `HOTELS.md`.) |
 
@@ -193,7 +193,7 @@ src/lib/                        routing.ts (OSRM client), format/icons/filter/po
 src/data/modes.ts               the Eat/See/Stay MODES config + one-time search index
 src/data/destinations.ts        resolves a "Get directions" target: any spot, or a landmark
 
-data/food-spots.js              68 food spots  · 59 OSM-verified + 9 user-pinned
+data/food-spots.js              67 food spots  · 58 OSM-verified + 9 user-pinned
 data/tourist-spots.js           21 sights      · FEE_TIERS, VENUE_ANCHOR, passport info
 data/hotels.js                  8 properties   · 3 flagged `mapped` for the Stay tab
 data/start-points.js            6 arrival points for directions
@@ -250,7 +250,7 @@ see `DATA.md`).
 - **Entrance fees** are from the Intramuros Administration and site operators — published
   and reasonably stable. There's also a ₱350 **Intramuros Passport** covering five sites,
   which the See tab surfaces once it's worth buying.
-- **Restaurant prices are indicative estimates, not quotes.** Only a handful of the 68
+- **Restaurant prices are indicative estimates, not quotes.** Only a handful of the 67
   publish menu pricing, so each gets a tier plus an explicit peso band and a review date.
   Presenting a guess as an exact figure would be worse than an honest range.
 - **Nine eateries have no OpenStreetMap node** — all user-pinned (an exact coordinate

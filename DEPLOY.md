@@ -98,7 +98,7 @@ trying again.
 Open the live URL and confirm:
 
 - [ ] The map loads with tiles and pins (not a blank navy rectangle).
-- [ ] All three tabs work: **Eat** 61, **See** 21, **Stay** 2.
+- [ ] All three tabs work: **Eat** 67, **See** 21, **Stay** 2.
 - [ ] **Ask Dan** opens and answers a question (confirms the Worker's CORS allowlist
       still matches this deployed origin).
 - [ ] Clicking a marker opens a popup with a **Get directions** button.

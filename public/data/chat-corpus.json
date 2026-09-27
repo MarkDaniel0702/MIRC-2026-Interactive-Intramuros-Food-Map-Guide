@@ -1,5 +1,5 @@
 {
-  "_generated": "2026-09-27T03:16:24.452Z",
+  "_generated": "2026-09-27T03:39:55.295Z",
   "_source": "node tools/build-corpus.mjs — do not edit by hand; edit data/mirc-2026.json",
   "meta": {
     "id": "mirc-2026",
@@ -6772,7 +6772,7 @@
     },
     {
       "q": "Where can I eat near the venue?",
-      "a": "Here are a few budget‑friendly spots within a short walk of the PLM venue:\n- Batala – ice‑cream and desserts, under ₱200 per person, on San Jose Street, 2 min walk (≈140 m).  \n- 7‑Eleven (Solana North) – convenience store with snacks and coffee, under ₱200 per person, near Fort Santiago, 6 min walk (≈470 m).  \n- Dexter Pizza – Sisay’s – pizza and Filipino fast food, under ₱200 per person, on Cabildo Street, 7 min walk (≈560 m).",
+      "a": "Here are a few budget‑friendly spots within a short walk of the PLM venue:\n- 7‑Eleven (Solana North) – convenience store with snacks and coffee, under ₱200 per person, near Fort Santiago, 6 min walk (≈470 m).  \n- Dexter Pizza – Sisay’s – pizza and Filipino fast food, under ₱200 per person, on Cabildo Street, 7 min walk (≈560 m).",
       "keys": [
         "Where can I eat near the venue?"
       ],
@@ -6788,7 +6788,7 @@
     },
     {
       "q": "Where can I eat cheaply near the venue?",
-      "a": "You have a few budget‑friendly options within a short walk of the PLM venue:\n- Batala – Ice‑cream and desserts, under ₱200 per person. 2 min walk (≈140 m) on San Jose Street.  \n- 7‑Eleven (Solana North) – Convenience store with snacks, drinks and quick meals, under ₱200 per person. 6 min walk (≈470 m) on Solana Street near Fort Santiago.  \n- 7‑Eleven (Solana South) – Same budget fare, under ₱200 per person. 4 min walk (≈330 m) on Solana Street near San Agustin Church.  \n\nThese price ranges are indicative estimates for a typical meal per person.",
+      "a": "You have a few budget‑friendly options within a short walk of the PLM venue:\n- 7‑Eleven (Solana North) – Convenience store with snacks, drinks and quick meals, under ₱200 per person. 6 min walk (≈470 m) on Solana Street near Fort Santiago.  \n- 7‑Eleven (Solana South) – Same budget fare, under ₱200 per person. 4 min walk (≈330 m) on Solana Street near San Agustin Church.  \n\nThese price ranges are indicative estimates for a typical meal per person.",
       "keys": [
         "Where can I eat cheaply near the venue?"
       ],
@@ -7121,18 +7121,6 @@
         "where": "General Luna Street · Plaza San Luis Complex",
         "fromVenue": "4 min walk (300 m)",
         "about": "One of the dining spots inside the Plaza San Luis heritage complex, a few steps from Casa Manila, serving Filipino plates alongside its drinks list."
-      },
-      {
-        "id": "batala-ice-cream",
-        "lat": 14.587318,
-        "lng": 120.977635,
-        "name": "Batala",
-        "category": "Desserts & Snacks",
-        "price": "Budget — under ₱200 per person",
-        "cuisine": "Ice Cream, Desserts",
-        "where": "San Jose Street",
-        "fromVenue": "2 min walk (140 m)",
-        "about": "Ice cream counter in the southern quarter of the walled city — a separate venue from Batala Bar below, despite the near-identical name."
       },
       {
         "id": "batala-bar",
@@ -7555,15 +7543,15 @@
       },
       {
         "id": "pastil-sa-tabi",
-        "lat": 14.588567,
-        "lng": 120.976931,
+        "lat": 14.588473,
+        "lng": 120.977436,
         "name": "Pastil Sa Tabi (PST)",
         "category": "Budget Eats & Carinderias",
         "price": "Budget — under ₱200 per person",
         "cuisine": "Filipino, Pastil, Rice Meals",
         "where": "Victoria Street",
-        "fromVenue": "2 min walk (200 m)",
-        "about": "Small pastil counter on Victoria Street serving cheap banana-leaf parcels of rice with shredded chicken or beef, to go. Not in OpenStreetMap — the coordinate was supplied directly by a visitor."
+        "fromVenue": "3 min walk (210 m)",
+        "about": "Small pastil counter on Victoria Street serving cheap banana-leaf parcels of rice with shredded chicken or beef, to go. Not in OpenStreetMap — the position was marked on the map by the site owner."
       },
       {
         "id": "pastil-an-sayo",
@@ -7769,15 +7757,15 @@
       },
       {
         "id": "vtans-eatery",
-        "lat": 14.588612,
-        "lng": 120.977135,
+        "lat": 14.588496,
+        "lng": 120.97748,
         "name": "Vtan's Eatery",
         "category": "Budget Eats & Carinderias",
         "price": "Budget — under ₱200 per person",
         "cuisine": "Filipino, Carinderia",
         "where": "Victoria Street",
         "fromVenue": "3 min walk (210 m)",
-        "about": "Carinderia on Victoria Street with a short daily menu of Filipino home dishes over rice. Not in OpenStreetMap — the coordinate was supplied directly by a visitor."
+        "about": "Carinderia on Victoria Street with a short daily menu of Filipino home dishes over rice. Not in OpenStreetMap — the position was marked on the map by the site owner."
       },
       {
         "id": "zaqueo-sisigan",
