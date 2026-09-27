@@ -466,12 +466,13 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
     dispatchRef.current({ type: 'DIRS_SET_BUSY', busy: true });
     dispatchRef.current({ type: 'DIRS_SET_MESSAGE', message: { text: 'Finding a walking route…', kind: 'busy' } });
 
-    // Exactly one end on campus: route through the PLM gate (routing.ts PLM_GATE).
+    // Any end on campus: that part runs through the PLM gate and along the campus
+    // ways (routing.ts PLM_GATE, campusWalk) instead of the nearest street.
     const ring = plmRingRef.current;
     const onCampus = (p: LatLng) => !!ring && pointInRing(p.lat, p.lng, ring);
     const fromIn = onCampus(from), toIn = onCampus(dest);
-    const gate = fromIn === toIn ? undefined : toIn ? 'enter' : 'exit';
-    const res = await routeRequest(from, { lat: dest.lat, lng: dest.lng }, dest.name, gate);
+    const campus = fromIn && toIn ? 'within' : toIn ? 'enter' : fromIn ? 'exit' : undefined;
+    const res = await routeRequest(from, { lat: dest.lat, lng: dest.lng }, dest.name, campus);
 
     dispatchRef.current({ type: 'DIRS_SET_BUSY', busy: false });
     dispatchRef.current({

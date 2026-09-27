@@ -306,8 +306,8 @@ messaging app's link preview, or a home-screen install reads before the app ever
 - **Live tracking and "Near me" need a real GPS fix and a secure context** (`https://`,
   which GitHub Pages provides) — they won't work over plain `http://` or from `file://`.
 - **OSRM cannot route inside the gated PLM campus.** Routes into or out of it are joined
-  to a fixed walk through the General Luna Street gate, which ends where the campus
-  footpath starts — see `DATA.md` §8 and the note in the Directions panel itself.
+  to a fixed walk through the General Luna Street gate, then follow the campus's own
+  mapped footpaths to the building — see `DATA.md` §8 and the note in the Directions panel.
 
 ---
 

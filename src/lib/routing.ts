@@ -23,9 +23,15 @@
  */
 import type { LatLng } from '../types';
 import { haversine } from './format';
+import { PLM_PATHS } from '../../data/plm-paths.js';
 
 const ENDPOINT = 'https://routing.openstreetmap.de/routed-foot/route/v1/foot/';
 const TIMEOUT_MS = 12000;
+
+type Pt = [number, number];
+const metres = (a: Pt, b: Pt) => haversine(a[0], a[1], b[0], b[1]);
+const lengthOf = (line: Pt[]) => line.slice(1).reduce((sum, p, i) => sum + metres(line[i], p), 0);
+const minutes = (m: number) => (m / 80) * 60; // 80 m/min, same pace used elsewhere
 
 /**
  * The walk between General Luna Street and the start of the campus footpath, through
@@ -34,18 +40,77 @@ const TIMEOUT_MS = 12000;
  * (2026-09-27), because OSRM cannot enter the gated campus: without this, a route
  * into or out of PLM just stopped at whichever street was nearest.
  */
-const PLM_GATE: [number, number][] = [
+const PLM_GATE: Pt[] = [
   [14.586809, 120.977449], [14.586801, 120.977420], [14.586783, 120.977416],
   [14.586771, 120.977406], [14.586741, 120.977391], [14.586726, 120.977376],
   [14.586720, 120.977359], [14.586690, 120.977330], [14.586663, 120.977317],
   [14.586654, 120.977308], [14.586650, 120.977283], [14.586671, 120.977237],
   [14.586679, 120.977207], [14.586677, 120.977195]
 ];
-const PLM_GATE_METRES = PLM_GATE.slice(1).reduce(
-  (sum, [lat, lng], i) => sum + haversine(PLM_GATE[i][0], PLM_GATE[i][1], lat, lng), 0);
+const PLM_GATE_METRES = lengthOf(PLM_GATE);
+const GATE_INSIDE = PLM_GATE[PLM_GATE.length - 1];
 
-/** 'enter' when only the destination is on the PLM campus, 'exit' when only the start is. */
-export type CampusGate = 'enter' | 'exit';
+/** Where a route meets the PLM campus: only the destination on it ('enter'), only the
+ *  start ('exit'), or both ('within'). */
+export type Campus = 'enter' | 'exit' | 'within';
+
+/** The campus ways (data/plm-paths.js) as a network: each point, and the metres to
+ *  each neighbour. Ways join wherever they share a point exactly. */
+const NET = new Map<string, { p: Pt; next: Map<string, number> }>();
+const key = (p: Pt) => `${p[0]},${p[1]}`;
+for (const way of PLM_PATHS as Pt[][]) {
+  way.forEach((p, i) => {
+    if (!NET.has(key(p))) NET.set(key(p), { p, next: new Map() });
+    if (i === 0) return;
+    const q = way[i - 1], m = metres(p, q);
+    NET.get(key(p))!.next.set(key(q), m);
+    NET.get(key(q))!.next.set(key(p), m);
+  });
+}
+
+/** The nearest point on any campus way to `p`, with the two ends of its segment. */
+function snap(p: Pt): { at: Pt; a: string; b: string } {
+  const kx = Math.cos((p[0] * Math.PI) / 180);
+  let best = { d: Infinity, at: p, a: '', b: '' };
+  for (const [a, { p: A, next }] of NET) {
+    for (const b of next.keys()) {
+      const B = NET.get(b)!.p;
+      const dx = (B[1] - A[1]) * kx, dy = B[0] - A[0];
+      const t = Math.max(0, Math.min(1, ((p[1] - A[1]) * kx * dx + (p[0] - A[0]) * dy) / (dx * dx + dy * dy || 1)));
+      const at: Pt = [A[0] + t * dy, A[1] + t * (B[1] - A[1])];
+      const d = metres(p, at);
+      if (d < best.d) best = { d, at, a, b };
+    }
+  }
+  return best;
+}
+
+/**
+ * Walk between two on-campus points: straight onto the nearest campus way, the
+ * shortest way through the network, then straight off to the point -- the last
+ * stretch to a building is the only part not on a mapped way.
+ */
+export function campusWalk(from: Pt, to: Pt): Pt[] {
+  const s = snap(from), e = snap(to);
+  if ((s.a === e.a && s.b === e.b) || (s.a === e.b && s.b === e.a)) return [from, s.at, e.at, to];
+  const dist = new Map([[s.a, metres(s.at, NET.get(s.a)!.p)], [s.b, metres(s.at, NET.get(s.b)!.p)]]);
+  const prev = new Map<string, string>();
+  const done = new Set<string>();
+  // ponytail: Dijkstra with a linear scan, no heap -- the campus has ~60 points.
+  for (;;) {
+    let u = '';
+    for (const [k, d] of dist) if (!done.has(k) && (!u || d < dist.get(u)!)) u = k;
+    if (!u) break;
+    done.add(u);
+    for (const [v, m] of NET.get(u)!.next) {
+      if (dist.get(u)! + m < (dist.get(v) ?? Infinity)) { dist.set(v, dist.get(u)! + m); prev.set(v, u); }
+    }
+  }
+  const via = (k: string) => (dist.get(k) ?? Infinity) + metres(NET.get(k)!.p, e.at);
+  const mid: Pt[] = [];
+  for (let k: string | undefined = via(e.a) <= via(e.b) ? e.a : e.b; k; k = prev.get(k)) mid.unshift(NET.get(k)!.p);
+  return [from, s.at, ...mid, e.at, to];
+}
 
 export interface RouteStep {
   text: string;
@@ -64,8 +129,8 @@ export interface RouteResult {
   line: [number, number][];
   steps: RouteStep[];
   externalUrl?: string;
-  /** Set when the route was stitched through PLM's gate (see PLM_GATE). */
-  gate?: CampusGate;
+  /** Set when part of the route runs on the PLM campus (see PLM_GATE, campusWalk). */
+  campus?: Campus;
 }
 
 interface OsrmManeuver {
@@ -164,24 +229,40 @@ export function arrowFor(step: OsrmStep): string {
 }
 
 /**
- * Route on foot between two {lat, lng} points. With `gate`, the street leg is routed
- * to (or from) the street end of PLM_GATE and the traced gate walk is joined on.
+ * Route on foot between two {lat, lng} points. With `campus`, the part on the PLM
+ * campus runs through PLM_GATE and along the campus ways (campusWalk); OSRM only
+ * routes the street leg, to or from the gate -- and nothing at all when both ends
+ * are on campus.
  *
  * Always resolves -- never rejects. On any failure it returns
  * `{ ok: false, fallback: true, ... }` carrying a straight-line estimate, so the
  * caller can degrade instead of showing an error.
  */
-export async function route(from: LatLng, to: LatLng, destinationName: string, gate?: CampusGate): Promise<RouteResult> {
+export async function route(from: LatLng, to: LatLng, destinationName: string, campus?: Campus): Promise<RouteResult> {
+  if (campus === 'within') {
+    const line = campusWalk([from.lat, from.lng], [to.lat, to.lng]);
+    const distance = lengthOf(line);
+    return {
+      ok: true, fallback: false, campus, distance, duration: minutes(distance), line,
+      steps: [
+        { text: `Follow the campus paths to ${destinationName}`, arrow: 'start', distance, name: '', last: false },
+        { text: `Arrive at ${destinationName}`, arrow: 'flag', distance: 0, name: '', last: true }
+      ]
+    };
+  }
+
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
 
   try {
-    if (!gate) return await osrm(from, to, destinationName, controller.signal);
+    if (!campus) return await osrm(from, to, destinationName, controller.signal);
     const street = { lat: PLM_GATE[0][0], lng: PLM_GATE[0][1] };
-    const r = gate === 'enter'
+    const r = campus === 'enter'
       ? await osrm(from, street, destinationName, controller.signal)
       : await osrm(street, to, destinationName, controller.signal);
-    return throughGate(r, gate, destinationName);
+    return campus === 'enter'
+      ? throughGate(r, campus, campusWalk(GATE_INSIDE, [to.lat, to.lng]), destinationName)
+      : throughGate(r, campus, campusWalk([from.lat, from.lng], GATE_INSIDE), destinationName);
   } catch (err) {
     return straightLineFallback(from, to, destinationName, err);
   } finally {
@@ -221,33 +302,37 @@ async function osrm(from: LatLng, to: LatLng, destinationName: string, signal: A
   };
 }
 
-/** Joins the gate walk onto a street route that ends (enter) or starts (exit) at the gate. */
-function throughGate(r: RouteResult, gate: CampusGate, destinationName: string): RouteResult {
+/** Joins the gate and the campus walk (`inside`, which starts or ends at GATE_INSIDE)
+ *  onto a street route that ends (enter) or starts (exit) at the gate. */
+function throughGate(r: RouteResult, campus: 'enter' | 'exit', inside: Pt[], destinationName: string): RouteResult {
+  const insideMetres = lengthOf(inside);
   const joined = {
     ...r,
-    gate,
-    distance: r.distance + PLM_GATE_METRES,
-    duration: r.duration + (PLM_GATE_METRES / 80) * 60 // 80 m/min, same pace used elsewhere
+    campus,
+    distance: r.distance + PLM_GATE_METRES + insideMetres,
+    duration: r.duration + minutes(PLM_GATE_METRES + insideMetres)
   };
-  const walk = { distance: PLM_GATE_METRES, name: '', last: false };
+  const step = (text: string, arrow: string, distance: number) => ({ text, arrow, distance, name: '', last: false });
 
-  if (gate === 'enter') {
+  if (campus === 'enter') {
     return {
       ...joined,
-      line: [...r.line, ...PLM_GATE],
+      line: [...r.line, ...PLM_GATE, ...inside.slice(1)],
       // OSRM's own "Arrive" is at the street; the walk carries on through the gate.
       steps: [
         ...r.steps.slice(0, -1),
-        { ...walk, text: 'Enter PLM through the gate on General Luna Street', arrow: 'straight' },
+        step('Enter PLM through the gate on General Luna Street', 'straight', PLM_GATE_METRES),
+        step(`Follow the campus paths to ${destinationName}`, 'straight', insideMetres),
         { text: `Arrive at ${destinationName}`, arrow: 'flag', distance: 0, name: '', last: true }
       ]
     };
   }
   return {
     ...joined,
-    line: [...[...PLM_GATE].reverse(), ...r.line],
+    line: [...inside, ...[...PLM_GATE].reverse().slice(1), ...r.line],
     steps: [
-      { ...walk, text: 'Leave PLM through the gate onto General Luna Street', arrow: 'start' },
+      step('Follow the campus paths to the gate on General Luna Street', 'start', insideMetres),
+      step('Leave PLM through the gate onto General Luna Street', 'straight', PLM_GATE_METRES),
       ...r.steps.map((s, i) => (i === 0 ? { ...s, arrow: 'straight' } : s))
     ]
   };

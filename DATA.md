@@ -469,9 +469,13 @@ goes through the **northern General Luna Street gate** (`11521214083`): OSRM rou
 street leg to the gate's street end, and a fixed 37 m walk — `PLM_GATE` in
 `src/lib/routing.ts`, traced from the route the site owner drew on the map and running
 0.4 m from that gate node — carries it through the gate to where the campus footpath
-starts (reversed for routes leaving campus). The route stops there: the paths on to
-each building are not drawn, and the directions panel says so. Campus-to-campus routes
-still run along the nearest public streets. The official delegate entrance is still a gap
+starts (reversed for routes leaving campus). From there `campusWalk` routes along the
+campus's own mapped ways — `data/plm-paths.js`, the 15 connected footways and driveways
+inside the campus from OpenStreetMap — by shortest path, with only the last few metres
+from the nearest way to the building's pin drawn straight (1–23 m; the directions panel
+says so). A route with both ends on campus uses the campus ways alone and never touches
+OSRM. `node tools/check-campus-walk.mjs` checks every campus destination is reached along
+the ways. The official delegate entrance is still a gap
 in the knowledge base; this gate is the site's routing choice, not a published one.
 
 **Finding the buildings.** They are drawn only past zoom 17 and are in no list or search

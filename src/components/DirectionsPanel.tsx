@@ -116,20 +116,13 @@ export function DirectionsPanel({ dirs, mapApi }: { dirs: FullDirsState; mapApi:
                 </li>
               ))}
             </ol>
-            {/* OSRM cannot enter the walled campus, so a route into PLM is joined to
-                the traced gate walk (routing.ts PLM_GATE), which stops where the campus
-                footpath starts -- say so rather than let the last step read as the door.
-                Campus to campus has no gate walk and runs along the public streets. */}
-            {dirs.result.gate === 'enter' && (
+            {/* On campus the route follows the mapped campus ways (routing.ts
+                campusWalk); only the short last stretch from the nearest way to the
+                building's pin is a straight line, so don't let it read as the door. */}
+            {dirs.result.campus && (
               <p className="dirs__note">
-                The route goes in through PLM's gate on General Luna Street and ends where the campus
-                footpath starts — follow the campus paths from there.
-              </p>
-            )}
-            {!dirs.result.gate && !dirs.result.fallback && dest?.kind === 'landmark' && (
-              <p className="dirs__note">
-                Both ends are on the PLM campus, which the routing service cannot enter, so this route
-                runs along the nearest public streets.
+                On the PLM campus the route follows the mapped footpaths. The last few metres between
+                the path and a building are drawn straight — use the nearest door.
               </p>
             )}
             <p className="dirs__credit">
