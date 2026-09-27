@@ -17,6 +17,8 @@ import { SpotCard } from './SpotCard';
 import { ALL_SPOTS } from '../data/modes';
 import { ALL_LANDMARKS } from '../data/destinations';
 import { PLM_BOUNDARY } from '../../data/plm-boundary.js';
+import { STREET_FOOD } from '../../data/street-food.js';
+import { GLYPHS } from '../lib/icons';
 import { pointInRing } from '../hooks/useLeafletMap';
 import type { MapApi } from '../hooks/useLeafletMap';
 import type { VisibleSpot } from '../hooks/useVisibleSpots';
@@ -121,6 +123,22 @@ export function Panel({ state, dispatch, mapApi, visible, sheetOpen, setSheet, i
           {intramurosExpanded ? <>
             <Tabs mode={state.mode} mapApi={mapApi} />
             <MapLayers mode={state.mode} mapModes={state.mapModes} dispatch={dispatch} />
+            {/* The street food area (data/street-food.js) is no listing, so it sits in
+                no list or search -- this chip is its way in from the Eat tab, doing
+                exactly what tapping its map label does. */}
+            {state.mode === 'food' && (
+              <fieldset className="filter" id="streetFoodBar">
+                <legend className="filter__legend">Street food</legend>
+                <div className="chips">
+                  <button type="button" className="chip chip--street-food"
+                    aria-label={`${STREET_FOOD.name} on ${STREET_FOOD.street} — show on the map`}
+                    onClick={() => pickLandmark(STREET_FOOD.id)}>
+                    <svg viewBox="0 0 16 16" aria-hidden="true"><path d={GLYPHS[STREET_FOOD.glyph!]} /></svg>
+                    Victoria · Magallanes · Recoletos
+                  </button>
+                </div>
+              </fieldset>
+            )}
 
             <div className="controls">
               <SearchBox key={`${state.mode}-${state.resetNonce}`} mode={state.mode}

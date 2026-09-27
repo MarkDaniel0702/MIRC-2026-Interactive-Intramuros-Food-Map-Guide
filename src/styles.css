@@ -289,14 +289,12 @@ body {
 /* The venue strip sits right under "Show on map" with the same inset. Its chips
    navigate rather than filter, so they take the landmark's gold rather than the
    pressed/unpressed states of the filter chips around them. */
-#venueBar { margin: 12px 24px 0; }
-#venueBar .chip svg {
+#venueBar, #streetFoodBar { margin: 12px 24px 0; }
+#venueBar .chip svg, #streetFoodBar .chip svg {
   width: 13px; height: 13px; flex: none;
   fill: none; stroke: currentColor; stroke-width: 1.4;
   stroke-linecap: round; stroke-linejoin: round;
 }
-.chip--venue { border-color: var(--gold-dk); color: var(--gold-br); }
-.chip--venue:hover { border-color: var(--gold); color: var(--white); }
 .chip__code { font: 700 11px/1.35 var(--mono); letter-spacing: .06em; }
 
 .filter__legend {
@@ -326,6 +324,13 @@ body {
 }
 .chip:hover { background: var(--navy-600); border-color: var(--navy-400); color: var(--white); }
 .chip:active { transform: scale(.97); }
+/* The navigating chips' colours -- after .chip, which would otherwise win at the
+   same specificity: the venue strip's gold, and the Eat tab's street food chip
+   in the green of its map label. */
+.chip--venue { border-color: var(--gold-dk); color: var(--gold-br); }
+.chip--venue:hover { border-color: var(--gold); color: var(--white); }
+.chip--street-food { border-color: #5E8E31; color: #B6E08A; }
+.chip--street-food:hover { border-color: #82C144; color: var(--white); }
 
 .chip__dot {
   width: 8px; height: 8px;
@@ -891,6 +896,7 @@ body {
    being juggled element by element in JS. */
 .panel.is-directions .tabs,
 .panel.is-directions #venueBar,
+.panel.is-directions #streetFoodBar,
 .panel.is-directions .controls,
 .panel.is-directions .list,
 .panel.is-directions .empty,
