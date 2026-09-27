@@ -11,6 +11,7 @@
  * own short label for a landmark.
  */
 import { LANDMARKS } from '../../data/landmarks.js';
+import { STREET_FOOD } from '../../data/street-food.js';
 import type { Landmark } from '../../data/types';
 import { findAnywhere } from './modes';
 import { norm } from '../lib/format';
@@ -39,6 +40,8 @@ export function findDestination(id: string): Destination | null {
     const { spot, modeKey } = hit;
     return { kind: 'spot', id, name: spot.name, lat: spot.lat, lng: spot.lng, spot, modeKey };
   }
-  const lm = (LANDMARKS as Landmark[]).find(l => l.id === id);
+  // The street food area walks to like a landmark, but stays out of ALL_LANDMARKS,
+  // which the venue strip and empty-list hint read as "the PLM campus".
+  const lm = [...(LANDMARKS as Landmark[]), STREET_FOOD].find(l => l.id === id);
   return lm ? { kind: 'landmark', id, name: lm.name, lat: lm.lat, lng: lm.lng, landmark: lm } : null;
 }

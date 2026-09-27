@@ -63,6 +63,8 @@ const CASES = [
   ['How many registered from Batangas State University?',  inSlice('Batangas State University')],
   ['Where can I get coffee near the venue?',               inSlice('Coffee')],
   ['Cheap place to eat near PLM?',                         inSlice('Budget')],
+  ['Where can I find street food in Intramuros?',          all(inSlice('Street food stalls'), inSlice('Magallanes Street'))],
+  ['Any street food stalls near Mapua?',                   inSlice('Street food stalls')],
   ['What can I see in Intramuros?',                        countIn('see', 3)],
   ['Where can I stay inside the walls?',                   inSlice('Bayleaf')],
   ['How do I get there from the LRT?',                     inSlice('Central Terminal')],

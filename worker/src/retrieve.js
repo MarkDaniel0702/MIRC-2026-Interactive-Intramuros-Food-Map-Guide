@@ -367,6 +367,10 @@ export function buildIndex(corpus) {
   };
   for (const [code, name] of Object.entries(trackName)) { link(code, name); link(name, code); }
   for (const [code, name] of Object.entries(roomName)) { link(code, name); link(name, code); }
+  /* "street food" is two words nearly every eat record carries (a "… Street" address,
+     the "food" tag), so as separate words it singles out nothing; as a phrase it means
+     the street food area (data/street-food.js), whose record alone says "unnamed stalls". */
+  link('street food', 'stalls unnamed');
 
   return { corpus, docs, df, dfStem, N: docs.length, synonyms, trackName, roomName };
 }

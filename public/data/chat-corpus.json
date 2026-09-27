@@ -1,5 +1,5 @@
 {
-  "_generated": "2026-09-26T17:53:31.306Z",
+  "_generated": "2026-09-27T03:16:24.452Z",
   "_source": "node tools/build-corpus.mjs — do not edit by hand; edit data/mirc-2026.json",
   "meta": {
     "id": "mirc-2026",
@@ -7696,6 +7696,16 @@
         "where": "Muralla Street",
         "fromVenue": "9 min walk (690 m)",
         "about": "Coffee chain branch on Muralla Street beside the university campuses."
+      },
+      {
+        "id": "street-food",
+        "lat": 14.5888223,
+        "lng": 120.9776672,
+        "name": "Street food stalls",
+        "category": "Street food area (unnamed stalls, not one place)",
+        "where": "Victoria, Magallanes and Recoletos Streets",
+        "fromVenue": "3 min walk (260 m)",
+        "about": "Unnamed street food stalls line Victoria Street (Cabildo Street to near Muralla Street), Magallanes Street (Victoria to Recoletos) and Recoletos Street (Magallanes to Cabildo). They have no names, fixed spots or listed prices here — walk the stretch and see what is set up."
       },
       {
         "id": "sunlai-foodhouse",

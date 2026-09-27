@@ -111,6 +111,12 @@ export interface Landmark {
   street?: string;
 }
 
+/** data/street-food.js: one zone drawn along its streets, not a pin per stall. */
+export interface StreetFoodArea extends Landmark {
+  /** The street stretches it covers, each a [lat, lng] polyline. */
+  lines: [number, number][][];
+}
+
 export interface StartPoint {
   id: string;
   name: string;

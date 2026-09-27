@@ -18,7 +18,9 @@ directions to any of it, and an AI assistant who knows the congress programme.
 | **See** | **21** heritage sights, with entrance fees, opening hours and realistic visit times |
 | **Stay** | **2** hotels — the properties inside the walls with both a public booking path and a real price. (A third, Residencia 729, is bookable but has no published rate — see `HOTELS.md`.) |
 
-Plus a highlighted **PLM** (Pamantasan ng Lungsod ng Maynila) campus landmark — the
+Plus the **street food area** — the unnamed stalls along Victoria, Magallanes and
+Recoletos Streets, drawn as one zone, not a pin per stall (`DATA.md` §9) — and a
+highlighted **PLM** (Pamantasan ng Lungsod ng Maynila) campus landmark — the
 MIRC 2026 venue — that zooms the map in when tapped and reveals its buildings and halls
 (JAA, GK, GEE, GA) once you're zoomed close, with a **venue strip** in the panel that
 jumps to any of them from every tab; and **walking directions** to any listing *or to

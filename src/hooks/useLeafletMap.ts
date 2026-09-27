@@ -27,6 +27,7 @@ import 'leaflet.markercluster';
 import { INTRAMUROS_BOUNDARY } from '../../data/intramuros-boundary.js';
 import { PLM_BOUNDARY } from '../../data/plm-boundary.js';
 import { LANDMARKS } from '../../data/landmarks.js';
+import { STREET_FOOD } from '../../data/street-food.js';
 import { WALK_METRES_PER_MIN } from '../../data/tourist-spots.js';
 import type { Landmark } from '../../data/types';
 
@@ -350,6 +351,7 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
     // markers exactly touching at 18 and clearly separate at 18.5 -- and
     // asking for one building means wanting to tell it from its neighbour.
     const lm = ALL_LANDMARKS.find(l => l.id === id);
+    showOffCampus(marker.getLatLng()); // the street food area, from the PLM Map
     map.flyTo(marker.getLatLng(), lm?.campus ? 18.5 : 18, flyOptions(0.8));
     pendingLandmarkRef.current = id;
     let revealT: ReturnType<typeof setTimeout>;
@@ -989,6 +991,34 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
       map.on('zoomend', syncCampus);
       syncCampus();
     }
+
+    // ── the street food area: one zone along its streets, never a pin per stall
+    //    (data/street-food.js). Its label is kept with the landmark markers, so a
+    //    click on it or its lines, and chat's focusById, all fly in and open the
+    //    same popup through flyToLandmark. ──
+    const foodLines = [
+      L.polyline(STREET_FOOD.lines, { color: '#82C144', weight: 16, opacity: 0.16, lineCap: 'round', lineJoin: 'round', bubblingMouseEvents: false }),
+      L.polyline(STREET_FOOD.lines, { color: '#82C144', weight: 4, opacity: 0.9, dashArray: '1 9', lineCap: 'round', lineJoin: 'round', bubblingMouseEvents: false })
+    ];
+    const foodLabel = L.marker([STREET_FOOD.lat, STREET_FOOD.lng], {
+      // Zero-size icon, label centred on the point by CSS (.area-label).
+      icon: L.divIcon({
+        className: 'area-icon',
+        html: `<div class="area-label">${PIN_SVG(STREET_FOOD.glyph!)}<span>Street food</span></div>`,
+        iconSize: [0, 0],
+        popupAnchor: [0, -14]
+      }),
+      title: STREET_FOOD.name,
+      alt: STREET_FOOD.name,
+      keyboard: true,
+      zIndexOffset: 800
+    });
+    foodLabel.bindPopup(landmarkPopupHTML(STREET_FOOD), { maxWidth: 260, minWidth: 220, autoPan: false });
+    for (const layer of [...foodLines, foodLabel]) {
+      layer.on('click', () => flyToLandmark(STREET_FOOD.id));
+      layer.addTo(map);
+    }
+    landmarkMarkersRef.current.set(STREET_FOOD.id, foodLabel);
 
     // ── every spot marker, across every mode, built once ──
     function buildMarker(spot: AnySpot): L.Marker {

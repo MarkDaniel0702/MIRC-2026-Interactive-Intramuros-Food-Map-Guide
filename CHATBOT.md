@@ -216,6 +216,12 @@ Two pools, two standards:
   `PLM`) and a room code exactly as the programme prints it (`AVR`, `KL`, `BTB`, `TOP`
   — upper case only, since "top" is also just a word). "The venue" resolves to PLM.
 
+**The street food area** (`data/street-food.js`, `DATA.md` §9) rides in the corpus as one
+`eat` record, "Street food stalls", with no price. The phrase "street food" is two words
+nearly every eat record carries, so `worker/src/retrieve.js` links the phrase to
+"stalls unnamed", which only that record says — "where can I find street food?" then
+retrieves it, and the name match above flies the map to it.
+
 A listed spot always wins over the campus ("Where is the PLM Canteen?" goes to the
 canteen), and a building wins over its campus ("Where is GEE at PLM?" goes to GEE).
 `node tools/eval-focus.mjs` pins all of this, positives and negatives, offline.

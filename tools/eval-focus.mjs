@@ -90,6 +90,14 @@ const CASES = [
   ['What can I see near PLM?', null],
   ['Where can I stay near the venue?', null],
   ['Where do I register?', null],
+
+  // ── the street food area (data/street-food.js): one zone, named as a whole ──
+  ['Where can I find street food?', 'eat', 'Street food stalls', 'street-food'],
+  ['Where are the street food stalls?', 'eat', 'Street food stalls', 'street-food'],
+  ['Is there street food in Intramuros?', 'eat', 'Street food stalls', 'street-food'],
+  ['Show me the street food on the map', 'eat', 'Street food stalls', 'street-food'],
+  ['Cheap food near the venue?', null],   // "food" alone is browsing, not the zone
+  ['Where is Victoria Street?', null],    // a street it runs along is not the zone
 ];
 
 let pass = 0, fail = 0;

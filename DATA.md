@@ -6,7 +6,7 @@ numbers come from, and what you should and shouldn't trust.
 Of the 61 food spots, **52 are OSM-derived and verified** and **9 are user-pinned** — an
 exact coordinate supplied directly by a visitor (a Google Maps pin), with no OpenStreetMap
 node (see §2, "Entries with no OpenStreetMap node"). No entries are currently
-address-estimated. The map also carries a small **landmark layer** (§8).
+address-estimated. The map also carries a small **landmark layer** (§8) and a **street food area** (§9).
 
 > **2026-09-09.** Several changes:
 > · `Cafe Sofia` (General Luna Street, OSM `node/11521200457`) removed after a first-hand
@@ -486,6 +486,34 @@ offers it from the empty-list state.
 
 > Note: PLM is *Pamantasan ng Lungsod ng Maynila*, not the Polytechnic University of the
 > Philippines (PUP), which is a different institution in Sta. Mesa.
+
+## 9. The street food area
+
+`data/street-food.js` marks the stretch where **unnamed street food stalls** set up, as
+one zone drawn along its streets rather than a pin per stall: the stalls have no names,
+fixed spots or published prices, so the data says nothing about any single one.
+
+| Street | Stretch | Length |
+|---|---|---|
+| Victoria Street | Cabildo Street → by Savor & Kribs, ~35 m short of Muralla Street | 203 m |
+| Magallanes Street | Victoria Street → Recoletos Street | 88 m |
+| Recoletos Street | Magallanes Street → Cabildo Street | 80 m |
+
+**Source.** The site owner drew the area on the map (2026-09-27). The drawing was
+registered against the map's own pins (all 20 fully visible pins matched their spots
+within 1.4 px, about 0.4 m) and snapped to the OpenStreetMap centrelines of the three
+streets, which it followed to 0.5–2.4 m (median). Five of its six ends fell within
+6.5 m of a street junction and were snapped to it; Victoria Street's north-east end
+stops where the drawing does. Every point is boundary-checked (`tools/verify-in-intramuros.mjs`,
+pass 6).
+
+**On the map** it is a green dotted line along the three streets with a **Street food**
+label at the Victoria × Magallanes junction; the label or a line opens its popup, with
+**Get directions** (it resolves through `src/data/destinations.ts` like a landmark, but
+stays out of the landmark list the venue strip reads). **For Dan** it is one record in
+the chat corpus's `eat` list (`tools/build-corpus.mjs`), with no price — so retrieval
+finds it for a "street food" question and `worker/src/focus.js` can fly the map to it by
+name. Add a new stretch by editing `lines` (and the table above); nothing else changes.
 
 ---
 

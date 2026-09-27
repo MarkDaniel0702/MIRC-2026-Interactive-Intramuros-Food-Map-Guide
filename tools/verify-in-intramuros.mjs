@@ -304,6 +304,18 @@ if (LANDMARKS) {
   }
 }
 
+/* ── pass 6: the street food area ────────────────────────────────────────────── */
+
+const { STREET_FOOD } = await import(pathToFileURL(join(root, 'data', 'street-food.js')).href);
+{
+  console.log(bold('  6. Street food area — does every point of its lines sit inside Intramuros?\n'));
+  const points = [[STREET_FOOD.lat, STREET_FOOD.lng], ...STREET_FOOD.lines.flat()];
+  const outside = points.filter(([lat, lng]) => !insideBoundary(lng, lat, INTRAMUROS_BOUNDARY.geometry));
+  console.log(`     ${outside.length ? red('FAIL') : green('PASS')}  ${STREET_FOOD.name.padEnd(38)} ${dim(`${points.length} points on ${STREET_FOOD.lines.length} streets`)}\n`);
+  if (outside.length) failures.push(`${outside.length} street food point(s) outside the boundary`);
+  if (seenIds.has(STREET_FOOD.id)) failures.push(`street food id "${STREET_FOOD.id}" collides with another record`);
+}
+
 /* ── summary ─────────────────────────────────────────────────────────────────── */
 
 const byCategory = {};

@@ -80,7 +80,7 @@ if (existsSync(data('warm-answers.json'))) {
 
 let FOOD_SPOTS, PRICE_TIERS, CATEGORIES, DATA_REVIEWED;
 let TOURIST_SPOTS, FEE_TIERS, SIGHT_CATEGORIES, VENUE_ANCHOR, WALK_METRES_PER_MIN, INTRAMUROS_PASSPORT;
-let HOTELS, START_POINTS, LANDMARKS;
+let HOTELS, START_POINTS, LANDMARKS, STREET_FOOD;
 try {
   ({ FOOD_SPOTS, PRICE_TIERS, CATEGORIES, DATA_REVIEWED } = await importData('food-spots.js'));
   ({ TOURIST_SPOTS, FEE_TIERS, SIGHT_CATEGORIES, VENUE_ANCHOR, WALK_METRES_PER_MIN, INTRAMUROS_PASSPORT } =
@@ -88,6 +88,7 @@ try {
   ({ HOTELS } = await importData('hotels.js'));
   ({ START_POINTS } = await importData('start-points.js'));
   ({ LANDMARKS } = await importData('landmarks.js'));
+  ({ STREET_FOOD } = await importData('street-food.js'));
 } catch (err) {
   die('could not load the map data files', err);
 }
@@ -129,7 +130,19 @@ const food = FOOD_SPOTS.map(s => drop({
   where: [s.street, s.area].filter(Boolean).join(' · '),
   fromVenue: fromVenue(s.lat, s.lng),
   about: s.blurb
-})).sort((a, b) => a.name.localeCompare(b.name));
+})).concat(
+  /* The street food area (data/street-food.js) rides with the food so retrieval
+     finds it for any "street food" question and focus.js can point the map at it
+     by name -- one record for the whole zone, with no price, since none is listed. */
+  drop({
+    id: STREET_FOOD.id, lat: STREET_FOOD.lat, lng: STREET_FOOD.lng,
+    name: STREET_FOOD.name,
+    category: `${STREET_FOOD.kind} (unnamed stalls, not one place)`,
+    where: STREET_FOOD.street,
+    fromVenue: fromVenue(STREET_FOOD.lat, STREET_FOOD.lng),
+    about: STREET_FOOD.blurb
+  })
+).sort((a, b) => a.name.localeCompare(b.name));
 
 const sights = TOURIST_SPOTS.map(s => drop({
   id: s.id, lat: s.lat, lng: s.lng,
