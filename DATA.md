@@ -517,8 +517,9 @@ stops where the drawing does. Every point is boundary-checked (`tools/verify-in-
 pass 6).
 
 **On the map** it is a green dotted line along the three streets with a **Street food**
-label at the Victoria × Magallanes junction, and the Eat tab carries a **Street food** chip
-that flies there; the label, a line or the chip opens its popup, with
+label at the Victoria × Magallanes junction, drawn only on the Intramuros Map (the PLM Map
+hides it), and the Eat tab carries a **Street food** chip that flies there, switching to the
+Intramuros Map if needed; the label, a line or the chip opens its popup, with
 **Get directions** (it resolves through `src/data/destinations.ts` like a landmark, but
 stays out of the landmark list the venue strip reads). **For Dan** it is one record in
 the chat corpus's `eat` list (`tools/build-corpus.mjs`), with no price — so retrieval

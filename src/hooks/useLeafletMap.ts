@@ -208,6 +208,9 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
    *  visibility toggle, since it's real Leaflet polygons sharing the map's
    *  own coordinate space). */
   const campusMaskRef = useRef<L.LayerGroup | null>(null);
+  /** The street food area's lines and label -- the campusMask's opposite:
+   *  shown only while the Intramuros Map is primary. */
+  const streetFoodRef = useRef<L.LayerGroup | null>(null);
   /** The PLM boundary ring itself ([lat, lng] pairs), kept apart from the
    *  drawn campusMask so the cluster-sync effect below can point-in-polygon
    *  test every spot against it -- hiding pins outside the PLM area while
@@ -1005,7 +1008,9 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
     // ── the street food area: one zone along its streets, never a pin per stall
     //    (data/street-food.js). Its label is kept with the landmark markers, so a
     //    click on it or its lines, and chat's focusById, all fly in and open the
-    //    same popup through flyToLandmark. ──
+    //    same popup through flyToLandmark. Hidden on the PLM Map (setView); the
+    //    label sits outside the campus enclosure, so flyToLandmark's
+    //    showOffCampus switches to the Intramuros Map, and shows it, first. ──
     const foodLines = [
       L.polyline(STREET_FOOD.lines, { color: '#82C144', weight: 16, opacity: 0.16, lineCap: 'round', lineJoin: 'round', bubblingMouseEvents: false }),
       L.polyline(STREET_FOOD.lines, { color: '#82C144', weight: 4, opacity: 0.9, dashArray: '1 9', lineCap: 'round', lineJoin: 'round', bubblingMouseEvents: false })
@@ -1026,9 +1031,10 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
     foodLabel.bindPopup(landmarkPopupHTML(STREET_FOOD), { maxWidth: 260, minWidth: 220, autoPan: false });
     for (const layer of [...foodLines, foodLabel]) {
       layer.on('click', () => flyToLandmark(STREET_FOOD.id));
-      layer.addTo(map);
     }
     landmarkMarkersRef.current.set(STREET_FOOD.id, foodLabel);
+    streetFoodRef.current = L.layerGroup([...foodLines, foodLabel]);
+    if (!plmLandmark) streetFoodRef.current.addTo(map); // no PLM Map: Intramuros is up
 
     // ── every spot marker, across every mode, built once ──
     function buildMarker(spot: AnySpot): L.Marker {
@@ -1143,6 +1149,7 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
       campusMaxBoundsRef.current = null;
       intramurosMaxBoundsRef.current = null;
       campusMaskRef.current = null;
+      streetFoodRef.current = null;
       plmRingRef.current = null;
       expandedRef.current = false;
       activePinIdRef.current = null;
@@ -1251,11 +1258,13 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
       if (intramurosMaxBoundsRef.current) map.setMaxBounds(intramurosMaxBoundsRef.current);
       map.setMinZoom(INTRAMUROS_MIN_ZOOM);
       if (campusMaskRef.current && map.hasLayer(campusMaskRef.current)) map.removeLayer(campusMaskRef.current);
+      streetFoodRef.current?.addTo(map);
       if (fly && homeRef.current) map.flyToBounds(homeRef.current.bounds, { ...homeRef.current.options, ...flyOptions(0.8) });
     } else {
       if (campusMaxBoundsRef.current) map.setMaxBounds(campusMaxBoundsRef.current);
       map.setMinZoom(CAMPUS_MIN_ZOOM);
       if (campusMaskRef.current && !map.hasLayer(campusMaskRef.current)) campusMaskRef.current.addTo(map);
+      streetFoodRef.current?.remove();
       if (fly && campusHomeRef.current) map.flyTo(campusHomeRef.current.center, campusHomeRef.current.zoom, flyOptions(0.8));
     }
 
