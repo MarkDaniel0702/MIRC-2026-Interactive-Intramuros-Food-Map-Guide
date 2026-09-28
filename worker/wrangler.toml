@@ -32,10 +32,11 @@ keep_vars = true
 # never cut Dan off from it.
 CORPUS_URL = "https://raw.githubusercontent.com/MarkDaniel0702/MIRC-2026-Interactive-Intramuros-Food-Map-Guide/main/public/data/chat-corpus.json"
 
-# Origins allowed to call this Worker. Leave the localhost entry for development.
-# The http:// custom-domain entry only covers the window before GitHub Pages issues
-# its certificate; drop it once Settings -> Pages -> Enforce HTTPS is ticked.
-ALLOWED_ORIGINS = "https://mirc2026interactivemap.me,http://mirc2026interactivemap.me,https://markdaniel0702.github.io,http://localhost:8000"
+# Origins allowed to call this Worker: only the live site. Enforce HTTPS is on, so
+# the page never runs on http://, and the old markdaniel0702.github.io URL only
+# 301-redirects here. Local dev needs no entry: `npm run dev` reaches the Worker
+# through Vite's /chat proxy (vite.config.ts), which CORS does not apply to.
+ALLOWED_ORIGINS = "https://mirc2026interactivemap.me"
 
 # Model ids are pinned here rather than in code so a provider renaming a model is a
 # one-line change. Check the provider's current model list before the congress.
