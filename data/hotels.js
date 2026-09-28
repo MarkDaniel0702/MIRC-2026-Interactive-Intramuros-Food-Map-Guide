@@ -38,6 +38,7 @@ export const STAY_CATEGORIES = {
   stay: { label: 'Places to stay', color: '#C9D6E6', icon: 'bed' }
 };
 
+/** @type {Record<import('./types').Hotel['access'], import('./types').AccessType>} */
 export const ACCESS_TYPES = {
   public:     { label: 'Open to travellers',  note: 'Bookable by the general public.' },
   restricted: { label: 'Members only',        note: 'Not available to the general public.' },
@@ -214,6 +215,7 @@ export const HOTELS = [
  * not be resolved and therefore could not be tested against the boundary polygon.
  * Listed separately rather than mixed in with verified entries.
  */
+/** @type {import('./types').UnverifiedHotel[]} */
 export const HOTELS_UNVERIFIED = [
   {
     name: 'Intramuros Stay by IN CAFE',

@@ -99,8 +99,8 @@ export function AboutDialog({ dialogRef }: { dialogRef: RefObject<HTMLDialogElem
         me</strong>. It stays in your browser to sort the list by distance, and is sent
         as coordinates to the FOSSGIS OSRM routing service only when you ask for
         directions — it is never stored on any server here. Questions you send to Dan are
-        passed through a Cloudflare Worker to Groq or Google's Gemini to generate an
-        answer, and may be logged server-side to improve future answers; they are not tied
+        passed through a Cloudflare Worker to an AI provider (Groq, with Google's Gemini
+        and OpenAI as fallbacks) to generate an answer, and may be logged server-side to improve future answers; they are not tied
         to your name or any account, because this site has none. This site sets no
         cookies and runs no analytics or ad tracking.
       </p>

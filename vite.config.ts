@@ -2,10 +2,9 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
 /*
- * base MUST match the GitHub Pages project sub-path -- the Worker's
- * ALLOWED_ORIGINS / CORPUS_URL (worker/wrangler.toml) are pinned to
- * https://mirc2026interactivemap.me/,
- * so a wrong base here silently breaks asset URLs and the chat corpus fetch.
+ * base is '/' because the site is served from the root of its custom domain,
+ * https://mirc2026interactivemap.me/ (DEPLOY.md section 6). A wrong base here
+ * silently breaks asset URLs and the chat corpus fetch.
  *
  * The /chat proxy exists only so `npm run dev` can talk to the deployed Worker:
  * worker/wrangler.toml's ALLOWED_ORIGINS does not include the Vite dev origin

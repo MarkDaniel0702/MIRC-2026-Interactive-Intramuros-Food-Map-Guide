@@ -28,7 +28,9 @@ jobs:
         with:
           node-version: 22
 
-      - run: npm install
+      # ci, not install: builds exactly what package-lock.json pins, and fails
+      # loudly if the lockfile has drifted from package.json.
+      - run: npm ci
       - run: npm run build
 
       - uses: actions/upload-pages-artifact@v3

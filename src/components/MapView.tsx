@@ -1,5 +1,4 @@
 import type { RefObject } from 'react';
-import { LuLayers } from 'react-icons/lu';
 import { Toasts } from './Toasts';
 import type { ToastItem } from '../hooks/useToasts';
 
@@ -32,7 +31,13 @@ export function MapView({ containerRef, mapNoteRef, toggleRef, toasts, intramuro
         aria-label="Full Intramuros Map"
         title={intramurosExpanded ? 'Back to the PLM Map' : 'Show the full Intramuros Map'}
         onClick={onToggleIntramurosView}>
-        <LuLayers aria-hidden="true" />
+        {/* Lucide "layers" (ISC), inlined like every other icon here. */}
+        <svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" strokeWidth="2"
+          strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z" />
+          <path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65" />
+          <path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65" />
+        </svg>
       </button>
 
       <div className="map-cartouche" aria-hidden="true">

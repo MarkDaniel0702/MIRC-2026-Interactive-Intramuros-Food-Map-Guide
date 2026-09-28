@@ -41,6 +41,7 @@ export const SIGHT_CATEGORIES = {
  * >>> if sessions are in a specific building/hall, pin this to that exact spot <<<
  * and every walking time on the site re-bases itself.
  */
+/** @type {import('./types').VenueAnchor} */
 export const VENUE_ANCHOR = {
   name: 'Pamantasan ng Lungsod ng Maynila',
   lat: 14.5868604,
@@ -54,6 +55,7 @@ export const WALK_METRES_PER_MIN = 80;
  * The Intramuros Administration sells a combined ticket. Worth flagging to anyone
  * planning to see more than two of the paid sites.
  */
+/** @type {import('./types').IntramurosPassport} */
 export const INTRAMUROS_PASSPORT = {
   price: '₱350',
   covers: ['Fort Santiago', 'Casa Manila', 'Museo de Intramuros', 'Baluarte de San Diego', 'Centro de Turismo'],

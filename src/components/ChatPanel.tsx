@@ -15,7 +15,6 @@
 import { Fragment, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { reduceMotionOnce } from '../lib/motion';
-import { LuVolume2, LuVolumeX } from 'react-icons/lu';
 
 const WORKER_URL = 'https://mirc-2026-chat.plm-mirc2026.workers.dev';
 const CHAT_URL = import.meta.env.DEV ? '/chat' : `${WORKER_URL}/chat`;
@@ -326,17 +325,6 @@ export function ChatPanel({ onFocus, onHighlightViewToggle }: ChatPanelProps) {
       return;
     }
 
-    if (!WORKER_URL) {
-      const msg = "I'm not switched on yet. The organisers still need to publish the MIRC 2026 programme and connect me — until then this panel is here, but I cannot answer.";
-      appendMessage({
-        role: 'bot',
-        text: msg,
-        muted: true
-      });
-      speak(msg);
-      return;
-    }
-
     setBusyBoth(true);
     const thinkingId = appendMessage({ role: 'bot', text: '', thinking: true });
 
@@ -467,7 +455,14 @@ export function ChatPanel({ onFocus, onHighlightViewToggle }: ChatPanelProps) {
           </div>
           <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
             <button type="button" aria-label={voiceEnabled ? "Mute Voice" : "Unmute Voice"} onClick={toggleVoice} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.2rem', padding: '0 8px', display: 'flex', alignItems: 'center', color: 'inherit' }}>
-              {voiceEnabled ? <LuVolume2 /> : <LuVolumeX />}
+              {/* Lucide "volume-2" / "volume-x" (ISC), inlined. */}
+              <svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" strokeWidth="2"
+                strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z" />
+                {voiceEnabled
+                  ? <><path d="M16 9a5 5 0 0 1 0 6" /><path d="M19.364 18.364a9 9 0 0 0 0-12.728" /></>
+                  : <><line x1="22" x2="16" y1="9" y2="15" /><line x1="16" x2="22" y1="9" y2="15" /></>}
+              </svg>
             </button>
             <button type="button" className="chat__close" aria-label="Close Dan" onClick={closePanel}>&times;</button>
           </div>

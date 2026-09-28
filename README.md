@@ -1,340 +1,391 @@
 # Intramuros Guide
 
-An interactive map of the walled city of Manila, built for visiting researchers at
-**MIRC 2026** — where to eat, what to see, where to stay, step-by-step walking
-directions to any of it, and an AI assistant who knows the congress programme.
+[![Deploy to GitHub Pages](https://github.com/MarkDaniel0702/MIRC-2026-Interactive-Intramuros-Food-Map-Guide/actions/workflows/deploy.yml/badge.svg)](https://github.com/MarkDaniel0702/MIRC-2026-Interactive-Intramuros-Food-Map-Guide/actions/workflows/deploy.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+An interactive map of the walled city of Manila, built for researchers visiting
+**MIRC 2026** at Pamantasan ng Lungsod ng Maynila (PLM). It shows where to eat, what to
+see and where to stay, gives step-by-step walking directions to any of it, and includes
+**Dan**, an AI assistant that knows the congress programme.
 
 ### 🗺️ [mirc2026interactivemap.me](https://mirc2026interactivemap.me/)
 
-![The Intramuros Guide map, showing the Eat tab's filters and list on the left and the walled city on the right, with colour-coded pins for every food spot and the PLM venue highlighted in gold](docs/screenshot-map.jpg)
+![The PLM Map view: the MIRC 2026 venue strip and the list of campus places on the left, and the PLM campus on the right with its buildings, the JAA, GK, GEE and GA venue codes and the campus canteen pinned](docs/screenshot-plm.jpg)
 
 ---
 
-## What's on it
+## Features
+
+### Two map views
+
+- **PLM Map** (the default). The MIRC 2026 venue and its campus: a **venue strip**
+  (PLM campus, JAA, GK, GEE, GA) that jumps to each session building, plus a list of every
+  other place on campus.
+- **Intramuros Map**. Tap the layers button under the zoom controls to open the whole
+  walled city, browsed through three tabs:
 
 | Tab | Contents |
 |---|---|
-| **Eat** | **67** restaurants, cafés, carinderias, fast-food branches and hotel dining rooms, with price ranges (58 OSM-verified + 9 user-pinned — see `DATA.md`) |
+| **Eat** | **67** restaurants, cafés, carinderias, fast-food branches and hotel dining rooms, each with a price range (58 OSM-verified, 9 user-pinned; see [`DATA.md`](DATA.md)) |
 | **See** | **21** heritage sights, with entrance fees, opening hours and realistic visit times |
-| **Stay** | **2** hotels — the properties inside the walls with both a public booking path and a real price. (A third, Residencia 729, is bookable but has no published rate — see `HOTELS.md`.) |
+| **Stay** | **2** hotels: the properties inside the walls that have both a public booking path and a published price (see [`HOTELS.md`](HOTELS.md)) |
 
-Plus the **street food area** — the unnamed stalls along Victoria, Magallanes and
-Recoletos Streets, drawn as one zone, not a pin per stall (`DATA.md` §9) — and a
-highlighted **PLM** (Pamantasan ng Lungsod ng Maynila) campus landmark — the
-MIRC 2026 venue — that zooms the map in when tapped and reveals its buildings and halls
-(JAA, GK, GEE, GA) once you're zoomed close, with a **venue strip** in the panel that
-jumps to any of them from every tab; and **walking directions** to any listing *or to
-any of those campus buildings* — from your location, a tapped point, the venue itself,
-or one of six arrival presets.
+![The Intramuros Map on the Eat tab: "Show on map" layer chips, the street food chip, search, category and price filters on the left; the walled city on the right with clustered pins, the street food area and the PLM venue marker](docs/screenshot-map.jpg)
 
-- **Search** by name, dish, cuisine, street or period — press <kbd>/</kbd> to jump to it
-- **Filter** by category and by price / entrance fee, in any combination
-- **The list and the map stay in sync** — hover a card to lift its pin, click a card to
-  fly to it, click a pin to scroll its card into view
-- **Near me** sorts everything by walking distance
-- **Ask Dan**, an AI assistant, for anything about the congress or getting around
-- Responsive: a sidebar on desktop, a drag-up sheet on a phone
-- Keyboard accessible, screen-reader labelled, honours `prefers-reduced-motion`
+### Finding things
+
+- **Search** by name, dish, cuisine, street or period. Press <kbd>/</kbd> to jump to the search box.
+- **Filter** by category and by price or entrance fee, in any combination.
+- **Show on map** puts Eat, See and Stay pins on the map together, whichever tab's list is open.
+- **Street food**: the unnamed stalls along Victoria, Magallanes and Recoletos Streets are
+  drawn as one zone, not a pin per stall, and have their own chip on the Eat tab.
+- **The list and the map stay in sync.** Hovering a card lifts its pin, clicking a card
+  flies the map to it, and clicking a pin scrolls its card into view.
+- **Near me** sorts everything by walking distance from your location.
+
+### Walking directions
+
+![Step-by-step walking directions to Barbara's Casa Manila starting from PLM (the venue): the start-point options on the left, and the route drawn out of the campus gate and up to the restaurant on the right](docs/screenshot-directions.jpg)
+
+Click any marker or list entry, then **Get directions**. You can start from your current
+location, from a point you tap on the map, from **the venue** (for the walk from PLM to
+lunch), or from one of six arrival presets. Three of those presets (LRT Central Terminal,
+Park & Ride Lawton and Escolta Ferry) are outside the walls and labelled that way; they are
+offered only as starting points, never as destinations. The PLM campus and each of its
+buildings have the same button, so a delegate can be walked to the building their session
+is in, not just to the campus gate.
+
+- Routes come from the **FOSSGIS OSRM pedestrian service**, the same one
+  openstreetmap.org uses. It needs no API key. OSRM returns maneuver objects rather than
+  sentences, so [`src/lib/routing.ts`](src/lib/routing.ts) writes the step-by-step
+  instructions itself.
+- OSRM cannot route inside the gated PLM campus. Routes into or out of it are joined to a
+  fixed walk through the General Luna Street gate, then follow the campus's own mapped
+  footpaths ([`data/plm-paths.js`](data/plm-paths.js)) to the building.
+- **Track my location live** follows you along a drawn route with the distance left, an
+  ETA, and whether you're getting closer or farther. A low-accuracy fix or a denied
+  permission is reported in plain words.
+- **If routing is unavailable**, you still get a straight-line distance, a walking
+  estimate and a link to OpenStreetMap directions.
+
+### Meet Dan
+
+![Dan, the phoenix-marked chat assistant, open in its side panel over the map, having introduced itself and offered three suggested questions about the MIRC 2026 programme](docs/screenshot-chat.jpg)
+
+**Ask Dan** (top right) opens a chat panel. Dan answers questions about the MIRC 2026
+programme (sessions, speakers, rooms, registration) and about Intramuros (getting around,
+its history, walls and heritage). Everything else gets a polite decline.
+
+- **Grounded only in the congress material**, not general knowledge. If something hasn't
+  been published, Dan says so instead of guessing.
+- **Answers in the asker's language**: English (Philippine, Australian, British or
+  American), Filipino, Malay, Mandarin Chinese, French or Portuguese.
+- **Reads answers aloud** with the browser's built-in speech synthesis. The speaker button
+  in the panel header mutes it.
+- **Can point at the map.** Ask "where is GEE?" and the reply comes with a **Show on the
+  map** button, one tap from directions.
+
+How it works: the corpus ([`public/data/chat-corpus.json`](public/data/chat-corpus.json))
+is cut down to a slice shaped to the question before any model sees it. That is what lets
+a free-tier model handle congress-scale traffic. Common questions are answered from a
+reviewed set of **warm answers** or from Cloudflare's edge cache, with no model call at
+all. The site itself holds no API key. A small Cloudflare Worker ([`worker/`](worker/))
+is the only server-side piece; it tries **Groq** first and falls back to **Gemini**, then
+**OpenAI** (Anthropic is also supported). The full pipeline, retrieval design and setup
+are in **[`CHATBOT.md`](CHATBOT.md)**.
+
+### On a phone
+
+On a phone, the panel becomes a **drag-up sheet** anchored to the bottom of the map. It
+starts collapsed to a handle, so the map is the first thing you see. Every feature works
+the same way, reflowed for a narrow screen.
+
+<img src="docs/screenshot-mobile.jpg" alt="The PLM Map filling a phone screen, with the panel collapsed to a drag-up sheet labelled PLM Map at the bottom" width="360">
+
+It's also keyboard accessible, labelled for screen readers, and honours
+`prefers-reduced-motion`.
 
 ---
 
-## Meet Dan
+## Everything on the map is inside Intramuros, and that's enforced
 
-![Dan, the phoenix-marked chat assistant, open in its side panel over the map, having just introduced itself and offered three suggested questions about the MIRC 2026 programme](docs/screenshot-chat.jpg)
-
-**Ask Dan** (top-right, or the phoenix mark) opens a chat panel that answers questions
-about the MIRC 2026 programme — sessions, speakers, rooms, registration — and about
-Intramuros itself: getting around it, and its history, walls and heritage, then
-**declines everything else**. It's grounded only in its own material, not general
-knowledge, so it won't improvise an answer it doesn't have. It also answers in whichever
-of English (Philippine, Australian, British or American), Filipino, Malay, Mandarin
-Chinese, French or Portuguese a question is asked in.
-
-Under the hood: the corpus (`public/data/chat-corpus.json`) is retrieved down to a
-question-shaped slice before it ever reaches a model, which is what makes a free-tier
-LLM (Groq, with Gemini as a fallback) viable at congress scale. The client is static and
-holds no API key — a small Cloudflare Worker (`worker/`) is the only server-side piece.
-Full pipeline, retrieval design and setup instructions are in **[`CHATBOT.md`](CHATBOT.md)**.
-
-Dan can also put a place on the map for you — ask "where is GEE?" and its **Get
-directions** button is one tap away.
-
----
-
-## Everything on the map is inside Intramuros — and that's enforced
-
-This is the part worth knowing. The guide's one hard rule is that nothing from Binondo,
-Ermita, Malate or Quiapo appears. That is not a promise in a README — it's a test.
-
-Every place was collected by querying **inside the official boundary polygon**
-(OpenStreetMap relation [`103707`](https://www.openstreetmap.org/relation/103707)), so
-each one is in Intramuros by construction. A script then re-checks every coordinate
-against that same polygon:
+The guide's one hard rule: nothing from Binondo, Ermita, Malate or Quiapo appears. A
+script enforces it. Every place was collected by querying **inside the official boundary
+polygon** (OpenStreetMap relation [`103707`](https://www.openstreetmap.org/relation/103707)),
+and the script re-checks every coordinate against that same polygon:
 
 ```bash
 node tools/verify-in-intramuros.mjs
 ```
 
 ```
-  1. Location — is every spot inside Intramuros?      68/68 PASS
-  2. Schema — is every record well formed?            PASS  (9 user-pinned)
-  3. Tourist spots — is every sight inside?           21/21 PASS
-  4. Accommodation — is every property inside?         8/8  PASS
-  5. Landmarks — is every landmark inside?              5/5 PASS
+  1. Location — is every spot inside Intramuros?
+     All 67 spots are inside the official Intramuros boundary.
+  2. Schema — is every record well formed?
+     All 67 records are well formed.
+     9 of them are user-pinned (no OSM node; exact coordinate supplied by a person).
+  3. Tourist spots — is every sight inside Intramuros?
+     All 21 sights are inside the official Intramuros boundary.
+  4. Accommodation — is every property inside Intramuros?
+     All 8 properties are inside the boundary (3 open to travellers, 2 shown on the map).
+  5. Landmarks — is every highlighted landmark inside Intramuros?
+     All 14 landmark(s) are inside the official Intramuros boundary.
+  6. Street food area — does every point of its lines sit inside Intramuros?
+     PASS  Street food stalls                     12 points on 3 streets
 
   VERIFIED — every spot is inside Intramuros and every record is valid.
 ```
 
-Nine eateries have no OpenStreetMap node. All are **user-pinned** — an exact coordinate
-supplied directly by a visitor (a Google Maps pin), shown as a normal pin. A second class,
-**address-estimated** (pin from the street address, flagged approximate, dashed marker),
-is supported but currently empty. Every one is boundary-checked by the same gate — one
-visitor-supplied pin landed ~2 km out and was rejected.
+(Per-record lines and the category breakdown are omitted here.) It exits non-zero on any failure, so it works as a pre-commit or CI
+gate. Run it after touching any file in `data/`. The same polygon is drawn on the map as
+the lit ground, with everything outside it dimmed.
 
-It exits non-zero on any failure, so it works as a pre-commit or CI gate. Run it after
-touching any data file.
-
-The same polygon is drawn on the map as the lit ground, with everything outside it dimmed —
-so the constraint is something you can *see*, not just something you're told.
-
-> The one deliberate exception: three transit points (LRT Central Terminal, Park & Ride
-> Lawton, Escolta Ferry) sit outside the walls and are offered **only** as starting points
-> for directions. They're labelled "outside" and never appear as destinations.
+The nine eateries with no OpenStreetMap node are **user-pinned**: an exact coordinate a
+visitor supplied (a Google Maps pin), boundary-checked like everything else. One such pin
+landed about 2 km outside the walls and was rejected. The tooling also supports a second
+class, **address-estimated** (placed from a street address and shown with a dashed
+marker), but no records use it at the moment.
 
 ---
 
-## Directions
+## Tech stack
 
-![Step-by-step walking directions to Barbara's Casa Manila, with the start-point options, route steps and the PLM venue and its campus buildings visible on the map behind the panel](docs/screenshot-directions.jpg)
+| Layer | What |
+|---|---|
+| UI | [React](https://react.dev/) 18 + TypeScript |
+| Build | [Vite](https://vite.dev/) 6 (`@vitejs/plugin-react`) |
+| Map | [Leaflet](https://leafletjs.com/) 1.9 + [Leaflet.markercluster](https://github.com/Leaflet/Leaflet.markercluster), OpenStreetMap tiles |
+| Routing | [FOSSGIS OSRM](https://routing.openstreetmap.de/) foot profile, called straight from the browser |
+| Assistant | Cloudflare Worker (plain JavaScript, no dependencies) → Groq / Gemini / OpenAI / Anthropic |
+| Speech | Web Speech API (`speechSynthesis`), in the browser |
+| Fonts | Archivo + IBM Plex Mono (Google Fonts) |
+| Hosting | GitHub Pages via GitHub Actions; custom domain `mirc2026interactivemap.me` |
+| Data tooling | Node scripts in `tools/`; two Python importers (need `openpyxl`) for the congress documents |
 
-Click any marker or list entry, then **Get directions**. Start from your current location,
-by tapping anywhere on the map, from **the venue** (for the walk from PLM to lunch), or from
-a preset arrival point. The PLM campus marker and each of its buildings (JAA, GK, GEE, GA)
-offer the same button, so a visitor can be walked to the specific building their session
-is in, not just to the campus gate — and asking Dan *"where is GEE?"* puts that building
-on the map with the button one tap away.
-
-Once a route is drawn, **Track my location live** turns on `watchPosition` and follows you
-along it — distance remaining, an ETA, and whether you're getting closer or moving away,
-updating as you walk. It degrades honestly: a low-accuracy GPS fix says so, and a denied
-permission stops tracking with a plain explanation instead of failing silently.
-
-Routing comes from the **FOSSGIS OSRM pedestrian service** — the same one
-openstreetmap.org uses for its own directions. No API key, nothing secret in the client.
-
-OSRM returns maneuver *objects* rather than sentences, and the usual companion library
-isn't published on any CDN, so [`src/lib/routing.ts`](src/lib/routing.ts) renders the
-instructions itself. That keeps the dependency list unchanged.
-
-**If routing is unavailable**, the feature degrades instead of breaking: you still get a
-straight-line distance, a walking estimate, and a link out to OpenStreetMap directions.
-Same for a denied location permission — the presets remain available and the interface
-explains what happened.
+There are only four runtime dependencies (`react`, `react-dom`, `leaflet`,
+`leaflet.markercluster`). Icons are inline SVG.
 
 ---
 
-## On a phone
+## Getting started
 
-The panel becomes a **drag-up sheet** anchored to the map instead of a fixed sidebar —
-collapsed to a handle and a count by default, so the map (and the boundary, and the venue)
-is the first thing you see. Every feature above — search, filters, Dan, directions, live
-tracking — works the same way, just reflowed for a narrow, tall viewport, and verified
-down to a 360px-wide screen.
-
-<img src="docs/screenshot-mobile.jpg" alt="The map filling a phone screen with the panel collapsed to a drag-up sheet at the bottom, showing the food-spot count and the walled city with its boundary and the PLM venue marker" width="360">
-
----
-
-## Run it locally
-
-React + TypeScript, built with Vite. No API keys needed for the map itself.
+**Prerequisites:** Node.js 22 (what CI uses) and npm. Nothing else is needed to run
+the map. You don't need an account or an API key.
 
 ```bash
-npm install
-npm run dev
-# then open the printed http://localhost:5173/... URL
+git clone https://github.com/MarkDaniel0702/MIRC-2026-Interactive-Intramuros-Food-Map-Guide.git
+cd MIRC-2026-Interactive-Intramuros-Food-Map-Guide
+npm ci
+npm run dev          # http://localhost:5173/
 ```
 
-The dev server proxies `/chat` to the deployed Worker (see `vite.config.ts`), so the
-assistant panel works locally too — the Worker's CORS allowlist only needs the
-production origin, not every developer's local port.
+| Command | What it does |
+|---|---|
+| `npm run dev` | Vite dev server with hot reload |
+| `npm run build` | Type-checks (`tsc -b`), then builds the site into `dist/` |
+| `npm run preview` | Serves the built `dist/` locally, to check a build before pushing |
+| `npm run typecheck` | Type-checks only |
 
-`npm run build` produces `dist/`; `npm run preview` serves that build locally so you can
-check it before pushing. `npm run typecheck` runs a standalone type check.
+In development, the dev server proxies `/chat` to the deployed Worker (`vite.config.ts`),
+so Dan works locally without adding `localhost` to the Worker's CORS allowlist. `npm run
+preview` calls the Worker directly, so Dan won't answer there.
+
+### Checks
+
+The project has no unit-test framework. Instead, a set of standalone Node scripts act as
+its tests. The ones below run **offline**: no API key, no quota, no network.
+
+| Command | Checks |
+|---|---|
+| `node tools/verify-in-intramuros.mjs` | Every record is inside the boundary and well formed (the data gate) |
+| `node tools/check-campus-walk.mjs` | Campus routing reaches every PLM building along the mapped paths |
+| `node tools/eval-retrieval.mjs` | Dan's retrieval puts the right record in the slice (73 cases) |
+| `node tools/eval-focus.mjs` | "Show on the map" points at the right place, and stays silent when there isn't one |
+| `node tools/eval-cache.mjs` | Warm answers match when they should and refuse near-misses |
+| `node tools/eval-fallback.mjs` | The Worker's provider chain falls back correctly (stubbed `fetch`) |
+
+Two scripts need a model key and call a real provider: `tools/try-dan.mjs` (an end-to-end
+acceptance run) and `tools/warm-cache.mjs` (regenerates `data/warm-answers.json`). See
+`CHATBOT.md` for how to run them.
 
 ---
 
-## Deploy
+## Configuration
 
-Push to `main`. A GitHub Actions workflow (`.github/workflows/deploy.yml`) builds the
-site and publishes `dist/` to GitHub Pages — no manual build step. Full instructions,
-the post-deploy checklist and troubleshooting are in **[`DEPLOY.md`](DEPLOY.md)**.
+**The static site has no environment variables and no secrets.** The few values worth
+knowing about are constants in the code:
 
-Dan's Worker is deployed separately (`worker/`, on Cloudflare) and needs its own API key
-set once via `wrangler secret put` — see **[`CHATBOT.md`](CHATBOT.md)**. Until that's
-done the chat panel still opens; it just says plainly that it can't answer yet, rather
-than failing silently. Nothing about the map, directions or the rest of the site depends
-on it.
+| Where | What |
+|---|---|
+| `VENUE_ANCHOR` in [`data/tourist-spots.js`](data/tourist-spots.js) | The point every "N min walk" is measured from (PLM's OSM centre). Move it and every distance re-bases itself. |
+| `WORKER_URL` in [`src/components/ChatPanel.tsx`](src/components/ChatPanel.tsx) | The deployed Worker the chat panel posts to in production |
+| `L.tileLayer(...)` in [`src/hooks/useLeafletMap.ts`](src/hooks/useLeafletMap.ts) | The map tile provider. The navy tint in `src/styles.css` sits on top of whatever tiles load. |
+| `base` in [`vite.config.ts`](vite.config.ts) | `/`, because the site is served from the root of its custom domain |
+
+**The Worker** is configured in [`worker/wrangler.toml`](worker/wrangler.toml):
+
+| Name | Kind | Purpose |
+|---|---|---|
+| `CORPUS_URL` | var | Where the Worker reads the built corpus (the raw GitHub copy of `public/data/chat-corpus.json`) |
+| `ALLOWED_ORIGINS` | var | CORS allowlist. If it's empty, every browser origin is refused (fails closed). |
+| `PROVIDER_ORDER` | var | Provider fallback order; default `groq,gemini,openai,anthropic` |
+| `GROQ_MODEL`, `GEMINI_MODEL`, `OPENAI_MODEL`, `ANTHROPIC_MODEL` | var | Pinned model ids |
+| `GROQ_API_KEY`, `GEMINI_API_KEY`, `OPENAI_API_KEY`, `ANTHROPIC_API_KEY` | **secret** | Set with `npx wrangler secret put <NAME>` in `worker/`. Configure at least one. |
+
+API keys live only in Cloudflare's secret store. **Never put a key in `wrangler.toml`, the
+client code, or any committed file.** `.env*`, `.dev.vars*` and `*.key` are gitignored for
+that reason.
+
+---
+
+## Deployment
+
+- **Site:** push to `main`. [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml)
+  runs `npm ci && npm run build` and publishes `dist/` to GitHub Pages. You never build
+  by hand. One-time setup, the post-deploy checklist, the custom-domain wiring and
+  troubleshooting are all in **[`DEPLOY.md`](DEPLOY.md)**.
+- **Dan's Worker:** deployed separately, with `cd worker && npx wrangler deploy`, plus at
+  least one API key set as a secret. See **[`CHATBOT.md`](CHATBOT.md)**. Until a key is
+  set, the chat panel still opens and says plainly that it can't answer yet. Nothing else
+  on the site depends on the Worker.
+- **Content updates for Dan:** edit `data/mirc-2026.json`, run
+  `node tools/build-corpus.mjs`, and push. The Worker picks up the new corpus within five
+  minutes; no redeploy is needed.
 
 ---
 
 ## Project structure
 
 ```
-index.html                      Vite entry point -- icons, manifest, Open Graph metadata
-src/main.tsx                    mounts React, imports Leaflet + styles.css
-src/App.tsx                     top-level layout: Panel + MapView + ChatPanel + AboutDialog
-src/styles.css                  design system, responsive layout, map + popup styling
-src/state/store.ts              app state (useReducer) -- mode, filters, selection, directions
-src/hooks/useLeafletMap.ts      the imperative map core -- markers, popups, flyTo, live tracking
-src/hooks/useVisibleSpots.ts    filtered + sorted spot list, derived from state
-src/components/                Panel, SpotList, DirectionsPanel, VenueBar, ChatPanel, AboutDialog, etc.
-src/lib/                        routing.ts (OSRM client), format/icons/filter/popupHtml helpers
-src/data/modes.ts               the Eat/See/Stay MODES config + one-time search index
-src/data/destinations.ts        resolves a "Get directions" target: any spot, or a landmark
-
-data/food-spots.js              67 food spots  · 58 OSM-verified + 9 user-pinned
-data/tourist-spots.js           21 sights      · FEE_TIERS, VENUE_ANCHOR, passport info
-data/hotels.js                  8 properties   · 3 flagged `mapped` for the Stay tab
-data/start-points.js            6 arrival points for directions
-data/landmarks.js               PLM landmark + campus sub-points (shown when zoomed in)
-data/mirc-2026.json             the congress knowledge base Dan answers from
-data/intramuros-boundary.js     the official boundary polygon (61 points)
-data/types.d.ts                 shared TypeScript interfaces for the data above
-
-public/data/chat-corpus.json    built corpus Dan's Worker (and the client) fetch
-public/favicon.svg              app icon · public/apple-touch-icon.png, icon-*.png, og-image.jpg
-public/robots.txt, sitemap.xml  crawl and discovery for the deployed site
-public/404.html                 branded not-found page for a mistyped URL on GitHub Pages
-
-worker/                         the Cloudflare Worker that answers Dan's questions
-tools/verify-in-intramuros.mjs  the accuracy gate
-tools/build-corpus.mjs          builds public/data/chat-corpus.json for the chat assistant
-tools/import-abstracts.py       attaches abstracts/authors from the presenter + submissions docs
-
-.github/workflows/deploy.yml    builds and publishes dist/ to GitHub Pages
-
-DATA.md                         sources, method, price methodology, known limitations
-HOTELS.md                       accommodation research in full
-CHATBOT.md                      Dan's architecture, retrieval design and setup instructions
-DEPLOY.md                       GitHub Pages instructions
+index.html                     Vite entry: meta tags, icons, manifest, Open Graph
+vite.config.ts                 base path + the dev-only /chat proxy
+src/
+  main.tsx                     mounts React; imports Leaflet CSS and styles.css
+  App.tsx                      layout: Panel + MapView + ChatPanel + AboutDialog
+  styles.css                   design tokens, responsive layout, map and popup styling
+  state/store.ts               app state (useReducer): mode, filters, selection, directions
+  hooks/useLeafletMap.ts       the imperative map core: markers, popups, flyTo, live tracking
+  hooks/                       useVisibleSpots, useMapVisibleIds, useToasts
+  components/                  Panel, SpotList, DirectionsPanel, VenueBar, ChatPanel, …
+  lib/                         routing.ts (OSRM + campus walk), popupHtml, format, icons, filter
+  data/modes.ts                the Eat/See/Stay config and one-time search index
+  data/destinations.ts         resolves a "Get directions" target (spot or landmark)
+data/
+  food-spots.js                67 food spots · 58 OSM-verified + 9 user-pinned
+  tourist-spots.js             21 sights · fee tiers, VENUE_ANCHOR, Intramuros Passport
+  hotels.js                    8 properties · 2 flagged `mapped` for the Stay tab
+  landmarks.js                 PLM + 13 campus buildings (shown when zoomed in)
+  street-food.js               the street food zone, drawn along its streets
+  start-points.js              the venue + 6 arrival points for directions
+  intramuros-boundary.js       the official boundary polygon (OSM relation 103707)
+  plm-boundary.js, plm-paths.js   the campus outline and its walkable paths
+  mirc-2026.json               the congress knowledge base Dan answers from
+  warm-answers.json            reviewed answers to common questions
+  types.d.ts                   TypeScript shapes for the files above
+public/                        copied as-is into dist/
+  data/chat-corpus.json        built corpus (tools/build-corpus.mjs), read by the Worker
+  404.html                     branded not-found page; forwards old /MIRC-2026-… links
+  favicon.svg, icon-*.png, apple-touch-icon.png, og-image.jpg, site.webmanifest
+  robots.txt, sitemap.xml, .nojekyll
+worker/                        the Cloudflare Worker behind Dan
+  src/index.js                 request handling, prompt, guards, provider chain
+  src/retrieve.js, focus.js, cache.js   retrieval, map focus, warm answers + edge cache
+tools/                         data gate, evals, corpus builder, importers (see Checks)
+  load-test/                   k6 load-test script and its reports against the live site
+docs/                          README screenshots
+DATA.md · HOTELS.md · CHATBOT.md · DEPLOY.md   sources and method, hotel research, Dan, deployment
 ```
 
-Adding a place means editing one array in `data/` and re-running the verify script. The
-map and the list both read from the same data, so there is nothing to keep in step.
+To add a place, edit one array in `data/` and re-run the verify script. The map and the
+list both read from the same data, so nothing else needs to be kept in step.
 
-### Two edits worth knowing about
-
-**Set the venue anchor.** `VENUE_ANCHOR` in [`data/tourist-spots.js`](data/tourist-spots.js)
-drives every "N min walk" on the site. It is set to Pamantasan ng Lungsod ng Maynila
-(PLM), the campus flagged as the MIRC 2026 venue, using PLM's OSM centre point. If
-sessions run in a specific building or hall, point it there and every distance re-bases
-itself:
-
-```js
-export const VENUE_ANCHOR = { name: 'Your venue', lat: 14.5869, lng: 120.9764 };
-```
-
-**Swap the tile provider** by editing the single `L.tileLayer(...)` call in
-`src/hooks/useLeafletMap.ts`. The navy tinting in `src/styles.css` is applied on top of
-whatever tiles arrive, so the look survives the change.
+Comments of the form `app.js:NNN` or `index.html:NNN` point at the pre-React, plain-JS
+version of the app. It lives in git history before commit `83ed6fb` ("Migrate app to
+Vite + React").
 
 ---
 
 ## About the data
 
-Names and coordinates come from **OpenStreetMap** via the Overpass API, retrieved
-2026-09-04 and cross-checked against Nominatim (with later additions and corrections —
-see `DATA.md`).
+Names and coordinates come from **OpenStreetMap** via the Overpass API. They were
+retrieved on 2026-09-04 and cross-checked against Nominatim, and there have been later
+additions and corrections, all logged in `DATA.md`.
 
-- **Entrance fees** are from the Intramuros Administration and site operators — published
-  and reasonably stable. There's also a ₱350 **Intramuros Passport** covering five sites,
-  which the See tab surfaces once it's worth buying.
-- **Restaurant prices are indicative estimates, not quotes.** Only a handful of the 67
-  publish menu pricing, so each gets a tier plus an explicit peso band and a review date.
-  Presenting a guess as an exact figure would be worse than an honest range.
-- **Nine eateries have no OpenStreetMap node** — all user-pinned (an exact coordinate
-  supplied by a visitor), boundary-checked like everything else.
-- **Hotel rates are a dated snapshot, not live pricing.** Nightly rates move daily.
-- **Dan answers only from the congress's own material** (`data/mirc-2026.json`); a few
-  fields — registration logistics, one keynote bio — are still open source-side, listed
-  in `CHATBOT.md`, not silently guessed at.
+- **Entrance fees** come from the Intramuros Administration and the site operators. They're
+  published and reasonably stable. The See tab also points out the ₱350 **Intramuros
+  Passport**, which covers five sites.
+- **Restaurant prices are indicative estimates, not quotes.** Few places publish menu
+  prices, so each spot gets a tier plus an explicit peso band and a review date.
+- **Hotel rates are a dated snapshot**, not live pricing.
+- **Dan answers only from the congress's own material** (`data/mirc-2026.json`). Details
+  the committee hasn't supplied yet are listed in `CHATBOT.md`. Dan doesn't guess at them.
 
-The reasoning behind all of that, including what *couldn't* be verified, is in
+The reasoning behind all of this, including what *couldn't* be verified, is in
 [`DATA.md`](DATA.md) and [`HOTELS.md`](HOTELS.md).
 
 ---
 
 ## Privacy
 
-There's no account, no sign-up and no form to fill in, so there's nothing to collect in
-the usual sense. In short: your location, if you share it, stays in the browser and is
-only ever sent (as coordinates, for a route) to the OSRM routing service; a question you
-ask Dan is relayed through the Worker to Groq or Gemini to generate an answer and isn't
-tied to your name or any account, because the site has none. **No cookies, no analytics,
-no ad tracking.** The full statement — same wording, always in reach — is in the app's
-own **About** dialog (`src/components/AboutDialog.tsx`).
+There are no accounts, no sign-up and no forms. **No cookies, no analytics, no ad
+tracking.**
 
----
+- **Your location**, if you share it, stays in the browser. It's sent (as coordinates) only
+  to the OSRM routing service, and only when you ask for directions.
+- **Questions you ask Dan** go through the Cloudflare Worker to an AI provider (Groq, with
+  Gemini and OpenAI as fallbacks) to generate an answer. They may be logged server-side so
+  the committee can fill gaps in the material. They're never tied to a name or an account.
 
-## Site polish
-
-A few things exist purely so the deployed site behaves like a normal public site rather
-than a bare build:
-
-- **Favicon set** — `favicon.svg` plus `apple-touch-icon.png` and `icon-192`/`icon-512.png`
-  for home-screen installs, wired through `site.webmanifest`.
-- **Open Graph / Twitter Card** metadata and a rendered `og-image.jpg`, so a shared link
-  previews with the map's own look rather than a blank card.
-- **`robots.txt` and `sitemap.xml`** — the site is public and meant to be found.
-- **A branded `404.html`** for a mistyped URL on GitHub Pages, instead of the platform default.
-- The browser tab **title updates with the active tab** (Eat / See / Stay).
-
-None of this touches the map, the data or Dan — it's the metadata a search engine, a
-messaging app's link preview, or a home-screen install reads before the app ever loads.
+The statement shown to users is in the app's **About** dialog
+(`src/components/AboutDialog.tsx`).
 
 ---
 
 ## Known limitations
 
-- **Restaurant prices and hotel rates are estimates, not live quotes** — see *About the
-  data* above. Confirm anything time-sensitive with the venue.
-- **Dan only knows what's in `data/mirc-2026.json`.** A handful of programme details
-  (registration logistics, one keynote's bio) are genuine gaps in the source material,
-  tracked in `CHATBOT.md`, not answered by guessing.
-- **Dan's free-tier providers (Groq, Gemini) have daily request ceilings.** The retrieval
-  step and a server-side cache keep normal use well inside them, but a very busy day could
-  still hit a rate limit — the panel says so rather than hanging.
-- **Live tracking and "Near me" need a real GPS fix and a secure context** (`https://`,
-  which GitHub Pages provides) — they won't work over plain `http://` or from `file://`.
-- **OSRM cannot route inside the gated PLM campus.** Routes into or out of it are joined
-  to a fixed walk through the General Luna Street gate, then follow the campus's own
-  mapped footpaths to the building — see `DATA.md` §8 and the note in the Directions panel.
+- **Prices and hotel rates are estimates, not live quotes.** Confirm anything
+  time-sensitive with the venue.
+- **Dan only knows what's in `data/mirc-2026.json`.** A few programme details are still
+  missing from the source material. They're tracked in `CHATBOT.md`.
+- **Dan runs on free tiers with daily ceilings.** Retrieval, warm answers and the edge
+  cache keep normal use well inside them, and paid providers sit behind as a fallback. On
+  a very busy day Dan can still get rate-limited, and the panel says so.
+- **The Worker's rate limit is best-effort.** It's counted per Worker isolate, so it
+  smooths bursts but isn't a hard global cap (see `worker/src/index.js`).
+- **Live tracking and Near me need a GPS fix and a secure context** (`https://`). They
+  won't work over plain `http://` or from `file://`.
+- **OSRM can't route inside the PLM campus.** The campus leg is stitched on through the
+  General Luna Street gate (see Directions above, and `DATA.md` §8).
+- **Dan's voice depends on the device.** Speech uses whatever voices the OS provides, so
+  it sounds different on Windows, Android and iOS.
 
 ---
 
-## Built with
+## License
 
-React 18 + TypeScript, built with Vite. Leaflet 1.9.4 · Leaflet.markercluster 1.5.3 ·
-react-icons · Archivo + IBM Plex Mono (Google Fonts). Dan is served by a small
-Cloudflare Worker (`worker/`) in front of Groq / Gemini, grounded on a retrieved slice of
-`public/data/chat-corpus.json` — see `CHATBOT.md`. Everything else is static.
+The source code is released under the **[MIT License](LICENSE)**. © 2026 Mark Daniel Apelledo.
 
-## Attribution
+The MIT License covers the code in this repository. It does not cover third-party data or
+services:
 
-Map data, place information and the boundary polygon © [OpenStreetMap](https://www.openstreetmap.org/copyright)
-contributors, licensed under the [ODbL](https://opendatacommons.org/licenses/odbl/).
-Walking routes by the [FOSSGIS OSRM service](https://routing.openstreetmap.de/).
+- Map data, place information and the boundary polygon are © [OpenStreetMap](https://www.openstreetmap.org/copyright)
+  contributors, available under the [ODbL](https://opendatacommons.org/licenses/odbl/).
+  Records in `data/` that are derived from OpenStreetMap remain under the ODbL.
+- Walking routes are provided by the [FOSSGIS OSRM service](https://routing.openstreetmap.de/).
+- Libraries, fonts and icons keep their own licenses: Leaflet (BSD-2-Clause),
+  Leaflet.markercluster and React (MIT), Archivo and IBM Plex Mono (SIL OFL), and the
+  inline layers and volume icons from [Lucide](https://lucide.dev/) (ISC).
+
 Categories, price tiers, visit durations and descriptions were written for this project.
 
 ## Credits
 
-Created by **Mark Daniel Apelledo** — creator of the Intramuros Map and Dan, its AI guide.
+Created by **Mark Daniel Apelledo**, creator of the Intramuros Map and of Dan, its AI guide.
 
 Built under the guidance of advisers **Dr. Dan Michael A. Cortez**, **Ms. Editha S. Medina**
 and **Mr. Neil Marcus T. Manubay**.
 
-Dan's voice was added by **Christian Andrei V. Santiago**, credited specifically for
+**Christian Andrei V. Santiago** added Dan's voice and is credited specifically for
 building the text-to-speech capability. **Alvin V. Genota** is a consultant to the
-creators — he was Mr. Santiago's professor last year and is currently Mr. Apelledo's
+creators: he was Mr. Santiago's professor last year and is currently Mr. Apelledo's
 Intelligent Systems professor.

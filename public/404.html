@@ -8,10 +8,12 @@
 <script>
   /* The site used to live under this sub-path on markdaniel0702.github.io, and
      GitHub now forwards those old links here with the path kept -- send them to
-     the same file at the root, so shared links and QR codes still land. */
+     the same file at the root, so shared links and QR codes still land.
+     Leading slashes are collapsed to one: "OLD//evil.example" would otherwise
+     become the protocol-relative "//evil.example" -- an open redirect. */
   var OLD = '/MIRC-2026-Interactive-Intramuros-Food-Map-Guide';
   if (location.pathname.indexOf(OLD) === 0) {
-    location.replace((location.pathname.slice(OLD.length) || '/') + location.search + location.hash);
+    location.replace('/' + location.pathname.slice(OLD.length).replace(/^\/+/, '') + location.search + location.hash);
   }
 </script>
 <meta name="color-scheme" content="dark">
