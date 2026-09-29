@@ -105,6 +105,8 @@ export interface Landmark {
   osm?: string;
   url?: string;
   blurb: string;
+  /** Longer text shown under a "Read more" toggle in the popup. */
+  details?: string;
   campus?: boolean;
   provisional?: boolean;
   /** Unused by the current data but read by landmarkPopupHTML (app.js:312). */

@@ -167,12 +167,13 @@ export const LANDMARKS = [
   },
   {
     id: 'plm-rizal',
-    name: 'Jose Rizal Monument',
+    name: 'Eternal Torch and Flame of Excellence',
     kind: 'PLM campus · monument',
     lat: 14.586617, lng: 120.977406,
     osm: 'node/3388716896',
     glyph: 'obelisk',
     campus: true,
-    blurb: 'A memorial to José Rizal on the campus grounds. Not one of the four MIRC 2026 session buildings. Position from OpenStreetMap.'
+    blurb: "The Eternal Torch and Flame of Excellence stands atop Gusaling Villegas along Gen. Luna and Muralla Streets in Intramuros, Manila. It symbolizes PLM's commitment to academic excellence and was returned to its original location in 2011. The site previously featured Gen. Douglas MacArthur's statue and later the bust of Dr. José P. Rizal, connecting the location to a legacy of leadership, heroism, and nation-building.",
+    details: 'At the tip of the iconic fulcrum-shaped façade of Gusaling Villegas, along Gen. Luna and Muralla Streets in Intramuros, Manila, proudly stands the Eternal Torch and Flame of Excellence—a powerful symbol of PLM’s enduring commitment to academic distinction. Once relocated to the open field to serve as a visible beacon inspiring generations to embrace excellence as a birthright of every PLM student, the torch was ceremoniously returned to its original and rightful place in 2011, crowning the University’s monumental façade. This very spot once bore the statue of Gen. Douglas MacArthur and later the bust of National Hero Dr. José P. Rizal, linking the monument to a legacy of leadership, heroism, and nation-building.'
   }
 ];

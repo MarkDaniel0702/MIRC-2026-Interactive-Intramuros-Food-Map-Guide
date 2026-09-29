@@ -1386,6 +1386,7 @@ body.is-picking .leaflet-container { cursor: crosshair !important; }
 }
 
 .pop__blurb { margin: 12px 0 0; font-size: 12.5px; line-height: 1.58; color: var(--slate-lt); }
+.pop__more summary { margin-top: 8px; cursor: pointer; font: 400 11px/1.5 var(--mono); color: var(--green-lt); }
 
 .pop__tags { display: flex; flex-wrap: wrap; gap: 4px; margin: 11px 0 0; }
 .pop__tag {

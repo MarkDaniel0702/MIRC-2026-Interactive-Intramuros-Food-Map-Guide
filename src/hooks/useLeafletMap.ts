@@ -107,9 +107,13 @@ export function pointInRing(lat: number, lng: number, ring: [number, number][]):
  * popup already on the map, so 'popupopen' never fires a second time once
  * that flyTo actually lands -- this needs calling again there explicitly.
  */
-function fitPopup(map: L.Map, popup: L.Popup) {
+function fitPopup(map: L.Map, popup: L.Popup, keepContent = false) {
   popup.options.maxHeight = Math.max(160, map.getSize().y - 64);
-  popup.update();
+  // update() re-sets the popup's HTML, which would collapse the <details> whose
+  // toggle asked for this refit, so that path re-lays out without it.
+  // ponytail: Leaflet-private (1.x); recheck on a Leaflet 2 upgrade.
+  if (keepContent) { (popup as any)._updateLayout(); (popup as any)._updatePosition(); }
+  else popup.update();
   const container = popup.getElement();
   if (!container) return;
   const rect = container.getBoundingClientRect();
@@ -1108,10 +1112,20 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
     // would otherwise open a popup hidden behind it. Covers every path that
     // opens a popup, not just the from:'list' one `select` already handles by
     // closing it before the fly starts.
+    let openPopup: L.Popup | null = null;
     map.on('popupopen', (e: L.PopupEvent) => {
+      openPopup = e.popup;
       fitPopup(map, e.popup);
       if (isMobileRef.current()) onSetSheetRef.current(false);
     });
+
+    // A landmark popup's "Read more" <details> (popupHtml.ts) grows the popup
+    // upward after fitPopup placed it, so place it again. `toggle` does not
+    // bubble, hence the capture listener.
+    function onPopupToggle() {
+      if (openPopup?.isOpen()) fitPopup(map, openPopup, true);
+    }
+    map.getContainer().addEventListener('toggle', onPopupToggle, true);
 
     // The intro note fades out on its own if the user has not touched the map.
     // Ported from app.js:1189.
@@ -1129,6 +1143,7 @@ export function useLeafletMap(params: UseLeafletMapParams): MapApi {
     return () => {
       fontsCancelled = true;
       document.removeEventListener('click', onDocumentClick);
+      map.getContainer().removeEventListener('toggle', onPopupToggle, true);
       window.removeEventListener('load', refitHome);
       ro.disconnect();
       clearTimeout(roT);
