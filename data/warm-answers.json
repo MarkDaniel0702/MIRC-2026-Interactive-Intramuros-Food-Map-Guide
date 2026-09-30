@@ -415,7 +415,11 @@
         "Please introduce yourself",
         "Describe yourself",
         "Give me your bio",
-        "What is your bio?"
+        "What is your bio?",
+        "Who are you?",
+        "What are you?",
+        "Who is Dan?",
+        "Who are you exactly?"
       ],
       "pinned": true
     },
@@ -445,6 +449,23 @@
         "What is your job?",
         "What is your role?",
         "What are you here for?"
+      ],
+      "pinned": true
+    },
+    {
+      "q": "What can you do?",
+      "a": "I can answer questions about the MIRC 2026 programme — sessions, tracks, speakers, papers, rooms and registration — and about Intramuros: its history, walls and gates, and how to get around. I can point the map at a restaurant, sight, hotel or PLM building when you ask me to find it, follow up on the last few turns of our conversation, read my answers aloud, and reply in English, Filipino, Malay, Mandarin Chinese, French or Portuguese. I only know what the organisers have supplied, so I cannot browse the web, and I cannot help with anything unrelated to the congress.",
+      "keys": [
+        "What can you do?",
+        "What are you able to do?",
+        "What are your capabilities?",
+        "What are your features?",
+        "How can you help?",
+        "How can you help me?",
+        "What can you help me with?",
+        "What do you do?",
+        "What do you help with?",
+        "Help"
       ],
       "pinned": true
     }

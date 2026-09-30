@@ -41,6 +41,10 @@ export const normalise = q => String(q ?? '')
   .filter(w => w && !FILLER.has(w))
   .join(' ');
 
+/* Lower-cased, punctuation-free text with the filler kept: the key for a question
+   that normalise() empties out entirely. */
+const rawKey = q => String(q ?? '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+
 /**
  * The prompt asks for plain text, and the models mostly comply — but not always, and
  * the chat panel escapes HTML rather than rendering markdown, so a stray `**GK BTB**`
@@ -83,7 +87,14 @@ export function warmAnswer(corpus, question) {
   if (!warm.length) return null;
 
   const nq = normalise(question);
-  if (!nq) return null;
+  /* "Who are you?" and "What can you do?" are all filler and normalise to nothing.
+     They can only ever match a key EXACTLY (by their stripped text) — never fuzzily,
+     since with no content words there is nothing to score. */
+  if (!nq) {
+    const raw = rawKey(question);
+    const hit = raw && warm.find(e => (e.keys ?? [e.q]).some(k => rawKey(k) === raw));
+    return hit ? { reply: hit.a, matched: hit.q, score: 1 } : null;
+  }
   const qWords = new Set(nq.split(' '));
 
   let best = null, bestScore = 0;
@@ -118,10 +129,10 @@ const TTL_SECONDS = 60 * 60 * 6;
    prompt (buildSystemPrompt in worker/src/index.js) — an answer cached before those
    existed was never told to answer in the asker's own language or draw on the new
    Intramuros history/transport fields, so it must not be served after this ships. */
-const CACHE_VERSION = 7;   // 7: empty-normalised questions keyed on raw text; intro names both creators
+const CACHE_VERSION = 8;   // 8: capability/intro prompt rules; all-filler questions can warm-match
 
 const cacheKey = (corpus, question) => new Request(
-  `https://dan.cache/v${CACHE_VERSION}/${corpus?._generated ?? 'v0'}/${hash(normalise(question) || String(question).toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim())}`,
+  `https://dan.cache/v${CACHE_VERSION}/${corpus?._generated ?? 'v0'}/${hash(normalise(question) || rawKey(question))}`,
   { method: 'GET' }
 );
 
