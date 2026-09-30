@@ -118,7 +118,7 @@ const TTL_SECONDS = 60 * 60 * 6;
    prompt (buildSystemPrompt in worker/src/index.js) — an answer cached before those
    existed was never told to answer in the asker's own language or draw on the new
    Intramuros history/transport fields, so it must not be served after this ships. */
-const CACHE_VERSION = 4;   // 4: self-knowledge rules added to the prompt
+const CACHE_VERSION = 5;   // 5: Dan has a creation date and the prompt states today's date
 
 const cacheKey = (corpus, question) => new Request(
   `https://dan.cache/v${CACHE_VERSION}/${corpus?._generated ?? 'v0'}/${hash(normalise(question))}`,

@@ -81,6 +81,30 @@ async function loadCorpus(env) {
   return corpusCache;
 }
 
+/* ── Dan's own age ───────────────────────────────────────────────────────────── */
+
+/* assistant.created is the one source. Warm answers hold {{created}} / {{age}}
+   placeholders rather than a number, so they cannot go stale the day after they
+   are written. ponytail: whole days/months/years only, no "2 months 3 days". */
+function dansAge(created, now = Date.now()) {
+  const start = Date.parse(created);
+  if (Number.isNaN(start)) return null;
+  const days = Math.max(0, Math.floor((now - start) / 864e5));
+  const [n, unit] = days < 60 ? [days, 'day']
+    : days < 730 ? [Math.floor(days / 30.44), 'month'] : [Math.floor(days / 365.25), 'year'];
+  return {
+    created: new Date(start).toLocaleDateString('en-GB',
+      { timeZone: 'UTC', day: 'numeric', month: 'long', year: 'numeric' }),
+    age: days < 1 ? 'less than a day' : `${n} ${unit}${n === 1 ? '' : 's'}`
+  };
+}
+
+const fillSelf = (text, corpus) => {
+  const s = dansAge(corpus.assistant?.created);
+  if (s) return text.replace(/\{\{created\}\}/g, s.created).replace(/\{\{age\}\}/g, s.age);
+  return /\{\{(?:created|age)\}\}/.test(text) ? 'No age or creation date has been set for me.' : text;
+};
+
 /* ── the grounded prompt ─────────────────────────────────────────────────────── */
 
 function buildSystemPrompt(corpus) {
@@ -108,7 +132,7 @@ know and can do — answer from the "assistant" section first, before anything g
 Your age or creation date is the "created" field. If it is null, say plainly that no age
 or creation date has been set for you; never estimate one, and never infer one from the
 congress dates, the year, or your own model. If it holds a date, give that date and work
-out your age from it against today's date.
+out your age from it against today's date, which is ${new Date().toISOString().slice(0, 10)}.
 
 Mr. Mark Daniel Apelledo and Mr. Christian Andrei V. Santiago are both credited as
 Creators. Mr. Santiago's credit is scoped specifically to giving Dan his voice and
@@ -584,7 +608,7 @@ async function handleChat(request, env, ctx, cors) {
     const warm = warmAnswer(corpus, message);
     if (warm) {
       console.log(JSON.stringify({ event: 'warm-hit', message, matched: warm.matched }));
-      return json({ reply: plainText(warm.reply), source: 'warm', cached: true, focus }, 200, cors);
+      return json({ reply: plainText(fillSelf(warm.reply, corpus)), source: 'warm', cached: true, focus }, 200, cors);
     }
 
     /* Tier 2 — someone in this datacentre already asked this. */
@@ -661,7 +685,7 @@ async function handleChat(request, env, ctx, cors) {
    drift. Not used by the Worker runtime, which goes through the default export
    above. */
 export {
-  buildSystemPrompt, looksOffTopic, replyEscapedScope,
+  buildSystemPrompt, dansAge, fillSelf, looksOffTopic, replyEscapedScope,
   providerChain, runProviderChain, timeoutSignal, PROVIDER_TIMEOUT_MS,
   callGroq, callGemini, callOpenAI, callAnthropic
 };
