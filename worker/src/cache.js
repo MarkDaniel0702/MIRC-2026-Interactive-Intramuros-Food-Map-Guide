@@ -118,10 +118,10 @@ const TTL_SECONDS = 60 * 60 * 6;
    prompt (buildSystemPrompt in worker/src/index.js) — an answer cached before those
    existed was never told to answer in the asker's own language or draw on the new
    Intramuros history/transport fields, so it must not be served after this ships. */
-const CACHE_VERSION = 6;   // 6: intro style rule and date wording in the prompt
+const CACHE_VERSION = 7;   // 7: empty-normalised questions keyed on raw text; intro names both creators
 
 const cacheKey = (corpus, question) => new Request(
-  `https://dan.cache/v${CACHE_VERSION}/${corpus?._generated ?? 'v0'}/${hash(normalise(question))}`,
+  `https://dan.cache/v${CACHE_VERSION}/${corpus?._generated ?? 'v0'}/${hash(normalise(question) || String(question).toLowerCase().trim())}`,
   { method: 'GET' }
 );
 
