@@ -121,7 +121,7 @@ const TTL_SECONDS = 60 * 60 * 6;
 const CACHE_VERSION = 7;   // 7: empty-normalised questions keyed on raw text; intro names both creators
 
 const cacheKey = (corpus, question) => new Request(
-  `https://dan.cache/v${CACHE_VERSION}/${corpus?._generated ?? 'v0'}/${hash(normalise(question) || String(question).toLowerCase().trim())}`,
+  `https://dan.cache/v${CACHE_VERSION}/${corpus?._generated ?? 'v0'}/${hash(normalise(question) || String(question).toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim())}`,
   { method: 'GET' }
 );
 
